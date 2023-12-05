@@ -4,23 +4,23 @@
 MemorySettings:
   m_ObjectHideFlags: 0
   m_EditorMemorySettings:
-    m_MainAllocatorBlockSize: -1
-    m_ThreadAllocatorBlockSize: -1
-    m_MainGfxBlockSize: -1
-    m_ThreadGfxBlockSize: -1
-    m_CacheBlockSize: -1
-    m_TypetreeBlockSize: -1
-    m_ProfilerBlockSize: -1
+    m_MainAllocatorBlockSize: 12582912
+    m_ThreadAllocatorBlockSize: 12582912
+    m_MainGfxBlockSize: 12582912
+    m_ThreadGfxBlockSize: 12582912
+    m_CacheBlockSize: 4194304
+    m_TypetreeBlockSize: 2097152
+    m_ProfilerBlockSize: 12582912
     m_ProfilerEditorBlockSize: -1
-    m_BucketAllocatorGranularity: -1
-    m_BucketAllocatorBucketsCount: -1
-    m_BucketAllocatorBlockSize: -1
-    m_BucketAllocatorBlockCount: -1
+    m_BucketAllocatorGranularity: 16
+    m_BucketAllocatorBucketsCount: 8
+    m_BucketAllocatorBlockSize: 25165824
+    m_BucketAllocatorBlockCount: 8
     m_ProfilerBucketAllocatorGranularity: -1
     m_ProfilerBucketAllocatorBucketsCount: -1
-    m_ProfilerBucketAllocatorBlockSize: -1
+    m_ProfilerBucketAllocatorBlockSize: 33554432
     m_ProfilerBucketAllocatorBlockCount: -1
-    m_TempAllocatorSizeMain: -1
+    m_TempAllocatorSizeMain: 12582912
     m_JobTempAllocatorBlockSize: -1
     m_BackgroundJobTempAllocatorBlockSize: -1
     m_JobTempAllocatorReducedBlockSize: -1
@@ -32,4 +32,33 @@ MemorySettings:
     m_TempAllocatorSizeJobWorker: -1
     m_TempAllocatorSizeBackgroundWorker: -1
     m_TempAllocatorSizePreloadManager: -1
-  m_PlatformMemorySettings: {}
+  m_PlatformMemorySettings:
+    1:
+      m_MainAllocatorBlockSize: -1
+      m_ThreadAllocatorBlockSize: -1
+      m_MainGfxBlockSize: -1
+      m_ThreadGfxBlockSize: -1
+      m_CacheBlockSize: -1
+      m_TypetreeBlockSize: -1
+      m_ProfilerBlockSize: -1
+      m_ProfilerEditorBlockSize: -1
+      m_BucketAllocatorGranularity: -1
+      m_BucketAllocatorBucketsCount: -1
+      m_BucketAllocatorBlockSize: -1
+      m_BucketAllocatorBlockCount: -1
+      m_ProfilerBucketAllocatorGranularity: -1
+      m_ProfilerBucketAllocatorBucketsCount: -1
+      m_ProfilerBucketAllocatorBlockSize: -1
+      m_ProfilerBucketAllocatorBlockCount: -1
+      m_TempAllocatorSizeMain: -1
+      m_JobTempAllocatorBlockSize: -1
+      m_BackgroundJobTempAllocatorBlockSize: -1
+      m_JobTempAllocatorReducedBlockSize: -1
+      m_TempAllocatorSizeGIBakingWorker: -1
+      m_TempAllocatorSizeNavMeshWorker: -1
+      m_TempAllocatorSizeAudioWorker: -1
+      m_TempAllocatorSizeCloudWorker: -1
+      m_TempAllocatorSizeGfx: -1
+      m_TempAllocatorSizeJobWorker: -1
+      m_TempAllocatorSizeBackgroundWorker: -1
+      m_TempAllocatorSizePreloadManager: -1
