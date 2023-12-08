@@ -6,7 +6,7 @@ using Random = System.Random;
 public class Perlin 
 {
 	// Generate Octave Perlin noise value for float coordinates x, y
-	public float OctavePerlin(float x, float y, int octaves, float persistence, float lacunarity)
+	public float OctavePerlin(float x, float y, int octaves, float persistance, float lacunarity)
 	{
 
 		float total = 0;
@@ -16,7 +16,7 @@ public class Perlin
 		{
 			total += CalculatePerlin(x * frequency, y * frequency) * amplitude;
 
-			amplitude *= persistence;
+			amplitude *= persistance;
 			frequency *= lacunarity;
 		}
 	

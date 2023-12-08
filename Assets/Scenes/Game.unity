@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 2036.8752, g: 2060.9905, b: 2614.4573, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -422,9 +422,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 256
   depth: 256
-  height: 20
-  scale: 2.5
+  height: 11
+  scale: 6.03
   seed: 9
+  octaves: 3
+  persistance: 1.5
+  lacunarity: 0.5
 --- !u!154 &1104187865
 TerrainCollider:
   m_ObjectHideFlags: 0
