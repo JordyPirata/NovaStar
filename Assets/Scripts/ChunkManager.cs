@@ -5,7 +5,17 @@ using UnityEngine;
 public class ChunkManager : MonoBehaviour
 {
     public Transform viewer;
-    Stack<GameObject> chunks = new Stack<GameObject>();
+    private Vector2 viewerPosition;
+    private int chunkSize = 255;
+    private int chunkVisibleInViewDistance = 1;
+
+    private Dictionary<Vector2, Chunk> chunks = new Dictionary<Vector2, Chunk>();
+    List<Chunk> terrainChunksVisibleLastUpdate = new List<Chunk>();
+
+    public void Update()
+    {
+        viewerPosition = new Vector2(viewer.position.x, viewer.position.z);
+    }
     public void Awake()
     {
         // Create child from ChunkManager game object
@@ -13,6 +23,6 @@ public class ChunkManager : MonoBehaviour
         // Set parent of chunk to ChunkManager
         chunk.transform.parent = transform;
         chunk.AddComponent<Chunk>();
-        chunk.AddComponent<TerrainGenerator>();
+        chunk.AddComponent<NoiseGenerator>();
     }
 }

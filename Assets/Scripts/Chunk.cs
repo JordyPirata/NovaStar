@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class Chunk : MonoBehaviour
 {
-    public int x;
-    public int y;
+    Vector2 position;
+    int CoordX;
+    int CoordY;
     public bool isLoaded;
+    float[,] heights;
     float[,] temperatures;
     float[,] moisture;
+
 
     public void Load()
     {
