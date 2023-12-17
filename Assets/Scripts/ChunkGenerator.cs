@@ -1,30 +1,33 @@
+using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
 using UnityEngine.Jobs;
 public struct ChunkAccess
 {
-    public float[,] heights;
-    public float[,] temperatures;
-    public float[,] moisture;
-    public int CoordX;
-    public int CoordY;
-    public bool isLoaded;
-    public void Load()
+    public Chunk chunk;
+
+    public ChunkAccess(Chunk chunk)
     {
-        isLoaded = true;
-    }
-    public void Unload()
-    {
-        isLoaded = false;
+        this.chunk = chunk;
     }
 }
-public struct ChunkGenerator : IJobParallelForTransform
+public struct ChunkGenerator : IJobParallelFor
 {
-
-    public void Execute(int index, TransformAccess transform)
+    public NativeArray<ChunkAccess> chunks;
+    private Chunk chunk;
+    public void Execute(int index)
     {
-        throw new System.NotImplementedException();
+        NoiseGenerator noiseGenerator = new();
+
+        chunk = chunks[index].chunk;
+        chunk.heights = noiseGenerator.GenerateNoise();
+        chunk.temperatures = noiseGenerator.GenerateNoise();
+        chunk.moisture = noiseGenerator.GenerateNoise();
+
+        ChunkAccess chunkAccess = new(chunk);
+        chunks[index] = chunkAccess;
     }
 }
