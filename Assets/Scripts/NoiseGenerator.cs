@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using Console = UnityEngine.Debug;
 using UnityEngine.Serialization;
 
 public class NoiseGenerator : MonoBehaviour
@@ -20,12 +19,9 @@ public class NoiseGenerator : MonoBehaviour
 		get => Seed;
 		set => _perlin.SetSeed(value);
 	}
-	[Range(1, 10)]
 	public int octaves = 8;
-	[Range(0, 2)]
-	public float persistance = 1.5f;
-	[Range(0, 2)]
-	public float lacunarity = 0.5f;
+	public float persistance = Mathf.PI / 2;
+	public float lacunarity = .5f;
 	/*
 	public void Awake()
 	{
@@ -76,7 +72,8 @@ public class NoiseGenerator : MonoBehaviour
 				}
 			}
 		}
-		// Normalize noise
+		// 
+		
 		
 		for (int x = 0; x < width; x++)
 		{

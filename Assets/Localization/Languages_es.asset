@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Languages_es
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: es
+  m_SharedData: {fileID: 11400000, guid: 05448326c610234468efe1bb1023ae59, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 234600353792
+    m_Localized: Jugar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1531256852480
+    m_Localized: Ajustes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1537179209728
+    m_Localized: Salir
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1174257178857472
+    m_Localized: Regresar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1175118294634496
+    m_Localized: "Ingl\xE9s"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1175255666479104
+    m_Localized: "Espa\xF1ol"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1176111019282432
+    m_Localized: Idiomas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1176594333126656
+    m_Localized: Sensibilidad
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1181247510761472
+    m_Localized: Volumen General
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1181772666982400
+    m_Localized: Volumen de Efectos
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []
