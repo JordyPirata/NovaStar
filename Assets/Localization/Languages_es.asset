@@ -58,6 +58,14 @@ MonoBehaviour:
     m_Localized: Volumen de Efectos
     m_Metadata:
       m_Items: []
+  - m_Id: 1389916580704256
+    m_Localized: Cancelar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1394429249155072
+    m_Localized: Crear
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
