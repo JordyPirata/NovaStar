@@ -39,7 +39,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1175255666479104
-    m_Localized: "Espa\xF1ol"
+    m_Localized: Espanol
     m_Metadata:
       m_Items: []
   - m_Id: 1176111019282432
@@ -72,6 +72,14 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 2950046668902400
     m_Localized: Pantalla Completa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2974071588352000
+    m_Localized: Activado
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2974128580554752
+    m_Localized: Desactivado
     m_Metadata:
       m_Items: []
   references:
