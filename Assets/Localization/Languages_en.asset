@@ -55,7 +55,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1181772666982400
-    m_Localized: Effects Volume
+    m_Localized: Effects
     m_Metadata:
       m_Items: []
   - m_Id: 1389916580704256
@@ -64,6 +64,14 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 1394429249155072
     m_Localized: Create
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2580025010638848
+    m_Localized: Music
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2950046668902400
+    m_Localized: Fullscreen
     m_Metadata:
       m_Items: []
   references:

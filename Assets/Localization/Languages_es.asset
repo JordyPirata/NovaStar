@@ -35,7 +35,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1175118294634496
-    m_Localized: "Ingl\xE9s"
+    m_Localized: Ingles
     m_Metadata:
       m_Items: []
   - m_Id: 1175255666479104
@@ -55,7 +55,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1181772666982400
-    m_Localized: Volumen de Efectos
+    m_Localized: Efectos
     m_Metadata:
       m_Items: []
   - m_Id: 1389916580704256
@@ -64,6 +64,14 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 1394429249155072
     m_Localized: Crear
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2580025010638848
+    m_Localized: Musica
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2950046668902400
+    m_Localized: Pantalla Completa
     m_Metadata:
       m_Items: []
   references:
