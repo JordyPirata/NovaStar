@@ -6,21 +6,19 @@ using System.IO;
 
 public class CRUD
 {
+    private Serializer serializer = new Serializer();
     public void Create<T>(T data, string path)
     {
-        Serializer serializer = new Serializer();
         serializer.Serialize(data, path);
     }
 
     public T Read<T>(string path)
     {
-        Serializer serializer = new Serializer();
         return serializer.Deserialize<T>(path);
     }
 
     public void Update<T>(T data, string path)
     {
-        Serializer serializer = new Serializer();
         serializer.Serialize(data, path);
     }
 

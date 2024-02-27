@@ -8,9 +8,17 @@ using Console = UnityEngine.Debug;
 
 public class SettingsMenu : MonoBehaviour
 {
-    public Button onButton, offButton, EnglishButton, SpanishButton;
+    public Button onButton, offButton, englishButton, spanishButton;
+    public Slider overallVolumeSlider, musicVolumeSlider, sfxVolumeSlider, sensitibilitySlider;
     private Settings settings = new();
+    private CRUD crud = new();
     public AudioMixer audioMixer;
+
+    private void Awake() 
+    {
+        LoadSettings();
+    }
+
     public void SetOverallVolume(float volume)
     {
         audioMixer.FindMatchingGroups("Master")[0].audioMixer.SetFloat("Master", volume);
@@ -29,34 +37,43 @@ public class SettingsMenu : MonoBehaviour
         settings.sfxVolume = volume;
         Console.Log("Volume: " + volume);
     }
+    public void SetSensitibility(float sensitibility)
+    {
+        settings.mouseSensitivity = sensitibility;
+        Console.Log("Sensitibility: " + sensitibility);
+    }
     public void SetFullscreen(bool isFullscreen)
     {
-        Screen.fullScreen = isFullscreen;
-        settings.fullscreen = isFullscreen;
         if (isFullscreen)
         {
+            settings.fullscreen = true;
             onButton.interactable = false;
             offButton.interactable = true;
         }
         else
         {
+            settings.fullscreen = false;
             offButton.interactable = false;
             onButton.interactable = true;
         }
+        Screen.fullScreen = isFullscreen;
     }
-    public void SetEnglish()
+    public void SetLanguage(int language)
     {
-        settings.language = 0;
-        StartCoroutine(SetLocale(0));
-        EnglishButton.interactable = false;
-        SpanishButton.interactable = true;
-    }
-    public void SetSpanish()
-    {
-        settings.language = 1;
-        StartCoroutine(SetLocale(1));
-        SpanishButton.interactable = false;
-        EnglishButton.interactable = true;
+        if (language == 0)
+        {
+            settings.language = 0;
+            StartCoroutine(SetLocale(0));
+            englishButton.interactable = false;
+            spanishButton.interactable = true;
+        }
+        else
+        {
+            settings.language = 1;
+            StartCoroutine(SetLocale(1));
+            spanishButton.interactable = false;
+            englishButton.interactable = true;
+        }
     }
     IEnumerator SetLocale(int localeID)
     {
@@ -65,28 +82,21 @@ public class SettingsMenu : MonoBehaviour
     }
     public void SaveSettings()
     {
-        CRUD crud = new();
         crud.Create(settings, Application.persistentDataPath + "/settings.json");
         Console.Log(Application.persistentDataPath + "/settings.json");
     }
-    /*
+
     public void LoadSettings()
     {
-        CRUD crud = new();
         settings = crud.Read<Settings>(Application.persistentDataPath + "/settings.json");
-        SetOverallVolume(settings.overallVolume);
-        SetMusicVolume(settings.musicVolume);
-        SetSFXVolume(settings.sfxVolume);
+        
+        SetLanguage(settings.language);
         SetFullscreen(settings.fullscreen);
-        if (settings.language == 0)
-        {
-            EnglishButton.interactable = false;
-            SpanishButton.interactable = true;
-        }
-        else
-        {
-            SpanishButton.interactable = false;
-            EnglishButton.interactable = true;
-        }
-    }*/
+
+        overallVolumeSlider.value = settings.overallVolume;
+        musicVolumeSlider.value = settings.musicVolume;
+        sfxVolumeSlider.value = settings.sfxVolume;
+
+        sensitibilitySlider.value = settings.mouseSensitivity;
+    }
 }
