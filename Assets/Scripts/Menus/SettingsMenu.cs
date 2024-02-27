@@ -11,10 +11,10 @@ public class SettingsMenu : MonoBehaviour
     public Button onButton, offButton, englishButton, spanishButton;
     public Slider overallVolumeSlider, musicVolumeSlider, sfxVolumeSlider, sensitibilitySlider;
     private Settings settings = new();
-    private CRUD crud = new();
+    private readonly CRUD crud = new();
     public AudioMixer audioMixer;
 
-    private void Awake() 
+    private void Awake()
     {
         LoadSettings();
     }
@@ -23,24 +23,21 @@ public class SettingsMenu : MonoBehaviour
     {
         audioMixer.FindMatchingGroups("Master")[0].audioMixer.SetFloat("Master", volume);
         settings.overallVolume = volume;
-        Console.Log("Volume: " + volume);
+        
     }
     public void SetMusicVolume(float volume)
     {
         audioMixer.FindMatchingGroups("Music")[0].audioMixer.SetFloat("Music", volume);
         settings.musicVolume = volume;
-        Console.Log("Volume: " + volume);
     }
     public void SetSFXVolume(float volume)
     {
         audioMixer.FindMatchingGroups("SFX")[0].audioMixer.SetFloat("SFX", volume);
         settings.sfxVolume = volume;
-        Console.Log("Volume: " + volume);
     }
     public void SetSensitibility(float sensitibility)
     {
         settings.mouseSensitivity = sensitibility;
-        Console.Log("Sensitibility: " + sensitibility);
     }
     public void SetFullscreen(bool isFullscreen)
     {
@@ -83,13 +80,12 @@ public class SettingsMenu : MonoBehaviour
     public void SaveSettings()
     {
         crud.Create(settings, Application.persistentDataPath + "/settings.json");
-        Console.Log(Application.persistentDataPath + "/settings.json");
     }
 
     public void LoadSettings()
     {
         settings = crud.Read<Settings>(Application.persistentDataPath + "/settings.json");
-        
+
         SetLanguage(settings.language);
         SetFullscreen(settings.fullscreen);
 
