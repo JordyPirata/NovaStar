@@ -14,8 +14,11 @@ public class SettingsMenu : MonoBehaviour
     private Settings settings = new();
     private readonly JsonRepository crud = JsonRepository.Instance;
     public AudioMixer audioMixer;
-    private readonly string settingsFile = Path.Combine(Application.persistentDataPath, "settings.json");
-
+    private string settingsFile;
+    private void Awake()
+    {
+        settingsFile = Path.Combine(Application.persistentDataPath, "settings.json");
+    }
     private void Start()
     {
         LoadSettings();
