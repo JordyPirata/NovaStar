@@ -1,57 +1,67 @@
 using System.Threading.Tasks;
 using System.IO;
 
-public class JsonRepository
+namespace Repository
 {
-    // The serializer is a dependency of the JsonRepository
-    private readonly Serializer serializer = new();
-    // Make JsonRepository a singleton and lock the instance
-    private static JsonRepository instance;
-    public static JsonRepository Instance
+    public class JsonRepository
     {
-        get
+        // The serializer is a dependency of the JsonRepository
+        private readonly Serializer serializer = new();
+        // Make JsonRepository a singleton and lock the instance
+        private static JsonRepository instance;
+        public static JsonRepository Instance
         {
-            instance ??= new JsonRepository();
-            return instance;
+            get
+            {
+                instance ??= new JsonRepository();
+                return instance;
+            }
         }
-    }
-    // The CreateAsync method serializes the data and saves it to a file
-    public async Task<string> CreateAsync<T>(T data, string path)
-    {
-        try
+        // The CreateAsync method serializes the data and saves it to a file
+        public async Task<string> CreateAsync<T>(T data, string path)
         {
-            await serializer.SerializeAsync(data, path);
-            return "Data saved successfully";
+            try
+            {
+                await serializer.SerializeAsync(data, path);
+                return "Data saved successfully";
+            }
+            catch (System.Exception e)
+            {
+                return e.Message;
+            }
         }
-        catch (System.Exception e)
+        // The ReadAsync method deserializes the data from a file
+        public async Task<(string, T)> ReadAsync<T>(string path)
         {
-            return e.Message;
+            try
+            {
+                T data = await serializer.DeserializeAsync<T>(path);
+                if (data == null)
+                {
+                    return ("Data not found", default);
+                }
+                else
+                {
+                    return ("Data read successfully", data);
+                }
+            }
+            catch (System.Exception e)
+            {
+                return (e.Message, default);
+            }
         }
-    }
-    // The ReadAsync method deserializes the data from a file
-    public async Task<(string, T)> ReadAsync<T>(string path)
-    {
-        try
+        // The Delete method deletes a file
+        public string Delete(string path)
         {
-            T data = await serializer.DeserializeAsync<T>(path);
-            return ("Data read successfully", data);
-        }
-        catch (System.Exception e)
-        {
-            return (e.Message, default);
-        }
-    }
-    // The Delete method deletes a file
-    public string Delete(string path)
-    {
-        try
-        {
-            File.Delete(path);
-            return "File deleted successfully";
-        }
-        catch (System.Exception e)
-        {
-            return e.Message;
+            try
+            {
+                File.Delete(path);
+                return "File deleted successfully";
+            }
+            catch (System.Exception e)
+            {
+                return e.Message;
+            }
         }
     }
 }

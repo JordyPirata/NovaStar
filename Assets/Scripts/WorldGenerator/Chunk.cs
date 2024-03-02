@@ -2,26 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Chunk : MonoBehaviour
+namespace Generator
 {
-    Vector2 position;
-    public int CoordX;
-    public int CoordY;
-    public bool IsLoaded
+    public class Chunk : MonoBehaviour
     {
-        get => IsLoaded;
-        set 
+        Vector2 position;
+        public int CoordX;
+        public int CoordY;
+        public bool IsLoaded
         {
-            // Active game object if value is true
-            gameObject.SetActive(value);
-            IsLoaded = value;
+            get => IsLoaded;
+            set 
+            {
+                // Active game object if value is true
+                gameObject.SetActive(value);
+                IsLoaded = value;
+            }
         }
-    }
-    public float[,] heights;
-    public float[,] temperatures;
-    public float[,] moisture;
-    private void Awake() {
-        // Set name of chunk
-        gameObject.name = $"Chunk({CoordX}, {CoordY})";
+        public float[,] heights;
+        public float[,] temperatures;
+        public float[,] moisture;
+        private void Awake() {
+            // Set name of chunk
+            gameObject.name = $"Chunk({CoordX}, {CoordY})";
+        }
     }
 }
