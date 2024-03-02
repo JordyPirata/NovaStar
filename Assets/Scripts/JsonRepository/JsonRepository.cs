@@ -1,0 +1,57 @@
+using System.Threading.Tasks;
+using System.IO;
+
+public class JsonRepository
+{
+    // The serializer is a dependency of the JsonRepository
+    private readonly Serializer serializer = new();
+    // Make JsonRepository a singleton and lock the instance
+    private static JsonRepository instance;
+    public static JsonRepository Instance
+    {
+        get
+        {
+            instance ??= new JsonRepository();
+            return instance;
+        }
+    }
+    // The CreateAsync method serializes the data and saves it to a file
+    public async Task<string> CreateAsync<T>(T data, string path)
+    {
+        try
+        {
+            await serializer.SerializeAsync(data, path);
+            return "Data saved successfully";
+        }
+        catch (System.Exception e)
+        {
+            return e.Message;
+        }
+    }
+    // The ReadAsync method deserializes the data from a file
+    public async Task<(string, T)> ReadAsync<T>(string path)
+    {
+        try
+        {
+            T data = await serializer.DeserializeAsync<T>(path);
+            return ("Data read successfully", data);
+        }
+        catch (System.Exception e)
+        {
+            return (e.Message, default);
+        }
+    }
+    // The Delete method deletes a file
+    public string Delete(string path)
+    {
+        try
+        {
+            File.Delete(path);
+            return "File deleted successfully";
+        }
+        catch (System.Exception e)
+        {
+            return e.Message;
+        }
+    }
+}

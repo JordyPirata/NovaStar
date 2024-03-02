@@ -1,20 +1,22 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Localization.Settings;
+using System.IO;
 using UnityEngine.UI;
 using Console = UnityEngine.Debug;
 
 public class SettingsMenu : MonoBehaviour
 {
+    private string message;
     public Button onButton, offButton, englishButton, spanishButton;
     public Slider overallVolumeSlider, musicVolumeSlider, sfxVolumeSlider, sensitibilitySlider;
     private Settings settings = new();
-    private readonly CRUD crud = new();
+    private readonly JsonRepository crud = JsonRepository.Instance;
     public AudioMixer audioMixer;
+    private readonly string settingsFile = Path.Combine(Application.persistentDataPath, "settings.json");
 
-    private void Awake()
+    private void Start()
     {
         LoadSettings();
     }
@@ -77,15 +79,18 @@ public class SettingsMenu : MonoBehaviour
         yield return LocalizationSettings.InitializationOperation;
         LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[localeID];
     }
-    public void SaveSettings()
+    public async void SaveSettings()
     {
-        crud.Create(settings, Application.persistentDataPath + "/settings.json");
+        message = await crud.CreateAsync(settings, settingsFile);
+        Console.Log(message);
     }
-
-    public void LoadSettings()
+    // Load settings from file
+    public async void LoadSettings()
     {
-        settings = crud.Read<Settings>(Application.persistentDataPath + "/settings.json");
-
+        // Read the settings from the file
+        (message, settings) = await crud.ReadAsync<Settings>(settingsFile);
+        Console.Log(message);
+        // Set the settings
         SetLanguage(settings.language);
         SetFullscreen(settings.fullscreen);
 
