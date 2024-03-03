@@ -7,7 +7,7 @@ namespace Repository
     {
         // The serializer is a dependency of the JsonRepository
         private readonly Serializer serializer = new();
-        // Make JsonRepository a singleton and lock the instance
+        // Make JsonRepository a singleton
         private static JsonRepository instance;
         public static JsonRepository Instance
         {

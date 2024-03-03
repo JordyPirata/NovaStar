@@ -10,34 +10,32 @@ using UnityEngine.Jobs;
 
 namespace Generator
 {
-    public struct ChunkAccess
+    public class ChunkGenerator
     {
-        public Vector2 position;
-        public int CoordX;
-        public int CoordY;
-        public bool IsLoaded;
-        public float[,] heights;
-        public float[,] temperatures;
-        public float[,] moisture;
-    }
-    public struct ChunkGenerator : IJobParallelFor
-    {
-        public NativeArray<ChunkAccess> chunks;
-        public void Execute(int index)
+        private Chunk chunk;
+        NoiseGenerator noiseGenerator;
+
+        private TerrainData GenerateTerrain(TerrainData terrainData)
         {
-            NoiseGenerator noiseGenerator = new();
+            terrainData.heightmapResolution = chunk.width;
+            terrainData.size = new Vector3(chunk.width, 20, chunk.width);
+            terrainData.SetHeights(0, 0, noiseGenerator.GenerateNoise());
+            return terrainData;
+        }
+        private void Awake() {
+            // Set name of chunk
+            chunk.name = $"Chunk({CoordX}, {CoordY})";
+            SetupChunk();
+        }
 
-            ChunkAccess chunk = chunks[index];
-            chunk.heights = noiseGenerator.GenerateNoise();
-            noiseGenerator.Seed = 1;
-            chunk.temperatures = noiseGenerator.GenerateNoise();
-            noiseGenerator.Seed = 2;
-            chunk.moisture = noiseGenerator.GenerateNoise();
-
-            chunk.CoordX = (int)chunk.position.x;
-            chunk.CoordY = (int)chunk.position.y;
-            chunks[index] = chunk;
-
+        public void SetupChunk()
+        {
+            // Add terrain, terrain collider and terrain data to chunk
+            _terrain = gameObject.AddComponent<Terrain>();
+			_terrainCollider = gameObject.AddComponent<TerrainCollider>();
+			_terrainData = new TerrainData();
+			_terrainCollider.terrainData = _terrainData;
+			_terrain.terrainData = _terrainData;
         }
     }
 }

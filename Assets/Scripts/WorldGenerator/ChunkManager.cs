@@ -1,23 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Generator
 {
+    //TODO: Change name to ChunkFacade and implement 
     public class ChunkManager : MonoBehaviour
     {
         public Transform viewer;
         private Vector2 viewerPosition;
-        private int chunkSize = 255;
-        private int chunkVisibleInViewDistance = 1;
-
-        private Dictionary<Vector2, Chunk> chunks = new Dictionary<Vector2, Chunk>();
-        List<Chunk> terrainChunksVisibleLastUpdate = new List<Chunk>();
-
-        public void Update()
-        {
-            viewerPosition = new Vector2(viewer.position.x, viewer.position.z);
-        }
+        private List<Chunk> chunks;
+        // TODO: Make this a list of chunks
         public void Awake()
         {
             // Create child from ChunkManager game object
@@ -27,5 +21,29 @@ namespace Generator
             chunk.AddComponent<Chunk>();
             chunk.AddComponent<NoiseGenerator>();
         }
+        IEnumerator LoadChunks()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(0.5f);
+                foreach (Chunk chunk in chunks)
+                {
+                    
+                }
+            }
+        }
+        public void Start()
+        {
+            StartCoroutine(UpdateViewerPosition());
+        }
+        IEnumerator UpdateViewerPosition()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(0.5f);
+                viewerPosition = new Vector2(viewer.position.x, viewer.position.z);
+            }
+        }
+        
     }
 }

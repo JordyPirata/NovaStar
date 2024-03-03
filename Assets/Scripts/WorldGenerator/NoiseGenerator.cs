@@ -1,4 +1,5 @@
 using System;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -6,12 +7,8 @@ namespace Generator
 {
 	public class NoiseGenerator : MonoBehaviour
 	{
+		// TODO:  Move variables to ChunkManager
 		private readonly Perlin _perlin = new();
-		/*
-		private Terrain _terrain;
-		private TerrainCollider _terrainCollider;
-		private TerrainData _terrainData;
-		*/
 		private readonly int width = 257;
 		private readonly int depth = 257;
 		public int height = 20;
@@ -24,31 +21,7 @@ namespace Generator
 		public int octaves = 8;
 		public float persistance = Mathf.PI / 2;
 		public float lacunarity = .5f;
-		/*
-		public void Awake()
-		{
-			_terrain = gameObject.AddComponent<Terrain>();
-			_terrainCollider = gameObject.AddComponent<TerrainCollider>();
-			_terrainData = new TerrainData();
-			_terrainCollider.terrainData = _terrainData;
-			_terrain.terrainData = _terrainData;
-		}
-		public void Start()
-		{
-			_terrainData = GenerateTerrain(_terrain.terrainData);
-			_terrain.terrainData = _terrainData;
-			_terrainCollider.terrainData = _terrainData;
-		}
-		*/
-		
-		[Obsolete("Use ChunkGenerator instead")]
-		private TerrainData GenerateTerrain(TerrainData terrainData)
-		{
-			terrainData.heightmapResolution = width;
-			terrainData.size = new Vector3(width, height, depth);
-			terrainData.SetHeights(0, 0, GenerateNoise());
-			return terrainData;
-		}
+
 		public float[,] GenerateNoise()
 		{
 			float[,] heigths = new float[width, depth];
@@ -74,9 +47,7 @@ namespace Generator
 					}
 				}
 			}
-			// 
-			
-			
+
 			for (int x = 0; x < width; x++)
 			{
 				for (int y = 0; y < depth; y++)
