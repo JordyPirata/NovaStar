@@ -8,8 +8,8 @@ namespace Generator
     {
         public int width = ChunkManager.Instance.width;
         public int height = ChunkManager.Instance.height;
-        public int CoordX;
-        public int CoordY;
+        public int CoordX = 0;
+        public int CoordY = 0;
         public bool IsLoaded
         {
             get => IsLoaded;
@@ -19,9 +19,7 @@ namespace Generator
                 gameObject.SetActive(value);
                 IsLoaded = value;
             }
-        }
-        public Terrain _terrain;
-        public TerrainCollider _terrainCollider;      
+        }   
         public float[,] heights;
         public float[,] temperatures;
         public float[,] moisture;

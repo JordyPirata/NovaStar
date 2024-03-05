@@ -16,17 +16,27 @@ namespace Generator
         private Chunk chunk;
         private NoiseGenerator noiseGenerator;
         private TerrainData terrainData;
-        
+        private Terrain terrain;
+        private void Awake()
+        {
+            chunk = gameObject.AddComponent<Chunk>();
+            noiseGenerator = gameObject.AddComponent<NoiseGenerator>();
+            
+            GenerateTerrain();
+            //terrain.materialTemplate = new Material(Shader.Find(""));
+            terrain.terrainData = terrainData;
+            terrain = gameObject.AddComponent<Terrain>();
+            gameObject.AddComponent<TerrainCollider>().terrainData = terrainData;
+            
+        }
         public void GenerateTerrain()
         {
-            terrainData.heightmapResolution = chunk.width;
-            terrainData.size = new Vector3(chunk.width, chunk.height, chunk.width);
+            terrainData = new TerrainData
+            {
+                heightmapResolution = chunk.width,
+                size = new Vector3(chunk.width, chunk.height, chunk.width)
+            };
             terrainData.SetHeights(0, 0, noiseGenerator.GenerateNoise(chunk.CoordX, chunk.CoordY));
-        }
-
-        public void SetUpChunk()
-        {
-            
         }
         
     }

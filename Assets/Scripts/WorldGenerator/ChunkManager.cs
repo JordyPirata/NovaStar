@@ -14,27 +14,15 @@ public class ChunkManager : MonoBehaviour
     public int height = 20;
     public float scale = 6.66f;
     public int seed = 0;
-    private static ChunkManager instance;
-    public static ChunkManager Instance
-    {
-        get
-        {
-            instance ??= new();
-            return instance;
-        }
-    }
+    public static ChunkManager Instance;
+
     public Transform viewer;
     public Vector2 viewerPosition;
     private List<Chunk> chunks;
     // TODO: Make this a list of chunks
     public void Awake()
     {
-        // Create child from ChunkManager game object
-        GameObject chunk = new($"Chunk({0}, {0})");
-        // Set parent of chunk to ChunkManager
-        chunk.transform.parent = transform;
-        chunk.AddComponent<Chunk>();
-        chunk.AddComponent<NoiseGenerator>();
+        gameObject.AddComponent<ChunkGenerator>();
     }
     IEnumerator LoadChunks()
     {

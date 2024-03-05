@@ -17,7 +17,7 @@ namespace Generator
 			get => ChunkManager.Instance.seed;
 			set => _perlin.SetSeed(value);
 		}
-		public int octaves = 8;
+		private int octaves = 8;
 		public const float persistance = Mathf.PI / 2;
 		public const float lacunarity = .5f;
 		public float[,] GenerateNoise(int coordX, int coordY)
