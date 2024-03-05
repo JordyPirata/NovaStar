@@ -7,35 +7,28 @@ using Unity.Jobs;
 using UnityEngine;
 using Unity.Mathematics;
 using UnityEngine.Jobs;
+using Unity.VisualScripting;
 
 namespace Generator
 {
-    public class ChunkGenerator
+    public class ChunkGenerator : MonoBehaviour
     {
         private Chunk chunk;
-        NoiseGenerator noiseGenerator;
-
-        private TerrainData GenerateTerrain(TerrainData terrainData)
+        private NoiseGenerator noiseGenerator;
+        private TerrainData terrainData;
+        
+        public void GenerateTerrain()
         {
             terrainData.heightmapResolution = chunk.width;
-            terrainData.size = new Vector3(chunk.width, 20, chunk.width);
-            terrainData.SetHeights(0, 0, noiseGenerator.GenerateNoise());
-            return terrainData;
-        }
-        private void Awake() {
-            // Set name of chunk
-            chunk.name = $"Chunk({CoordX}, {CoordY})";
-            SetupChunk();
+            terrainData.size = new Vector3(chunk.width, chunk.height, chunk.width);
+            terrainData.SetHeights(0, 0, noiseGenerator.GenerateNoise(chunk.CoordX, chunk.CoordY));
         }
 
-        public void SetupChunk()
+        public void SetUpChunk()
         {
-            // Add terrain, terrain collider and terrain data to chunk
-            _terrain = gameObject.AddComponent<Terrain>();
-			_terrainCollider = gameObject.AddComponent<TerrainCollider>();
-			_terrainData = new TerrainData();
-			_terrainCollider.terrainData = _terrainData;
-			_terrain.terrainData = _terrainData;
+            
         }
+        
     }
+
 }

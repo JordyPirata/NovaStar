@@ -6,7 +6,8 @@ namespace Generator
 {
     public class Chunk : MonoBehaviour
     {
-        public int width = 257;
+        public int width = ChunkManager.Instance.width;
+        public int height = ChunkManager.Instance.height;
         public int CoordX;
         public int CoordY;
         public bool IsLoaded
@@ -19,9 +20,8 @@ namespace Generator
                 IsLoaded = value;
             }
         }
-        private Terrain _terrain;
-		private TerrainCollider _terrainCollider;
-		private TerrainData _terrainData;
+        public Terrain _terrain;
+        public TerrainCollider _terrainCollider;      
         public float[,] heights;
         public float[,] temperatures;
         public float[,] moisture;
