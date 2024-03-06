@@ -4,22 +4,20 @@ using UnityEngine;
 
 namespace Generator
 {
-    public class Chunk : MonoBehaviour
+    public class Chunk
     {
-        public int width = ChunkManager.Instance.width;
-        public int height = ChunkManager.Instance.height;
-        public int CoordX = 0;
-        public int CoordY = 0;
-        public bool IsLoaded
+        public Chunk()
         {
-            get => IsLoaded;
-            set 
-            {
-                // Active game object if value is true
-                gameObject.SetActive(value);
-                IsLoaded = value;
-            }
-        }   
+            IsLoaded = false;
+            ChunkName = $"Chunk({CoordX},{CoordY})";
+        }
+        public string ChunkName;
+        public int width = ChunkManager.width;
+        public int height = ChunkManager.height;
+        public Vector2 position;
+        public int CoordX;
+        public int CoordY;
+        public bool IsLoaded;
         public float[,] heights;
         public float[,] temperatures;
         public float[,] moisture;

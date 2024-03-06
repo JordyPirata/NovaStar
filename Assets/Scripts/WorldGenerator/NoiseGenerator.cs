@@ -5,16 +5,16 @@ using UnityEngine.Serialization;
 
 namespace Generator
 {
-	public class NoiseGenerator : MonoBehaviour
+	public class NoiseGenerator 
 	{
 		// TODO:  Move variables to ChunkManager
 		private readonly Perlin _perlin = new();
-		private int Width { get; set; } = ChunkManager.Instance.width;
-		private int Depth { get; set; } = ChunkManager.Instance.depth;
-		private float Scale { get; set; } = ChunkManager.Instance.scale;
+		private readonly int Width = ChunkManager.width;
+		private readonly int Depth = ChunkManager.depth;
+		private readonly float Scale = ChunkManager.scale;
 		public int Seed
 		{
-			get => ChunkManager.Instance.seed;
+			get => ChunkManager.seed;
 			set => _perlin.SetSeed(value);
 		}
 		private int octaves = 8;
