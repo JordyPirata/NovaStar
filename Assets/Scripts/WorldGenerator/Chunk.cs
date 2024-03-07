@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,7 +15,7 @@ namespace Generator
         public string ChunkName;
         public int width = ChunkManager.width;
         public int height = ChunkManager.height;
-        public Vector2 position;
+        [NonSerialized]public Vector2 position;
         public int CoordX;
         public int CoordY;
         public bool IsLoaded;

@@ -8,24 +8,26 @@ using UnityEngine;
 using Unity.Mathematics;
 using UnityEngine.Jobs;
 using Unity.VisualScripting;
+using Repository;
+using System.IO;
 
 
 namespace Generator
 {
     public class ChunkGenerator : MonoBehaviour
     {
+        private string message;
         private readonly Chunk chunk = new();
-        public NoiseGenerator noiseGenerator;
-        public TerrainData terrainData;
+        private NoiseGenerator noiseGenerator;
+        private TerrainData terrainData;
         private Terrain terrain;
         private void Start()
         {
             SetUpChunk();
-            GenerateTerrain();
-        }
-        public void Update()
-        {
             SetPosition(ChunkManager.viewerPosition);
+            GenerateTerrain();
+            SaveChunk();
+
         }
         //set position of the chunk
         public void SetPosition(Vector2 position)
@@ -39,25 +41,29 @@ namespace Generator
         }
         public void GenerateTerrain()
         {
-            chunk.heights = noiseGenerator.GenerateNoise(chunk.CoordX, chunk.CoordY);
-            terrainData.heightmapResolution = chunk.width;
+            terrain.terrainData.baseMapResolution = chunk.width;
+            chunk.heights = noiseGenerator.GenerateNoise((int)chunk.position.x, (int)chunk.position.y);
+            terrainData.baseMapResolution = chunk.width + 1;
+            terrainData.heightmapResolution = chunk.width + 1;
             terrainData.size = new Vector3(chunk.width, chunk.height, chunk.width);
             terrainData.SetHeights(0, 0, chunk.heights);
         }
 
         public void SetUpChunk()
         {
-
             //GENERATE NEW TERRAINDATA
             terrainData = new TerrainData();
             //terrain.materialTemplate = new Material(Shader.Find(""));
-            gameObject.AddComponent<Terrain>().terrainData = terrainData;
+            terrain = gameObject.AddComponent<Terrain>();
+            terrain.terrainData = terrainData;
+            TerrainSettings.ApplySettings(terrain);
             gameObject.AddComponent<TerrainCollider>().terrainData = terrainData;
             noiseGenerator = new NoiseGenerator();
         }
-        public void SaveChunk()
+        public async void SaveChunk()
         {
-
+            message = await JsonRepository.Instance.CreateAsync(chunk, Path.Combine(Application.persistentDataPath, "chunks.json"));
+            Debug.Log(message);
         }
     }
 }
