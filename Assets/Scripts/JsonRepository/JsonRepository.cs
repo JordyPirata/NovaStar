@@ -63,5 +63,9 @@ namespace Repository
                 return e.Message;
             }
         }
+        public bool Exist(string path)
+        {
+            return File.Exists(path);
+        }
     }
 }

@@ -14,8 +14,7 @@ namespace Menus
         private string message;
         public Button onButton, offButton, englishButton, spanishButton;
         public Slider overallVolumeSlider, musicVolumeSlider, sfxVolumeSlider, sensitibilitySlider;
-        private Settings settings = new();
-        private readonly JsonRepository crud = JsonRepository.Instance;
+        private Settings settings;
         public AudioMixer audioMixer;
         private string settingsFile;
         private void Awake()
@@ -88,15 +87,18 @@ namespace Menus
         }
         public async void SaveSettings()
         {
-            message = await crud.CreateAsync(settings, settingsFile);
+            message = await JsonRepository.Instance.CreateAsync(settings, settingsFile);
             Console.Log(message);
         }
         // Load settings from file
         public async void LoadSettings()
         {
             // Read the settings from the file
-            (message, settings) = await crud.ReadAsync<Settings>(settingsFile);
-            if (settings == null)
+            if (JsonRepository.Instance.Exist(settingsFile))
+            {
+                (message, settings) = await JsonRepository.Instance.ReadAsync<Settings>(settingsFile);
+            }
+            else 
             {
                 settings = new Settings();
                 SaveSettings();
