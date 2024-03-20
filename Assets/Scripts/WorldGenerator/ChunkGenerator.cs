@@ -1,26 +1,18 @@
-using System;
-using System.CodeDom.Compiler;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Collections;
-using Unity.Jobs;
 using UnityEngine;
-using Unity.Mathematics;
-using UnityEngine.Jobs;
-using Unity.VisualScripting;
 using Repository;
 using System.IO;
-
+using Util;
 
 namespace Generator
 {
     public class ChunkGenerator : MonoBehaviour
     {
         private string message;
-        private readonly Chunk chunk = new();
         private NoiseGenerator noiseGenerator;
         private TerrainData terrainData;
         private Terrain terrain;
+        private Chunk chunk = ChunkFactory.CreateChunk(0, 0);
+
         private void Start()
         {
             SetUpChunk();
@@ -46,7 +38,7 @@ namespace Generator
             terrainData.baseMapResolution = chunk.width + 1;
             terrainData.heightmapResolution = chunk.width + 1;
             terrainData.size = new Vector3(chunk.width, chunk.height, chunk.width);
-            terrainData.SetHeights(0, 0, chunk.heights);
+            terrainData.SetHeights(0, 0,TransferData.TransferDataFromArrayTo2DArray(chunk.heights,chunk.width,chunk.height));
         }
 
         public void SetUpChunk()
