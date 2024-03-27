@@ -3,14 +3,14 @@ namespace Util
 {
     public struct TransferData
     {
-        public static float[,] TransferDataFromArrayTo2DArray(float[] array, int width, int height)
+        public static float[,] TransferDataFromArrayTo2DArray(float[] array, int width, int depth)
         {
-            float[,] newArray = new float[width, height];
+            float[,] newArray = new float[width, depth];
             for (int i = 0; i < width; i++)
             {
-                for (int j = 0; j < height; j++)
+                for (int j = 0; j < depth; j++)
                 {
-                    newArray[i, j] = array[i * width + j];
+                    newArray[i, j] = array[(i * width) + j];
                 }
             }
             return newArray;

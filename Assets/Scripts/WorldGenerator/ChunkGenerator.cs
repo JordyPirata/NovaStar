@@ -3,6 +3,7 @@ using Repository;
 using System.IO;
 using Util;
 
+
 namespace Generator
 {
     public class ChunkGenerator : MonoBehaviour
@@ -38,7 +39,7 @@ namespace Generator
             terrainData.baseMapResolution = chunk.width + 1;
             terrainData.heightmapResolution = chunk.width + 1;
             terrainData.size = new Vector3(chunk.width, chunk.height, chunk.width);
-            terrainData.SetHeights(0, 0,TransferData.TransferDataFromArrayTo2DArray(chunk.heights,chunk.width,chunk.height));
+            terrainData.SetHeights(0, 0,TransferData.TransferDataFromArrayTo2DArray(chunk.heights,chunk.width,chunk.depth));
         }
 
         public void SetUpChunk()
