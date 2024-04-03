@@ -12,7 +12,6 @@ namespace Generator
         public int width;
         public int depth;
         public int height;
-        [NonSerialized]public Vector2 position;
         public int CoordX;
         public int CoordY;
         public bool IsLoaded;

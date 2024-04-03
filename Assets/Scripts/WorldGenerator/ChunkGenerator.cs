@@ -28,14 +28,13 @@ namespace Generator
             chunk.CoordX = (int)position.x / chunk.width;
             chunk.CoordY = (int)position.y / chunk.width;
             chunk.ChunkName = $"Chunk({chunk.CoordX},{chunk.CoordY})";
-            chunk.position = new Vector2(chunk.CoordX * chunk.width, chunk.CoordY * chunk.width);
-            gameObject.transform.position = new Vector3(chunk.position.x, 0, chunk.position.y);
+            gameObject.transform.position = new Vector3(chunk.CoordX, 0, chunk.CoordY);
             gameObject.name = chunk.ChunkName;
         }
         public void GenerateTerrain()
         {
             terrain.terrainData.baseMapResolution = chunk.width;
-            chunk.heights = noiseGenerator.GenerateNoise((int)chunk.position.x, (int)chunk.position.y);
+            chunk.heights = noiseGenerator.GenerateNoise(chunk.CoordX, chunk.CoordY);
             terrainData.baseMapResolution = chunk.width + 1;
             terrainData.heightmapResolution = chunk.width + 1;
             terrainData.size = new Vector3(chunk.width, chunk.height, chunk.width);

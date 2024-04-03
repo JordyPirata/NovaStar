@@ -4,7 +4,6 @@ using Generator;
 
 public class ChunkFactory
 {
-    public ChunkFactory Instance;
     public static Chunk CreateChunk(int coordX, int coordY)
     {
         int arraySize = ChunkManager.width * ChunkManager.depth;
@@ -14,7 +13,6 @@ public class ChunkFactory
             width = ChunkManager.width,
             depth = ChunkManager.depth,
             height = ChunkManager.height,
-            position = new Vector2(0, 0),
             CoordX = coordX,
             CoordY = coordY,
             IsLoaded = false,

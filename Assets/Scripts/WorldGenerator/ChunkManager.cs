@@ -9,8 +9,8 @@ using Repository;
 //TODO: Change name to ChunkFacade and implement 
 public class ChunkManager : MonoBehaviour
 {
-    public const int width = 257;
-    public const int depth = 257;
+    public const int width = 256;
+    public const int depth = 256;
     public const int height = 20;
     public const float scale = 6.66f;
     public const int seed = 0;
