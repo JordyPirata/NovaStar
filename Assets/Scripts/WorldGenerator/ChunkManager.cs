@@ -24,7 +24,7 @@ public class ChunkManager : MonoBehaviour
         // add component as a child of the chunk manager
         GameObject chunk = new();
         chunk.transform.parent = transform;
-        chunk.AddComponent<ChunkGenerator>().SetPosition(viewerPosition);
+        chunk.AddComponent<ChunkGenerator>();
         StartCoroutine(UpdateViewerPosition());
     }
     IEnumerator LoadChunks()

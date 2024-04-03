@@ -12,23 +12,20 @@ namespace Generator
         private NoiseGenerator noiseGenerator;
         private TerrainData terrainData;
         private Terrain terrain;
-        private Chunk chunk = ChunkFactory.CreateChunk(0, 0);
+        private Chunk chunk = ChunkFactory.CreateChunk(0, 1);
 
         private void Start()
         {
             SetUpChunk();
-            SetPosition(ChunkManager.viewerPosition);
+            SetPosition();
             GenerateTerrain();
             SaveChunk();
 
         }
         //set position of the chunk
-        public void SetPosition(Vector2 position)
+        public void SetPosition()
         {
-            chunk.CoordX = (int)position.x / chunk.width;
-            chunk.CoordY = (int)position.y / chunk.width;
-            chunk.ChunkName = $"Chunk({chunk.CoordX},{chunk.CoordY})";
-            gameObject.transform.position = new Vector3(chunk.CoordX, 0, chunk.CoordY);
+            gameObject.transform.position = new Vector3(chunk.CoordX * chunk.width, 0, chunk.CoordY * chunk.depth);
             gameObject.name = chunk.ChunkName;
         }
         public void GenerateTerrain()
