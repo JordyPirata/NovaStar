@@ -7,13 +7,12 @@ namespace Generator
 	public class NoiseGenerator 
 	{
 		// TODO:  Move variables to ChunkManager
-		private readonly Perlin _perlin = new();
+		private readonly Perlin _perlin;
 		private readonly int Width = ChunkManager.width;
 		private readonly int Depth = ChunkManager.depth;
-		public int Seed
+		private int[] Permutation
 		{
-			get => ChunkManager.seed;
-			set => _perlin.SetSeed(value);
+			get => ChunkManager.Instance.Permutation().Result;
 		}
 		private int octaves = 8;
 		public const float persistance = Mathf.PI / 2;
@@ -28,7 +27,7 @@ namespace Generator
 				// Itera CoordX en uno veces width
 				for (int y = 0; y < Depth; y++)
 				{
-					heigths[i] = (_perlin.OctavePerlin(coordX, coordY, octaves, persistance, lacunarity) + 20f) * 0.0175f;
+					heigths[i] = (_perlin.OctavePerlin(coordX, coordY, octaves, persistance, lacunarity, Permutation) + 20f) * 0.0175f;
 					coordY ++;
 					i ++;
 				}

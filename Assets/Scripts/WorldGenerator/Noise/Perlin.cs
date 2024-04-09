@@ -1,13 +1,12 @@
 using System;
-
-using Random = System.Random;
+using Unity.Mathematics;
 
 namespace Generator
 {
-	public class Perlin 
+	public struct Perlin 
 	{
 		// Generate Octave Perlin noise value for float coordinates x, y
-		public float OctavePerlin(float x, float y, int octaves, float persistance, float lacunarity)
+		public float OctavePerlin(float x, float y, int octaves, float persistance, float lacunarity, int[] permutacion)
 		{
 
 			float total = 0;
@@ -15,7 +14,7 @@ namespace Generator
 			float amplitude = 1;
 			for (int i = 0; i < octaves; i++)
 			{
-				total += CalculatePerlin(x * frequency, y * frequency) * amplitude;
+				total += CalculatePerlin(x * frequency, y * frequency, permutacion) * amplitude;
 
 				amplitude *= persistance;
 				frequency *= lacunarity;
@@ -23,45 +22,11 @@ namespace Generator
 		
 			return total;
 		}
-		// set a seed value for the permutation vector
-		private int seed = 0;
-		public void SetSeed(int seed)
-		{
-			this.seed = seed;
-			
-			for (int i = 0; i < 256; i++)
-			{
-				p[256 + i] = p[i] = Permutation()[i];
-			}
-		}
-		//Generate a new permutation vector based on the value of seed
-		public int[] Permutation()
-		{
-			for (int i = 0; i <= 255; i++)
-			{
-				p[i] = i;
-			}
-			Random random = new(seed);
-			// Fisher-Yates shuffle algorithm
-			for (int i = p.Length - 1; i > 0; i--)
-			{
-				int j = random.Next(0, i + 1);
-				// Swap p[i] and p[j]
-				(p[j], p[i]) = (p[i], p[j]);
-			}
-			return p;
-		}
-		// Constructor
-		public Perlin()
-		{
-			SetSeed(0);
-		}
-		private readonly int[] p = new int[512];
 		// Calculate Perlin noise value for coordinates x, y
-		public float CalculatePerlin(float x, float y)
+		public static float CalculatePerlin(float x, float y, int[] p)
 		{
-			int X = (int)Math.Floor(x) & 255, // Keep the first 8 bits of the integer (coerce to 0-255)
-				Y = (int)Math.Floor(y) & 255;
+			int X = (int)math.floor(x) & 255, // Keep the first 8 bits of the integer (coerce to 0-255)
+				Y = (int)math.floor(y) & 255;
 
 			x -= X; // Get the decimal part of the number
 			y -= Y;
