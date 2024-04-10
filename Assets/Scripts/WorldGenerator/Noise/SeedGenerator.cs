@@ -9,7 +9,7 @@ public class SeedGenerator
 	{
 		SetSeed(seed);
 	}
-	private int[] p = new int[512];
+	public int[] p = new int[512];
     private int seed;
 	public void SetSeed(int seed)
 	{
@@ -19,14 +19,9 @@ public class SeedGenerator
 		{
 			p[256 + i] = p[i] = Permutation()[i];
 		}
-		SaveSeed();
-	}
-	public async void SaveSeed()
-	{
-		await JsonRepository.Instance.CreateAsync(p, "seed.json");
 	}
 	//Generate a new permutation vector based on the value of seed
-	public int[] Permutation()
+	private int[] Permutation()
 	{
 		for (int i = 0; i <= 255; i++)
 		{

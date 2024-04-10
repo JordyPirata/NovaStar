@@ -10,31 +10,29 @@ using System.Threading.Tasks;
 //TODO: Change name to ChunkFacade and implement 
 public class ChunkManager : MonoBehaviour
 {
-    private static ChunkManager instance;
-    public static ChunkManager Instance
+    public static ChunkManager Instance { get; private set; }
+    private void Awake()
     {
-        get
+        if (Instance == null)
         {
-            if (instance == null)
-            {
-                instance = GameObject
-            }
-            return instance;
+            Instance = this;
         }
     }
-    SeedGenerator seedGenerator = new(seed);
+
+    readonly SeedGenerator seedGenerator = new(seed);
     public const int width = 256;
     public const int depth = 256;
     public const int height = 20;
     public const float scale = 6.66f;
     public const int seed = 0;
-    public async Task<int[]> Permutation()
+    public int[] Permutation
     {
-        int[] p;
-        (_, p) = await JsonRepository.Instance.ReadAsync<int[]>("seed.json");
-        
-        return p;
+        get
+        {
+            return seedGenerator.p;
+        }
     }
+
     public Transform viewer;
     public static Vector2 viewerPosition;
     private List<Chunk> chunks;
@@ -67,8 +65,4 @@ public class ChunkManager : MonoBehaviour
         }
     }
 
-    public static implicit operator ChunkManager(ChunkGenerator v)
-    {
-        throw new NotImplementedException();
-    }
 }

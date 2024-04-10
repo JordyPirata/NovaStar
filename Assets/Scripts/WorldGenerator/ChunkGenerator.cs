@@ -30,6 +30,7 @@ namespace Generator
         }
         public void GenerateTerrain()
         {
+            noiseGenerator = new NoiseGenerator();
             terrain.terrainData.baseMapResolution = chunk.width;
             chunk.heights = noiseGenerator.GenerateNoise(chunk.CoordX, chunk.CoordY);
             terrainData.baseMapResolution = chunk.width + 1;
@@ -47,7 +48,6 @@ namespace Generator
             terrain.terrainData = terrainData;
             TerrainSettings.ApplySettings(terrain);
             gameObject.AddComponent<TerrainCollider>().terrainData = terrainData;
-            noiseGenerator = new NoiseGenerator();
         }
         public async void SaveChunk()
         {

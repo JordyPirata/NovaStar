@@ -1,24 +1,25 @@
 using System;
 using Unity.Mathematics;
 using UnityEngine;
+using Repository;
+using System.Threading.Tasks;
 
 namespace Generator
 {
-	public class NoiseGenerator 
+	public class NoiseGenerator
 	{
+
 		// TODO:  Move variables to ChunkManager
-		private readonly Perlin _perlin;
+		private readonly Perlin _perlin = new();
 		private readonly int Width = ChunkManager.width;
 		private readonly int Depth = ChunkManager.depth;
-		private int[] Permutation
-		{
-			get => ChunkManager.Instance.Permutation().Result;
-		}
 		private int octaves = 8;
 		public const float persistance = Mathf.PI / 2;
 		public const float lacunarity = .5f;
+		// Awaited variable
 		public float[] GenerateNoise(int coordX, int coordY)
 		{
+			// Get permutation from seed.json
 			float[] heigths = new float[Width * Depth];
 			int initialY = coordY, i = 0;
 
@@ -27,14 +28,15 @@ namespace Generator
 				// Itera CoordX en uno veces width
 				for (int y = 0; y < Depth; y++)
 				{
-					heigths[i] = (_perlin.OctavePerlin(coordX, coordY, octaves, persistance, lacunarity, Permutation) + 20f) * 0.0175f;
-					coordY ++;
-					i ++;
+					heigths[i] = (_perlin.OctavePerlin(coordX, coordY, octaves, persistance, lacunarity, ChunkManager.Instance.Permutation) + 20f) * 0.0175f;
+					coordY++;
+					i++;
 				}
-				coordX ++;
+				coordX++;
 				coordY = initialY;
 			}
 			return heigths;
 		}
+
 	}
 }
