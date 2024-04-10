@@ -1,14 +1,14 @@
 // Create factory
 using Unity.Jobs;
 using Unity.Collections;
-using UnityEditor.Profiling.Memory.Experimental;
 using Generator;
 
-public struct ChunkGeneratorJob : IJob
+public struct ChunkGeneratorJob : IJobParallelFor
 {
     NativeArray<Chunk> chunks;
-    public void Execute()
+    public void Execute(int index)
     {
         throw new System.NotImplementedException();
+
     }
 }

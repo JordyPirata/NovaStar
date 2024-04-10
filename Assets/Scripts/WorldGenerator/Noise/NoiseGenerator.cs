@@ -6,29 +6,23 @@ using System.Threading.Tasks;
 
 namespace Generator
 {
-	public class NoiseGenerator
+	public struct  NoiseGenerator
 	{
-
 		// TODO:  Move variables to ChunkManager
-		private readonly Perlin _perlin = new();
-		private readonly int Width = ChunkManager.width;
-		private readonly int Depth = ChunkManager.depth;
-		private int octaves = 8;
+		private const int octaves = 8;
 		public const float persistance = Mathf.PI / 2;
 		public const float lacunarity = .5f;
-		// Awaited variable
-		public float[] GenerateNoise(int coordX, int coordY)
+		public static float[] GenerateNoise(int coordX, int coordY)
 		{
-			// Get permutation from seed.json
-			float[] heigths = new float[Width * Depth];
+			float[] heigths = new float[ChunkManager.width * ChunkManager.depth];
 			int initialY = coordY, i = 0;
 
-			for (int x = 0; x < Width; x++)
+			for (int x = 0; x < ChunkManager.width; x++)
 			{
 				// Itera CoordX en uno veces width
-				for (int y = 0; y < Depth; y++)
+				for (int y = 0; y < ChunkManager.depth; y++)
 				{
-					heigths[i] = (_perlin.OctavePerlin(coordX, coordY, octaves, persistance, lacunarity, ChunkManager.Instance.Permutation) + 20f) * 0.0175f;
+					heigths[i] = (Perlin.OctavePerlin(coordX, coordY, octaves, persistance, lacunarity, ChunkManager.Instance.Permutation) + 20f) * 0.0175f;
 					coordY++;
 					i++;
 				}

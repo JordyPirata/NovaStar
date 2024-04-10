@@ -9,12 +9,11 @@ namespace Generator
     public class ChunkGenerator : MonoBehaviour
     {
         private string message;
-        private NoiseGenerator noiseGenerator;
         private TerrainData terrainData;
         private Terrain terrain;
         private Chunk chunk = ChunkFactory.CreateChunk(0, 1);
 
-        private void Start()
+        private void Awake()
         {
             SetUpChunk();
             SetPosition();
@@ -25,14 +24,13 @@ namespace Generator
         //set position of the chunk
         public void SetPosition()
         {
-            gameObject.transform.position = new Vector3(chunk.CoordX * chunk.width, 0, chunk.CoordY * chunk.depth);
+            gameObject.transform.position = chunk.position;
             gameObject.name = chunk.ChunkName;
         }
         public void GenerateTerrain()
         {
-            noiseGenerator = new NoiseGenerator();
             terrain.terrainData.baseMapResolution = chunk.width;
-            chunk.heights = noiseGenerator.GenerateNoise(chunk.CoordX, chunk.CoordY);
+            chunk.heights = NoiseGenerator.GenerateNoise(chunk.CoordX, chunk.CoordY);
             terrainData.baseMapResolution = chunk.width + 1;
             terrainData.heightmapResolution = chunk.width + 1;
             terrainData.size = new Vector3(chunk.width, chunk.height, chunk.width);

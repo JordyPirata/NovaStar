@@ -6,7 +6,7 @@ namespace Generator
 	public struct Perlin 
 	{
 		// Generate Octave Perlin noise value for float coordinates x, y
-		public float OctavePerlin(float x, float y, int octaves, float persistance, float lacunarity, int[] permutacion)
+		public static float OctavePerlin(float x, float y, int octaves, float persistance, float lacunarity, int[] permutacion)
 		{
 
 			float total = 0;

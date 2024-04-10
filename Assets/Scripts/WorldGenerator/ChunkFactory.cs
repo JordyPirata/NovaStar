@@ -9,6 +9,7 @@ public class ChunkFactory
         int arraySize = ChunkManager.width * ChunkManager.depth;
         return new Chunk()
         {
+            position = new Vector3(coordX * ChunkManager.width, 0, coordY * ChunkManager.depth),
             ChunkName = $"Chunk({coordX},{coordY})",
             width = ChunkManager.width,
             depth = ChunkManager.depth,
