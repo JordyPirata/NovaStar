@@ -17,6 +17,10 @@ public class ChunkManager : MonoBehaviour
         {
             Instance = this;
         }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     readonly SeedGenerator seedGenerator = new(seed);

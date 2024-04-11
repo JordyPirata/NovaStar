@@ -23,7 +23,7 @@ namespace Repository
             try
             {
                 await serializer.SerializeAsync(data, path);
-                return "Data saved successfully";
+                return "Data saved successfully on: " + path;
             }
             catch (System.Exception e)
             {
