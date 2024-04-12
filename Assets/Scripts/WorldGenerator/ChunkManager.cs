@@ -6,6 +6,7 @@ using UnityEngine;
 using Generator;
 using Repository;
 using System.Threading.Tasks;
+using Unity.Collections;
 
 //TODO: Change name to ChunkFacade and implement 
 public class ChunkManager : MonoBehaviour
@@ -28,18 +29,18 @@ public class ChunkManager : MonoBehaviour
     public const int depth = 256;
     public const int height = 20;
     public const float scale = 6.66f;
-    public const int seed = 0;
+    public static int seed = 0;
     public int[] Permutation
     {
         get
         {
-            return seedGenerator.p;
+            return seedGenerator.permutation;
         }
     }
 
     public Transform viewer;
     public static Vector2 viewerPosition;
-    private List<Chunk> chunks;
+    private NativeArray<Chunk> chunks;
     // TODO: Make this a list of chunks
     public void Start()
     {

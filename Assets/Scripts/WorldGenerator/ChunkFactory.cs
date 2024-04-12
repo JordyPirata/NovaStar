@@ -1,12 +1,13 @@
 // Create factory
 using UnityEngine;
 using Generator;
+using Unity.Burst;
 
+[BurstCompile]
 public class ChunkFactory
 {
     public static Chunk CreateChunk(int coordX, int coordY)
     {
-        int arraySize = ChunkManager.width * ChunkManager.depth;
         return new Chunk()
         {
             position = new Vector3(coordX * ChunkManager.width, 0, coordY * ChunkManager.depth),
@@ -17,9 +18,9 @@ public class ChunkFactory
             CoordX = coordX,
             CoordY = coordY,
             IsLoaded = false,
-            heights = new float[arraySize],
-            temperatures = new float[arraySize],
-            moisture = new float[arraySize]
+            heights = NoiseGenerator.GenerateNoise(coordX, coordY),
+            temperatures = null,
+            moisture = null
         };
     }
 }

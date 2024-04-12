@@ -1,27 +1,26 @@
-using System;
-using Unity.Mathematics;
 using UnityEngine;
-using Repository;
-using System.Threading.Tasks;
+using Unity.Burst;
 
 namespace Generator
 {
+	[BurstCompile]
 	public struct  NoiseGenerator
 	{
-		// TODO:  Move variables to ChunkManager
 		private const int octaves = 8;
 		public const float persistance = Mathf.PI / 2;
 		public const float lacunarity = .5f;
+		// Generate noise for the chunk
 		public static float[] GenerateNoise(int coordX, int coordY)
 		{
+			// Define the heights of the chunk
 			float[] heigths = new float[ChunkManager.width * ChunkManager.depth];
 			int initialY = coordY, i = 0;
 
 			for (int x = 0; x < ChunkManager.width; x++)
 			{
-				// Itera CoordX en uno veces width
 				for (int y = 0; y < ChunkManager.depth; y++)
 				{
+					// Assign the height to the heights array
 					heigths[i] = (Perlin.OctavePerlin(coordX, coordY, octaves, persistance, lacunarity, ChunkManager.Instance.Permutation) + 20f) * 0.0175f;
 					coordY++;
 					i++;

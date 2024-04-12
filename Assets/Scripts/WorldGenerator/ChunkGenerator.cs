@@ -1,55 +1,38 @@
 using UnityEngine;
 using Repository;
 using System.IO;
-using Util;
-
 
 namespace Generator
 {
     public class ChunkGenerator : MonoBehaviour
     {
         private string message;
-        private TerrainData terrainData;
-        private Terrain terrain;
+        private Terrain terrain = new();
         private Chunk chunk = ChunkFactory.CreateChunk(0, 1);
 
-        private void Awake()
+        public void Awake( )
         {
-            SetUpChunk();
-            SetPosition();
+            SetAttributes();
             GenerateTerrain();
             SaveChunk();
-
         }
-        //set position of the chunk
-        public void SetPosition()
+        //set position of the chunks
+        public void SetAttributes( )
         {
             gameObject.transform.position = chunk.position;
             gameObject.name = chunk.ChunkName;
         }
-        public void GenerateTerrain()
+        public void GenerateTerrain( )
         {
-            terrain.terrainData.baseMapResolution = chunk.width;
-            chunk.heights = NoiseGenerator.GenerateNoise(chunk.CoordX, chunk.CoordY);
-            terrainData.baseMapResolution = chunk.width + 1;
-            terrainData.heightmapResolution = chunk.width + 1;
-            terrainData.size = new Vector3(chunk.width, chunk.height, chunk.width);
-            terrainData.SetHeights(0, 0,TransferData.TransferDataFromArrayTo2DArray(chunk.heights,chunk.width,chunk.depth));
-        }
-
-        public void SetUpChunk()
-        {
-            //GENERATE NEW TERRAINDATA
-            terrainData = new TerrainData();
-            //terrain.materialTemplate = new Material(Shader.Find(""));
+            
             terrain = gameObject.AddComponent<Terrain>();
-            terrain.terrainData = terrainData;
-            TerrainSettings.ApplySettings(terrain);
-            gameObject.AddComponent<TerrainCollider>().terrainData = terrainData;
+            terrain = TerrainSettings.ApplySettings(terrain, chunk);
+            gameObject.AddComponent<TerrainCollider>().terrainData = terrain.terrainData;
+
         }
-        public async void SaveChunk()
+        public async void SaveChunk( )
         {
-            message = await JsonRepository.Instance.CreateAsync(chunk, Path.Combine(Application.persistentDataPath, "chunks.json"));
+            message = await JsonRepository.Instance.CreateAsync(chunk, Path.Combine(Application.persistentDataPath, string.Concat(chunk.ChunkName, ".json")));
             Debug.Log(message);
         }
     }
