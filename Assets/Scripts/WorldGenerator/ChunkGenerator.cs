@@ -1,83 +1,72 @@
-using UnityEngine;
-using Repository;
-using System.IO;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using System.IO;
+using Repository;
+using Unity.Collections;
+using Unity.Mathematics;
+using Unity.Jobs;
+using Generator;
 
-namespace Generator
+public class ChunkGenerator 
 {
-    ///<summary>
-    /// Class to generate the chunk object
-    /// </summary>
-    public class ChunkGenerator : MonoBehaviour
+    string message;
+    private static ChunkGenerator instance;
+    public static ChunkGenerator Instance
     {
-        private string message;
-        public readonly int poolSize = 10;
-        public readonly GameObject ChunkPrefab;
-        private readonly List<GameObject> chunkList;
-        private ChunkGenerator instance;
-        public ChunkGenerator Instance { get { return instance; } private set { instance = value; } }
-        public void Awake()
+        get
         {
-            if (instance == null)
-            {
-                instance = this;
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
+            instance ??= new ChunkGenerator();
+            return instance;
         }
-        public void Start()
+    }
+
+    public static List<GameObject> SetUpChunk(List<GameObject> chunks, List<int2> chunksCoords)
+    {
+        NativeArray<int2> NativeChunksCoords = new(chunksCoords.ToArray(), Allocator.TempJob);
+        NativeArray<Chunk> NativeChunks = new();
+
+        ChunkDataGeneratorJob chunkDataGeneratorJob = new()
         {
-            AddChunkToPool(poolSize);
-        }
-        private void AddChunkToPool(int amount)
+            chunksCoords = NativeChunksCoords,
+            chunks = NativeChunks
+        };
+
+        JobHandle jobHandle = chunkDataGeneratorJob.Schedule(chunksCoords.Count, 1);
+        jobHandle.Complete();
+        
+        for (int i = 0; i < chunks.Count; i++)
         {
-            for (int i = 0; i < amount; i++)
-            {
-                GameObject chunk = Instantiate(ChunkPrefab);
-                chunk.SetActive(false);
-                chunkList.Add(chunk);
-                chunk.transform.parent = transform;
-            }
+            chunks[i] = SetAttributes(chunks[i], NativeChunks[i]);
+            chunks[i].SetActive(true);
         }
-        // TODO: 
-        // generate chunkData with a job
-        // Implement the method
-        // create system to load existing chunks
-        // implement system to save chunks
-        // Test the system
-        public GameObject GetChunk(int coordX, int CoordY)
-        {
-            foreach (GameObject chunk in chunkList)
-            {
-                if (!chunk.activeInHierarchy)
-                {
-                    chunk.SetActive(true);
-                    return chunk;
-                }
-            }
-            return null;
-        }
-        public Chunk Chunk { get; private set; }
-        public void SetChunk(Chunk chunk)
-        {
-            Chunk = chunk;
-            SetAttributes();
-        }
-        //set position of the chunks
-        private void SetAttributes()
-        {
-            Terrain terrain = new Terrain();
-            gameObject.transform.position = Chunk.position;
-            gameObject.name = Chunk.ChunkName;
-            terrain = TerrainSettings.ApplySettings(terrain, Chunk);
-            gameObject.AddComponent<TerrainCollider>().terrainData = terrain.terrainData;
-        }
-        private async void SaveChunk()
-        {
-            message = await JsonRepository.Instance.CreateAsync(Chunk, Path.Combine(Application.persistentDataPath, string.Concat(Chunk.ChunkName, ".json")));
-            Debug.Log(message);
-        }
+
+        NativeChunksCoords.Dispose();
+        NativeChunks.Dispose();
+
+        return chunks;
+
+    }
+
+    //set position of the chunks
+    private static GameObject SetAttributes(GameObject ChunkGameObject, Chunk Chunk)
+    {
+        ChunkGameObject.transform.position = Chunk.position;
+        ChunkGameObject.name = Chunk.ChunkName;
+        
+        Terrain terrain = ChunkGameObject.GetComponent<Terrain>();
+        TerrainCollider terrainCollider = ChunkGameObject.GetComponent<TerrainCollider>();
+        
+        terrain = TerrainSettings.ApplySettings(terrain, Chunk);
+        terrainCollider.terrainData = terrain.terrainData;
+
+        Instance.SaveChunk(ChunkGameObject);
+
+        return ChunkGameObject;
+    }
+    private async void SaveChunk(GameObject Chunk)
+    {
+        message = await JsonRepository.Instance.CreateAsync(Chunk, Path.Combine(Application.persistentDataPath, string.Concat(Chunk.name, ".json")));
+        Debug.Log(message);
     }
 }
