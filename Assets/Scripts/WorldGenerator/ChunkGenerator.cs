@@ -21,10 +21,10 @@ public class ChunkGenerator
         }
     }
 
-    public static List<GameObject> SetUpChunk(List<GameObject> chunks, List<int2> chunksCoords)
+    public static List<GameObject> GenerateChunk(List<GameObject> chunks, List<int2> chunksCoords)
     {
         NativeArray<int2> NativeChunksCoords = new(chunksCoords.ToArray(), Allocator.TempJob);
-        NativeArray<Chunk> NativeChunks = new();
+        NativeArray<Chunk> NativeChunks = new(chunksCoords.Count, Allocator.TempJob);
 
         ChunkDataGeneratorJob chunkDataGeneratorJob = new()
         {

@@ -17,8 +17,8 @@ namespace Generator
         [SerializeField] private int poolSize = 24;
         [SerializeField] private GameObject ChunkPrefab;
         private readonly List<GameObject> chunkList = new();
-        private ChunkPool instance;
-        public ChunkPool Instance { get { return instance; } private set { instance = value; } }
+        private static ChunkPool instance;
+        public static ChunkPool Instance { get { return instance; } private set { instance = value; } }
         public void Awake()
         {
             if (instance == null)
@@ -50,9 +50,8 @@ namespace Generator
         // create system to load existing chunks
         // implement system to save chunks
         // Test the system
-        public List<GameObject> GetInactiveChunks(List<int2> chunksCoords)
+        public List<GameObject> GetInactiveChunks()
         {
-            int coordsCount = chunksCoords.Count;
             // Set empty list of inactive chunks
             List<GameObject> inactiveChunks = new();
             for (int i = 0; i < chunkList.Count; i++)
@@ -62,12 +61,7 @@ namespace Generator
                     inactiveChunks.Add(chunkList[i]);
                 }
             }
-            if (coordsCount > inactiveChunks.Count)
-            {
-                return null;
-            }
-
-            return null;
+            return inactiveChunks;
         }
 
 

@@ -1,12 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using Generator;
-using Repository;
-using System.Threading.Tasks;
 using Unity.Collections;
+using Unity.Mathematics;
 
 //TODO: Change name to ChunkFacade and implement 
 public class ChunkManager : MonoBehaviour
@@ -41,23 +39,26 @@ public class ChunkManager : MonoBehaviour
 
     public Transform viewer;
     public static Vector2 viewerPosition;
-    private NativeArray<Chunk> chunks;
     // TODO: Make this a list of chunks
     public void Start()
     {
         // add component as a child of the chunk manager
-
+        List<int2> chunksCoords = new()
+        {
+            new int2(0, 0),
+            new int2(1, 0),
+            new int2(0, 1),
+            new int2(1, 1)
+        };
         StartCoroutine(UpdateViewerPosition());
+        List<GameObject> chunks = ChunkPool.Instance.GetInactiveChunks();
+        ChunkGenerator.GenerateChunk(chunks, chunksCoords);
     }
     IEnumerator Loadchunks()
     {
         while (true)
         {
             yield return new WaitForSeconds(0.5f);
-            foreach (Chunk chunk in chunks)
-            {
-
-            }
         }
     }
     IEnumerator UpdateViewerPosition()
