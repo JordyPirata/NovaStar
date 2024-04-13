@@ -11,12 +11,13 @@ using Unity.Collections;
 //TODO: Change name to ChunkFacade and implement 
 public class ChunkManager : MonoBehaviour
 {
-    public static ChunkManager Instance { get; private set; }
+    private static ChunkManager instance;
+    public static ChunkManager Instance { get {return instance;} private set {instance = value;} }
     private void Awake()
     {
-        if (Instance == null)
+        if (instance == null)
         {
-            Instance = this;
+            instance = this;
         }
         else
         {
@@ -45,12 +46,10 @@ public class ChunkManager : MonoBehaviour
     public void Start()
     {
         // add component as a child of the chunk manager
-        GameObject chunk = new();
-        chunk.transform.parent = transform;
-        chunk.AddComponent<ChunkGenerator>();
+
         StartCoroutine(UpdateViewerPosition());
     }
-    IEnumerator LoadChunks()
+    IEnumerator Loadchunks()
     {
         while (true)
         {
