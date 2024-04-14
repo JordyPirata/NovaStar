@@ -1,4 +1,5 @@
-using System.Collections;
+
+using Unity.Collections.LowLevel.Unsafe;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
@@ -25,6 +26,7 @@ public class ChunkGenerator
     {
         NativeArray<int2> NativeChunksCoords = new(chunksCoords.ToArray(), Allocator.TempJob);
         NativeArray<Chunk> NativeChunks = new(chunksCoords.Count, Allocator.TempJob);
+        FixedString128Bytes chunkName = new();
 
         ChunkDataGeneratorJob chunkDataGeneratorJob = new()
         {

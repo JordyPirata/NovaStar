@@ -19,5 +19,5 @@ public struct Chunk
     public float[] heights;
     public float[] temperatures;
     public float[] moisture;
-    
+
 }
