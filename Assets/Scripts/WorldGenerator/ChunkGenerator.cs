@@ -8,6 +8,8 @@ using Unity.Collections;
 using Unity.Mathematics;
 using Unity.Jobs;
 using Generator;
+using Util;
+using System.Runtime.InteropServices;
 
 public class ChunkGenerator 
 {
@@ -25,8 +27,7 @@ public class ChunkGenerator
     public static List<GameObject> GenerateChunk(List<GameObject> chunks, List<int2> chunksCoords)
     {
         NativeArray<int2> NativeChunksCoords = new(chunksCoords.ToArray(), Allocator.TempJob);
-        NativeArray<Chunk> NativeChunks = new(chunksCoords.Count, Allocator.TempJob);
-        FixedString128Bytes chunkName = new();
+        NativeArray<UnManagedChunk> NativeChunks = new(chunksCoords.Count, Allocator.TempJob);
 
         ChunkDataGeneratorJob chunkDataGeneratorJob = new()
         {
@@ -39,10 +40,10 @@ public class ChunkGenerator
         
         for (int i = 0; i < chunks.Count; i++)
         {
-            chunks[i] = SetAttributes(chunks[i], NativeChunks[i]);
+            chunks[i] = SetAttributes(chunks[i], TransferData.TrasferDataToChunk(chunkDataGeneratorJob.chunks[i]));
             chunks[i].SetActive(true);
         }
-
+        chunkDataGeneratorJob.chunks.Dispose();
         NativeChunksCoords.Dispose();
         NativeChunks.Dispose();
 
