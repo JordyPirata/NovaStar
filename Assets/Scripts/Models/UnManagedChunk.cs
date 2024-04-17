@@ -12,15 +12,5 @@ public struct UnManagedChunk
     public int CoordX;
     public int CoordY;
     public bool IsLoaded;
-    public NativeArray<float> heights;
-    public NativeArray<float> temperatures;
-    public NativeArray<float> moisture;
-
-    public void Dispose()
-    {
-        heights.Dispose();
-        temperatures.Dispose();
-        moisture.Dispose();
-    }
 
 }

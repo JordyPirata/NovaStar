@@ -26,6 +26,7 @@ public class ChunkManager : MonoBehaviour
     readonly SeedGenerator seedGenerator = new(seed);
     public const int width = 256;
     public const int depth = 256;
+    public const int length = width * depth;
     public const int height = 20;
     public const float scale = 6.66f;
     public static int seed = 0;

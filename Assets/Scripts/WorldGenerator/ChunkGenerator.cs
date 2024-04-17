@@ -28,11 +28,18 @@ public class ChunkGenerator
     {
         NativeArray<int2> NativeChunksCoords = new(chunksCoords.ToArray(), Allocator.TempJob);
         NativeArray<UnManagedChunk> NativeChunks = new(chunksCoords.Count, Allocator.TempJob);
+        NativeArray<NativeArray<float>> heights = new(chunksCoords.Count, Allocator.TempJob);
+        NativeArray<NativeArray<float>> temperatures = new(chunksCoords.Count, Allocator.TempJob);
+        NativeArray<NativeArray<float>> moisture = new(chunksCoords.Count, Allocator.TempJob);
 
         ChunkDataGeneratorJob chunkDataGeneratorJob = new()
         {
             chunksCoords = NativeChunksCoords,
-            chunks = NativeChunks
+            chunks = NativeChunks,
+            heights = heights,
+            temperatures = temperatures,
+            moisture = moisture
+            
         };
 
         JobHandle jobHandle = chunkDataGeneratorJob.Schedule(chunksCoords.Count, 1);
@@ -40,7 +47,7 @@ public class ChunkGenerator
         
         for (int i = 0; i < chunks.Count; i++)
         {
-            chunks[i] = SetAttributes(chunks[i], TransferData.TrasferDataToChunk(chunkDataGeneratorJob.chunks[i]));
+            chunks[i] = SetAttributes(chunks[i], TransferData.TrasferDataToChunk(chunkDataGeneratorJob.chunks[i], heights[i], temperatures[i], moisture[i]));
             chunks[i].SetActive(true);
         }
         chunkDataGeneratorJob.chunks.Dispose();

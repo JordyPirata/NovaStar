@@ -1,4 +1,5 @@
 // Purpose: Contains the TransferData struct, which contains a method to transfer a 1D array to a 2D array.
+using System;
 using Unity.Burst;
 using Unity.Collections;
 
@@ -19,9 +20,9 @@ namespace Util
             }
             return newArray;
         }
-        public static Chunk TrasferDataToChunk(UnManagedChunk unManagedChunk)
+        public static Chunk TrasferDataToChunk(UnManagedChunk unManagedChunk, NativeArray<float> heights, NativeArray<float> temperatures, NativeArray<float> moisture)
         {
-            return new Chunk()
+            Chunk chunk = new()
             {
                 position = unManagedChunk.position,
                 ChunkName = unManagedChunk.name.ToString(),
@@ -31,15 +32,24 @@ namespace Util
                 CoordX = unManagedChunk.CoordX,
                 CoordY = unManagedChunk.CoordY,
                 IsLoaded = unManagedChunk.IsLoaded,
-                heights = unManagedChunk.heights.ToArray(),
-                temperatures = unManagedChunk.temperatures.ToArray(),
-                moisture = unManagedChunk.moisture.ToArray(),
+                heights = heights.ToArray(),
+                temperatures = heights.ToArray(),
+                moisture = heights.ToArray(),
             };
-        }
+            heights.Dispose();
+            temperatures.Dispose();
+            moisture.Dispose();
 
-        public static UnManagedChunk TransferDataToUnManagedChunk(Chunk chunk)
+            return chunk;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chunk"></param>
+        /// <returns></returns>
+        public static (UnManagedChunk, Arrays) TransferDataToUnManagedChunk(Chunk chunk)
         {
-            return new UnManagedChunk()
+            UnManagedChunk unManagedChunk = new()
             {
                 position = chunk.position,
                 name = chunk.ChunkName,
@@ -48,11 +58,16 @@ namespace Util
                 height = chunk.height,
                 CoordX = chunk.CoordX,
                 CoordY = chunk.CoordY,
-                IsLoaded = chunk.IsLoaded,
-                heights = new NativeArray<float>(chunk.heights, Allocator.None),
-                temperatures = new NativeArray<float>(chunk.temperatures, Allocator.TempJob),
-                moisture = new NativeArray<float>(chunk.moisture, Allocator.TempJob),
+                IsLoaded = chunk.IsLoaded, 
             };
+            Arrays arrays = new()
+            {
+                heights = new NativeArray<float>(chunk.heights, Allocator.TempJob),
+                temperatures = new NativeArray<float>(chunk.temperatures, Allocator.TempJob),
+                moisture = new NativeArray<float>(chunk.moisture, Allocator.TempJob)
+            };
+            arrays.Inicialize();
+            return (unManagedChunk, arrays);
         }
     }
 }
