@@ -5,7 +5,7 @@ using Unity.Jobs;
 public struct UnManagedChunk
 {
     public float3 position;
-    public FixedString128Bytes name;
+    public FixedString128Bytes ChunkName;
     public int width;
     public int depth;
     public int height;

@@ -3,6 +3,8 @@ using Unity.Jobs;
 using Unity.Collections;
 using Unity.Mathematics;
 using Util;
+using Generator;
+using UnityEngine;
 
 /// <summary>
 ///  This job is responsible for generating the chunk data
@@ -13,16 +15,24 @@ public struct ChunkDataGeneratorJob : IJobParallelFor
     public NativeArray<int2> chunksCoords;
     public NativeArray<UnManagedChunk> chunks;
     public NativeArray<NativeArray<float>> heights;
-    public NativeArray<NativeArray<float>> temperatures;
-    public NativeArray<NativeArray<float>> moisture;
+
     public void Execute(int index)
     {
-
-        arrays = new Arrays();
-        (chunks[index], arrays) = TransferData.TransferDataToUnManagedChunk(ChunkFactory.CreateChunk(chunksCoords[index].x,chunksCoords[index].y));
-        heights[index] = arrays.heights;
-        temperatures[index] = arrays.temperatures;
-        moisture[index] = arrays.moisture;
-        arrays.Dispose();
+        int coordX = chunksCoords[index].x;
+        int coordY = chunksCoords[index].y;
+        
+        chunks[index] = new() {
+            position = new Vector3(coordX * ChunkManager.width, 0, coordY * ChunkManager.depth),
+            ChunkName = $"Chunk({coordX},{coordY})",
+            width = ChunkManager.width,
+            depth = ChunkManager.depth,
+            height = ChunkManager.height,
+            CoordX = coordX,
+            CoordY = coordY,
+            IsLoaded = false,
+            
+        };
+        heights[index] = new NativeArray<float>(NoiseGenerator.GenerateNoise(coordX, coordY), Allocator.TempJob);
+        
     }
 }

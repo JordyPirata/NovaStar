@@ -20,12 +20,12 @@ namespace Util
             }
             return newArray;
         }
-        public static Chunk TrasferDataToChunk(UnManagedChunk unManagedChunk, NativeArray<float> heights, NativeArray<float> temperatures, NativeArray<float> moisture)
+        public static Chunk TrasferDataToChunk(UnManagedChunk unManagedChunk, NativeArray<float> heights)
         {
             Chunk chunk = new()
             {
                 position = unManagedChunk.position,
-                ChunkName = unManagedChunk.name.ToString(),
+                ChunkName = unManagedChunk.ChunkName.ToString(),
                 width = unManagedChunk.width,
                 depth = unManagedChunk.depth,
                 height = unManagedChunk.height,
@@ -33,12 +33,11 @@ namespace Util
                 CoordY = unManagedChunk.CoordY,
                 IsLoaded = unManagedChunk.IsLoaded,
                 heights = heights.ToArray(),
-                temperatures = heights.ToArray(),
-                moisture = heights.ToArray(),
+                temperatures = null,
+                moisture = null,
             };
             heights.Dispose();
-            temperatures.Dispose();
-            moisture.Dispose();
+
 
             return chunk;
         }
@@ -52,7 +51,7 @@ namespace Util
             UnManagedChunk unManagedChunk = new()
             {
                 position = chunk.position,
-                name = chunk.ChunkName,
+                ChunkName = chunk.ChunkName,
                 width = chunk.width,
                 depth = chunk.depth,
                 height = chunk.height,
