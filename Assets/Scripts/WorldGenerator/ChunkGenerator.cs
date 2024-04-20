@@ -1,4 +1,3 @@
-
 using Unity.Collections.LowLevel.Unsafe;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,9 +25,11 @@ public class ChunkGenerator
 
     public static List<GameObject> GenerateChunk(List<GameObject> chunks, List<int2> chunksCoords)
     {
-        NativeArray<int2> NativeChunksCoords = new(chunksCoords.ToArray(), Allocator.TempJob);
-        NativeArray<UnManagedChunk> NativeChunks = new(chunksCoords.Count, Allocator.TempJob);
-        NativeArray<NativeArray<float>> heights = new(chunksCoords.Count, Allocator.TempJob);
+        NativeArray<int2> NativeChunksCoords = new(chunksCoords.ToArray(), Allocator.Persistent);
+        NativeArray<int2> NativeChunksCoords = new(chunksCoords.ToArray(), Allocator.Persistent);
+        NativeArray<UnManagedChunk> NativeChunks = new(chunksCoords.Count, Allocator.Persistent); 
+        NativeArray<float> heights = new(ChunkManager.depth, Allocator.Persistent);
+        var heightsArray = new NativeSlice<float>(heights, 0, ChunkManager.depth);
 
         ChunkDataGeneratorJob chunkDataGeneratorJob = new()
         {

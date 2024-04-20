@@ -14,7 +14,7 @@ public struct ChunkDataGeneratorJob : IJobParallelFor
     private Arrays arrays;
     public NativeArray<int2> chunksCoords;
     public NativeArray<UnManagedChunk> chunks;
-    public NativeArray<NativeArray<float>> heights;
+    public NativeSlice<NativeArray<float>> heights;
 
     public void Execute(int index)
     {
