@@ -26,10 +26,8 @@ public class ChunkGenerator
     public static List<GameObject> GenerateChunk(List<GameObject> chunks, List<int2> chunksCoords)
     {
         NativeArray<int2> NativeChunksCoords = new(chunksCoords.ToArray(), Allocator.Persistent);
-        NativeArray<int2> NativeChunksCoords = new(chunksCoords.ToArray(), Allocator.Persistent);
         NativeArray<UnManagedChunk> NativeChunks = new(chunksCoords.Count, Allocator.Persistent); 
-        NativeArray<float> heights = new(ChunkManager.depth, Allocator.Persistent);
-        var heightsArray = new NativeSlice<float>(heights, 0, ChunkManager.depth);
+        NativeArray<NativeArray<float>> heights = new(ChunkManager.length, Allocator.Persistent);
 
         ChunkDataGeneratorJob chunkDataGeneratorJob = new()
         {
