@@ -14,7 +14,6 @@ public class Settings
         fullscreen = true;
         language = 0;
         mouseSensitivity = 0.5f;
-        return;
     }
     // Settings class to store the settings of the game
     public float overallVolume { get; set; }

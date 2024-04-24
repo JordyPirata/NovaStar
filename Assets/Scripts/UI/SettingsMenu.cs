@@ -14,7 +14,7 @@ namespace Menus
         private string message;
         public Button onButton, offButton, englishButton, spanishButton;
         public Slider overallVolumeSlider, musicVolumeSlider, sfxVolumeSlider, sensitibilitySlider;
-        private Settings settings;
+        private Settings settings = new();
         public AudioMixer audioMixer;
         private string settingsFile;
         private void Awake()

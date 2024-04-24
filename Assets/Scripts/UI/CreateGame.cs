@@ -10,7 +10,8 @@ public class CreateGame : MonoBehaviour
     public Scrollbar scrollbar;
     public RectTransform contentPanel;
     public VerticalLayoutGroup layout;
-    public GameObject worldPanel;
+    private List<GameObject> worlds = new List<GameObject>();
+    public GameObject worldPrefab;
     public void Awake()
     {
         // Create a new world when the game starts
@@ -40,11 +41,9 @@ public class CreateGame : MonoBehaviour
     }
 
     public void CreateWorld()
-    
     {
         // Create a new world
-        GameObject newWorld = Instantiate(worldPanel, layout.transform);
-        // Set the new world to be the second last child of the layout
-        newWorld.transform.SetSiblingIndex(layout.transform.childCount - 2);
+        GameObject world = Instantiate(worldPrefab, contentPanel);
+        worlds.Add(world);
     }
 }
