@@ -6,18 +6,9 @@ using System.IO;
 using System;
 
 
-public class Game : MonoBehaviour
+public class Game 
 {
     public static string GameName;
-    private readonly string GamePath = Path.Combine(Application.persistentDataPath, GameName);
+    public string GamePath = Path.Combine(Application.persistentDataPath, GameName);
 
-    public void Create()
-    {
-        // Create the game folder
-        Directory.CreateDirectory(GamePath);
-    }
-
-    
-
-    
 }
