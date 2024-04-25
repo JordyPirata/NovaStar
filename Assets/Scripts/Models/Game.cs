@@ -8,7 +8,7 @@ using System;
 
 public class Game 
 {
-    public static string GameName;
+    public static string GameName; 
     public string GamePath = Path.Combine(Application.persistentDataPath, GameName);
 
 }

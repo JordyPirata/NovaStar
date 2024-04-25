@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Localization.Plugins.XLIFF.V20;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +8,7 @@ public class CreateGame : MonoBehaviour
     public Scrollbar scrollbar;
     public RectTransform contentPanel;
     public VerticalLayoutGroup layout;
-    private List<GameObject> worlds = new List<GameObject>();
+    private List<GameObject> worlds = new();
     public GameObject worldPrefab;
     public void Awake()
     {
