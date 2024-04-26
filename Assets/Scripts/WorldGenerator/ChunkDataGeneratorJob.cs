@@ -11,10 +11,9 @@ using UnityEngine;
 /// </summary>
 public struct ChunkDataGeneratorJob : IJobParallelFor
 {
-    private Arrays arrays;
     public NativeArray<int2> chunksCoords;
     public NativeArray<UnManagedChunk> chunks;
-    public NativeSlice<NativeArray<float>> heights;
+    public NativeArray<float> allHeights;
 
     public void Execute(int index)
     {
@@ -30,9 +29,17 @@ public struct ChunkDataGeneratorJob : IJobParallelFor
             CoordX = coordX,
             CoordY = coordY,
             IsLoaded = false,
-            
         };
-        heights[index] = new NativeArray<float>(NoiseGenerator.GenerateNoise(coordX, coordY), Allocator.TempJob);
+        float[] heights = NoiseGenerator.GenerateNoise(coordX, coordY);
+        
+        int iterator = 0;
+        int first = index * ChunkManager.length;
+        int last = first + ChunkManager.length;
+        for (int i = first; i < last; i++)
+        {
+            allHeights[i] = heights[iterator];
+            iterator++;
+        }
         
     }
 }

@@ -27,25 +27,25 @@ public class ChunkGenerator
     {
         NativeArray<int2> NativeChunksCoords = new(chunksCoords.ToArray(), Allocator.Persistent);
         NativeArray<UnManagedChunk> NativeChunks = new(chunksCoords.Count, Allocator.Persistent); 
-        NativeArray<NativeArray<float>> heights = new(ChunkManager.length, Allocator.Persistent);
+        NativeArray<float> AllHeights = new(ChunkManager.length * chunksCoords.Count, Allocator.Persistent);
 
         ChunkDataGeneratorJob chunkDataGeneratorJob = new()
         {
             chunksCoords = NativeChunksCoords,
             chunks = NativeChunks,
-            heights = heights,
-            
+            allHeights = AllHeights,
         };
 
-        JobHandle jobHandle = chunkDataGeneratorJob.Schedule(chunksCoords.Count, 1);
+        JobHandle jobHandle = chunkDataGeneratorJob.Schedule(ChunkManager.length * chunksCoords.Count , ChunkManager.depth);
         jobHandle.Complete();
         
         for (int i = 0; i < chunks.Count; i++)
         {
-            chunks[i] = SetAttributes(chunks[i], TransferData.TrasferDataToChunk(chunkDataGeneratorJob.chunks[i], heights[i]));
+            chunks[i] = SetAttributes(chunks[i], 
+                TransferData.TrasferDataToChunk(chunkDataGeneratorJob.chunks[i], 
+                    TransferData.TransferDataFromMasterArrayToChunkArray(chunkDataGeneratorJob.allHeights.ToArray(), i, ChunkManager.length)));
             chunks[i].SetActive(true);
         }
-        chunkDataGeneratorJob.chunks.Dispose();
         NativeChunksCoords.Dispose();
         NativeChunks.Dispose();
 

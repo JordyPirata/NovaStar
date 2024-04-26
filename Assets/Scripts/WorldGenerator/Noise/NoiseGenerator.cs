@@ -13,7 +13,7 @@ namespace Generator
 		public static float[] GenerateNoise(int coordX, int coordY)
 		{
 			// Define the heights of the chunk
-			float[] heigths = new float[ChunkManager.width * ChunkManager.depth];
+			float[] heigths = new float[ChunkManager.length];
 			int initialY = coordY, i = 0;
 
 			for (int x = 0; x < ChunkManager.width; x++)

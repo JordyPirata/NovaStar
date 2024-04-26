@@ -20,7 +20,7 @@ namespace Util
             }
             return newArray;
         }
-        public static Chunk TrasferDataToChunk(UnManagedChunk unManagedChunk, NativeArray<float> heights)
+        public static Chunk TrasferDataToChunk(UnManagedChunk unManagedChunk, float[] heights)
         {
             Chunk chunk = new()
             {
@@ -32,20 +32,24 @@ namespace Util
                 CoordX = unManagedChunk.CoordX,
                 CoordY = unManagedChunk.CoordY,
                 IsLoaded = unManagedChunk.IsLoaded,
-                heights = heights.ToArray(),
+                heights = heights,
                 temperatures = null,
                 moisture = null,
             };
-            heights.Dispose();
-
-
+            
             return chunk;
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="chunk"></param>
-        /// <returns></returns>
+        public static float[] TransferDataFromMasterArrayToChunkArray(float[] masterArray, int index, int length)
+        {
+            float[] chunkArray = new float[length];
+            for (int i = 0; i < length; i++)
+            {
+                chunkArray[i] = masterArray[(index * length) + i];
+            }
+            return chunkArray;
+        }
+
+        [Obsolete("This method is obsolete")]
         public static (UnManagedChunk, Arrays) TransferDataToUnManagedChunk(Chunk chunk)
         {
             UnManagedChunk unManagedChunk = new()
