@@ -24,6 +24,9 @@ public class ChunkManager : MonoBehaviour
     }
 
     readonly SeedGenerator seedGenerator = new(seed);
+    public const int octaves = 8;
+    public const float persistance = Mathf.PI / 2;
+    public const float lacunarity = .5f;
     public const int width = 256;
     public const int depth = 256;
     public const int length = width * depth;
@@ -53,7 +56,7 @@ public class ChunkManager : MonoBehaviour
         };
         StartCoroutine(UpdateViewerPosition());
         List<GameObject> chunks = ChunkPool.Instance.GetInactiveChunks();
-        ChunkGenerator.GenerateChunk(chunks, chunksCoords);
+        ChunkGenerator.Instance.GenerateChunk(chunks, chunksCoords);
     }
     IEnumerator Loadchunks()
     {

@@ -23,7 +23,7 @@ public class ChunkGenerator
         }
     }
 
-    public static List<GameObject> GenerateChunk(List<GameObject> chunks, List<int2> chunksCoords)
+    public List<GameObject> GenerateChunk(List<GameObject> chunks, List<int2> chunksCoords)
     {
         NativeArray<int2> NativeChunksCoords = new(chunksCoords.ToArray(), Allocator.Persistent);
         NativeArray<UnManagedChunk> NativeChunks = new(chunksCoords.Count, Allocator.Persistent); 
@@ -33,12 +33,11 @@ public class ChunkGenerator
         {
             chunksCoords = NativeChunksCoords,
             chunks = NativeChunks,
-            allHeights = AllHeights,
         };
 
-        JobHandle jobHandle = chunkDataGeneratorJob.Schedule(ChunkManager.length * chunksCoords.Count , ChunkManager.depth);
+        JobHandle jobHandle = chunkDataGeneratorJob.Schedule(chunksCoords.Count -1 , 1);
         jobHandle.Complete();
-        
+        /*
         for (int i = 0; i < chunks.Count; i++)
         {
             chunks[i] = SetAttributes(chunks[i], 
@@ -46,6 +45,7 @@ public class ChunkGenerator
                     TransferData.TransferDataFromMasterArrayToChunkArray(chunkDataGeneratorJob.allHeights.ToArray(), i, ChunkManager.length)));
             chunks[i].SetActive(true);
         }
+        */
         NativeChunksCoords.Dispose();
         NativeChunks.Dispose();
 
@@ -65,13 +65,14 @@ public class ChunkGenerator
         terrain = TerrainSettings.ApplySettings(terrain, Chunk);
         terrainCollider.terrainData = terrain.terrainData;
 
-        Instance.SaveChunk(ChunkGameObject);
+        Instance.SaveChunk(Chunk);
 
         return ChunkGameObject;
     }
-    private async void SaveChunk(GameObject Chunk)
+    private async void SaveChunk(Chunk Chunk)
     {
-        message = await JsonRepository.Instance.CreateAsync(Chunk, Path.Combine(Application.persistentDataPath, string.Concat(Chunk.name, ".json")));
+        message = await JsonRepository.Instance.CreateAsync(Chunk, 
+            Path.Combine(Application.persistentDataPath, string.Concat(Chunk.ChunkName, ".json")));
         Debug.Log(message);
     }
 }

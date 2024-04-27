@@ -13,8 +13,7 @@ public struct ChunkDataGeneratorJob : IJobParallelFor
 {
     public NativeArray<int2> chunksCoords;
     public NativeArray<UnManagedChunk> chunks;
-    public NativeArray<float> allHeights;
-
+    // TODO: separate the noise generation from the chunk generation
     public void Execute(int index)
     {
         int coordX = chunksCoords[index].x;
@@ -30,16 +29,5 @@ public struct ChunkDataGeneratorJob : IJobParallelFor
             CoordY = coordY,
             IsLoaded = false,
         };
-        float[] heights = NoiseGenerator.GenerateNoise(coordX, coordY);
-        
-        int iterator = 0;
-        int first = index * ChunkManager.length;
-        int last = first + ChunkManager.length;
-        for (int i = first; i < last; i++)
-        {
-            allHeights[i] = heights[iterator];
-            iterator++;
-        }
-        
     }
 }
