@@ -23,7 +23,6 @@ public class ChunkManager : MonoBehaviour
         }
     }
 
-    readonly SeedGenerator seedGenerator = new(seed);
     public const int octaves = 8;
     public const float persistance = Mathf.PI / 2;
     public const float lacunarity = .5f;
@@ -33,6 +32,7 @@ public class ChunkManager : MonoBehaviour
     public const int height = 20;
     public const float scale = 6.66f;
     public static int seed = 0;
+    readonly SeedGenerator seedGenerator = new(seed);
     public int[] Permutation
     {
         get
@@ -47,13 +47,19 @@ public class ChunkManager : MonoBehaviour
     public void Start()
     {
         // add component as a child of the chunk manager
-        List<int2> chunksCoords = new()
+        int2[] chunksCoords =
         {
-            new int2(0, 0),
-            new int2(1, 0),
-            new int2(0, 1),
-            new int2(1, 1)
+            new(0, 0),
+            new(1, 0),
+            new(0, 1),
+            new(1, 1),
+            new(0, -1),
+            new(-1, 0),
+            new(-1, -1),
+            new(-1, 1),
+            new(1, -1)
         };
+        
         StartCoroutine(UpdateViewerPosition());
         List<GameObject> chunks = ChunkPool.Instance.GetInactiveChunks();
         ChunkGenerator.Instance.GenerateChunk(chunks, chunksCoords);

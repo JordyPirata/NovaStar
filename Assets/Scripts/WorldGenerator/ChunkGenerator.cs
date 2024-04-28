@@ -7,8 +7,7 @@ using Unity.Collections;
 using Unity.Mathematics;
 using Unity.Jobs;
 using Generator;
-using Util;
-using System.Runtime.InteropServices;
+using System.Linq;
 
 public class ChunkGenerator 
 {
@@ -23,32 +22,14 @@ public class ChunkGenerator
         }
     }
 
-    public List<GameObject> GenerateChunk(List<GameObject> chunks, List<int2> chunksCoords)
+    public List<GameObject> GenerateChunk(List<GameObject> chunks, int2[] chunksCoords)
     {
-        NativeArray<int2> NativeChunksCoords = new(chunksCoords.ToArray(), Allocator.Persistent);
-        NativeArray<UnManagedChunk> NativeChunks = new(chunksCoords.Count, Allocator.Persistent); 
-        NativeArray<float> AllHeights = new(ChunkManager.length * chunksCoords.Count, Allocator.Persistent);
-
-        ChunkDataGeneratorJob chunkDataGeneratorJob = new()
+        List<Chunk> chunksData = ChunkDataGenerator.Generate(chunksCoords);
+        for (int i = 0; i < chunksCoords.Count(); i++)
         {
-            chunksCoords = NativeChunksCoords,
-            chunks = NativeChunks,
-        };
-
-        JobHandle jobHandle = chunkDataGeneratorJob.Schedule(chunksCoords.Count -1 , 1);
-        jobHandle.Complete();
-        /*
-        for (int i = 0; i < chunks.Count; i++)
-        {
-            chunks[i] = SetAttributes(chunks[i], 
-                TransferData.TrasferDataToChunk(chunkDataGeneratorJob.chunks[i], 
-                    TransferData.TransferDataFromMasterArrayToChunkArray(chunkDataGeneratorJob.allHeights.ToArray(), i, ChunkManager.length)));
+            chunks[i] = SetAttributes(chunks[i], chunksData[i]);
             chunks[i].SetActive(true);
         }
-        */
-        NativeChunksCoords.Dispose();
-        NativeChunks.Dispose();
-
         return chunks;
 
     }

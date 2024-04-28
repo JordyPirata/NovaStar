@@ -12,8 +12,7 @@ namespace Generator
     /// This class is responsible for generating chunks and adding them to the pool
     /// </summary>
     public class ChunkPool : MonoBehaviour
-    {
-        private string message;
+    {   
         [SerializeField] private int poolSize = 24;
         [SerializeField] private GameObject ChunkPrefab;
         private readonly List<GameObject> chunkList = new();
@@ -34,7 +33,7 @@ namespace Generator
         {
             AddChunkToPool(poolSize);
         }
-        private void AddChunkToPool(int amount)
+        public void AddChunkToPool(int amount)
         {
             for (int i = 0; i < amount; i++)
             {

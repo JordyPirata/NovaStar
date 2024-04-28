@@ -8,7 +8,7 @@ namespace Generator
         public const bool allowAutoConnect = true;
         public const int groupingID = 0;
         public const int baseMapResolution = 4096;
-        public const int pixelError = 1;
+        public const int pixelError = 5;
         public const int heightmapMaximumLOD = 0;
 
         public static Terrain ApplySettings(Terrain terrain, Chunk chunk)

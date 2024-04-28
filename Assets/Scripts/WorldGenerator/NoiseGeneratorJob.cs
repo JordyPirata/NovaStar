@@ -5,13 +5,13 @@ using Generator;
 
 public struct NoiseGeneratorJob : IJobParallelFor
 {
-    public NativeArray<int2> allCoords;
-    public NativeArray<float> allHeights;
+    public NativeArray<int2> AllCoords;
+    public NativeArray<float> Heights;
     public void Execute(int index)
     {
-        allHeights[index] = (Perlin.OctavePerlin(allCoords[index].x, allCoords[index].y, 
-            ChunkManager.octaves, ChunkManager.persistance, ChunkManager.lacunarity, ChunkManager.Instance.Permutation) + 20f) * 0.0175f;
-        throw new System.NotImplementedException();
+        Heights[index] = (Perlin.OctavePerlin(AllCoords[index].x, AllCoords[index].y,
+            ChunkManager.octaves, ChunkManager.persistance, ChunkManager.lacunarity,
+            ChunkManager.Instance.Permutation) + 20f) * 0.0175f;
     }
 
 }
