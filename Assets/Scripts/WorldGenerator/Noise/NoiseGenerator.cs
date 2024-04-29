@@ -12,24 +12,27 @@ namespace Generator
 		// Generate noise for the chunk
 		public static float[] GenerateNoise(int coordX, int coordY)
 		{
+			int iCoordX = coordX * ChunkManager.width;
+			int iCoordY = coordY * ChunkManager.depth;
 			// Define the heights and allCoords arrays
 			NativeArray<float> heights = new(ChunkManager.length, Allocator.TempJob);
 			NativeArray<int2> allCoords = new(ChunkManager.length, Allocator.TempJob);
 
 			int initialY = coordY, i = 0;
-			int actualX, actualY;
 
 			for (int x = 0; x < ChunkManager.width; x++)
 			{
 				for (int y = 0; y < ChunkManager.depth; y++)
 				{
 					// Calculate the actual x and y
-					allCoords[i] = new int2(coordX , coordY);
-					coordY++;
+					allCoords[i] = new int2(iCoordX , iCoordY);
+					// is negative
+					iCoordY++;
 					i++;
 				}
-				coordX++;
-				coordY = initialY;
+				iCoordX++;
+				// Reset the y
+				iCoordY = initialY;
 			}
 			// Generate the noise
 
