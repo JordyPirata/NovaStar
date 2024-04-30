@@ -18,7 +18,7 @@ namespace Generator
 			NativeArray<float> heights = new(ChunkManager.length, Allocator.TempJob);
 			NativeArray<int2> allCoords = new(ChunkManager.length, Allocator.TempJob);
 
-			int initialY = coordY, i = 0;
+			int initialY = iCoordY, i = 0;
 
 			for (int x = 0; x < ChunkManager.width; x++)
 			{
@@ -45,6 +45,13 @@ namespace Generator
 			jobHandle.Complete();
 			
 			var result = heights.ToArray();
+			result[0] = 1f;
+			result[1] = 1f;
+			result[2] = 1f;
+
+			result[256] = 1f;
+			result[257] = 1f;
+			result[258] = 1f;
 
 			heights.Dispose();
 			allCoords.Dispose();
