@@ -17,44 +17,40 @@ namespace Generator
 			// Define the heights and allCoords arrays
 			NativeArray<float> heights = new(ChunkManager.length, Allocator.TempJob);
 			NativeArray<int2> allCoords = new(ChunkManager.length, Allocator.TempJob);
+			NativeArray<int> permutation = new(ChunkManager.Instance.Permutation, Allocator.TempJob);
 
-			int initialY = iCoordY, i = 0;
+			int initialX = iCoordX, i = 0;
 
-			for (int x = 0; x < ChunkManager.width; x++)
+			for (int y = 0; y < ChunkManager.width; y++)
 			{
-				for (int y = 0; y < ChunkManager.depth; y++)
+				for (int x = 0; x < ChunkManager.depth; x++)
 				{
 					// Calculate the actual x and y
 					allCoords[i] = new int2(iCoordX , iCoordY);
 					// is negative
-					iCoordY++;
+					iCoordX++;
 					i++;
 				}
-				iCoordX++;
+				iCoordY++;
 				// Reset the y
-				iCoordY = initialY;
+				iCoordX = initialX;
 			}
 			// Generate the noise
 
 			NoiseGeneratorJob noiseGeneratorJob = new()
             {
 				AllCoords = allCoords,
-				Heights = heights
+				Heights = heights,
+				Permutation = permutation
 			};
-			JobHandle jobHandle = noiseGeneratorJob.Schedule(ChunkManager.length, 64);
+			JobHandle jobHandle = noiseGeneratorJob.Schedule(ChunkManager.length, 32);
 			jobHandle.Complete();
 			
 			var result = heights.ToArray();
-			result[0] = 1f;
-			result[1] = 1f;
-			result[2] = 1f;
-
-			result[256] = 1f;
-			result[257] = 1f;
-			result[258] = 1f;
-
+			// Dispose the arrays
 			heights.Dispose();
 			allCoords.Dispose();
+			permutation.Dispose();
 			return result;
 
 		}

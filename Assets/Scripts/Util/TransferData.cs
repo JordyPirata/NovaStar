@@ -11,11 +11,11 @@ namespace Util
         public static float[,] TransferDataFromArrayTo2DArray(float[] array, int width, int depth)
         {
             float[,] newArray = new float[width, depth];
-            for (int i = 0; i < width; i++)
+            for (int y = 0; y < width; y++)
             {
-                for (int j = 0; j < depth; j++)
+                for (int x = 0; x < depth; x++)
                 {
-                    newArray[i, j] = array[(i * width) + j];
+                    newArray[x, y] = array[(y * width) + x];
                 }
             }
             return newArray;
