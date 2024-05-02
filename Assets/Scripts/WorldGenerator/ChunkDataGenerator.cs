@@ -19,8 +19,6 @@ public struct ChunkDataGenerator
         List<Chunk> chunks = new();
         foreach (var coord in chunkCoords)
         {
-            // Generate noise for the chunk
-            float[] heights = NoiseGenerator.GenerateNoise(coord.x, coord.y);
             // Create the chunk
             Chunk chunk = new()
             {
@@ -32,7 +30,7 @@ public struct ChunkDataGenerator
                 CoordX = coord.x,
                 CoordY = coord.y,
                 IsLoaded = false,
-                heights = heights
+                heights = NoiseGenerator.GenerateNoise(coord.x, coord.y),
             };
             // Add the chunk to the list
             chunks.Add(chunk);

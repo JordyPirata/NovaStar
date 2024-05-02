@@ -20,57 +20,5 @@ namespace Util
             }
             return newArray;
         }
-        public static Chunk TrasferDataToChunk(UnManagedChunk unManagedChunk, float[] heights)
-        {
-            Chunk chunk = new()
-            {
-                position = unManagedChunk.position,
-                ChunkName = unManagedChunk.ChunkName.ToString(),
-                width = unManagedChunk.width,
-                depth = unManagedChunk.depth,
-                height = unManagedChunk.height,
-                CoordX = unManagedChunk.CoordX,
-                CoordY = unManagedChunk.CoordY,
-                IsLoaded = unManagedChunk.IsLoaded,
-                heights = heights,
-                temperatures = null,
-                moisture = null,
-            };
-            
-            return chunk;
-        }
-        public static float[] TransferDataFromMasterArrayToChunkArray(float[] masterArray, int index, int length)
-        {
-            float[] chunkArray = new float[length];
-            for (int i = 0; i < length; i++)
-            {
-                chunkArray[i] = masterArray[(index * length) + i];
-            }
-            return chunkArray;
-        }
-
-        [Obsolete("This method is obsolete")]
-        public static (UnManagedChunk, Arrays) TransferDataToUnManagedChunk(Chunk chunk)
-        {
-            UnManagedChunk unManagedChunk = new()
-            {
-                position = chunk.position,
-                ChunkName = chunk.ChunkName,
-                width = chunk.width,
-                depth = chunk.depth,
-                height = chunk.height,
-                CoordX = chunk.CoordX,
-                CoordY = chunk.CoordY,
-                IsLoaded = chunk.IsLoaded, 
-            };
-            Arrays arrays = new()
-            {
-                heights = new NativeArray<float>(chunk.heights, Allocator.TempJob),
-                temperatures = new NativeArray<float>(chunk.temperatures, Allocator.TempJob),
-                moisture = new NativeArray<float>(chunk.moisture, Allocator.TempJob)
-            };
-            arrays.Inicialize();
-            return (unManagedChunk, arrays);
-        }
     }
 }

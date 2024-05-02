@@ -17,7 +17,6 @@ namespace Generator
 			// Define the heights and allCoords arrays
 			NativeArray<float> heights = new(ChunkManager.length, Allocator.TempJob);
 			NativeArray<int2> allCoords = new(ChunkManager.length, Allocator.TempJob);
-			NativeArray<int> permutation = new(ChunkManager.Instance.Permutation, Allocator.TempJob);
 
 			int initialX = iCoordX, i = 0;
 
@@ -41,7 +40,6 @@ namespace Generator
             {
 				AllCoords = allCoords,
 				Heights = heights,
-				Permutation = permutation
 			};
 			JobHandle jobHandle = noiseGeneratorJob.Schedule(ChunkManager.length, 32);
 			jobHandle.Complete();
@@ -50,7 +48,6 @@ namespace Generator
 			// Dispose the arrays
 			heights.Dispose();
 			allCoords.Dispose();
-			permutation.Dispose();
 			return result;
 
 		}

@@ -7,12 +7,14 @@ public struct NoiseGeneratorJob : IJobParallelFor
 {
     public NativeArray<int2> AllCoords;
     public NativeArray<float> Heights;
-    public NativeArray<int> Permutation;
+    // TODO: Assing the constants to scale and offset
     public void Execute(int index)
     {
+        Heights[index] = Perlin.CalculatePerlin(AllCoords[index].x * 0.01f, AllCoords[index].y * 0.01f , ChunkManager.Instance.Permutation);
+        Heights[index] /= 1.5f;
+        /*
         Heights[index] = (Perlin.OctavePerlin(AllCoords[index].x, AllCoords[index].y,
-            ChunkManager.octaves, ChunkManager.persistance, ChunkManager.lacunarity,
-            Permutation.ToArray()) + 20f) * 0.0175f;
+            ChunkManager.octaves, ChunkManager.persistance, ChunkManager.lacunarity,ChunkManager.Instance.Permutation) + 20f) * 0.0175f;
+        */
     }
-
 }

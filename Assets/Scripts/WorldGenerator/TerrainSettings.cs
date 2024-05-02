@@ -5,11 +5,11 @@ namespace Generator
 {
     public class TerrainSettings
     {
-        public const bool allowAutoConnect = true;
+        public const bool allowAutoConnect = false;
         public const int groupingID = 0;
         public const int detailResolution = 1024;
         public const int baseMapResolution = 4096;
-        public const int pixelError = 0;
+        public const int pixelError = 1;
         public const int heightmapMaximumLOD = 0;
 
         public static Terrain ApplySettings(Terrain terrain, Chunk chunk)
@@ -22,7 +22,6 @@ namespace Generator
 
             TerrainData terrainData = new()
             {
-                
                 baseMapResolution = baseMapResolution,
                 heightmapResolution = chunk.width,
                 size = new Vector3(chunk.width, chunk.height, chunk.width)

@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using Repository;
-using Unity.Collections;
 using Unity.Mathematics;
-using Unity.Jobs;
 using Generator;
 using System.Linq;
+using System;
 
 public class ChunkGenerator 
 {
@@ -31,7 +30,6 @@ public class ChunkGenerator
             chunks[i].SetActive(true);
         }
         return chunks;
-
     }
 
     //set position of the chunks

@@ -40,7 +40,8 @@ namespace Generator
                 GameObject chunk = Instantiate(ChunkPrefab);
                 chunk.SetActive(false);
                 chunkList.Add(chunk);
-                chunk.transform.parent = transform;
+                // Set the parent of the chunk to the chunk pool
+                chunk.transform.SetParent(transform);
             }
         }
         // TODO: 
