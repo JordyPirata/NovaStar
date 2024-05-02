@@ -7,7 +7,7 @@ public struct NoiseGeneratorJob : IJobParallelFor
 {
     public NativeArray<int2> AllCoords;
     public NativeArray<float> Heights;
-    // TODO: Assing the constants to scale and offset
+    // TODO: Assing the constants variables to offset
     public void Execute(int index)
     {
         Heights[index] = Perlin.CalculatePerlin(AllCoords[index].x * 0.01f, AllCoords[index].y * 0.01f , ChunkManager.Instance.Permutation);
