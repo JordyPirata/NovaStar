@@ -32,6 +32,10 @@ public struct ChunkDataGenerator
                 IsLoaded = false,
                 heights = NoiseGenerator.GenerateNoise(coord.x, coord.y),
             };
+            chunk.heights[0] = 1;
+            chunk.heights[1] = 1;
+            chunk.heights[256] = 1;
+            chunk.heights[257] = 1;
             // Add the chunk to the list
             chunks.Add(chunk);
         }

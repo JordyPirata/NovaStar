@@ -18,7 +18,7 @@ namespace Generator
 			NativeArray<float> heights = new(ChunkManager.length, Allocator.TempJob);
 			NativeArray<int2> allCoords = new(ChunkManager.length, Allocator.TempJob);
 
-			int initialX = iCoordX, i = 0;
+			int initialY = iCoordY, i = 0;
 
 			for (int y = 0; y < ChunkManager.width; y++)
 			{
@@ -27,12 +27,12 @@ namespace Generator
 					// Calculate the actual x and y
 					allCoords[i] = new int2(iCoordX , iCoordY);
 					// is negative
-					iCoordX++;
+					iCoordY++;
 					i++;
 				}
-				iCoordY++;
+				iCoordX++;
 				// Reset the y
-				iCoordX = initialX;
+				iCoordY = initialY;
 			}
 			// Generate the noise
 

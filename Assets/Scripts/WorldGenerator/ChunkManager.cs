@@ -30,7 +30,7 @@ public class ChunkManager : MonoBehaviour
     public const int depth = 256;
     public const int length = width * depth;
     public const int height = 20;
-    public const float scale = 6.66f;
+    public const float offset = 0.01f;
     public static int seed = 0;
     readonly SeedGenerator seedGenerator = new(seed);
     public int[] Permutation
