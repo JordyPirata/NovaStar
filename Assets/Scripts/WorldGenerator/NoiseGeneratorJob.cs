@@ -22,8 +22,9 @@ public struct NoiseGeneratorJob : IJobParallelFor
     }
     public void OPerlin(int index)
     {
-        Heights[index] = (Perlin.OctavePerlin(AllCoords[index].x * ChunkManager.offset, AllCoords[index].y * ChunkManager.offset,
-            ChunkManager.octaves, ChunkManager.persistance, ChunkManager.lacunarity,ChunkManager.Instance.Permutation) + 20f) * 0.0175f;
+        Heights[index] = (Perlin.OctavePerlin(AllCoords[index].x, AllCoords[index].y,
+            ChunkManager.octaves, ChunkManager.persistance, ChunkManager.lacunarity,
+            ChunkManager.Instance.Permutation) + 20f) * 0.0175f;
     }
 
 }
