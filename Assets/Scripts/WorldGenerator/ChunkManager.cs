@@ -30,7 +30,7 @@ public class ChunkManager : MonoBehaviour
     public const int depth = 256;
     public const int length = width * depth;
     public const int height = 20;
-    public const float offset = 0.01f;
+    public const float offset = 0.00875f;
     public static int seed = 0;
     readonly SeedGenerator seedGenerator = new(seed);
     public int[] Permutation
@@ -47,7 +47,7 @@ public class ChunkManager : MonoBehaviour
     public void Start()
     {
         // add component as a child of the chunk manager
-        int2[] chunksCoords =
+        float2[] chunksCoords =
         {
             new(-1, 1),
             new(0, 1),
@@ -75,8 +75,6 @@ public class ChunkManager : MonoBehaviour
             new(0, -2),
             new(1, -2),
             new(2, -2),
-            new(3, 1),
-            new(3, 0),
         };
         
         StartCoroutine(UpdateViewerPosition());

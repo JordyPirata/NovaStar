@@ -21,7 +21,7 @@ public class ChunkGenerator
         }
     }
 
-    public List<GameObject> GenerateChunk(List<GameObject> chunks, int2[] chunksCoords)
+    public List<GameObject> GenerateChunk(List<GameObject> chunks, float2[] chunksCoords)
     {
         List<Chunk> chunksData = ChunkDataGenerator.Generate(chunksCoords);
         for (int i = 0; i < chunksCoords.Count(); i++)

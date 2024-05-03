@@ -14,7 +14,7 @@ public struct ChunkDataGenerator
 {
 
     // TODO: separate the noise generation from the chunk generation
-    public static List<Chunk> Generate(int2[] chunkCoords)
+    public static List<Chunk> Generate(float2[] chunkCoords)
     {
         List<Chunk> chunks = new();
         foreach (var coord in chunkCoords)
@@ -27,10 +27,10 @@ public struct ChunkDataGenerator
                 width = ChunkManager.width,
                 depth = ChunkManager.depth,
                 height = ChunkManager.height,
-                CoordX = coord.x,
-                CoordY = coord.y,
+                CoordX = (int)coord.x,
+                CoordY = (int)coord.y,
                 IsLoaded = false,
-                heights = NoiseGenerator.GenerateNoise(coord.x, coord.y),
+                heights = NoiseGenerator.GenerateNoise(coord),
             };
             chunk.heights[0] = 1;
             chunk.heights[1] = 1;

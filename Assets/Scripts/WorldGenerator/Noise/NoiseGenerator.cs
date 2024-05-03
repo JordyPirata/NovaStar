@@ -10,13 +10,13 @@ namespace Generator
 	public struct NoiseGenerator
 	{
 		// Generate noise for the chunk
-		public static float[] GenerateNoise(int coordX, int coordY)
+		public static float[] GenerateNoise(float2 coords)
 		{
-			int iCoordX = coordX * ChunkManager.width;
-			int iCoordY = coordY * ChunkManager.depth;
+			int iCoordX = (int)coords.x * ChunkManager.width;
+			int iCoordY = (int)coords.y * ChunkManager.depth;
 			// Define the heights and allCoords arrays
 			NativeArray<float> heights = new(ChunkManager.length, Allocator.TempJob);
-			NativeArray<int2> allCoords = new(ChunkManager.length, Allocator.TempJob);
+			NativeArray<float2> allCoords = new(ChunkManager.length, Allocator.TempJob);
 
 			int initialY = iCoordY, i = 0;
 

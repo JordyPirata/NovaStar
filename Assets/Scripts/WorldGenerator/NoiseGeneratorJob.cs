@@ -7,12 +7,12 @@ using UnityEngine;
 
 public struct NoiseGeneratorJob : IJobParallelFor
 {
-    public NativeArray<int2> AllCoords;
+    public NativeArray<float2> AllCoords;
     public NativeArray<float> Heights;
     // TODO: Assing the constants variables to offset
     public void Execute(int index)
     {
-        Heights[index] = Mathf.PerlinNoise(AllCoords[index].x * ChunkManager.offset, AllCoords[index].y * ChunkManager.offset);
+        Heights[index] = noise.cnoise(AllCoords[index] * ChunkManager.offset);
     }
 
     public void SPerlin(int index)
