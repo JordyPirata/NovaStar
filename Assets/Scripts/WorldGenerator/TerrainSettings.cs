@@ -5,7 +5,7 @@ namespace Generator
 {
     public class TerrainSettings
     {
-        public const bool allowAutoConnect = false;
+        public const bool allowAutoConnect = true;
         public const int groupingID = 0;
         public const int detailResolution = 1024;
         public const int baseMapResolution = 4096;
