@@ -13,6 +13,7 @@ public struct NoiseGeneratorJob : IJobParallelFor
     public void Execute(int index)
     {
         Heights[index] = noise.cnoise(AllCoords[index] * ChunkManager.offset);
+        Heights[index] /= 1.75f;
     }
 
     public void SPerlin(int index)
