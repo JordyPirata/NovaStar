@@ -23,6 +23,8 @@ public class ChunkManager : MonoBehaviour
         }
     }
 
+    public Material material;
+
     public const int octaves = 8;
     public const float persistance = Mathf.PI / 2;
     public const float lacunarity = .5f;

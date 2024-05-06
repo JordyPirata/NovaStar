@@ -14,7 +14,7 @@ namespace Generator
 
         public static Terrain ApplySettings(Terrain terrain, Chunk chunk)
         {
-
+            terrain.materialTemplate = ChunkManager.Instance.material;
             terrain.allowAutoConnect = allowAutoConnect;
             terrain.groupingID = groupingID;
             terrain.heightmapPixelError = pixelError;
