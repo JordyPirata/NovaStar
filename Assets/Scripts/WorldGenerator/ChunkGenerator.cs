@@ -37,6 +37,7 @@ public class ChunkGenerator
     {
         ChunkGameObject.transform.position = Chunk.position;
         ChunkGameObject.name = Chunk.ChunkName;
+        ChunkGameObject.layer = LayerMask.NameToLayer("Default");
         
         Terrain terrain = ChunkGameObject.GetComponent<Terrain>();
         TerrainCollider terrainCollider = ChunkGameObject.GetComponent<TerrainCollider>();
