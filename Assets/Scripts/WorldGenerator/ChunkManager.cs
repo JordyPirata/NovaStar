@@ -28,10 +28,10 @@ public class ChunkManager : MonoBehaviour
     public const int octaves = 8;
     public const float persistance = Mathf.PI / 2;
     public const float lacunarity = .5f;
-    public const int width = 257;
-    public const int depth = 257;
-    public const int length = width * depth;
-    public const int height = 30;
+    public static int width = 33;
+    public static int depth = 33;
+    public static int length = width * depth;
+    public static int height = 30;
     public const float offset = 0.01f;
     public static int seed = 0;
     readonly SeedGenerator seedGenerator = new(seed);
