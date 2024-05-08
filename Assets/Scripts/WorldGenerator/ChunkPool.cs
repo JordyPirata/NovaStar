@@ -45,8 +45,6 @@ namespace Generator
             }
         }
         // TODO: 
-        // generate chunkData with a job
-        // Implement the method
         // create system to load existing chunks
         // implement system to save chunks
         // Test the system

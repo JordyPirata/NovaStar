@@ -12,8 +12,7 @@ public struct NoiseGeneratorJob : IJobParallelFor
     // TODO: Assing the constants variables to offset
     public void Execute(int index)
     {
-        Heights[index] = noise.cnoise(AllCoords[index] * ChunkManager.offset);
-        Heights[index] /= 1.75f;
+        Heights[index] = noise.cnoise(AllCoords[index] * ChunkManager.offset) * 0.5f + 0.5f;
     }
 
     public void SPerlin(int index)
