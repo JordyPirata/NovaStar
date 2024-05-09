@@ -63,7 +63,7 @@ namespace Repository
                 return e.Message;
             }
         }
-        public bool Exist(string path)
+        public static bool Exists(string path)
         {
             return File.Exists(path);
         }

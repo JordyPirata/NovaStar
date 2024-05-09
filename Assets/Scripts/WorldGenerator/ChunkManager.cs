@@ -24,79 +24,72 @@ public class ChunkManager : MonoBehaviour
     }
 
     public Material material;
-
     public const int octaves = 8;
     public const float persistance = Mathf.PI / 2;
     public const float lacunarity = .5f;
-    public static int width = 33;
-    public static int depth = 33;
+    public static int width = 65;
+    public static int depth = 65;
     public static int length = width * depth;
     public static int height = 30;
     public const float offset = 0.01f;
     public static int seed = 0;
-    readonly SeedGenerator seedGenerator = new(seed);
-    public int[] Permutation
-    {
-        get
-        {
-            return seedGenerator.permutation;
-        }
-    }
-
+    public Dictionary<float2, GameObject> chunkDictionary = new();
+    private List<GameObject> chunks = new();
     public Transform viewer;
-    public static Vector2 viewerPosition;
+    public const float maxViewDst = 100;
+    private readonly int chunkVisibleInViewDst = Mathf.RoundToInt(maxViewDst / width);
+    public Vector2 viewerPosition;
+    public float2 viewerCoordinate;
+
     // TODO: Make this a list of chunks
     public void Start()
     {
         // add component as a child of the chunk manager
-        float2[] chunksCoords =
-        {
-            new(-1, 1),
-            new(0, 1),
-            new(-1, 0),
-            new(0, 0),
-            new(-1, -1),
-            new(0, -1),
-            new(1, 1),
-            new(1, 0),
-            new(1, -1),
-            new(2, 1),
-            new(2, 0),
-            new(2, -1),
-            new(2, 2),
-            new(2, -2),
-            new(1, 2),
-            new(0, 2),
-            new(-1, 2),
-            new(-2, 2),
-            new(-2, 1),
-            new(-2, 0),
-            new(-2, -1),
-            new(-2, -2),
-            new(-1, -2),
-            new(0, -2),
-            new(1, -2),
-            new(2, -2),
-        };
         
-        StartCoroutine(UpdateViewerPosition());
-        List<GameObject> chunks = ChunkPool.Instance.GetInactiveChunks();
-        ChunkGenerator.Instance.GenerateChunk(chunks, chunksCoords);
+        StartCoroutine(UpdateViewer());
+        StartCoroutine(UpdateInactiveChunks());
+        StartCoroutine(GenerateChunks());
     }
-    IEnumerator Loadchunks()
+    IEnumerator GenerateChunks()
+    {
+        yield return new WaitForSeconds(1.2f);
+        ChunkGenerator.GenerateChunk(chunks.ToArray(), UpdateVisibleChunks().ToArray());
+    }
+
+    IEnumerator UpdateInactiveChunks()
     {
         while (true)
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.3f);
+            chunks.Clear();
+            chunks = ChunkPool.Instance.GetInactiveChunks();
         }
     }
-    IEnumerator UpdateViewerPosition()
+    public List<float2> UpdateVisibleChunks()
+    {
+        List<float2> chunksCoords = new();
+        int currentChunkCoordX = Mathf.RoundToInt(viewerPosition.x / width);
+        int currentChunkCoordY = Mathf.RoundToInt(viewerPosition.y / width);
+
+        for (int yOffset = -chunkVisibleInViewDst; yOffset <= chunkVisibleInViewDst; yOffset++)
+        {
+            for (int xOffset = -chunkVisibleInViewDst; xOffset <= chunkVisibleInViewDst; xOffset++)
+            {
+                chunksCoords.Add(new float2(currentChunkCoordX + xOffset, currentChunkCoordY + yOffset));
+            }
+        }
+        return chunksCoords;
+    }
+    IEnumerator UpdateViewer()
     {
         while (true)
         {
-            yield return new WaitForSeconds(0.5f);
-            viewerPosition = new Vector2(viewer.position.x, viewer.position.z);
+            yield return new WaitForSeconds(1f);
+            viewerPosition = new float2(viewer.position.x, viewer.position.z);
+            viewerCoordinate = new float2(Mathf.FloorToInt(viewerPosition.x / width), Mathf.FloorToInt(viewerPosition.y / depth));
         }
     }
+
+
 
 }
