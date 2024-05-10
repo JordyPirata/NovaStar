@@ -94,7 +94,7 @@ namespace Menus
         public async void LoadSettings()
         {
             // Read the settings from the file
-            if (JsonRepository.Instance.Exists(settingsFile))
+            if (JsonRepository.Exists(settingsFile))
             {
                 (message, settings) = await JsonRepository.Instance.ReadAsync<Settings>(settingsFile);
             }

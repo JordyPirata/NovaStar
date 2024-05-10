@@ -10,6 +10,7 @@ using Repository;
 using System.IO;
 using System.Threading.Tasks;
 using System;
+using System.Threading;
 
 /// <summary>
 ///  This struct is responsible for generating the chunk data
@@ -26,42 +27,43 @@ public class ChunkDataGenerator
         }
     }
     string message;
-    public async IAsyncEnumerable<Chunk> Generate(float2[] chunkCoords)
+    public async Task<Chunk> Generate(float2 coord)
     {
-        foreach (var coord in chunkCoords)
+        
+        string chunkName = $"Chunk({coord.x},{coord.y})";
+        string chunkPath = Path.Combine(Application.persistentDataPath, string.Concat(chunkName, ".json"));
+        Chunk chunk;
+        // Check if the chunk exists
+        if (JsonRepository.Exists(chunkPath))
         {
-            string chunkName = $"Chunk({coord.x},{coord.y})";
-            string chunkPath = Path.Combine(Application.persistentDataPath, string.Concat(chunkName, ".json"));
-            Chunk chunk;
-            // Check if the chunk exists
-            if (JsonRepository.Exists(chunkPath))
-            {
-                (message,chunk) = await JsonRepository.Instance.ReadAsync<Chunk>(chunkPath);
-                chunk.position = new float3(coord.x * ChunkManager.width, 0, coord.y * ChunkManager.depth);
-                Debug.Log(message + " " + chunk.ChunkName);
-                // Add the chunk to the list
-                yield return chunk;
-            }
-            else
-            {
-                // Create the chunk
-                chunk = new()
-                {
-                    position = new float3(coord.x * ChunkManager.width, 0, coord.y * ChunkManager.depth),
-                    ChunkName = chunkName,
-                    width = ChunkManager.width,
-                    depth = ChunkManager.depth,
-                    height = ChunkManager.height,
-                    CoordX = (int)coord.x,
-                    CoordY = (int)coord.y,
-                    IsLoaded = false,
-                    heights = NoiseGenerator.GenerateNoise(coord),
-                };
-                // Add the chunk to the list
-                SaveChunk(chunk);
-                yield return chunk;
-            }
+            // Load the chunk
+            (message, chunk)  = await JsonRepository.Instance.ReadAsync<Chunk>(chunkPath);
+            
+            chunk.position = new float3(coord.x * ChunkManager.width, 0, coord.y * ChunkManager.depth);
+            Debug.Log(message + " " + chunk.ChunkName);
+            // Add the chunk to the list
+            return chunk;
         }
+        else
+        {
+            // Create the chunk
+            chunk = new()
+            {
+                position = new float3(coord.x * ChunkManager.width, 0, coord.y * ChunkManager.depth),
+                ChunkName = chunkName,
+                width = ChunkManager.width,
+                depth = ChunkManager.depth,
+                height = ChunkManager.height,
+                CoordX = (int)coord.x,
+                CoordY = (int)coord.y,
+                IsLoaded = false,
+                heights = NoiseGenerator.GenerateNoise(coord),
+            };
+            // Add the chunk to the list
+            SaveChunk(chunk);
+            return chunk;
+        }
+        
     }
     private async void SaveChunk(Chunk Chunk)
     {

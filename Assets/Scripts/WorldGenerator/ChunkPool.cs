@@ -48,7 +48,7 @@ namespace Generator
         // create system to load existing chunks
         // implement system to save chunks
         // Test the system
-        public List<GameObject> GetInactiveChunks()
+        public void UpdateInactiveChunks()
         {
             // Set empty list of inactive chunks
             List<GameObject> inactiveChunks = new();
@@ -59,7 +59,17 @@ namespace Generator
                     inactiveChunks.Add(chunkList[i]);
                 }
             }
-            return inactiveChunks;
+        }
+        public GameObject GetChunk()
+        {
+            for (int i = 0; i < chunkList.Count; i++)
+            {
+                if (!chunkList[i].activeInHierarchy)
+                {
+                    return chunkList[i];
+                }
+            }
+            return null;
         }
         
     }

@@ -4,15 +4,13 @@ using Generator;
 
 public class ChunkGenerator 
 {
-    public static async void GenerateChunk(GameObject[] chunks, float2[] chunksCoords)
+    public static GameObject GenerateChunk(float2 chunkCoords)
     {
-        int i = 0;
-        await foreach (var chunksData in ChunkDataGenerator.Instance.Generate(chunksCoords))
-        {
-            chunks[i] = SetAttributes(chunks[i], chunksData);
-            chunks[i].SetActive(true);
-            i++;
-        }
+        var chunkData = ChunkDataGenerator.Instance.Generate(chunkCoords);
+        
+        GameObject chunk = SetAttributes(ChunkPool.Instance.GetChunk(), chunkData);
+        chunk.SetActive(true);
+        return chunk;
     }
 
     //set position of the chunks

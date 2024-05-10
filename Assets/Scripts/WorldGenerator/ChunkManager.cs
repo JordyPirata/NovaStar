@@ -5,6 +5,7 @@ using UnityEngine;
 using Generator;
 using Unity.Collections;
 using Unity.Mathematics;
+using System.Threading.Tasks;
 
 //TODO: Change name to ChunkFacade and implement 
 public class ChunkManager : MonoBehaviour
@@ -33,8 +34,7 @@ public class ChunkManager : MonoBehaviour
     public static int height = 30;
     public const float offset = 0.01f;
     public static int seed = 0;
-    public Dictionary<float2, GameObject> chunkDictionary = new();
-    private List<GameObject> chunks = new();
+    private Dictionary<float2, GameObject> chunkDictionary = new();
     public Transform viewer;
     public const float maxViewDst = 100;
     private readonly int chunkVisibleInViewDst = Mathf.RoundToInt(maxViewDst / width);
@@ -48,26 +48,28 @@ public class ChunkManager : MonoBehaviour
         
         StartCoroutine(UpdateViewer());
         StartCoroutine(UpdateInactiveChunks());
-        StartCoroutine(GenerateChunks());
-    }
-    IEnumerator GenerateChunks()
-    {
-        yield return new WaitForSeconds(1.2f);
-        ChunkGenerator.GenerateChunk(chunks.ToArray(), UpdateVisibleChunks().ToArray());
+        UpdateVisibleChunks();
     }
 
     IEnumerator UpdateInactiveChunks()
     {
         while (true)
         {
-            yield return new WaitForSeconds(0.3f);
-            chunks.Clear();
-            chunks = ChunkPool.Instance.GetInactiveChunks();
+            yield return new WaitForSeconds(1f);
+            ChunkPool.Instance.UpdateInactiveChunks();
         }
     }
-    public List<float2> UpdateVisibleChunks()
+    IEnumerator UpdateChunks()
     {
-        List<float2> chunksCoords = new();
+        while (true)
+        {
+            yield return new WaitForSeconds(10f);
+            UpdateVisibleChunks();
+        }
+        
+    }
+    public void UpdateVisibleChunks()
+    {
         int currentChunkCoordX = Mathf.RoundToInt(viewerPosition.x / width);
         int currentChunkCoordY = Mathf.RoundToInt(viewerPosition.y / width);
 
@@ -75,10 +77,24 @@ public class ChunkManager : MonoBehaviour
         {
             for (int xOffset = -chunkVisibleInViewDst; xOffset <= chunkVisibleInViewDst; xOffset++)
             {
-                chunksCoords.Add(new float2(currentChunkCoordX + xOffset, currentChunkCoordY + yOffset));
+                float2 viewedChunkCoord = new(currentChunkCoordX + xOffset, currentChunkCoordY + yOffset);
+                ChunkGenerator.GenerateChunk(viewedChunkCoord);
+                /*
+                if (chunkDictionary.ContainsKey(viewedChunkCoord))
+                {
+                    
+                    Bounds bounds = new(chunkDictionary[viewedChunkCoord].transform.position, Vector3.one * width);
+                    float viewerDstFromNearestEdge = Mathf.Sqrt(bounds.SqrDistance(viewerPosition));
+                    bool visible = viewerDstFromNearestEdge <= maxViewDst;
+                    chunkDictionary[viewedChunkCoord].SetActive(visible);
+                    
+                }
+                else
+                {
+                    chunkDictionary.Add(viewedChunkCoord, ChunkGenerator.GenerateChunk(viewedChunkCoord));
+                }*/
             }
         }
-        return chunksCoords;
     }
     IEnumerator UpdateViewer()
     {
@@ -89,7 +105,4 @@ public class ChunkManager : MonoBehaviour
             viewerCoordinate = new float2(Mathf.FloorToInt(viewerPosition.x / width), Mathf.FloorToInt(viewerPosition.y / depth));
         }
     }
-
-
-
 }
