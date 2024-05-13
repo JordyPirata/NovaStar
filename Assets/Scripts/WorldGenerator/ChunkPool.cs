@@ -15,7 +15,7 @@ namespace Generator
     {   
         [SerializeField] private int poolSize = 100;
         [SerializeField] private GameObject ChunkPrefab;
-        private readonly List<GameObject> chunkList = new();
+        private readonly List<PoolItem> chunkList = new();
         private static ChunkPool instance;
         public static ChunkPool Instance { get { return instance; } }
         public void Awake()
@@ -28,30 +28,38 @@ namespace Generator
             {
                 Destroy(gameObject);
             }
-            AddChunkToPool();
+            InitPool();
         }
-        private void AddChunkToPool()
+        private void InitPool()
         {
             for (int i = 0; i < poolSize; i++)
             {
                 GameObject chunk = Instantiate(ChunkPrefab);
                 chunk.SetActive(false);
-                chunkList.Add(chunk);
+                chunkList.Add(new(chunk));
                 // Set the parent of the chunk to the chunk pool
                 chunk.transform.SetParent(transform);
             }
         }
 
-        public GameObject GetChunk(float2 chunkCoords)
+        public PoolItem GetChunk()
         {
 
-            for (int i = 0; i < poolSize; i++)
+            // for (int i = 0; i < poolSize; i++)
+            // {
+            //     if (!chunkList[i].activeInHierarchy)
+            //     {
+            //         return chunkList[i];
+            //     }
+            // }
+            // return null;
+
+            foreach (var chunk in chunkList)
             {
-                if (!chunkList[i].activeInHierarchy)
+                var chunkGameObject = chunk.TryUse();
+                if (chunkGameObject != null)
                 {
-                    ChunkManager.chunkDictionary.Remove(chunkCoords);
-                    // Remove the chunk from the dictionary 
-                    return chunkList[i];
+                    return chunkGameObject;
                 }
             }
             return null;
