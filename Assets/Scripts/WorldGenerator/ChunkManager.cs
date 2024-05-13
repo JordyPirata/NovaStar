@@ -34,75 +34,69 @@ public class ChunkManager : MonoBehaviour
     public static int height = 30;
     public const float offset = 0.01f;
     public static int seed = 0;
-    private Dictionary<float2, GameObject> chunkDictionary = new();
+    public static Dictionary<float2, GameObject> chunkDictionary = new();
+    public static List<GameObject> terrainChunksVisibleLastUpdate = new();
     public Transform viewer;
-    public const float maxViewDst = 100;
+    public const float maxViewDst = 250;
     private readonly int chunkVisibleInViewDst = Mathf.RoundToInt(maxViewDst / width);
-    public Vector2 viewerPosition;
+    public static Vector2 viewerPosition;
     public float2 viewerCoordinate;
 
-    // TODO: Make this a list of chunks
     public void Start()
     {
-        // add component as a child of the chunk manager
-        
-        StartCoroutine(UpdateViewer());
-        StartCoroutine(UpdateInactiveChunks());
-        UpdateVisibleChunks();
+        StartCoroutine(UpdateChunks());
     }
-
-    IEnumerator UpdateInactiveChunks()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(1f);
-            ChunkPool.Instance.UpdateInactiveChunks();
-        }
-    }
+    
     IEnumerator UpdateChunks()
     {
         while (true)
         {
-            yield return new WaitForSeconds(10f);
+            yield return new WaitForSeconds(2f);
+            viewerPosition = new float2(viewer.position.x, viewer.position.z);
+            viewerCoordinate = new float2(Mathf.RoundToInt(viewerPosition.x / width), Mathf.RoundToInt(viewerPosition.y / depth));
             UpdateVisibleChunks();
         }
         
     }
-    public void UpdateVisibleChunks()
+    public async void UpdateVisibleChunks()
     {
-        int currentChunkCoordX = Mathf.RoundToInt(viewerPosition.x / width);
-        int currentChunkCoordY = Mathf.RoundToInt(viewerPosition.y / width);
+        for (int i = 0; i < terrainChunksVisibleLastUpdate.Count; i++)
+        {
+            terrainChunksVisibleLastUpdate[i].SetActive(false);
+        }
+        terrainChunksVisibleLastUpdate.Clear();
 
         for (int yOffset = -chunkVisibleInViewDst; yOffset <= chunkVisibleInViewDst; yOffset++)
         {
             for (int xOffset = -chunkVisibleInViewDst; xOffset <= chunkVisibleInViewDst; xOffset++)
             {
-                float2 viewedChunkCoord = new(currentChunkCoordX + xOffset, currentChunkCoordY + yOffset);
-                ChunkGenerator.GenerateChunk(viewedChunkCoord);
-                /*
+                
+                float2 viewedChunkCoord = new(viewerCoordinate.x + xOffset, viewerCoordinate.y + yOffset);
+                
                 if (chunkDictionary.ContainsKey(viewedChunkCoord))
                 {
-                    
-                    Bounds bounds = new(chunkDictionary[viewedChunkCoord].transform.position, Vector3.one * width);
-                    float viewerDstFromNearestEdge = Mathf.Sqrt(bounds.SqrDistance(viewerPosition));
-                    bool visible = viewerDstFromNearestEdge <= maxViewDst;
-                    chunkDictionary[viewedChunkCoord].SetActive(visible);
-                    
+                    UpdateStatus(viewedChunkCoord);
+                    if (chunkDictionary[viewedChunkCoord].activeInHierarchy)
+                    {
+                        terrainChunksVisibleLastUpdate.Add(chunkDictionary[viewedChunkCoord]);
+                    }
                 }
                 else
                 {
-                    chunkDictionary.Add(viewedChunkCoord, ChunkGenerator.GenerateChunk(viewedChunkCoord));
-                }*/
+                    chunkDictionary.Add(viewedChunkCoord, await ChunkGenerator.GenerateChunk(viewedChunkCoord));
+                }
             }
         }
     }
-    IEnumerator UpdateViewer()
+    public void UpdateStatus(float2 coords)
     {
-        while (true)
-        {
-            yield return new WaitForSeconds(1f);
-            viewerPosition = new float2(viewer.position.x, viewer.position.z);
-            viewerCoordinate = new float2(Mathf.FloorToInt(viewerPosition.x / width), Mathf.FloorToInt(viewerPosition.y / depth));
-        }
+        chunkDictionary[coords].GetInstanceID();
+        Bounds bounds = new(chunkDictionary[coords].transform.position, Vector2.one * width);
+        float viewerDstFromNearestEdge = Mathf.Sqrt(bounds.SqrDistance(viewerPosition));
+        bool visible = viewerDstFromNearestEdge <= maxViewDst;
+
+        chunkDictionary[coords].SetActive(visible);
     }
+    
 }
+

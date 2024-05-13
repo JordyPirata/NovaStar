@@ -54,9 +54,6 @@ public class ChunkDataGenerator
                 width = ChunkManager.width,
                 depth = ChunkManager.depth,
                 height = ChunkManager.height,
-                CoordX = (int)coord.x,
-                CoordY = (int)coord.y,
-                IsLoaded = false,
                 heights = NoiseGenerator.GenerateNoise(coord),
             };
             // Add the chunk to the list

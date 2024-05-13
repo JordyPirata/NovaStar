@@ -28,14 +28,11 @@ namespace Generator
             {
                 Destroy(gameObject);
             }
+            AddChunkToPool();
         }
-        public void Start()
+        private void AddChunkToPool()
         {
-            AddChunkToPool(poolSize);
-        }
-        public void AddChunkToPool(int amount)
-        {
-            for (int i = 0; i < amount; i++)
+            for (int i = 0; i < poolSize; i++)
             {
                 GameObject chunk = Instantiate(ChunkPrefab);
                 chunk.SetActive(false);
@@ -44,28 +41,16 @@ namespace Generator
                 chunk.transform.SetParent(transform);
             }
         }
-        // TODO: 
-        // create system to load existing chunks
-        // implement system to save chunks
-        // Test the system
-        public void UpdateInactiveChunks()
+
+        public GameObject GetChunk(float2 chunkCoords)
         {
-            // Set empty list of inactive chunks
-            List<GameObject> inactiveChunks = new();
-            for (int i = 0; i < chunkList.Count; i++)
+
+            for (int i = 0; i < poolSize; i++)
             {
                 if (!chunkList[i].activeInHierarchy)
                 {
-                    inactiveChunks.Add(chunkList[i]);
-                }
-            }
-        }
-        public GameObject GetChunk()
-        {
-            for (int i = 0; i < chunkList.Count; i++)
-            {
-                if (!chunkList[i].activeInHierarchy)
-                {
+                    ChunkManager.chunkDictionary.Remove(chunkCoords);
+                    // Remove the chunk from the dictionary 
                     return chunkList[i];
                 }
             }
