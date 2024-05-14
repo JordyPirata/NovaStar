@@ -1,5 +1,6 @@
 using System.Diagnostics.Tracing;
 using System.Threading;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Generator
@@ -7,8 +8,8 @@ namespace Generator
     public class PoolItem
     {
         public GameObject GameObject { get; set; }
+        private Bounds Bounds { get; set; }
         private bool _isAvailable;
-        private Mutex mutex = new Mutex();
         public PoolItem(GameObject gameObject)
         {
             GameObject = gameObject;
@@ -17,24 +18,39 @@ namespace Generator
 
         public PoolItem TryUse()
         {
-            if (mutex.WaitOne(0))
+            if (_isAvailable)
             {
-                if (_isAvailable)
-                {
-                    _isAvailable = false;
-                    mutex.ReleaseMutex();
-                    return this;
-                }
-                mutex.ReleaseMutex();
+                _isAvailable = false;
+                return this;
             }
             return null;
         }
 
         public void Release()
         {
-            mutex.WaitOne();
             _isAvailable = true;
-            mutex.ReleaseMutex();
+        }
+        public bool UpdateStatus()
+        {
+            Bounds = new(GameObject.transform.position, Vector2.one * ChunkManager.width);
+            float viewerDstFromNearestEdge = Mathf.Sqrt(Bounds.SqrDistance(ChunkManager.viewerPosition));
+            bool visible = viewerDstFromNearestEdge <= ChunkManager.maxViewDst;
+
+            SetVisible(visible);
+            if (!visible)
+            {
+                Release();
+            }
+            return visible;
+            
+        }
+        public void SetVisible(bool visible)
+        {
+            GameObject.SetActive(visible);
+        }
+        public bool IsVisible()
+        {
+            return GameObject.activeSelf;
         }
     }
 }

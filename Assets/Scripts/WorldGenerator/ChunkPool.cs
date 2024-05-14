@@ -28,6 +28,9 @@ namespace Generator
             {
                 Destroy(gameObject);
             }
+        }
+        public void Start()
+        {
             InitPool();
         }
         private void InitPool()

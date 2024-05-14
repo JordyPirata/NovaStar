@@ -28,14 +28,14 @@ public class ChunkManager : MonoBehaviour
     public const int octaves = 8;
     public const float persistance = Mathf.PI / 2;
     public const float lacunarity = .5f;
-    public static int width = 129;
-    public static int depth = 129;
+    public static int width = 257;
+    public static int depth = 257;
     public static int length = width * depth;
     public static int height = 30;
     public const float offset = 0.01f;
     public static int seed = 0;
     public static Dictionary<float2, PoolItem> chunkDictionary = new();
-    public static List<float2> coordsVisible = new();
+    public static List<PoolItem> chunksVisible = new();
     public Transform viewer;
     public const float maxViewDst = 450;
     private readonly int chunkVisibleInViewDst = Mathf.RoundToInt(maxViewDst / width);
@@ -51,7 +51,7 @@ public class ChunkManager : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(5f);
             viewerPosition = new float2(viewer.position.x, viewer.position.z);
             viewerCoordinate = new float2(Mathf.RoundToInt(viewerPosition.x / width), Mathf.RoundToInt(viewerPosition.y / depth));
             UpdateVisibleChunks();
@@ -60,7 +60,11 @@ public class ChunkManager : MonoBehaviour
     }
     public async void UpdateVisibleChunks()
     {
-        coordsVisible.Clear();
+        foreach (var chunks in chunksVisible)
+        {
+            chunks.SetVisible(false);
+        }
+        chunksVisible.Clear();
         
         for (int yOffset = -chunkVisibleInViewDst; yOffset <= chunkVisibleInViewDst; yOffset++)
         {
@@ -68,39 +72,21 @@ public class ChunkManager : MonoBehaviour
             {
                 
                 float2 viewedChunkCoord = new(viewerCoordinate.x + xOffset, viewerCoordinate.y + yOffset);
-                if (!chunkDictionary.ContainsKey(viewedChunkCoord))
+                if (chunkDictionary.ContainsKey(viewedChunkCoord))
+                {
+                    chunkDictionary[viewedChunkCoord].UpdateStatus();
+                    if (chunkDictionary[viewedChunkCoord].IsVisible())
+                    {
+                        chunksVisible.Add(chunkDictionary[viewedChunkCoord]);
+                    }
+                }
+                else
                 {
                     chunkDictionary.Add(viewedChunkCoord, await ChunkGenerator.GenerateChunk(viewedChunkCoord));
                 }
 
-                coordsVisible.Add(viewedChunkCoord);
             }
         }
-        //Remove chunks that are not visible
-        foreach (var coords in chunkDictionary.Keys)
-        {
-            UpdateStatus(coords);
-            if (!coordsVisible.Contains(coords))
-            {
-                chunkDictionary[coords].Release();
-                chunkDictionary.Remove(coords);
-            }
-        }
-    }
-    public bool UpdateStatus(float2 coords)
-    {
-        Bounds bounds = new(chunkDictionary[coords].GameObject.transform.position, Vector2.one * width);
-        float viewerDstFromNearestEdge = Mathf.Sqrt(bounds.SqrDistance(viewerPosition));
-        bool visible = viewerDstFromNearestEdge <= maxViewDst;
-
-
-        chunkDictionary[coords].GameObject.SetActive(visible);
-        if (!visible) {
-            chunkDictionary[coords].Release();
-            chunkDictionary.Remove(coords);
-        }
-        return visible;
-    }
-    
+    }  
 }
 
