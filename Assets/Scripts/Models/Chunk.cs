@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-
+[Serializable]
 public struct Chunk
 {
     [NonSerialized]

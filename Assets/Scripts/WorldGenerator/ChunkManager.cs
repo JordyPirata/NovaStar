@@ -58,14 +58,15 @@ public class ChunkManager : MonoBehaviour
         }
         
     }
-    public async void UpdateVisibleChunks()
+    public void UpdateVisibleChunks()
     {
+        /*
         foreach (var chunks in chunksVisible)
         {
-            chunks.SetVisible(false);
+            //chunks.SetVisible(false);
         }
         chunksVisible.Clear();
-        
+        */
         for (int yOffset = -chunkVisibleInViewDst; yOffset <= chunkVisibleInViewDst; yOffset++)
         {
             for (int xOffset = -chunkVisibleInViewDst; xOffset <= chunkVisibleInViewDst; xOffset++)
@@ -82,7 +83,7 @@ public class ChunkManager : MonoBehaviour
                 }
                 else
                 {
-                    chunkDictionary.Add(viewedChunkCoord, await ChunkGenerator.GenerateChunk(viewedChunkCoord));
+                    chunkDictionary.Add(viewedChunkCoord, ChunkGenerator.GenerateChunk(viewedChunkCoord));
                 }
 
             }

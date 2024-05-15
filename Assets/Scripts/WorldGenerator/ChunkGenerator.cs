@@ -6,9 +6,9 @@ using System;
 
 public class ChunkGenerator 
 {
-    public static async Task<PoolItem> GenerateChunk(float2 chunkCoords)
+    public static PoolItem GenerateChunk(float2 chunkCoords)
     {
-        var chunkData = await ChunkDataGenerator.Instance.Generate(chunkCoords);
+        var chunkData = ChunkDataGenerator.Instance.Generate(chunkCoords);
         var poolItem = ChunkPool.Instance.GetChunk() ?? throw new Exception("chunk pool is full");
 
         poolItem.GameObject =  SetAttributes(poolItem!.GameObject, chunkData);

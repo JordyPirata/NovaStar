@@ -37,10 +37,6 @@ namespace Generator
             bool visible = viewerDstFromNearestEdge <= ChunkManager.maxViewDst;
 
             SetVisible(visible);
-            if (!visible)
-            {
-                Release();
-            }
             return visible;
             
         }

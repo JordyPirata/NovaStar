@@ -19,7 +19,7 @@ namespace Menus
         private string settingsFile;
         private void Awake()
         {
-            settingsFile = Path.Combine(Application.persistentDataPath, "settings.json");
+            settingsFile = Path.Combine(Application.persistentDataPath, "settings.bin");
             Console.Log(Application.persistentDataPath);
         }
         private void Start()
@@ -85,18 +85,18 @@ namespace Menus
             yield return LocalizationSettings.InitializationOperation;
             LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[localeID];
         }
-        public async void SaveSettings()
+        public void SaveSettings()
         {
-            message = await JsonRepository.Instance.CreateAsync(settings, settingsFile);
+            message = JsonRepository.Instance.CreateAsync(settings, settingsFile);
             Console.Log(message);
         }
         // Load settings from file
-        public async void LoadSettings()
+        public void LoadSettings()
         {
             // Read the settings from the file
             if (JsonRepository.Exists(settingsFile))
             {
-                (message, settings) = await JsonRepository.Instance.ReadAsync<Settings>(settingsFile);
+                (message, settings) = JsonRepository.Instance.ReadAsync<Settings>(settingsFile);
             }
             else 
             {

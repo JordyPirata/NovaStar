@@ -27,17 +27,17 @@ public class ChunkDataGenerator
         }
     }
     string message;
-    public async Task<Chunk> Generate(float2 coord)
+    public Chunk Generate(float2 coord)
     {
         
         string chunkName = $"Chunk({coord.x},{coord.y})";
-        string chunkPath = Path.Combine(Application.persistentDataPath, string.Concat(chunkName, ".json"));
+        string chunkPath = Path.Combine(Application.persistentDataPath, string.Concat(chunkName, ".bin"));
         Chunk chunk;
         // Check if the chunk exists
         if (JsonRepository.Exists(chunkPath))
         {
             // Load the chunk
-            (message, chunk)  = await JsonRepository.Instance.ReadAsync<Chunk>(chunkPath);
+            (message, chunk)  = JsonRepository.Instance.ReadAsync<Chunk>(chunkPath);
             
             chunk.position = new float3(coord.x * ChunkManager.width, 0, coord.y * ChunkManager.depth);
             Debug.Log(message + " " + chunk.ChunkName);
@@ -62,10 +62,10 @@ public class ChunkDataGenerator
         }
         
     }
-    private async void SaveChunk(Chunk Chunk)
+    private void SaveChunk(Chunk Chunk)
     {
-        message = await JsonRepository.Instance.CreateAsync(Chunk, 
-            Path.Combine(Application.persistentDataPath, string.Concat(Chunk.ChunkName, ".json")));
+        message = JsonRepository.Instance.CreateAsync(Chunk, 
+            Path.Combine(Application.persistentDataPath, string.Concat(Chunk.ChunkName, ".bin")));
         Debug.Log(message + " " + Chunk.ChunkName);
     }
     

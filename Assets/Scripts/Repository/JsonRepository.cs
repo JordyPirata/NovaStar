@@ -16,15 +16,15 @@ namespace Repository
             }
         }
         // The CreateAsync method serializes the data and saves it to a file
-        public async Task<string> CreateAsync<T>(T data, string path)
+        public string CreateAsync<T>(T data, string path)
         {
-            await Serializer.SerializeAsync(data, path);
+            Serializer.Instance.BSerialize(data, path);
             return "Data saved successfully on: " + path;
         }
         // The ReadAsync method deserializes the data from a file
-        public async Task<(string, T)> ReadAsync<T>(string path)
+        public (string, T) ReadAsync<T>(string path)
         {
-            T data = await Serializer.DeserializeAsync<T>(path);
+            T data = Serializer.Instance.BDeserialize<T>(path);
             if (data == null)
             {
                 return ("Data not found", default);
