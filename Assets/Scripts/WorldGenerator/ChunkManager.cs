@@ -51,7 +51,7 @@ public class ChunkManager : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(5f);
+            yield return new WaitForSeconds(2f);
             viewerPosition = new float2(viewer.position.x, viewer.position.z);
             viewerCoordinate = new float2(Mathf.RoundToInt(viewerPosition.x / width), Mathf.RoundToInt(viewerPosition.y / depth));
             UpdateVisibleChunks();
@@ -60,13 +60,13 @@ public class ChunkManager : MonoBehaviour
     }
     public void UpdateVisibleChunks()
     {
-        /*
+        
         foreach (var chunks in chunksVisible)
         {
-            //chunks.SetVisible(false);
+            chunks.SetVisible(false);
         }
         chunksVisible.Clear();
-        */
+        
         for (int yOffset = -chunkVisibleInViewDst; yOffset <= chunkVisibleInViewDst; yOffset++)
         {
             for (int xOffset = -chunkVisibleInViewDst; xOffset <= chunkVisibleInViewDst; xOffset++)

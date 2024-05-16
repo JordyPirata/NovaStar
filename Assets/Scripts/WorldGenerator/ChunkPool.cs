@@ -1,10 +1,5 @@
 using UnityEngine;
-using Repository;
-using System.IO;
 using System.Collections.Generic;
-using System;
-using Unity.Mathematics;
-using Unity.VisualScripting;
 
 namespace Generator
 {
@@ -45,7 +40,7 @@ namespace Generator
             }
         }
 
-        public PoolItem GetChunk()
+        public PoolItem GetChunk(Vector2 coord)
         {
 
             // for (int i = 0; i < poolSize; i++)
@@ -59,7 +54,7 @@ namespace Generator
 
             foreach (var chunk in chunkList)
             {
-                var chunkGameObject = chunk.TryUse();
+                var chunkGameObject = chunk.TryUse(coord);
                 if (chunkGameObject != null)
                 {
                     return chunkGameObject;
