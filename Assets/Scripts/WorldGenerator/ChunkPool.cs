@@ -42,16 +42,6 @@ namespace Generator
 
         public PoolItem GetChunk(Vector2 coord)
         {
-
-            // for (int i = 0; i < poolSize; i++)
-            // {
-            //     if (!chunkList[i].activeInHierarchy)
-            //     {
-            //         return chunkList[i];
-            //     }
-            // }
-            // return null;
-
             foreach (var chunk in chunkList)
             {
                 var chunkGameObject = chunk.TryUse(coord);

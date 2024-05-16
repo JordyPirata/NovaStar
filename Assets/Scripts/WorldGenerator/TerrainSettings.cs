@@ -12,7 +12,7 @@ namespace Generator
 
         public static Terrain ApplySettings(Terrain terrain, Chunk chunk)
         {
-            terrain.materialTemplate = ChunkManager.Instance.material;
+            terrain.materialTemplate = DefaultTerrainMaterial();
             terrain.allowAutoConnect = allowAutoConnect;
             terrain.groupingID = groupingID;
             terrain.heightmapPixelError = pixelError;
@@ -29,5 +29,16 @@ namespace Generator
             
             return terrain;
         }
+        public static Material DefaultTerrainMaterial ()
+		{
+			Shader shader = UnityEngine.Rendering.GraphicsSettings.renderPipelineAsset.defaultTerrainMaterial.shader;
+		
+			if (shader == null) shader = Shader.Find("HDRP/TerrainLit");
+			if (shader == null) shader = Shader.Find("Nature/Terrain/Standard");
+			if (shader == null) shader = Shader.Find("Lightweight Render Pipeline/Terrain/Lit");
+
+			return new Material(shader);
+            
+		}
     }
 }
