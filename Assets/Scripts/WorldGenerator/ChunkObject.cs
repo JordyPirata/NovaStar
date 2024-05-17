@@ -6,25 +6,24 @@ using UnityEngine.UIElements;
 
 namespace Generator
 {
-    public class PoolItem
+    public class ChunkObject
     {
         public GameObject GameObject { get; set; }
-        private Bounds bounds { get; set; }
-        private Vector2 position { get; set; }
+        private Bounds Bounds { get; set; }
+        private Vector2 Position { get; set; }
         private bool _isAvailable;
-        public PoolItem(GameObject gameObject )
+        public ChunkObject(GameObject gameObject)
         {
-            
             GameObject = gameObject;
             _isAvailable = true;
         }
 
-        public PoolItem TryUse(Vector2 coord)
+        public ChunkObject TryUse(Vector2 coord)
         {
             if (_isAvailable)
             {
-                position = coord * ChunkManager.width;
-                bounds = new(position, Vector2.one * ChunkManager.width);
+                Position = coord * ChunkManager.width;
+                Bounds = new(Position, Vector2.one * ChunkManager.width);
                 _isAvailable = false;
                 return this;
             }
@@ -37,11 +36,11 @@ namespace Generator
         }
         public bool UpdateStatus()
         {
-            float viewerDstFromNearestEdge = Mathf.Sqrt(bounds.SqrDistance(ChunkManager.viewerPosition));
+            float viewerDstFromNearestEdge = Mathf.Sqrt(Bounds.SqrDistance(ChunkManager.viewerPosition));
             bool visible = viewerDstFromNearestEdge <= ChunkManager.maxViewDst;
             SetVisible(visible);
             return visible;
-            
+
         }
         public void SetVisible(bool visible)
         {

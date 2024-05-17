@@ -11,10 +11,12 @@ using System.IO;
 using System.Threading.Tasks;
 using System;
 using System.Threading;
+using Unity.Burst;
 
 /// <summary>
 ///  This struct is responsible for generating the chunk data
 /// </summary>
+[BurstCompile]
 public class ChunkDataGenerator 
 {
     private static ChunkDataGenerator instance;
