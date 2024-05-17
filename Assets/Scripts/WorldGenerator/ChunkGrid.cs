@@ -14,6 +14,11 @@ namespace Generator
                 else return default;
             }
         }
+        public IEnumerable<T> AllChunks ()
+		{
+			foreach (KeyValuePair<float2,T> kvp in grid)
+				yield return kvp.Value;
+		}
     }
 
 }

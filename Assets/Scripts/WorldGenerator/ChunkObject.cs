@@ -9,16 +9,20 @@ namespace Generator
     public class ChunkObject
     {
         public GameObject GameObject { get; set; }
+        public Terrain Terrain { get; set; }
+        public float2 Coord { get; set; }
         private Bounds Bounds { get; set; }
         private Vector2 Position { get; set; }
         private bool _isAvailable;
         public ChunkObject(GameObject gameObject)
         {
+            
             GameObject = gameObject;
-            _isAvailable = true;
+            Terrain = GameObject.GetComponent<Terrain>();
+            _isAvailable = true;   
         }
 
-        public ChunkObject TryUse(Vector2 coord)
+        public ChunkObject TryUse(float2 coord)
         {
             if (_isAvailable)
             {

@@ -41,6 +41,7 @@ public class ChunkManager : MonoBehaviour
     public void Start()
     {
         StartCoroutine(UpdateChunks());
+        StartCoroutine(WeldChunks());
     }
     public IEnumerator UpdateChunks()
     {
@@ -50,7 +51,16 @@ public class ChunkManager : MonoBehaviour
             viewerPosition = new float2(viewer.position.x, viewer.position.z);
             viewerCoordinate = new float2(Mathf.RoundToInt(viewerPosition.x / width), Mathf.RoundToInt(viewerPosition.y / depth));
             ChunkVisibility.Instance.UpdateVisibleChunks(MapChunks, viewerCoordinate);
+            
         }
 
+    }
+    public IEnumerator WeldChunks()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(20f);
+            Weld.SetNeighborsAll(MapChunks);
+        }
     }
 }
