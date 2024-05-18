@@ -17,7 +17,7 @@ using Unity.Burst;
 ///  This struct is responsible for generating the chunk data
 /// </summary>
 [BurstCompile]
-public class ChunkDataGenerator 
+public class ChunkDataGenerator
 {
     private static ChunkDataGenerator instance;
     public static ChunkDataGenerator Instance
@@ -31,7 +31,7 @@ public class ChunkDataGenerator
     string message;
     public Chunk Generate(float2 coord)
     {
-        
+
         string chunkName = $"Chunk({coord.x},{coord.y})";
         string chunkPath = Path.Combine(Application.persistentDataPath, string.Concat(chunkName, ".bin"));
         Chunk chunk;
@@ -39,8 +39,8 @@ public class ChunkDataGenerator
         if (JsonRepository.Exists(chunkPath))
         {
             // Load the chunk
-            (message, chunk)  = JsonRepository.Instance.ReadAsync<Chunk>(chunkPath);
-            
+            (message, chunk) = JsonRepository.Instance.Read<Chunk>(chunkPath);
+
             chunk.position = new float3(coord.x * ChunkManager.width, 0, coord.y * ChunkManager.depth);
             Debug.Log(message + " " + chunk.ChunkName);
             // Add the chunk to the list
@@ -62,13 +62,13 @@ public class ChunkDataGenerator
             SaveChunk(chunk);
             return chunk;
         }
-        
+
     }
     private void SaveChunk(Chunk Chunk)
     {
-        message = JsonRepository.Instance.CreateAsync(Chunk, 
+        message = JsonRepository.Instance.Create(Chunk,
             Path.Combine(Application.persistentDataPath, string.Concat(Chunk.ChunkName, ".bin")));
         Debug.Log(message + " " + Chunk.ChunkName);
     }
-    
+
 }

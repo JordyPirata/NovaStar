@@ -18,6 +18,7 @@ public class Weld
             terrain.SetNeighbors(leftNeighbor, terrain.topNeighbor, terrain.rightNeighbor, terrain.bottomNeighbor);
             leftNeighbor.SetNeighbors(leftNeighbor.leftNeighbor, leftNeighbor.topNeighbor, terrain, leftNeighbor.bottomNeighbor);
         }
+        
         Terrain rightNeighbor = chunkGrid[ coord + new float2(+1, 0) ]?.Terrain;
         if (rightNeighbor!=null && rightNeighbor.isActiveAndEnabled)
         {

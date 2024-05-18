@@ -18,10 +18,6 @@ public class ChunkManager : MonoBehaviour
         {
             instance = this;
         }
-        else
-        {
-            Destroy(gameObject);
-        }
     }
     public const int octaves = 8;
     public const float persistance = Mathf.PI / 2;

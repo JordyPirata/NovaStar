@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 2168.7434, g: 2281.7776, b: 3338.4966, a: 1}
+  m_IndirectSpecularColor: {r: 2183.1008, g: 2327.2444, b: 3491.692, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -457,6 +457,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4416926081852918490, guid: 64dce48905ffd9b4293e595fa6941544,
+        type: 3}
+      propertyPath: GroundLayers.m_Bits
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 4416926081852918491, guid: 64dce48905ffd9b4293e595fa6941544,
         type: 3}
       propertyPath: m_Enabled
@@ -682,6 +687,7 @@ GameObject:
   - component: {fileID: 1279037707}
   - component: {fileID: 1279037709}
   - component: {fileID: 1279037708}
+  - component: {fileID: 1279037710}
   m_Layer: 0
   m_Name: ChunkManager
   m_TagString: Untagged
@@ -731,11 +737,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7610490fedbee34fa7a8be32880472a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  material: {fileID: 2100000, guid: ae29ac02d08992344b9095971167e1c6, type: 2}
   viewer: {fileID: 1682498596}
   viewerCoordinate:
     x: 0
     y: 0
+--- !u!114 &1279037710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1279037705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1605cf1c335e49248a7e739bfee7d46d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  terrainLayers:
+  - {fileID: 8574412962073106934, guid: 29d97156d2d9518488a24d2d3ccaf575, type: 2}
+  - {fileID: 8574412962073106934, guid: 2f6c48c2a9d4aad41aa1d8d6cceec138, type: 2}
+  - {fileID: 8574412962073106934, guid: b45bd0bdc4036424d85cb00fc8dfff81, type: 2}
+  - {fileID: 8574412962073106934, guid: db4e00b350d2a224bb2ae6d4c5f429c6, type: 2}
+  - {fileID: 8574412962073106934, guid: 05dac9162669d954f922f10c5cdafbcf, type: 2}
+  - {fileID: 8574412962073106934, guid: 98bb5885811ecc043b4c5d920f7c568d, type: 2}
+  - {fileID: 8574412962073106934, guid: 5829422ac1e40684d95fd7339a6917de, type: 2}
+  - {fileID: 8574412962073106934, guid: 8dc55c697b7c062448332f962389f7f1, type: 2}
+  - {fileID: 8574412962073106934, guid: da6f914ddc7022347a614bcbe590eab2, type: 2}
+  - {fileID: 8574412962073106934, guid: ad7fa5c763b4a274393265d45bd1608d, type: 2}
+  - {fileID: 8574412962073106934, guid: 5496c0c63f9738942950de5d98ea33ae, type: 2}
+  - {fileID: 8574412962073106934, guid: 6fc77eab8aab11143adce9a28250a1b1, type: 2}
+  - {fileID: 8574412962073106934, guid: 032d2ba560fafe94dac9e438627c60a2, type: 2}
+  - {fileID: 8574412962073106934, guid: 6592dbd951bb2724b952e179b37df31d, type: 2}
 --- !u!1001 &1569025848
 PrefabInstance:
   m_ObjectHideFlags: 0

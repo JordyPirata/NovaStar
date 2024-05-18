@@ -19,10 +19,6 @@ namespace Generator
             {
                 instance = this;
             }
-            else
-            {
-                Destroy(gameObject);
-            }
         }
         public void Start()
         {
@@ -39,7 +35,6 @@ namespace Generator
                 chunk.transform.SetParent(transform);
             }
         }
-
         public ChunkObject GetChunk(Vector2 coord)
         {
             foreach (var chunk in chunkList)
@@ -52,6 +47,5 @@ namespace Generator
             }
             return null;
         }
-
     }
 }

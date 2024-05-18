@@ -87,7 +87,7 @@ namespace Menus
         }
         public void SaveSettings()
         {
-            message = JsonRepository.Instance.CreateAsync(settings, settingsFile);
+            message = JsonRepository.Instance.Create(settings, settingsFile);
             Console.Log(message);
         }
         // Load settings from file
@@ -96,9 +96,9 @@ namespace Menus
             // Read the settings from the file
             if (JsonRepository.Exists(settingsFile))
             {
-                (message, settings) = JsonRepository.Instance.ReadAsync<Settings>(settingsFile);
+                (message, settings) = JsonRepository.Instance.Read<Settings>(settingsFile);
             }
-            else 
+            else
             {
                 settings = new Settings();
                 SaveSettings();

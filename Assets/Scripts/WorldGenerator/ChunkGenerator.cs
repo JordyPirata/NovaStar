@@ -1,7 +1,6 @@
 using UnityEngine;
 using Unity.Mathematics;
 using Generator;
-using System.Threading.Tasks;
 using System;
 
 public class ChunkGenerator
@@ -16,20 +15,19 @@ public class ChunkGenerator
 
     }
     
-
     //set position of the chunks
     private static GameObject SetAttributes(GameObject ChunkGameObject, Chunk Chunk)
     {
         ChunkGameObject.transform.position = Chunk.position;
         ChunkGameObject.name = Chunk.ChunkName;
-        ChunkGameObject.layer = LayerMask.NameToLayer("Default");
+        ChunkGameObject.layer = LayerMask.NameToLayer("Terrain");
 
         Terrain terrain = ChunkGameObject.GetComponent<Terrain>();
         TerrainCollider terrainCollider = ChunkGameObject.GetComponent<TerrainCollider>();
 
         terrain = TerrainSettings.ApplySettings(terrain, Chunk);
+        terrainCollider.includeLayers = LayerMask.GetMask("Player");
         terrainCollider.terrainData = terrain.terrainData;
         return ChunkGameObject;
     }
-
 }

@@ -9,10 +9,11 @@ namespace Generator
         public const int groupingID = 0;
         public const int pixelError = 0;
         public const int heightmapMaximumLOD = 0;
+        private static Material defaultTerrainMaterial { get{return DefaultTerrainMaterial();}}
 
         public static Terrain ApplySettings(Terrain terrain, Chunk chunk)
         {
-            terrain.materialTemplate = DefaultTerrainMaterial();
+            terrain.materialTemplate = defaultTerrainMaterial;
             terrain.allowAutoConnect = allowAutoConnect;
             terrain.groupingID = groupingID;
             terrain.heightmapPixelError = pixelError;
@@ -20,6 +21,7 @@ namespace Generator
 
             TerrainData terrainData = new()
             {
+                terrainLayers = TerrainLayers.Instance.terrainLayers,
                 heightmapResolution = chunk.width,
                 size = new Vector3(chunk.width, chunk.height, chunk.width)
             };
