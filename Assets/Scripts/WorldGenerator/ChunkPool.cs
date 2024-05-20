@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Map = Generator.ChunkGrid<Generator.ChunkObject>;
 
 namespace Generator
 {
@@ -19,9 +20,6 @@ namespace Generator
             {
                 instance = this;
             }
-        }
-        public void Start()
-        {
             InitPool();
         }
         private void InitPool()
@@ -37,9 +35,13 @@ namespace Generator
         }
         public ChunkObject GetChunk(Vector2 coord)
         {
-            foreach (var chunk in chunkList)
+            for (int i = 0; i < chunkList.Count; i++)
             {
-                var chunkGameObject = chunk.TryUse(coord);
+                if(chunkList[i].CheckDistanceAndRelease())
+                {
+                    Map.grid.Remove(chunkList[i].Coord);
+                }
+                var chunkGameObject = chunkList[i].TryUse(coord);
                 if (chunkGameObject != null)
                 {
                     return chunkGameObject;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Generator;
 using UnityEngine;
 using System.Collections;
+using Map = Generator.ChunkGrid<Generator.ChunkObject>;
 
 public class ChunkVisibility
 {
@@ -17,7 +18,7 @@ public class ChunkVisibility
     }
     private static readonly List<ChunkObject> chunksVisible = new();
     private readonly int chunkVisibleInViewDst = Mathf.RoundToInt(ChunkManager.maxViewDst / ChunkManager.width);
-    public void UpdateVisibleChunks(ChunkGrid<ChunkObject> Chunks, float2 viewerCoordinate)
+    public void UpdateVisibleChunks(float2 viewerCoordinate)
     {
 
         foreach (var chunks in chunksVisible)
@@ -32,17 +33,17 @@ public class ChunkVisibility
             {
 
                 float2 viewedChunkCoord = new(viewerCoordinate.x + xOffset, viewerCoordinate.y + yOffset);
-                if (Chunks.grid.ContainsKey(viewedChunkCoord))
+                if (Map.grid.ContainsKey(viewedChunkCoord))
                 {
-                    Chunks.grid[viewedChunkCoord].UpdateStatus();
-                    if (Chunks.grid[viewedChunkCoord].IsVisible())
+                    Map.grid[viewedChunkCoord].UpdateStatus();
+                    if (Map.grid[viewedChunkCoord].IsVisible())
                     {
-                        chunksVisible.Add(Chunks.grid[viewedChunkCoord]);
+                        chunksVisible.Add(Map.grid[viewedChunkCoord]);
                     }
                 }
                 else
                 {
-                    Chunks.grid.Add(viewedChunkCoord, ChunkGenerator.GenerateChunk(viewedChunkCoord));
+                    Map.grid.Add(viewedChunkCoord, ChunkGenerator.GenerateChunk(viewedChunkCoord));
                 }
 
             }

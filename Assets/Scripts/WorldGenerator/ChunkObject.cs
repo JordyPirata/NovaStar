@@ -16,16 +16,17 @@ namespace Generator
         private bool _isAvailable;
         public ChunkObject(GameObject gameObject)
         {
-            
+
             GameObject = gameObject;
             Terrain = GameObject.GetComponent<Terrain>();
-            _isAvailable = true;   
+            _isAvailable = true;
         }
 
         public ChunkObject TryUse(float2 coord)
         {
             if (_isAvailable)
             {
+                Coord = coord;
                 Position = coord * ChunkManager.width;
                 Bounds = new(Position, Vector2.one * ChunkManager.width);
                 _isAvailable = false;
@@ -53,6 +54,15 @@ namespace Generator
         public bool IsVisible()
         {
             return GameObject.activeSelf;
+        }
+        public bool CheckDistanceAndRelease()
+        {
+            if (Vector2.Distance(Position, ChunkManager.viewerPosition) > ChunkManager.maxViewDst + ChunkManager.width + 100)
+            {
+                Release();
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -12,9 +12,8 @@ public class ChunkGenerator
 
         poolItem.GameObject = SetAttributes(poolItem!.GameObject, chunkData);
         return poolItem;
-
     }
-    
+
     //set position of the chunks
     private static GameObject SetAttributes(GameObject ChunkGameObject, Chunk Chunk)
     {

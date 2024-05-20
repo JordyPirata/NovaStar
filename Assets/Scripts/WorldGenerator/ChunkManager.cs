@@ -28,7 +28,6 @@ public class ChunkManager : MonoBehaviour
     public static int height = 30;
     public const float offset = 0.01f;
     public static int seed = 0;
-    private readonly ChunkGrid<ChunkObject> MapChunks = new();
     public Transform viewer;
     public const float maxViewDst = 450;
     public static Vector2 viewerPosition;
@@ -37,7 +36,7 @@ public class ChunkManager : MonoBehaviour
     public void Start()
     {
         StartCoroutine(UpdateChunks());
-        StartCoroutine(WeldChunks());
+        // StartCoroutine(WeldChunks());
     }
     public IEnumerator UpdateChunks()
     {
@@ -46,7 +45,7 @@ public class ChunkManager : MonoBehaviour
             yield return new WaitForSeconds(2f);
             viewerPosition = new float2(viewer.position.x, viewer.position.z);
             viewerCoordinate = new float2(Mathf.RoundToInt(viewerPosition.x / width), Mathf.RoundToInt(viewerPosition.y / depth));
-            ChunkVisibility.Instance.UpdateVisibleChunks(MapChunks, viewerCoordinate);
+            ChunkVisibility.Instance.UpdateVisibleChunks(viewerCoordinate);
             
         }
 
@@ -56,7 +55,7 @@ public class ChunkManager : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(20f);
-            Weld.SetNeighborsAll(MapChunks);
+            Weld.SetNeighborsAll();
         }
     }
 }
