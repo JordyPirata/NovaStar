@@ -1,8 +1,6 @@
 #region Includes
-using System;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 #endregion
 

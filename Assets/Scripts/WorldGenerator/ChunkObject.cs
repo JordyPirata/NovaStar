@@ -1,8 +1,5 @@
-using System.Diagnostics.Tracing;
-using System.Threading;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Generator
 {

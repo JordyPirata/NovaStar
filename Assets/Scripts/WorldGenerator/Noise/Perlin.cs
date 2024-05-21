@@ -1,10 +1,9 @@
-using System;
 using Unity.Burst;
 using Unity.Mathematics;
 
 namespace Generator
 {
-	[BurstCompile]
+    [BurstCompile]
 	public struct Perlin 
 	{
 		// Generate Octave Perlin noise value for float coordinates x, y

@@ -1,9 +1,4 @@
-using System;
-using UnityEngine;
-using Unity.Collections;
 using Random = System.Random;
-using Repository;
-using OpenCover.Framework.Model;
 public class SeedGenerator
 {
 	public SeedGenerator(int seed)

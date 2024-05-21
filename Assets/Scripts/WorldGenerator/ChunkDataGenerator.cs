@@ -1,16 +1,8 @@
-
-using Unity.Jobs;
-using Unity.Collections;
 using Unity.Mathematics;
-using Util;
 using Generator;
 using UnityEngine;
-using System.Collections.Generic;
 using Repository;
 using System.IO;
-using System.Threading.Tasks;
-using System;
-using System.Threading;
 using Unity.Burst;
 
 /// <summary>

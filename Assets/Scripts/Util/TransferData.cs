@@ -1,7 +1,5 @@
 // Purpose: Contains the TransferData struct, which contains a method to transfer a 1D array to a 2D array.
-using System;
 using Unity.Burst;
-using Unity.Collections;
 
 namespace Util
 {

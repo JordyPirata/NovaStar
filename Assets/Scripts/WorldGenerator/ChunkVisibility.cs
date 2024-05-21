@@ -2,7 +2,6 @@ using Unity.Mathematics;
 using System.Collections.Generic;
 using Generator;
 using UnityEngine;
-using System.Collections;
 using Map = Generator.ChunkGrid<Generator.ChunkObject>;
 
 public class ChunkVisibility

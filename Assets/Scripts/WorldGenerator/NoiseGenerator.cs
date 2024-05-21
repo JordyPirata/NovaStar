@@ -1,4 +1,3 @@
-using UnityEngine;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Mathematics;
@@ -6,7 +5,7 @@ using Unity.Jobs;
 
 namespace Generator
 {
-	[BurstCompile]
+    [BurstCompile]
 	public struct NoiseGenerator
 	{
 		// Generate noise for the chunk
@@ -25,7 +24,7 @@ namespace Generator
 				for (int x = 0; x < ChunkManager.depth; x++)
 				{
 					// Calculate the actual x and y
-					allCoords[i] = new int2(iCoordX , iCoordY);
+					allCoords[i] = new int2(iCoordX, iCoordY);
 					// is negative
 					iCoordY++;
 					i++;

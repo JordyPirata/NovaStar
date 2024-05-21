@@ -1,11 +1,6 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Generator;
-using Unity.Collections;
 using Unity.Mathematics;
-using System.Threading.Tasks;
 
 //TODO: Change name to ChunkFacade and implement 
 public class ChunkManager : MonoBehaviour
@@ -46,7 +41,6 @@ public class ChunkManager : MonoBehaviour
             viewerPosition = new float2(viewer.position.x, viewer.position.z);
             viewerCoordinate = new float2(Mathf.RoundToInt(viewerPosition.x / width), Mathf.RoundToInt(viewerPosition.y / depth));
             ChunkVisibility.Instance.UpdateVisibleChunks(viewerCoordinate);
-            
         }
 
     }
