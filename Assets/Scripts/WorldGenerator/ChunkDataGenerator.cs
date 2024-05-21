@@ -62,7 +62,6 @@ public class ChunkDataGenerator
             SaveChunk(chunk);
             return chunk;
         }
-
     }
     private void SaveChunk(Chunk Chunk)
     {

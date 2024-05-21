@@ -10,31 +10,31 @@ public class Weld
     public static void SetNeighbors(float2 coord)
     {
         // Set the neighbors of the chunk
-        ChunkObject thisChunk = Map.grid[coord];
+        ChunkObject thisChunk = Map.Instance[coord];
         Terrain terrain = thisChunk.Terrain;
 
-        Terrain leftNeighbor = Map.grid[coord + new float2(-1, 0)]?.Terrain;
+        Terrain leftNeighbor = Map.Instance[coord + new float2(-1, 0)]?.Terrain;
         if (leftNeighbor != null && leftNeighbor.isActiveAndEnabled)
         {
             terrain.SetNeighbors(leftNeighbor, terrain.topNeighbor, terrain.rightNeighbor, terrain.bottomNeighbor);
             leftNeighbor.SetNeighbors(leftNeighbor.leftNeighbor, leftNeighbor.topNeighbor, terrain, leftNeighbor.bottomNeighbor);
         }
         
-        Terrain rightNeighbor = Map.grid[ coord + new float2(+1, 0) ]?.Terrain;
+        Terrain rightNeighbor = Map.Instance[ coord + new float2(+1, 0) ]?.Terrain;
         if (rightNeighbor!=null && rightNeighbor.isActiveAndEnabled)
         {
             terrain.SetNeighbors(terrain.leftNeighbor, terrain.topNeighbor, rightNeighbor, terrain.bottomNeighbor);
             rightNeighbor.SetNeighbors(terrain, rightNeighbor.topNeighbor, rightNeighbor.rightNeighbor, rightNeighbor.bottomNeighbor);
         }
 
-        Terrain bottomNeighbor = Map.grid[ coord + new float2(0, -1) ]?.Terrain;
+        Terrain bottomNeighbor = Map.Instance[ coord + new float2(0, -1) ]?.Terrain;
         if (bottomNeighbor!=null && bottomNeighbor.isActiveAndEnabled)
         {
             terrain.SetNeighbors(terrain.leftNeighbor, terrain.topNeighbor, terrain.rightNeighbor, bottomNeighbor);
             bottomNeighbor.SetNeighbors(bottomNeighbor.leftNeighbor, terrain, bottomNeighbor.rightNeighbor, bottomNeighbor.bottomNeighbor);
         }
 
-        Terrain topNeighbor = Map.grid[ coord + new float2(0, +1) ]?.Terrain;
+        Terrain topNeighbor = Map.Instance[ coord + new float2(0, +1) ]?.Terrain;
         if (topNeighbor!=null && topNeighbor.isActiveAndEnabled)
         {
             terrain.SetNeighbors(terrain.leftNeighbor, topNeighbor, terrain.rightNeighbor, terrain.bottomNeighbor);
@@ -43,8 +43,7 @@ public class Weld
     }
     public static void SetNeighborsAll()
     {
-        Stopwatch timer = null;
-        timer = new Stopwatch();
+        Stopwatch timer = new();
         timer.Start();
         if (Map.AllChunks() == null)
         {

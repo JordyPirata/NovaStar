@@ -33,17 +33,17 @@ public class ChunkVisibility
             {
 
                 float2 viewedChunkCoord = new(viewerCoordinate.x + xOffset, viewerCoordinate.y + yOffset);
-                if (Map.grid.ContainsKey(viewedChunkCoord))
+                if (Map.ContainsKey(viewedChunkCoord))
                 {
-                    Map.grid[viewedChunkCoord].UpdateStatus();
-                    if (Map.grid[viewedChunkCoord].IsVisible())
+                    Map.Instance[viewedChunkCoord].UpdateStatus();
+                    if (Map.Instance[viewedChunkCoord].IsVisible())
                     {
-                        chunksVisible.Add(Map.grid[viewedChunkCoord]);
+                        chunksVisible.Add(Map.Instance[viewedChunkCoord]);
                     }
                 }
                 else
                 {
-                    Map.grid.Add(viewedChunkCoord, ChunkGenerator.GenerateChunk(viewedChunkCoord));
+                    Map.Add(viewedChunkCoord, ChunkGenerator.GenerateChunk(viewedChunkCoord));
                 }
 
             }

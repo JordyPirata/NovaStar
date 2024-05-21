@@ -39,7 +39,7 @@ namespace Generator
             {
                 if(chunkList[i].CheckDistanceAndRelease())
                 {
-                    Map.grid.Remove(chunkList[i].Coord);
+                    Map.Remove(chunkList[i].Coord);
                 }
                 var chunkGameObject = chunkList[i].TryUse(coord);
                 if (chunkGameObject != null)

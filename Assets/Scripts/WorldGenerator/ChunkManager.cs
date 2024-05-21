@@ -36,7 +36,7 @@ public class ChunkManager : MonoBehaviour
     public void Start()
     {
         StartCoroutine(UpdateChunks());
-        // StartCoroutine(WeldChunks());
+        StartCoroutine(WeldChunks());
     }
     public IEnumerator UpdateChunks()
     {
