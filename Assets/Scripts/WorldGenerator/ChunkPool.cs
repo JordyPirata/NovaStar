@@ -9,7 +9,7 @@ namespace Generator
     /// </summary>
     public class ChunkPool : MonoBehaviour
     {
-        [SerializeField] private int poolSize = 100;
+        [SerializeField] private int poolSize = 40;
         [SerializeField] private GameObject ChunkPrefab;
         private readonly List<ChunkObject> chunkList = new();
         private static ChunkPool instance;
