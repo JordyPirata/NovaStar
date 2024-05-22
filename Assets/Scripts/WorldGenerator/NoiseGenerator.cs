@@ -2,6 +2,8 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Mathematics;
 using Unity.Jobs;
+using UnityEditor.Localization.Plugins.XLIFF.V12;
+using Unity.VisualScripting;
 
 namespace Generator
 {
@@ -11,8 +13,9 @@ namespace Generator
 		// Generate noise for the chunk
 		public static float[] GenerateNoise(float2 coords)
 		{
-			int iCoordX = (int)coords.x * ChunkManager.width;
-			int iCoordY = (int)coords.y * ChunkManager.depth;
+			// Calculate the initial x and y
+			int iCoordX = ((int)coords.x * ChunkManager.width) - (int)coords.x;
+			int iCoordY = ((int)coords.y * ChunkManager.depth) - (int)coords.y;
 			// Define the heights and allCoords arrays
 			NativeArray<float> heights = new(ChunkManager.length, Allocator.TempJob);
 			NativeArray<float2> allCoords = new(ChunkManager.length, Allocator.TempJob);
@@ -24,7 +27,7 @@ namespace Generator
 				for (int x = 0; x < ChunkManager.depth; x++)
 				{
 					// Calculate the actual x and y
-					allCoords[i] = new int2(iCoordX, iCoordY);
+					allCoords[i] = new int2(iCoordX , iCoordY);
 					// is negative
 					iCoordY++;
 					i++;
@@ -40,7 +43,7 @@ namespace Generator
 				AllCoords = allCoords,
 				Heights = heights,
 			};
-			JobHandle jobHandle = noiseGeneratorJob.Schedule(ChunkManager.length, 33);
+			JobHandle jobHandle = noiseGeneratorJob.Schedule(ChunkManager.length, 85);
 			jobHandle.Complete();
 			
 			var result = heights.ToArray();
@@ -50,6 +53,9 @@ namespace Generator
 			return result;
 
 		}
-
+		public readonly bool IsPair(int x, int y)
+		{
+			return x % 2 == 0 && y % 2 == 0;
+		}
 	}
 }

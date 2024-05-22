@@ -19,8 +19,8 @@ public class ChunkManager : MonoBehaviour
     public const float lacunarity = .5f;
     public static int width = 257;
     public static int depth = 257;
-    public static int length = width * depth;
-    public static int height = 30;
+    public static int length = width *depth;
+    public static int height = 50;
     public const float offset = 0.01f;
     public static int seed = 0;
     public Transform viewer;
