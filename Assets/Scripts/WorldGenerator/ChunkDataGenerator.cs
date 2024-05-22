@@ -9,19 +9,11 @@ using Unity.Burst;
 ///  This struct is responsible for generating the chunk data
 /// </summary>
 [BurstCompile]
-public class ChunkDataGenerator
+public struct ChunkDataGenerator
 {
-    private static ChunkDataGenerator instance;
-    public static ChunkDataGenerator Instance
-    {
-        get
-        {
-            instance ??= new ChunkDataGenerator();
-            return instance;
-        }
-    }
-    string message;
-    public Chunk Generate(float2 coord)
+
+    static string message;
+    public static Chunk Generate(float2 coord)
     {
 
         string chunkName = $"Chunk({coord.x},{coord.y})";
@@ -55,7 +47,7 @@ public class ChunkDataGenerator
             return chunk;
         }
     }
-    private void SaveChunk(Chunk Chunk)
+    private static void SaveChunk(Chunk Chunk)
     {
         message = JsonRepository.Instance.Create(Chunk,
             Path.Combine(Application.persistentDataPath, string.Concat(Chunk.ChunkName, ".bin")));

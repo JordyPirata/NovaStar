@@ -7,7 +7,7 @@ public class ChunkGenerator
 {
     public static ChunkObject GenerateChunk(float2 chunkCoords)
     {
-        var chunkData = ChunkDataGenerator.Instance.Generate(chunkCoords);
+        var chunkData = ChunkDataGenerator.Generate(chunkCoords);
         var poolItem = ChunkPool.Instance.GetChunk(chunkCoords) ?? throw new Exception("chunk pool is full");
 
         poolItem.GameObject = SetAttributes(poolItem!.GameObject, chunkData);

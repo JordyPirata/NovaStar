@@ -4,8 +4,9 @@ using Generator;
 using System.Diagnostics;
 using Debug = UnityEngine.Debug;
 using Map = Generator.ChunkGrid<Generator.ChunkObject>;
-
-public class Weld
+using Unity.Burst;
+[BurstCompile]
+public struct Weld
 {
     public static void SetNeighbors(float2 coord)
     {

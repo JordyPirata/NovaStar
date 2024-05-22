@@ -40,7 +40,7 @@ public class ChunkManager : MonoBehaviour
             yield return new WaitForSeconds(2f);
             viewerPosition = new float2(viewer.position.x, viewer.position.z);
             viewerCoordinate = new float2(Mathf.RoundToInt(viewerPosition.x / width), Mathf.RoundToInt(viewerPosition.y / depth));
-            ChunkVisibility.Instance.UpdateVisibleChunks(viewerCoordinate);
+            ChunkVisibility.UpdateVisibleChunks(viewerCoordinate);
         }
 
     }

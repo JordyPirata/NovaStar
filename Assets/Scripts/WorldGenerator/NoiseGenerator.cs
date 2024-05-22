@@ -53,9 +53,5 @@ namespace Generator
 			return result;
 
 		}
-		public readonly bool IsPair(int x, int y)
-		{
-			return x % 2 == 0 && y % 2 == 0;
-		}
 	}
 }

@@ -3,21 +3,14 @@ using System.Collections.Generic;
 using Generator;
 using UnityEngine;
 using Map = Generator.ChunkGrid<Generator.ChunkObject>;
-
-public class ChunkVisibility
+using Unity.Collections;
+using Unity.Burst;
+[BurstCompile]
+public struct ChunkVisibility
 {
-    private static ChunkVisibility instance;
-    public static ChunkVisibility Instance
-    {
-        get
-        {
-            instance ??= new ChunkVisibility();
-            return instance;
-        }
-    }
     private static readonly List<ChunkObject> chunksVisible = new();
-    private readonly int chunkVisibleInViewDst = Mathf.RoundToInt(ChunkManager.maxViewDst / ChunkManager.width);
-    public void UpdateVisibleChunks(float2 viewerCoordinate)
+    private static readonly int chunkVisibleInViewDst = Mathf.RoundToInt(ChunkManager.maxViewDst / ChunkManager.width);
+    public static void UpdateVisibleChunks(float2 viewerCoordinate)
     {
 
         foreach (var chunks in chunksVisible)
