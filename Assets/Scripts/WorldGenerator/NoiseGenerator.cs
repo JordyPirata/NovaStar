@@ -51,7 +51,6 @@ namespace Generator
 			heights.Dispose();
 			allCoords.Dispose();
 			return result;
-
 		}
 	}
 }

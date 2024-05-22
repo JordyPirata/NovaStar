@@ -1,4 +1,5 @@
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Repository
 {
@@ -15,15 +16,15 @@ namespace Repository
             }
         }
         // The CreateAsync method serializes the data and saves it to a file
-        public string Create<T>(T data, string path)
+        public async Task<string> Create<T>(T data, string path)
         {
-            Serializer.Instance.BSerialize(data, path);
+            await Serializer.Instance.BSerialize(data, path);
             return "Data saved successfully on: " + path;
         }
         // The ReadAsync method deserializes the data from a file
-        public (string, T) Read<T>(string path)
+        public async Task<(string, T)> Read<T>(string path)
         {
-            T data = Serializer.Instance.BDeserialize<T>(path);
+            T data = await Serializer.Instance.BDeserialize<T>(path);
             if (data == null)
             {
                 return ("Data not found", default);

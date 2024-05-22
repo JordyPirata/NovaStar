@@ -85,18 +85,18 @@ namespace Menus
             yield return LocalizationSettings.InitializationOperation;
             LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[localeID];
         }
-        public void SaveSettings()
+        public async void SaveSettings()
         {
-            message = JsonRepository.Instance.Create(settings, settingsFile);
+            message = await JsonRepository.Instance.Create(settings, settingsFile);
             Console.Log(message);
         }
         // Load settings from file
-        public void LoadSettings()
+        public async void LoadSettings()
         {
             // Read the settings from the file
             if (JsonRepository.Exists(settingsFile))
             {
-                (message, settings) = JsonRepository.Instance.Read<Settings>(settingsFile);
+                (message, settings) = await JsonRepository.Instance.Read<Settings>(settingsFile);
             }
             else
             {

@@ -2,12 +2,13 @@ using UnityEngine;
 using Unity.Mathematics;
 using Generator;
 using System;
+using System.Threading.Tasks;
 
 public class ChunkGenerator
 {
-    public static ChunkObject GenerateChunk(float2 chunkCoords)
+    public static async Task<ChunkObject> GenerateChunk(float2 chunkCoords)
     {
-        var chunkData = ChunkDataGenerator.Generate(chunkCoords);
+        Chunk chunkData = await ChunkDataGenerator.Generate(chunkCoords);
         var poolItem = ChunkPool.Instance.GetChunk(chunkCoords) ?? throw new Exception("chunk pool is full");
 
         poolItem.GameObject = SetAttributes(poolItem!.GameObject, chunkData);

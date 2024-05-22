@@ -4,6 +4,7 @@ using UnityEngine;
 using Repository;
 using System.IO;
 using Unity.Burst;
+using System.Threading.Tasks;
 
 /// <summary>
 ///  This struct is responsible for generating the chunk data
@@ -13,7 +14,7 @@ public struct ChunkDataGenerator
 {
 
     static string message;
-    public static Chunk Generate(float2 coord)
+    public async static Task<Chunk> Generate(float2 coord)
     {
 
         string chunkName = $"Chunk({coord.x},{coord.y})";
@@ -23,7 +24,7 @@ public struct ChunkDataGenerator
         if (JsonRepository.Exists(chunkPath))
         {
             // Load the chunk
-            (message, chunk) = JsonRepository.Instance.Read<Chunk>(chunkPath);
+            (message, chunk) = await JsonRepository.Instance.Read<Chunk>(chunkPath);
 
             chunk.position = new float3(coord.x * ChunkManager.width, 0, coord.y * ChunkManager.depth);
             Debug.Log(message + " " + chunk.ChunkName);
@@ -47,9 +48,9 @@ public struct ChunkDataGenerator
             return chunk;
         }
     }
-    private static void SaveChunk(Chunk Chunk)
+    private static async void SaveChunk(Chunk Chunk)
     {
-        message = JsonRepository.Instance.Create(Chunk,
+        message = await JsonRepository.Instance.Create(Chunk,
             Path.Combine(Application.persistentDataPath, string.Concat(Chunk.ChunkName, ".bin")));
         Debug.Log(message + " " + Chunk.ChunkName);
     }

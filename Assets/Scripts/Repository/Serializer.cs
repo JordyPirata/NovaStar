@@ -19,16 +19,16 @@ namespace Repository
         }
         // Serialize the data to a binary file
         private readonly BinaryFormatter binaryFormatter = new();
-        public void BSerialize<T>(T data, string path)
+        public async Task BSerialize<T>(T data, string path)
         {
             using Stream stream = File.Open(path, FileMode.Create);
-            binaryFormatter.Serialize(stream, data);
+            await Task.Run(() => binaryFormatter.Serialize(stream, data));
         }
         // Deserialize the data from a binary file
-        public T BDeserialize<T>(string path)
+        public async Task<T> BDeserialize<T>(string path)
         {
             using Stream stream = File.Open(path, FileMode.Open);
-            return (T)binaryFormatter.Deserialize(stream);
+            return await Task.Run( () =>(T)binaryFormatter.Deserialize(stream));
         }
         [System.Obsolete]
         public static async Task SerializeAsync<T>(T data, string path)
