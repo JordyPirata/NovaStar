@@ -43,7 +43,7 @@ namespace Generator
 				AllCoords = allCoords,
 				Heights = heights,
 			};
-			JobHandle jobHandle = noiseGeneratorJob.Schedule(ChunkManager.length, 85);
+			JobHandle jobHandle = noiseGeneratorJob.Schedule(ChunkManager.length, 65);
 			jobHandle.Complete();
 			
 			var result = heights.ToArray();

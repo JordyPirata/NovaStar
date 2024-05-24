@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using Unity.Mathematics;
 using System.Threading.Tasks;
+using UnityEngine.Analytics;
 
 //TODO: Change name to ChunkFacade and implement 
 public class ChunkManager : MonoBehaviour
@@ -15,17 +16,17 @@ public class ChunkManager : MonoBehaviour
             instance = this;
         }
     }
-    public const int octaves = 8;
-    public const float persistance = Mathf.PI / 2;
-    public const float lacunarity = .5f;
+    public const int octaves = 4;
+    public static float persistance = Mathf.PI / 2;
+    public static float lacunarity = 1.25f;
     public static int width = 257;
     public static int depth = 257;
-    public static int length = width *depth;
-    public static int height = 50;
-    public const float offset = 0.01f;
+    public static int length = width * depth;
+    public static int height = 250;
+    public const float scale = 0.001f;
     public static int seed = 0;
     public Transform viewer;
-    public const float maxViewDst = 450;
+    public const float maxViewDst = 500;
     public static Vector2 viewerPosition;
     public float2 viewerCoordinate;
 
@@ -45,9 +46,10 @@ public class ChunkManager : MonoBehaviour
             await ChunkVisibility.UpdateVisibleChunks(viewerCoordinate);
             // delay the update of the chunks by system time
             await Task.Delay(2000);
+            await Task.Yield();
         }
     }
-    
+
     // Weld the chunks together
     public IEnumerator WeldChunks()
     {
