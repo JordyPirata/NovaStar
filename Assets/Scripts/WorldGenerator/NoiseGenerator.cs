@@ -11,7 +11,7 @@ namespace Generator
 	public struct NoiseGenerator
 	{
 		// Generate noise for the chunk
-		public static float[] GenerateNoise(float2 coords)
+		public static float[] UseJobs(float2 coords)
 		{
 			// Calculate the initial x and y
 			int iCoordX = ((int)coords.x * ChunkManager.width) - (int)coords.x;
@@ -19,7 +19,7 @@ namespace Generator
 			// Define the heights and allCoords arrays
 			NativeArray<float> heights = new(ChunkManager.length, Allocator.TempJob);
 			NativeArray<float2> allCoords = new(ChunkManager.length, Allocator.TempJob);
-
+			
 			int initialY = iCoordY, i = 0;
 
 			for (int y = 0; y < ChunkManager.width; y++)
@@ -45,12 +45,16 @@ namespace Generator
 			};
 			JobHandle jobHandle = noiseGeneratorJob.Schedule(ChunkManager.length, 65);
 			jobHandle.Complete();
-			
+
 			var result = heights.ToArray();
 			// Dispose the arrays
 			heights.Dispose();
 			allCoords.Dispose();
 			return result;
+		}
+		private float[] UseComputeShader(float2 coords)
+		{
+			return NoiseGeneratorS.GenerateNoise(coords);
 		}
 	}
 }

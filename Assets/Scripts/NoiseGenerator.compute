@@ -1,34 +1,19 @@
-// Each #kernel tells which function to compile; you can have many kernels
 #pragma kernel CSMain
+#include "Assets/Scripts/Perlin.hlsl"
 
-// Create a RenderTexture with enableRandomWrite flag and set it
-// with cs.SetTexture
-RWTexture2D<float4> Result;
+RWStructuredBuffer<float> Result;
 
-[numthreads(8,8,1)]
+[numthreads(257,257,1)]
+  
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
-    // TODO: insert actual code here!
+    // TODO: Perlin Implementation
 
-    Result[id.xy] = float4(id.x & id.y, (id.x & 15)/15.0, (id.y & 15)/15.0, 0.0);
-}
+    fnl_state noise = fnlCreateState();
+    noise.noise_type = FNL_NOISE_OPENSIMPLEX2;
+    noise.fractal_type = FNL_FRACTAL_FBM;
 
-public float CalculatePerlin(float x, float y)
-{
+    // Gather noise data
     
-    int X = (int)math.floor(x) & 255, // Keep the first 8 bits of the integer (coerce to 0-255)
-        Y = (int)math.floor(y) & 255;
-
-    x -= X; // Get the decimal part of the number
-    y -= Y;
-
-    float u = Fade(x), // Compute the fade curves for x, y
-        v = Fade(y);
-
-    int A = p[X] + Y, AA = p[A], AB = p[A + 1],  // Hash coordinates of the 4 corners of the unit square
-        B = p[X + 1] + Y, BA = p[B], BB = p[B + 1];   
-    
-    return Lerp(v,											 			
-            Lerp(u, Grad(p[AA], x, y), Grad(p[BA], x - 1, y)),			
-            Lerp(u, Grad(p[AB], x, y - 1), Grad(p[BB], x - 1, y - 1))); // Add blended results from 4 corners of the unit square
+    Result[id.x] = fnlGetNoise2D(noise, id.x, id.y);
 }
