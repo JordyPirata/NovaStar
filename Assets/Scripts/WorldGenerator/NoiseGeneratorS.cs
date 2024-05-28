@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
@@ -6,35 +7,48 @@ using UnityEngine;
 
 namespace Generator
 {
-    public class NoiseGeneratorS
+    public class NoiseGeneratorS : MonoBehaviour
     {
-        struct NoiseData
+        int kernel;
+        private struct PerlinData
         {
             public float2 coords;
-            public float height;
+            public float value;
         }
-        private static ComputeShader _computeShader = Resources.Load<ComputeShader>("Assets/Scripts/NoiseGenerator.compute");
-        private static ComputeBuffer _computeBuffer;
 
-        public static float[] GenerateNoise(float2 coords)
+        public ComputeShader computeShader;
+        private ComputeBuffer _computeBuffer;
+        private int length;
+
+        public void Start()
         {
-            int coordSize = sizeof(float) * 2, heightSize = sizeof(float);
-            int totalSize = coordSize + heightSize;
+            kernel = computeShader.FindKernel("CSMain");
+            length = ChunkManager.Length;
+        }
 
-            _computeBuffer = new ComputeBuffer(ChunkManager.length, totalSize);
-            _computeBuffer.SetData(new NoiseData[ChunkManager.length]);
+        public float[] GenerateNoise(float2 coords)
+        {
+            SetBuffer();
+            computeShader.SetBuffer(0, "Result", _computeBuffer);
+            computeShader.Dispatch(0, ChunkManager.Length / 257, 1, 1);
 
-            _computeShader.SetBuffer(0, "Result", _computeBuffer);
-            _computeShader.Dispatch(0, 257, 257, 1);
-
-            var result = new float[ChunkManager.length];
+            var result = new float[ChunkManager.Length];
             
             _computeBuffer.GetData(result);
             _computeBuffer.Dispose();
             return result;
         }
+        
+        private void SetBuffer()
+        {
+            
+            int coordSize = sizeof(float) * 2, heightSize = sizeof(float);
+            int totalSize = coordSize + heightSize;
 
+            _computeBuffer = new ComputeBuffer(ChunkManager.Length, totalSize);
+            _computeBuffer.SetData(new PerlinData[ChunkManager.Length]);
 
+        }
     }
 }
 

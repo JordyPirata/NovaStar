@@ -24,18 +24,17 @@ namespace Generator
         }
         private void InitPool()
         {
-            for (int i = 0; i < poolSize; i++)
+            for (var i = 0; i < poolSize; i++)
             {
-                GameObject chunk = Instantiate(ChunkPrefab);
+                GameObject chunk = Instantiate(ChunkPrefab, transform, true);
                 chunk.SetActive(false);
                 chunkList.Add(new(chunk));
                 // Set the parent of the chunk to the chunk pool
-                chunk.transform.SetParent(transform);
             }
         }
         public ChunkObject GetChunk(Vector2 coord)
         {
-            for (int i = 0; i < chunkList.Count; i++)
+            for (var i = 0; i < chunkList.Count; i++)
             {
                 if(chunkList[i].CheckDistanceAndRelease())
                 {

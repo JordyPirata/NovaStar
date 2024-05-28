@@ -3,7 +3,9 @@ using UnityEngine;
 public class TerrainLayers : MonoBehaviour
 {
     private static TerrainLayers instance;
-    public static TerrainLayers Instance { get { return instance; } private set { instance = value; } }
+    public static TerrainLayers Instance { get => instance;
+        private set => instance = value;
+    }
     public void Awake()
     {
         if (instance == null)
@@ -26,7 +28,7 @@ public class TerrainLayers : MonoBehaviour
     }
     public void SetTerrainLayer(int index, Texture2D texture, float tileSize, float normalScale, float metallic, float smoothness)
     {
-        TerrainLayer terrainLayer = new TerrainLayer
+        var terrainLayer = new TerrainLayer
         {
             diffuseTexture = texture,
             tileSize = new Vector2(tileSize, tileSize),
@@ -39,7 +41,7 @@ public class TerrainLayers : MonoBehaviour
 
     public void SetTerrainLayerByPath(int index, string path, float tileSize, float normalScale, float metallic, float smoothness)
     {
-        Texture2D texture = Resources.Load<Texture2D>(path);
+        var texture = Resources.Load<Texture2D>(path);
         SetTerrainLayer(index, texture, tileSize, normalScale, metallic, smoothness);
     }
     public TerrainLayer GetTerrainLayer(int index)

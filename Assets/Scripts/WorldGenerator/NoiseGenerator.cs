@@ -1,3 +1,4 @@
+using System;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Mathematics;
@@ -17,8 +18,8 @@ namespace Generator
 			int iCoordX = ((int)coords.x * ChunkManager.width) - (int)coords.x;
 			int iCoordY = ((int)coords.y * ChunkManager.depth) - (int)coords.y;
 			// Define the heights and allCoords arrays
-			NativeArray<float> heights = new(ChunkManager.length, Allocator.TempJob);
-			NativeArray<float2> allCoords = new(ChunkManager.length, Allocator.TempJob);
+			NativeArray<float> heights = new(ChunkManager.Length, Allocator.TempJob);
+			NativeArray<float2> allCoords = new(ChunkManager.Length, Allocator.TempJob);
 			
 			int initialY = iCoordY, i = 0;
 
@@ -43,7 +44,7 @@ namespace Generator
 				AllCoords = allCoords,
 				Heights = heights,
 			};
-			JobHandle jobHandle = noiseGeneratorJob.Schedule(ChunkManager.length, 65);
+			JobHandle jobHandle = noiseGeneratorJob.Schedule(ChunkManager.Length, 65);
 			jobHandle.Complete();
 
 			var result = heights.ToArray();
@@ -54,7 +55,7 @@ namespace Generator
 		}
 		private float[] UseComputeShader(float2 coords)
 		{
-			return NoiseGeneratorS.GenerateNoise(coords);
+			throw new NotImplementedException();
 		}
 	}
 }

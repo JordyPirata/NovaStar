@@ -14,7 +14,7 @@ public struct ChunkDataGenerator
 {
 
     static string message;
-    public async static Task<Chunk> Generate(float2 coord)
+    public static async Task<Chunk> Generate(float2 coord)
     {
 
         string chunkName = $"Chunk({coord.x},{coord.y})";

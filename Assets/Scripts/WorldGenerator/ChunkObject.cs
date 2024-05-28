@@ -21,15 +21,12 @@ namespace Generator
 
         public ChunkObject TryUse(float2 coord)
         {
-            if (_isAvailable)
-            {
-                Coord = coord;
-                Position = coord * ChunkManager.width;
-                Bounds = new(Position, Vector2.one * ChunkManager.width);
-                _isAvailable = false;
-                return this;
-            }
-            return null;
+            if (!_isAvailable) return null;
+            Coord = coord;
+            Position = coord * ChunkManager.width;
+            Bounds = new(Position, Vector2.one * ChunkManager.width);
+            _isAvailable = false;
+            return this;
         }
 
         public void Release()
@@ -38,8 +35,8 @@ namespace Generator
         }
         public bool UpdateStatus()
         {
-            float viewerDstFromNearestEdge = Mathf.Sqrt(Bounds.SqrDistance(ChunkManager.viewerPosition));
-            bool visible = viewerDstFromNearestEdge <= ChunkManager.maxViewDst;
+            var viewerDstFromNearestEdge = Mathf.Sqrt(Bounds.SqrDistance(ChunkManager.viewerPosition));
+            var visible = viewerDstFromNearestEdge <= ChunkManager.maxViewDst;
             SetVisible(visible);
             return visible;
 
@@ -54,12 +51,10 @@ namespace Generator
         }
         public bool CheckDistanceAndRelease()
         {
-            if (Vector2.Distance(Position, ChunkManager.viewerPosition) > ChunkManager.maxViewDst + ChunkManager.width + 100)
-            {
-                Release();
-                return true;
-            }
-            return false;
+            if (!(Vector2.Distance(Position, ChunkManager.viewerPosition) >
+                  ChunkManager.maxViewDst + ChunkManager.width + 100)) return false;
+            Release();
+            return true;
         }
     }
 }

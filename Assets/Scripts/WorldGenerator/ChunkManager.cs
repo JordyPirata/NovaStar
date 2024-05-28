@@ -21,7 +21,7 @@ public class ChunkManager : MonoBehaviour
     public static float lacunarity = 1.25f;
     public static int width = 257;
     public static int depth = 257;
-    public static int length = width * depth;
+    public static int Length => width * depth;
     public static int height = 250;
     public const float scale = 0.001f;
     public static int seed = 0;
