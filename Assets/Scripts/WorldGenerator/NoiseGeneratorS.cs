@@ -55,15 +55,21 @@ namespace Generator
 			}
 
             // Initialize the buffer
-            ComputeBuffer coordsBuffer = InitCoordsBuffer(allCoords);
-            ComputeBuffer valuesBuffer = new ComputeBuffer(length, sizeof(float));
+            var coordsBuffer = InitCoordsBuffer(allCoords);
+            var valuesBuffer = new ComputeBuffer(length, sizeof(float));
 			
             // Set the buffer
             computeShader.SetBuffer(kernel, Coords, coordsBuffer);
             computeShader.SetBuffer(kernel, Values, valuesBuffer);
+            
+            // Dispatch the shader
             computeShader.Dispatch(kernel, length / 257, 1, 1);
             
+            
+            // Get the data from the buffer
             valuesBuffer.GetData(heights);
+            
+            // Release the buffers
             coordsBuffer.Release();
             valuesBuffer.Release();
             return heights;
