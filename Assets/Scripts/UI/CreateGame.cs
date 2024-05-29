@@ -12,11 +12,6 @@ public class CreateGame : MonoBehaviour
     public GameObject worldPrefab;
     public void Awake()
     {
-        // Create a new world when the game starts
-        for (int i = 0; i < 5; i++)
-        {
-            CreateWorld();
-        }
         // Resize the panel
         StartCoroutine(ResizePanel());
         // Scroll to the bottom of the panel

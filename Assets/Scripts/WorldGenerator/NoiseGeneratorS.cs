@@ -21,12 +21,13 @@ namespace Generator
         }
         public ComputeShader computeShader;
         private readonly int length = ChunkManager.Length;
-        private static readonly int Result = Shader.PropertyToID("coords");
+        private static readonly int Coords = Shader.PropertyToID("coords");
         private static int kernel;
+        private static readonly int Values = Shader.PropertyToID("values");
 
         public void Start()
         {
-	        kernel = computeShader.FindKernel("CSmain");
+	        kernel = computeShader.FindKernel("CSMain");
         }
         public float[] GenerateNoise(float2 coords)
         {
@@ -55,12 +56,16 @@ namespace Generator
 
             // Initialize the buffer
             ComputeBuffer coordsBuffer = InitCoordsBuffer(allCoords);
+            ComputeBuffer valuesBuffer = new ComputeBuffer(length, sizeof(float));
 			
             // Set the buffer
-            computeShader.SetBuffer(kernel, Result, coordsBuffer);
+            computeShader.SetBuffer(kernel, Coords, coordsBuffer);
+            computeShader.SetBuffer(kernel, Values, valuesBuffer);
             computeShader.Dispatch(kernel, length / 257, 1, 1);
             
+            valuesBuffer.GetData(heights);
             coordsBuffer.Release();
+            valuesBuffer.Release();
             return heights;
         }
         
