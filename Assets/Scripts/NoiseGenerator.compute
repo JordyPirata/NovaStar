@@ -1,20 +1,13 @@
 #pragma kernel CSMain
 #include "Assets/Scripts/Perlin.hlsl"
 
-struct perlin_data
-{
-    float2 coords;
-    float value;
-};
-
-
-RWStructuredBuffer<perlin_data> perlin_data_buffer;
+StructuredBuffer<float2> coords;
+RWStructuredBuffer<float> values;
 
 [numthreads(257,1,1)]
   
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
-    float2 coords = perlin_data_buffer[id.x].coords;
     
     // TODO: Perlin Implementation
 
@@ -24,5 +17,5 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 
     // Gather noise data
     
-    perlin_data_buffer[id.x].value = fnlGetNoise2D(noise, coords.x, coords.y);
+    values[id.x] = fnlGetNoise2D(noise, coords[id.x].x, coords[id.x].y);
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -9,45 +10,68 @@ namespace Generator
 {
     public class NoiseGeneratorS : MonoBehaviour
     {
-        int kernel;
-        private struct PerlinData
+        private static NoiseGeneratorS instance;
+        public static NoiseGeneratorS Instance { get { return instance; } }
+        private void Awake()
         {
-            public float2 coords;
-            public float value;
+            if (instance == null)
+            {
+                instance = this;
+            }
         }
-
         public ComputeShader computeShader;
-        private ComputeBuffer _computeBuffer;
-        private int length;
+        private readonly int length = ChunkManager.Length;
+        private static readonly int Result = Shader.PropertyToID("coords");
+        private static int kernel;
 
         public void Start()
         {
-            kernel = computeShader.FindKernel("CSMain");
-            length = ChunkManager.Length;
+	        kernel = computeShader.FindKernel("CSmain");
         }
-
         public float[] GenerateNoise(float2 coords)
         {
-            SetBuffer();
-            computeShader.SetBuffer(0, "Result", _computeBuffer);
-            computeShader.Dispatch(0, ChunkManager.Length / 257, 1, 1);
-
-            var result = new float[ChunkManager.Length];
+            // Calculate the initial x and y
+			var iCoordX = (int)coords.x * ChunkManager.width - (int)coords.x;
+			var iCoordY = (int)coords.y * ChunkManager.depth - (int)coords.y;
             
-            _computeBuffer.GetData(result);
-            _computeBuffer.Dispose();
-            return result;
+            var allCoords = new float2[ChunkManager.Length];
+            var heights = new float[ChunkManager.Length];
+            int initialY = iCoordY, i = 0;
+
+			for (var y = 0; y < ChunkManager.width; y++)
+			{
+				for (var x = 0; x < ChunkManager.depth; x++)
+				{
+					// Calculate the actual x and y
+					allCoords[i] = new int2(iCoordX, iCoordY);
+					// is negative
+					iCoordY++;
+					i++;
+				}
+				iCoordX++;
+				// Reset the y
+				iCoordY = initialY;
+			}
+
+            // Initialize the buffer
+            ComputeBuffer coordsBuffer = InitCoordsBuffer(allCoords);
+			
+            // Set the buffer
+            computeShader.SetBuffer(kernel, Result, coordsBuffer);
+            computeShader.Dispatch(kernel, length / 257, 1, 1);
+            
+            coordsBuffer.Release();
+            return heights;
         }
         
-        private void SetBuffer()
+        private ComputeBuffer InitCoordsBuffer(float2[] data)
         {
-            
-            int coordSize = sizeof(float) * 2, heightSize = sizeof(float);
-            int totalSize = coordSize + heightSize;
+	        var totalSize = sizeof(float) * 2; 
 
-            _computeBuffer = new ComputeBuffer(ChunkManager.Length, totalSize);
-            _computeBuffer.SetData(new PerlinData[ChunkManager.Length]);
+            var computeBuffer = new ComputeBuffer(data.Length, totalSize);
+            computeBuffer.SetData(data);
 
+            return computeBuffer;
         }
     }
 }

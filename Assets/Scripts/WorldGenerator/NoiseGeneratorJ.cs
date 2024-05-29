@@ -8,27 +8,27 @@ using Unity.VisualScripting;
 
 namespace Generator
 {
-    [BurstCompile]
-	public struct NoiseGenerator
+	[BurstCompile]
+	public struct NoiseGeneratorJ
 	{
 		// Generate noise for the chunk
 		public static float[] UseJobs(float2 coords)
 		{
 			// Calculate the initial x and y
-			int iCoordX = ((int)coords.x * ChunkManager.width) - (int)coords.x;
-			int iCoordY = ((int)coords.y * ChunkManager.depth) - (int)coords.y;
+			var iCoordX = (int)coords.x * ChunkManager.width - (int)coords.x;
+			var iCoordY = (int)coords.y * ChunkManager.depth - (int)coords.y;
 			// Define the heights and allCoords arrays
 			NativeArray<float> heights = new(ChunkManager.Length, Allocator.TempJob);
 			NativeArray<float2> allCoords = new(ChunkManager.Length, Allocator.TempJob);
-			
+
 			int initialY = iCoordY, i = 0;
 
-			for (int y = 0; y < ChunkManager.width; y++)
+			for (var y = 0; y < ChunkManager.width; y++)
 			{
-				for (int x = 0; x < ChunkManager.depth; x++)
+				for (var x = 0; x < ChunkManager.depth; x++)
 				{
 					// Calculate the actual x and y
-					allCoords[i] = new int2(iCoordX , iCoordY);
+					allCoords[i] = new int2(iCoordX, iCoordY);
 					// is negative
 					iCoordY++;
 					i++;
@@ -40,11 +40,11 @@ namespace Generator
 			// Generate the noise
 
 			NoiseGeneratorJob noiseGeneratorJob = new()
-            {
+			{
 				AllCoords = allCoords,
 				Heights = heights,
 			};
-			JobHandle jobHandle = noiseGeneratorJob.Schedule(ChunkManager.Length, 65);
+			var jobHandle = noiseGeneratorJob.Schedule(ChunkManager.Length, 65);
 			jobHandle.Complete();
 
 			var result = heights.ToArray();
@@ -52,10 +52,6 @@ namespace Generator
 			heights.Dispose();
 			allCoords.Dispose();
 			return result;
-		}
-		private float[] UseComputeShader(float2 coords)
-		{
-			throw new NotImplementedException();
 		}
 	}
 }

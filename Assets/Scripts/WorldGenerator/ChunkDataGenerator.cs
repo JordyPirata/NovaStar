@@ -41,7 +41,7 @@ public struct ChunkDataGenerator
                 width = ChunkManager.width,
                 depth = ChunkManager.depth,
                 height = ChunkManager.height,
-                heights = NoiseGenerator.UseJobs(coord),
+                heights = NoiseGeneratorS.Instance.GenerateNoise(coord),
             };
             // Add the chunk to the list
             SaveChunk(chunk);
