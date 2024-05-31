@@ -21,7 +21,7 @@ namespace Menus
         {
             settingsFile = Path.Combine(Application.persistentDataPath, "settings.bin");
             Console.Log(Application.persistentDataPath);
-        }
+        }   
         private void Start()
         {
             LoadSettings();

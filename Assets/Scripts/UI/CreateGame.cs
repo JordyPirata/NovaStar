@@ -8,7 +8,7 @@ public class CreateGame : MonoBehaviour
     public Scrollbar scrollbar;
     public RectTransform contentPanel;
     public VerticalLayoutGroup layout;
-    private List<GameObject> worlds = new();
+    private List<WorldPanel> worlds = new();
     public GameObject worldPrefab;
     public void Awake()
     {
@@ -37,6 +37,5 @@ public class CreateGame : MonoBehaviour
     {
         // Create a new world
         GameObject world = Instantiate(worldPrefab, contentPanel);
-        worlds.Add(world);
     }
 }

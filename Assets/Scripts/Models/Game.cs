@@ -1,10 +1,12 @@
 using UnityEngine;
 using System.IO;
+using System;
 
-
-public class Game 
+[Serializable]
+public class World
 {
-    public static string GameName; 
-    public string GamePath = Path.Combine(Application.persistentDataPath, GameName);
-
+    public string GameName;
+    public string GamePath;
+    public string GameDirectory;
+    public int seed;
 }
