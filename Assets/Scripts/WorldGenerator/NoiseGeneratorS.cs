@@ -63,7 +63,7 @@ namespace Generator
             computeShader.SetBuffer(kernel, Values, valuesBuffer);
             
             // Dispatch the shader
-            computeShader.Dispatch(kernel, length / 257, 1, 1);
+            computeShader.Dispatch(kernel, Mathf.CeilToInt(length / 52f), 1, 1);
             
             
             // Get the data from the buffer

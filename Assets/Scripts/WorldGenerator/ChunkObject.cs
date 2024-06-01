@@ -28,15 +28,18 @@ namespace Generator
             _isAvailable = false;
             return this;
         }
-
+        // Release the chunk
         public void Release()
         {
             _isAvailable = true;
         }
+        // Update the status of the chunk
         public bool UpdateStatus()
         {
+            // get the distance from the viewer to the nearest edge of the chunk
             var viewerDstFromNearestEdge = Mathf.Sqrt(Bounds.SqrDistance(ChunkManager.viewerPosition));
             var visible = viewerDstFromNearestEdge <= ChunkManager.maxViewDst;
+            // set the visibility of the chunk
             SetVisible(visible);
             return visible;
 
@@ -51,8 +54,9 @@ namespace Generator
         }
         public bool CheckDistanceAndRelease()
         {
+            // if the distance from the viewer to the chunk is greater than the max view distance
             if (!(Vector2.Distance(Position, ChunkManager.viewerPosition) >
-                  ChunkManager.maxViewDst + ChunkManager.width + 100)) return false;
+                  ChunkManager.maxViewDst + ChunkManager.width * 2)) return false;
             Release();
             return true;
         }

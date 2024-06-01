@@ -7,9 +7,9 @@ namespace Generator
     {
         public const bool allowAutoConnect = true;
         public const int groupingID = 0;
-        public const int pixelError = 0;
+        public const int pixelError = 20;
         public const int heightmapMaximumLOD = 0;
-        public const int basemapDistance = 200;
+        public const int basemapDistance = 300;
         private static Material defaultTerrainMaterial { get{return DefaultTerrainMaterial();}}
 
         public static Terrain ApplySettings(Terrain terrain, Chunk chunk)

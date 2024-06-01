@@ -41,10 +41,9 @@ namespace Generator
         }
         public static void Add(float2 coord, T chunk)
         {
-            lock (_lock)
-            {
-                grid.Add(coord, chunk);
-            }
+            
+            grid.Add(coord, chunk);
+            
         }
         public static void Remove(float2 coord)
         {

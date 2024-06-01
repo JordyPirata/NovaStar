@@ -16,8 +16,10 @@ public struct ChunkVisibility
             {
 
                 float2 viewedChunkCoord = new(viewerCoordinate.x + xOffset, viewerCoordinate.y + yOffset);
+                // if the chunk is in the map
                 if (Map.ContainsKey(viewedChunkCoord))
                 {
+                    // update the status of the chunk
                     Map.Instance[viewedChunkCoord].UpdateStatus();
                 }
                 else
