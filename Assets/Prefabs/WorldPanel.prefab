@@ -566,7 +566,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4453024900979399130}
   - component: {fileID: 7073773700169223199}
-  - component: {fileID: 5154549258183244416}
+  - component: {fileID: 966129367131881345}
   - component: {fileID: 8327502238929218251}
   m_Layer: 0
   m_Name: WorldPanel
@@ -606,7 +606,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5339542752480058589}
   m_CullTransparentMesh: 1
---- !u!114 &5154549258183244416
+--- !u!114 &966129367131881345
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -618,12 +618,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c1b28187377ea53e9efea1debc5885f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gameObject: {fileID: 0}
   game:
-    GameName: 
+    GameName: NewGame
     GamePath: 
     GameDirectory: 
     seed: 0
-  worldName: {fileID: 7594795718246110836}
+  TMPro: {fileID: 7594795718246110836}
 --- !u!114 &8327502238929218251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -827,7 +828,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5154549258183244416}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: WorldPanel, Assembly-CSharp
         m_MethodName: CreateWorld
         m_Mode: 1
@@ -960,7 +961,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5154549258183244416}
+      - m_Target: {fileID: 966129367131881345}
         m_TargetAssemblyTypeName: WorldPanel, Assembly-CSharp
         m_MethodName: DeleteGame
         m_Mode: 1

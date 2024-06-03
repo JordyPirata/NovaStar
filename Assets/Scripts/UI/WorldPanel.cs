@@ -10,22 +10,23 @@ using Console = UnityEngine.Debug;
 
 public class WorldPanel : MonoBehaviour
 {
-    string message;
-    public World game;
-    //Access to TextMeshPro component
-    public TextMeshProUGUI worldName;
-
     public void Awake()
     {
         CreateWorld();
     }
+    // Variables
+    string message;
+    public World game;
+    //Access to TextMeshPro component
+    public TextMeshProUGUI TMPro;
+
     // Access to the buttons of the world panel
     public void CreateWorld()
     {
         game = new World
         {
             // Set the game name
-            GameName = worldName.text,
+            GameName = TMPro.text,
             // Set the seed
             seed = 12345,
         };
@@ -50,13 +51,14 @@ public class WorldPanel : MonoBehaviour
         Directory.CreateDirectory(game.GameDirectory);
         // Save the game
         message = await JsonRepository.Instance.Create(game, game.GamePath);
+        Console.Log(message);
         
     }
     public void DeleteGame()
     {
         // Delete the game
         Directory.Delete(game.GameDirectory, true);
-        // Destroy the game object
         Destroy(gameObject);
     }
+        
 }

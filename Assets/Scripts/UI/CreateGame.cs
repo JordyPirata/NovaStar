@@ -35,7 +35,10 @@ public class CreateGame : MonoBehaviour
 
     public void CreateWorld()
     {
-        // Create a new world
+        
         GameObject world = Instantiate(worldPrefab, contentPanel);
+        WorldPanel worldPanel = world.GetComponent<WorldPanel>();
+        worlds.Add(worldPanel);
+        
     }
 }
