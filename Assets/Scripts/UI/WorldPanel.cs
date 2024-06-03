@@ -5,21 +5,38 @@ using System.IO;
 using Repository;
 using UnityEngine.UI;
 
+using TMPro;
+using Console = UnityEngine.Debug;
+
 public class WorldPanel : MonoBehaviour
 {
     string message;
     public World game;
+    //Access to TextMeshPro component
+    public TextMeshProUGUI worldName;
+
+    public void Awake()
+    {
+        CreateWorld();
+    }
     // Access to the buttons of the world panel
     public void CreateWorld()
     {
-        // Create a new world
         game = new World
         {
             // Set the game name
-            GameName = "New Game",
+            GameName = worldName.text,
             // Set the seed
-            seed = Random.Range(0, int.MaxValue)
+            seed = 12345,
         };
+        game.GameDirectory = Path.Combine(Application.persistentDataPath, game.GameName);
+        Console.Log(game.GameDirectory);
+        // Check if the game already exists
+        if(JsonRepository.ExistsDirectory(game.GameDirectory))
+        {
+            // Set the game name add (n) to the name an increment it
+            game.GameName = string.Concat(game.GameName, " (", Directory.GetDirectories(Application.persistentDataPath).Length, ")");
+        }
         // Save the game
         SaveGame();
     }
@@ -39,5 +56,7 @@ public class WorldPanel : MonoBehaviour
     {
         // Delete the game
         Directory.Delete(game.GameDirectory, true);
+        // Destroy the game object
+        Destroy(gameObject);
     }
 }

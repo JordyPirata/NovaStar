@@ -44,5 +44,9 @@ namespace Repository
         {
             return File.Exists(path);
         }
+        public static bool ExistsDirectory(string path)
+        {
+            return Directory.Exists(path);
+        }
     }
 }

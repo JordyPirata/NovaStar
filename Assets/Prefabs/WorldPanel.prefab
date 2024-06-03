@@ -618,6 +618,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c1b28187377ea53e9efea1debc5885f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  game:
+    GameName: 
+    GamePath: 
+    GameDirectory: 
+    seed: 0
+  worldName: {fileID: 7594795718246110836}
 --- !u!114 &8327502238929218251
 MonoBehaviour:
   m_ObjectHideFlags: 0

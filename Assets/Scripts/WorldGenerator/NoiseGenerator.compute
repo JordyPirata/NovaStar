@@ -3,6 +3,7 @@
 
 StructuredBuffer<float2> coords;
 RWStructuredBuffer<float> values;
+int seed;
 
 [numthreads(52,1,1)]
   
@@ -10,12 +11,12 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 {
     
     // TODO: Perlin Implementation
-
-    fnl_state noise = fnlCreateState();
+    
+    fnl_state noise = fnlCreateState(seed);
     noise.noise_type = FNL_NOISE_OPENSIMPLEX2;
-    noise.fractal_type = FNL_FRACTAL_RIDGED;
+    noise.fractal_type = FNL_FRACTAL_FBM;
     noise.frequency = 0.001;
-    noise.octaves = 3;
+    noise.octaves = 4;
 
     // Gather noise data
     

@@ -21,9 +21,11 @@ namespace Generator
         }
         public ComputeShader computeShader;
         private readonly int length = ChunkManager.Length;
+        private readonly int seed = ChunkManager.seed;
         private static readonly int Coords = Shader.PropertyToID("coords");
         private static int kernel;
         private static readonly int Values = Shader.PropertyToID("values");
+        private static readonly int Seed = Shader.PropertyToID("seed");
 
         public void Start()
         {
@@ -61,10 +63,9 @@ namespace Generator
             // Set the buffer
             computeShader.SetBuffer(kernel, Coords, coordsBuffer);
             computeShader.SetBuffer(kernel, Values, valuesBuffer);
-            
+            computeShader.SetInt(Seed, seed);
             // Dispatch the shader
-            computeShader.Dispatch(kernel, Mathf.CeilToInt(length / 52f), 1, 1);
-            
+            computeShader.Dispatch(kernel, Mathf.CeilToInt(length / 52f), 1, 1); 
             
             // Get the data from the buffer
             valuesBuffer.GetData(heights);

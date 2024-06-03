@@ -16,6 +16,7 @@ public class ChunkManager : MonoBehaviour
         {
             instance = this;
         }
+        
     }
     public const int octaves = 4;
     public static float persistance = Mathf.PI / 2;
@@ -25,7 +26,7 @@ public class ChunkManager : MonoBehaviour
     public static int Length => width * depth;
     public static int height = 150;
     public const float scale = 0.001f;
-    public static int seed = 0;
+    public static int seed = 6551445;
     public Transform viewer;
     public const float maxViewDst = 750;
     public static Vector2 viewerPosition;
@@ -38,19 +39,6 @@ public class ChunkManager : MonoBehaviour
         await UpdateChunks();
     }
     // Update the chunks with the viewer position
-    public IEnumerator UpdateChunksT()
-    {
-        while (true)
-        {
-            // get the viewer position and coordinate
-            viewerPosition = new Vector2(viewer.position.x, viewer.position.z);
-            viewerCoordinate = new Vector2(Mathf.RoundToInt(viewerPosition.x / width), Mathf.RoundToInt(viewerPosition.y / depth));
-            // update the visible chunks
-            yield return ChunkVisibility.UpdateVisibleChunks(viewerCoordinate);
-            // delay the update of the chunks by system time
-            yield return new WaitForSeconds(2);
-        }
-    }
     public async Task UpdateChunks()
     {
         while (true)
