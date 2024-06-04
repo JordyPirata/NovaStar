@@ -21,10 +21,10 @@ public struct ChunkDataGenerator
         string chunkPath = Path.Combine(Application.persistentDataPath, string.Concat(chunkName, ".bin"));
         Chunk chunk;
         // Check if the chunk exists
-        if (JsonRepository.Exists(chunkPath))
+        if (GameRepository.Exists(chunkPath))
         {
             // Load the chunk
-            (message, chunk) = await JsonRepository.Instance.Read<Chunk>(chunkPath);
+            (message, chunk) = await GameRepository.Instance.Read<Chunk>(chunkPath);
 
             chunk.position = new float3(coord.x * ChunkManager.width, 0, coord.y * ChunkManager.depth);
             Debug.Log(message + " " + chunk.ChunkName);
@@ -50,7 +50,7 @@ public struct ChunkDataGenerator
     }
     private static async void SaveChunk(Chunk Chunk)
     {
-        message = await JsonRepository.Instance.Create(Chunk,
+        message = await GameRepository.Instance.Create(Chunk,
             Path.Combine(Application.persistentDataPath, string.Concat(Chunk.ChunkName, ".bin")));
         Debug.Log(message + " " + Chunk.ChunkName);
     }

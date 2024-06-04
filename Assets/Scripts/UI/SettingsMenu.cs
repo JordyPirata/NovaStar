@@ -87,16 +87,16 @@ namespace Menus
         }
         public async void SaveSettings()
         {
-            message = await JsonRepository.Instance.Create(settings, settingsFile);
+            message = await GameRepository.Instance.Create(settings, settingsFile);
             Console.Log(message);
         }
         // Load settings from file
         public async void LoadSettings()
         {
             // Read the settings from the file
-            if (JsonRepository.Exists(settingsFile))
+            if (GameRepository.Exists(settingsFile))
             {
-                (message, settings) = await JsonRepository.Instance.Read<Settings>(settingsFile);
+                (message, settings) = await GameRepository.Instance.Read<Settings>(settingsFile);
             }
             else
             {

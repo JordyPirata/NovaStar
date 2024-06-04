@@ -519,7 +519,19 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 966129367131881345}
+        m_TargetAssemblyTypeName: WorldPanel, Assembly-CSharp
+        m_MethodName: SaveGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -618,13 +630,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c1b28187377ea53e9efea1debc5885f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gameObject: {fileID: 0}
   game:
     GameName: NewGame
     GamePath: 
     GameDirectory: 
     seed: 0
-  TMPro: {fileID: 7594795718246110836}
+  TMPro: {fileID: 4455915011969676881}
 --- !u!114 &8327502238929218251
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -18,7 +18,7 @@ public class WorldPanel : MonoBehaviour
     string message;
     public World game;
     //Access to TextMeshPro component
-    public TextMeshProUGUI TMPro;
+    public TMP_InputField TMPro;
 
     // Access to the buttons of the world panel
     public void CreateWorld()
@@ -31,18 +31,25 @@ public class WorldPanel : MonoBehaviour
             seed = 12345,
         };
         game.GameDirectory = Path.Combine(Application.persistentDataPath, game.GameName);
-        Console.Log(game.GameDirectory);
+        // Save the game
+        SaveGame();
+    }
+    public async void UpdateWorld()
+    {
+        // Update the game
+        message = await GameRepository.Instance.Create(game, game.GamePath);
+        Console.Log(message);
+    }
+    public async void SaveGame()
+    {
         // Check if the game already exists
-        if(JsonRepository.ExistsDirectory(game.GameDirectory))
+        if(GameRepository.ExistsDirectory(game.GameDirectory))
         {
             // Set the game name add (n) to the name an increment it
             game.GameName = string.Concat(game.GameName, " (", Directory.GetDirectories(Application.persistentDataPath).Length, ")");
         }
-        // Save the game
-        SaveGame();
-    }
-    public async void SaveGame()
-    {
+        // Set the game name
+        game.GameName = TMPro.text;
         // Set the game directory
         game.GameDirectory = Path.Combine(Application.persistentDataPath, game.GameName);
         // Set the game path
@@ -50,10 +57,18 @@ public class WorldPanel : MonoBehaviour
         // Create a folder with the game name
         Directory.CreateDirectory(game.GameDirectory);
         // Save the game
-        message = await JsonRepository.Instance.Create(game, game.GamePath);
+        message = await GameRepository.Instance.Create(game, game.GamePath);
         Console.Log(message);
         
     }
+    
+    public async void LoadGame()
+    {
+        // Load the game
+        (message, game) = await GameRepository.Instance.Read<World>(game.GamePath);
+        Console.Log(message);
+    }
+
     public void DeleteGame()
     {
         // Delete the game
