@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,35 +12,16 @@ public class CreateGame : MonoBehaviour
     public VerticalLayoutGroup layout;
     private List<WorldPanel> worlds = new();
     public GameObject worldPrefab;
-    public void Awake()
+    public void Update()
     {
         // Resize the panel
-        StartCoroutine(ResizePanel());
-        // Scroll to the bottom of the panel
-        StartCoroutine(ScrollValue());
+        contentPanel.sizeDelta = new Vector2(contentPanel.sizeDelta.x, layout.preferredHeight);
     }
-
-    IEnumerator ScrollValue()
-    {
-        yield return new WaitForSeconds(0.25f);
-        scrollbar.value = 1;
-    }
-    IEnumerator ResizePanel()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(0.2f);
-            // Resize the panel to fit the content
-            contentPanel.sizeDelta = new Vector2(contentPanel.sizeDelta.x, layout.preferredHeight);
-        }
-    }
-
     public void CreateWorld()
     {
-        
         GameObject world = Instantiate(worldPrefab, contentPanel);
         WorldPanel worldPanel = world.GetComponent<WorldPanel>();
         worlds.Add(worldPanel);
-        
+        scrollbar.value = 1;
     }
 }

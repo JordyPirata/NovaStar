@@ -68,8 +68,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Enter text...
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 324fcc7c89ebb19499ddc486f335d507, type: 2}
-  m_sharedMaterial: {fileID: 9077280876484823353, guid: 324fcc7c89ebb19499ddc486f335d507,
+  m_fontAsset: {fileID: 11400000, guid: b919233abdebc3d458bb098f891a2f2d, type: 2}
+  m_sharedMaterial: {fileID: -7787287623544016727, guid: b919233abdebc3d458bb098f891a2f2d,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -561,7 +561,7 @@ MonoBehaviour:
   m_CaretWidth: 1
   m_ReadOnly: 0
   m_RichText: 1
-  m_GlobalFontAsset: {fileID: 11400000, guid: 324fcc7c89ebb19499ddc486f335d507, type: 2}
+  m_GlobalFontAsset: {fileID: 11400000, guid: b919233abdebc3d458bb098f891a2f2d, type: 2}
   m_OnFocusSelectAll: 1
   m_ResetOnDeActivation: 1
   m_RestoreOriginalTextOnEscape: 1
@@ -1018,8 +1018,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 3.0237}
+  m_SizeDelta: {x: 0, y: 6.0473}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1882170356649133027
 CanvasRenderer:
@@ -1051,8 +1051,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "New World\u200B"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 324fcc7c89ebb19499ddc486f335d507, type: 2}
-  m_sharedMaterial: {fileID: 9077280876484823353, guid: 324fcc7c89ebb19499ddc486f335d507,
+  m_fontAsset: {fileID: 11400000, guid: b919233abdebc3d458bb098f891a2f2d, type: 2}
+  m_sharedMaterial: {fileID: -7787287623544016727, guid: b919233abdebc3d458bb098f891a2f2d,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1077,13 +1077,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 21
-  m_fontSizeBase: 21
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 16
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535

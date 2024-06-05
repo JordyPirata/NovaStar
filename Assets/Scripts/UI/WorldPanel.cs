@@ -28,18 +28,23 @@ public class WorldPanel : MonoBehaviour
             // Set the game name
             GameName = TMPro.text,
             // Set the seed
-            seed = 12345,
+            seed = Random.Range(0, int.MaxValue)
         };
+        // Create a folder with the game name
         game.GameDirectory = Path.Combine(Application.persistentDataPath, game.GameName);
+        // Set the game path
+        game.GamePath = Path.Combine(game.GameDirectory, string.Concat(game.GameName, ".bin"));
         // Save the game
         SaveGame();
     }
     public async void UpdateWorld()
     {
         // Update the game
-        message = await GameRepository.Instance.Create(game, game.GamePath);
+        game.GameName = TMPro.text;
+        message = await GameRepository.Instance.Update(game, game.GamePath);
         Console.Log(message);
     }
+
     public async void SaveGame()
     {
         // Check if the game already exists
@@ -47,18 +52,18 @@ public class WorldPanel : MonoBehaviour
         {
             // Set the game name add (n) to the name an increment it
             game.GameName = string.Concat(game.GameName, " (", Directory.GetDirectories(Application.persistentDataPath).Length, ")");
+            // Set the text of the TextMeshPro component
+            TMPro.text = game.GameName;
+            // Set the game directory path
+            game.GameDirectory = Path.Combine(Application.persistentDataPath, game.GameName);
+            // Set the game path
+            game.GamePath = Path.Combine(game.GameDirectory, string.Concat(game.GameName, ".bin"));
         }
-        // Set the game name
-        game.GameName = TMPro.text;
-        // Set the game directory
-        game.GameDirectory = Path.Combine(Application.persistentDataPath, game.GameName);
-        // Set the game path
-        game.GamePath = Path.Combine(game.GameDirectory, string.Concat(game.GameName, ".bin"));
         // Create a folder with the game name
         Directory.CreateDirectory(game.GameDirectory);
         // Save the game
         message = await GameRepository.Instance.Create(game, game.GamePath);
-        Console.Log(message);
+        Console.Log(message + TMPro.text);
         
     }
     
