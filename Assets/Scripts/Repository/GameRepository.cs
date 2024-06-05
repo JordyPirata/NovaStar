@@ -34,21 +34,8 @@ namespace Repository
                 return ("Data read successfully", data);
             }
         }
-        public async Task<string> Update<T>(T data, string path)
-        {
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-                await Serializer.Instance.BSerialize(data, path);
-                return "Data updated successfully";
-            }
-            else
-            {
-                return "Data not found";
-            }
-        }
         // The Delete method deletes a file
-        public string Delete(string path)
+        public static string Delete(string path)
         {
             File.Delete(path);
             return "File deleted successfully";

@@ -37,12 +37,18 @@ public class WorldPanel : MonoBehaviour
         // Save the game
         SaveGame();
     }
-    public async void UpdateWorld()
+    public void UpdateWorld()
     {
-        // Update the game
+        if (!GameRepository.ExistsDirectory(game.GameDirectory))
+        {
+            Console.Log("Game not found");
+            return;
+        }
+        GameRepository.DeleteDirectory(game.GameDirectory);
+        // Set the game name
         game.GameName = TMPro.text;
-        message = await GameRepository.Instance.Update(game, game.GamePath);
-        Console.Log(message);
+        UpdateDir();
+        SaveGame();
     }
 
     public async void SaveGame()
@@ -54,10 +60,7 @@ public class WorldPanel : MonoBehaviour
             game.GameName = string.Concat(game.GameName, " (", Directory.GetDirectories(Application.persistentDataPath).Length, ")");
             // Set the text of the TextMeshPro component
             TMPro.text = game.GameName;
-            // Set the game directory path
-            game.GameDirectory = Path.Combine(Application.persistentDataPath, game.GameName);
-            // Set the game path
-            game.GamePath = Path.Combine(game.GameDirectory, string.Concat(game.GameName, ".bin"));
+            UpdateDir();
         }
         // Create a folder with the game name
         Directory.CreateDirectory(game.GameDirectory);
@@ -65,6 +68,13 @@ public class WorldPanel : MonoBehaviour
         message = await GameRepository.Instance.Create(game, game.GamePath);
         Console.Log(message + TMPro.text);
         
+    }
+    private void UpdateDir()
+    {
+        // Set the game directory path
+        game.GameDirectory = Path.Combine(Application.persistentDataPath, game.GameName);
+        // Set the game path
+        game.GamePath = Path.Combine(game.GameDirectory, string.Concat(game.GameName, ".bin"));
     }
     
     public async void LoadGame()

@@ -522,7 +522,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 966129367131881345}
         m_TargetAssemblyTypeName: WorldPanel, Assembly-CSharp
-        m_MethodName: SaveGame
+        m_MethodName: UpdateWorld
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
