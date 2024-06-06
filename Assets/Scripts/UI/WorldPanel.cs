@@ -7,13 +7,10 @@ using UnityEngine.UI;
 
 using TMPro;
 using Console = UnityEngine.Debug;
+using Util;
 
 public class WorldPanel : MonoBehaviour
 {
-    public void Awake()
-    {
-        CreateWorld();
-    }
     // Variables
     string message;
     public World game;
@@ -21,37 +18,47 @@ public class WorldPanel : MonoBehaviour
     public TMP_InputField TMPro;
 
     // Access to the buttons of the world panel
-    public void CreateWorld()
+    public void CreateWorld(World _game)
     {
-        game = new World
+        if (_game == null)
         {
-            // Set the game name
-            GameName = TMPro.text,
-            // Set the seed
-            seed = Random.Range(0, int.MaxValue)
-        };
+            game = new World
+            {
+                // Set the game name
+                GameName = TMPro.text,
+                // Set the seed
+                seed = Random.Range(0, int.MaxValue)
+            };
+        }
+        else
+        {
+            game = _game;
+            TMPro.text = game.GameName;
+        }
+        
         // Create a folder with the game name
         game.GameDirectory = Path.Combine(Application.persistentDataPath, game.GameName);
         // Set the game path
         game.GamePath = Path.Combine(game.GameDirectory, string.Concat(game.GameName, ".bin"));
         // Save the game
-        SaveGame();
     }
-    public void UpdateWorld()
+    public async void UpdateWorld()
     {
         if (!GameRepository.ExistsDirectory(game.GameDirectory))
         {
             Console.Log("Game not found");
             return;
         }
-        GameRepository.DeleteDirectory(game.GameDirectory);
+        _ = GameRepository.Delete(game.GamePath);
+        // Rename Directory
+        Directory.Move(game.GameDirectory, Path.Combine(Application.persistentDataPath, TMPro.text));
         // Set the game name
         game.GameName = TMPro.text;
         UpdateDir();
-        SaveGame();
+        message = await GameRepository.Instance.Create(game, game.GamePath);
     }
 
-    public async void SaveGame()
+    public async void SaveWorld()
     {
         // Check if the game already exists
         if(GameRepository.ExistsDirectory(game.GameDirectory))
@@ -66,7 +73,7 @@ public class WorldPanel : MonoBehaviour
         Directory.CreateDirectory(game.GameDirectory);
         // Save the game
         message = await GameRepository.Instance.Create(game, game.GamePath);
-        Console.Log(message + TMPro.text);
+        Console.Log(message);
         
     }
     private void UpdateDir()
@@ -76,19 +83,22 @@ public class WorldPanel : MonoBehaviour
         // Set the game path
         game.GamePath = Path.Combine(game.GameDirectory, string.Concat(game.GameName, ".bin"));
     }
-    
-    public async void LoadGame()
-    {
-        // Load the game
-        (message, game) = await GameRepository.Instance.Read<World>(game.GamePath);
-        Console.Log(message);
-    }
 
     public void DeleteGame()
     {
         // Delete the game
         Directory.Delete(game.GameDirectory, true);
         Destroy(gameObject);
+    }
+    public async void LoadWorld(string directoryPath)
+    {
+        
+        string GameName = TransferData.GetLastDirectory(directoryPath);
+        string GamePath = Path.Combine(directoryPath, string.Concat(GameName, ".bin"));
+        // Load the game
+        (message, game) = await GameRepository.Instance.Read<World>(GamePath);
+        CreateWorld(game);
+        Console.Log(message);
     }
         
 }

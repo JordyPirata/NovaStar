@@ -18,5 +18,11 @@ namespace Util
             }
             return newArray;
         }
+        public static string GetLastDirectory(string path)
+        {
+            // split when '/' && '\'is found
+            string[] directories = path.Split('/', '\\');
+            return directories[^1];
+        }
     }
 }
