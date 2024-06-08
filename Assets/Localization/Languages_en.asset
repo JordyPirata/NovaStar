@@ -82,6 +82,10 @@ MonoBehaviour:
     m_Localized: Off
     m_Metadata:
       m_Items: []
+  - m_Id: 42020061523701760
+    m_Localized: New World
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

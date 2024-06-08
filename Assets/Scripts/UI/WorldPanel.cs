@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using Repository;
-using UnityEngine.UI;
-
 using TMPro;
 using Console = UnityEngine.Debug;
-using Util;
+using UnityEngine.UI;
+using UnityEngine.Localization;
 
 public class WorldPanel : MonoBehaviour
 {
@@ -16,6 +15,9 @@ public class WorldPanel : MonoBehaviour
     public World game;
     //Access to TextMeshPro component
     public TMP_InputField TMPro;
+    public Button editButton;
+    public Button playButton;
+    public LocalizedString localizedString;
 
     // Access to the buttons of the world panel
     public void CreateWorld(World _game)
@@ -63,8 +65,9 @@ public class WorldPanel : MonoBehaviour
         // Check if the game already exists
         if(GameRepository.ExistsDirectory(game.GameDirectory))
         {
+            int o = IOUtil.TimesRepeatDir(Application.persistentDataPath, game.GameName);
             // Set the game name add (n) to the name an increment it
-            game.GameName = string.Concat(game.GameName, " (", Directory.GetDirectories(Application.persistentDataPath).Length, ")");
+            game.GameName = string.Concat(game.GameName, "(", o, ")");
             // Set the text of the TextMeshPro component
             TMPro.text = game.GameName;
             UpdateDir();
@@ -93,7 +96,7 @@ public class WorldPanel : MonoBehaviour
     public async void LoadWorld(string directoryPath)
     {
         
-        string GameName = TransferData.GetLastDirectory(directoryPath);
+        string GameName = IOUtil.GetLastDirectory(directoryPath);
         string GamePath = Path.Combine(directoryPath, string.Concat(GameName, ".bin"));
         // Load the game
         (message, game) = await GameRepository.Instance.Read<World>(GamePath);

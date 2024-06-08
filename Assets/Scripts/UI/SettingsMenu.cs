@@ -6,27 +6,30 @@ using System.IO;
 using UnityEngine.UI;
 using Console = UnityEngine.Debug;
 using Repository;
-
+// TODO: Make ServiceLocator for the SettingsMenu to avoid using the Singleton pattern
 namespace Menus
 {
     public class SettingsMenu : MonoBehaviour
     {
-        private string message;
-        public Button onButton, offButton, englishButton, spanishButton;
-        public Slider overallVolumeSlider, musicVolumeSlider, sfxVolumeSlider, sensitibilitySlider;
-        private Settings settings = new();
-        public AudioMixer audioMixer;
-        private string settingsFile;
+        private static SettingsMenu instance;
+        public static SettingsMenu Instance { get { return instance; }}
+
         private void Awake()
         {
+            if (instance == null)
+            {
+                instance = this;
+            }
             settingsFile = Path.Combine(Application.persistentDataPath, "settings.bin");
-            Console.Log(Application.persistentDataPath);
-        }   
-        private void Start()
-        {
             LoadSettings();
         }
-
+        
+        private static string message;
+        public Button onButton, offButton, englishButton, spanishButton;
+        public Slider overallVolumeSlider, musicVolumeSlider, sfxVolumeSlider, sensitibilitySlider;
+        private static Settings settings = new();
+        public AudioMixer audioMixer;
+        private static string settingsFile;  
         public void SetOverallVolume(float volume)
         {
             audioMixer.FindMatchingGroups("Master")[0].audioMixer.SetFloat("Master", volume);
@@ -114,6 +117,7 @@ namespace Menus
             sfxVolumeSlider.value = settings.sfxVolume;
 
             sensitibilitySlider.value = settings.mouseSensitivity;
+            
         }
     }
 }

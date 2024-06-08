@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,6 +12,7 @@ public class CreateGame : MonoBehaviour
     public VerticalLayoutGroup layout;
     public List<WorldPanel> worlds = new();
     public GameObject worldPrefab;
+    public GameObject editPanel;
     public void Awake()
     {
         LoadWorlds();
@@ -29,7 +29,7 @@ public class CreateGame : MonoBehaviour
         worldPanel.CreateWorld(null);
         worldPanel.SaveWorld();
         worlds.Add(worldPanel);
-        scrollbar.value = 1;
+        scrollbar.value = 0;
     }
     public void LoadWorlds()
     {
@@ -40,6 +40,13 @@ public class CreateGame : MonoBehaviour
             world.LoadWorld(directory);
             world.CreateWorld(world.game);
             worlds.Add(world);
+            // Add liseners to the buttons
+            world.editButton.onClick.AddListener(() => {
+                editPanel.SetActive(true);
+                gameObject.SetActive(false);
+                }
+            );
+
         }
     }
 }
