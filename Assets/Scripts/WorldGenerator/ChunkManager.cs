@@ -8,16 +8,6 @@ using System;
 //TODO: Change name to ChunkFacade and implement 
 public class ChunkManager : MonoBehaviour
 {
-    private static ChunkManager instance;
-    public static ChunkManager Instance { get { return instance; } private set { instance = value; } }
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        
-    }
     public static int width = 257;
     public static int depth = 257;
     public static int Length => width * depth;

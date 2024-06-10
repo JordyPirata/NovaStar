@@ -1,7 +1,7 @@
 using Unity.Burst;
 using UnityEngine;
 using Util;
-
+using UnityEngine.Rendering;
 namespace Generator
 {
     [BurstCompile]
@@ -36,7 +36,7 @@ namespace Generator
         }
         public static Material GetDefaultTerrainMaterial ()
 		{
-			Shader shader = UnityEngine.Rendering.GraphicsSettings.renderPipelineAsset.defaultTerrainMaterial.shader;
+			Shader shader = GraphicsSettings.renderPipelineAsset.defaultTerrainMaterial.shader;
 		
 			if (shader == null) shader = Shader.Find("HDRP/TerrainLit");
 			if (shader == null) shader = Shader.Find("Nature/Terrain/Standard");
