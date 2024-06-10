@@ -57,7 +57,7 @@ public class WorldPanel : MonoBehaviour
         // Set the game name
         game.GameName = TMPro.text;
         UpdateDir();
-        message = await GameRepository.Instance.Create(game, game.GamePath);
+        message = await GameRepository.Create(game, game.GamePath);
     }
 
     public async void SaveWorld()
@@ -75,7 +75,7 @@ public class WorldPanel : MonoBehaviour
         // Create a folder with the game name
         Directory.CreateDirectory(game.GameDirectory);
         // Save the game
-        message = await GameRepository.Instance.Create(game, game.GamePath);
+        message = await GameRepository.Create(game, game.GamePath);
         Console.Log(message);
         
     }
@@ -99,7 +99,7 @@ public class WorldPanel : MonoBehaviour
         string GameName = IOUtil.GetLastDirectory(directoryPath);
         string GamePath = Path.Combine(directoryPath, string.Concat(GameName, ".bin"));
         // Load the game
-        (message, game) = await GameRepository.Instance.Read<World>(GamePath);
+        (message, game) = await GameRepository.Read<World>(GamePath);
         CreateWorld(game);
         Console.Log(message);
     }

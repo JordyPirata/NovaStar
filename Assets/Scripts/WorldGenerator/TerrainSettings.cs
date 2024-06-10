@@ -1,20 +1,22 @@
+using Unity.Burst;
 using UnityEngine;
 using Util;
 
 namespace Generator
 {
-    public class TerrainSettings
+    [BurstCompile]
+    public struct TerrainSettings
     {
         public const bool allowAutoConnect = true;
         public const int groupingID = 0;
         public const int pixelError = 20;
         public const int heightmapMaximumLOD = 0;
         public const int basemapDistance = 300;
-        private static Material defaultTerrainMaterial { get{return DefaultTerrainMaterial();}}
+        private static Material DefaultTerrainMaterial { get{return GetDefaultTerrainMaterial();}}
 
         public static Terrain ApplySettings(Terrain terrain, Chunk chunk)
         {
-            terrain.materialTemplate = defaultTerrainMaterial;
+            terrain.materialTemplate = DefaultTerrainMaterial;
             terrain.allowAutoConnect = allowAutoConnect;
             terrain.groupingID = groupingID;
             terrain.heightmapPixelError = pixelError;
@@ -32,7 +34,7 @@ namespace Generator
             
             return terrain;
         }
-        public static Material DefaultTerrainMaterial ()
+        public static Material GetDefaultTerrainMaterial ()
 		{
 			Shader shader = UnityEngine.Rendering.GraphicsSettings.renderPipelineAsset.defaultTerrainMaterial.shader;
 		

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Unity.Mathematics;
-// TODO: Lock the grid to prevent concurrent access
+
 namespace Generator
 {
     public class ChunkGrid<T> where T : ChunkObject
@@ -18,6 +18,7 @@ namespace Generator
         private static readonly Dictionary<float2, T> grid = new();
         public static IEnumerable<T> AllChunks ()
 		{
+            // Lock the grid to prevent concurrent access
             lock (_lock)
             {
                 foreach (KeyValuePair<float2, T> kvp in grid)
@@ -47,10 +48,7 @@ namespace Generator
         }
         public static void Remove(float2 coord)
         {
-            lock (_lock)
-            {
-                grid.Remove(coord);
-            }
+            grid.Remove(coord);
         }
     }
 }

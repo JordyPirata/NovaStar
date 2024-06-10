@@ -90,7 +90,7 @@ namespace Menus
         }
         public async void SaveSettings()
         {
-            message = await GameRepository.Instance.Create(settings, settingsFile);
+            message = await GameRepository.Create(settings, settingsFile);
             Console.Log(message);
         }
         // Load settings from file
@@ -99,7 +99,7 @@ namespace Menus
             // Read the settings from the file
             if (GameRepository.Exists(settingsFile))
             {
-                (message, settings) = await GameRepository.Instance.Read<Settings>(settingsFile);
+                (message, settings) = await GameRepository.Read<Settings>(settingsFile);
             }
             else
             {

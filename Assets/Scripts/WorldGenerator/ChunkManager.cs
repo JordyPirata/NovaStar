@@ -18,14 +18,10 @@ public class ChunkManager : MonoBehaviour
         }
         
     }
-    public const int octaves = 4;
-    public static float persistance = Mathf.PI / 2;
-    public static float lacunarity = 1.25f;
     public static int width = 257;
     public static int depth = 257;
     public static int Length => width * depth;
     public static int height = 150;
-    public const float scale = 0.001f;
     public static int seed = 6551445;
     public Transform viewer;
     public const float maxViewDst = 750;

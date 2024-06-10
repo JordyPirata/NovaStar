@@ -3,8 +3,9 @@ using Unity.Mathematics;
 using Generator;
 using System;
 using System.Threading.Tasks;
-
-public class ChunkGenerator
+using Unity.Burst;
+[BurstCompile]
+public struct ChunkGenerator
 {
     public static async Task<ChunkObject> GenerateChunk(float2 chunkCoords)
     {
