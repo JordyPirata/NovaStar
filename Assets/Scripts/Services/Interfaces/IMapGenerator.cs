@@ -1,0 +1,4 @@
+interface IMapGenerator
+{
+    void GenerateMap();
+}

@@ -8,8 +8,11 @@ using System.Collections;
 
 namespace Services
 {
+/// <summary>
+/// This class is responsible for welding the chunks together
+/// </summary>
 [BurstCompile]
-public struct Weld
+public struct WeldMap
 {
     public IEnumerator WeldChunks()
     {

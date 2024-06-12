@@ -7,11 +7,25 @@ using WorldGenerator;
 
 namespace Services
 {
+/// <summary>
+/// This class is responsible for showing the chunks that are visible to the player
+/// </summary>
 [BurstCompile]
-public struct ChunkVisibility
+public readonly struct MapGenerator: IMapGenerator
 {
+    private static float2 ViewerCoordinate
+    {
+        get
+        {
+            return ServiceLocator.Resolve<IPlayerInfo>().GetPlayerCoordinate();
+        }
+    }
+    public async void GenerateMap()
+    {
+        await UpdateChunks();
+    }
     private static readonly int chunkVisibleInViewDst = Mathf.RoundToInt(ChunkConfig.maxViewDst / ChunkConfig.width);
-    public static async Task UpdateVisibleChunks(float2 viewerCoordinate)
+    private static async Task UpdateVisibleChunks(float2 viewerCoordinate)
     {
 
         for (var yOffset = -chunkVisibleInViewDst; yOffset <= chunkVisibleInViewDst; yOffset++)
@@ -34,14 +48,14 @@ public struct ChunkVisibility
             }
         }
     }
-    public async Task UpdateChunks()
+
+    private async readonly Task UpdateChunks()
     {
         while (true)
-        {   // get the viewer position and coordinate
-            viewerPosition = new float2(viewer.position.x, viewer.position.z);
-            viewerCoordinate = new float2(Mathf.RoundToInt(viewerPosition.x / width), Mathf.RoundToInt(viewerPosition.y / depth));
-            // update the visible chunks
-            await ChunkVisibility.UpdateVisibleChunks(viewerCoordinate);
+        {   
+            // get the player coordinate
+            
+            await MapGenerator.UpdateVisibleChunks(ViewerCoordinate);
             // delay the update of the chunks by system time
             await Task.Delay(2000);
             await Task.Yield();
