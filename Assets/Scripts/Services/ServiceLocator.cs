@@ -10,7 +10,7 @@ public class ServiceLocator
         services[typeof(T)] = service;
     }
 
-    public static T Resolve<T>()
+    public static T GetService<T>()
     {
         if (services.TryGetValue(typeof(T), out object service))
         {

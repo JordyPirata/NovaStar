@@ -17,7 +17,7 @@ public readonly struct MapGenerator: IMapGenerator
     {
         get
         {
-            return ServiceLocator.Resolve<IPlayerInfo>().GetPlayerCoordinate();
+            return ServiceLocator.GetService<IPlayerInfo>().GetPlayerCoordinate();
         }
     }
     public async void GenerateMap()

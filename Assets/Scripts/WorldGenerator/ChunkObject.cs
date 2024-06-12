@@ -11,6 +11,7 @@ namespace WorldGenerator
         private Bounds Bounds { get; set; }
         private Vector2 Position { get; set; }
         private bool _isAvailable;
+        Vector2 viewerPosition = ServiceLocator.GetService<IPlayerInfo>().GetPlayerPosition();
         public ChunkObject(GameObject gameObject)
         {
             GameObject = gameObject;
@@ -35,8 +36,9 @@ namespace WorldGenerator
         // Update the status of the chunk
         public bool UpdateStatus()
         {
+            
             // get the distance from the viewer to the nearest edge of the chunk
-            var viewerDstFromNearestEdge = Mathf.Sqrt(Bounds.SqrDistance(ChunkConfig.viewerPosition));
+            var viewerDstFromNearestEdge = Mathf.Sqrt(Bounds.SqrDistance(viewerPosition));
             var visible = viewerDstFromNearestEdge <= ChunkConfig.maxViewDst;
             // set the visibility of the chunk
             SetVisible(visible);
@@ -54,7 +56,7 @@ namespace WorldGenerator
         public bool CheckDistanceAndRelease()
         {
             // if the distance from the viewer to the chunk is greater than the max view distance
-            if (!(Vector2.Distance(Position, ChunkConfig.viewerPosition) >
+            if (!(Vector2.Distance(Position, viewerPosition) >
                   ChunkConfig.maxViewDst + ChunkConfig.width * 2)) return false;
             Release();
             return true;
