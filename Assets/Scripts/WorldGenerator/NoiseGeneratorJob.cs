@@ -1,7 +1,8 @@
-using Generator;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
+namespace WorldGenerator
+{
 
 public struct NoiseGeneratorJob : IJobParallelFor
 {
@@ -15,4 +16,5 @@ public struct NoiseGeneratorJob : IJobParallelFor
         _total /= 2;
         Heights[index] = _total;
     }
+}
 }

@@ -1,9 +1,10 @@
 using UnityEngine;
 using Unity.Mathematics;
-using Generator;
 using System;
 using System.Threading.Tasks;
 using Unity.Burst;
+namespace WorldGenerator
+{
 [BurstCompile]
 public struct ChunkGenerator
 {
@@ -31,4 +32,5 @@ public struct ChunkGenerator
         terrainCollider.terrainData = terrain.terrainData;
         return ChunkGameObject;
     }
+}
 }

@@ -1,5 +1,9 @@
 using UnityEngine;
-
+namespace WorldGenerator
+{
+    ///<summary>
+    /// This class is responsible for setting the terrain layers
+    /// </summary>
 public class TerrainLayers : MonoBehaviour
 {
     private static TerrainLayers instance;
@@ -48,4 +52,5 @@ public class TerrainLayers : MonoBehaviour
     {
         return terrainLayers[index];
     }
+}
 }

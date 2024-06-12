@@ -1,12 +1,13 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Map = Generator.ChunkGrid<Generator.ChunkObject>;
+using Map = WorldGenerator.ChunkGrid<WorldGenerator.ChunkObject>;
 
-namespace Generator
+namespace WorldGenerator
 {
     ///<summary>
     /// This class is responsible for generating chunks and adding them to the pool
     /// </summary>
+    // TODO: Posible GamePool Service
     public class ChunkPool : MonoBehaviour
     {
         [SerializeField] private int poolSize;

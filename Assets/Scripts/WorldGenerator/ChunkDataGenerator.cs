@@ -1,11 +1,12 @@
 using Unity.Mathematics;
-using Generator;
 using UnityEngine;
 using Repository;
 using System.IO;
 using Unity.Burst;
 using System.Threading.Tasks;
 
+namespace WorldGenerator
+{
 /// <summary>
 ///  This struct is responsible for generating the chunk data
 /// </summary>
@@ -26,7 +27,7 @@ public struct ChunkDataGenerator
             // Load the chunk
             (message, chunk) = await GameRepository.Read<Chunk>(chunkPath);
 
-            chunk.position = new float3(coord.x * ChunkManager.width, 0, coord.y * ChunkManager.depth);
+            chunk.position = new float3(coord.x * ChunkConfig.width, 0, coord.y * ChunkConfig.depth);
             Debug.Log(message + " " + chunk.ChunkName);
             // Add the chunk to the list
             return chunk;
@@ -36,11 +37,11 @@ public struct ChunkDataGenerator
             // Create the chunk
             chunk = new()
             {
-                position = new float3(coord.x * ChunkManager.width, 0, coord.y * ChunkManager.depth),
+                position = new float3(coord.x * ChunkConfig.width, 0, coord.y * ChunkConfig.depth),
                 ChunkName = chunkName,
-                width = ChunkManager.width,
-                depth = ChunkManager.depth,
-                height = ChunkManager.height,
+                width = ChunkConfig.width,
+                depth = ChunkConfig.depth,
+                height = ChunkConfig.height,
                 heights = NoiseGeneratorS.Instance.GenerateNoise(coord),
             };
             // Add the chunk to the list
@@ -55,4 +56,5 @@ public struct ChunkDataGenerator
         Debug.Log(message + " " + Chunk.ChunkName);
     }
 
+}
 }

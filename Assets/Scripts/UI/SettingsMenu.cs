@@ -11,15 +11,8 @@ namespace Menus
 {
     public class SettingsMenu : MonoBehaviour
     {
-        private static SettingsMenu instance;
-        public static SettingsMenu Instance { get { return instance; }}
-
         private void Awake()
         {
-            if (instance == null)
-            {
-                instance = this;
-            }
             settingsFile = Path.Combine(Application.persistentDataPath, "settings.bin");
             LoadSettings();
         }

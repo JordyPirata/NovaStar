@@ -9,7 +9,7 @@ int seed;
   
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
-    
+
     // TODO: Perlin Implementation
     
     fnl_state noise = fnlCreateState(seed);

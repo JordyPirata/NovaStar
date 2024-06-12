@@ -6,7 +6,7 @@ using Unity.Jobs;
 using UnityEditor.Localization.Plugins.XLIFF.V12;
 using Unity.VisualScripting;
 
-namespace Generator
+namespace WorldGenerator
 {
 	[BurstCompile]
 	public struct NoiseGeneratorJ
@@ -15,17 +15,17 @@ namespace Generator
 		public static float[] UseJobs(float2 coords)
 		{
 			// Calculate the initial x and y
-			var iCoordX = (int)coords.x * ChunkManager.width - (int)coords.x;
-			var iCoordY = (int)coords.y * ChunkManager.depth - (int)coords.y;
+			var iCoordX = (int)coords.x * ChunkConfig.width - (int)coords.x;
+			var iCoordY = (int)coords.y * ChunkConfig.depth - (int)coords.y;
 			// Define the heights and allCoords arrays
-			NativeArray<float> heights = new(ChunkManager.Length, Allocator.TempJob);
-			NativeArray<float2> allCoords = new(ChunkManager.Length, Allocator.TempJob);
+			NativeArray<float> heights = new(ChunkConfig.Length, Allocator.TempJob);
+			NativeArray<float2> allCoords = new(ChunkConfig.Length, Allocator.TempJob);
 
 			int initialY = iCoordY, i = 0;
 
-			for (var y = 0; y < ChunkManager.width; y++)
+			for (var y = 0; y < ChunkConfig.width; y++)
 			{
-				for (var x = 0; x < ChunkManager.depth; x++)
+				for (var x = 0; x < ChunkConfig.depth; x++)
 				{
 					// Calculate the actual x and y
 					allCoords[i] = new int2(iCoordX, iCoordY);
@@ -44,7 +44,7 @@ namespace Generator
 				AllCoords = allCoords,
 				Heights = heights,
 			};
-			var jobHandle = noiseGeneratorJob.Schedule(ChunkManager.Length, 65);
+			var jobHandle = noiseGeneratorJob.Schedule(ChunkConfig.Length, 65);
 			jobHandle.Complete();
 
 			var result = heights.ToArray();

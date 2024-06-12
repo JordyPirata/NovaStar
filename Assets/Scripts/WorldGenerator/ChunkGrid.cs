@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Unity.Mathematics;
 
-namespace Generator
+namespace WorldGenerator
 {
     public class ChunkGrid<T> where T : ChunkObject
     {

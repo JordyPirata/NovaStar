@@ -1,8 +1,4 @@
-using UnityEngine;
-using System.IO;
-using System;
-
-[Serializable]
+[System.Serializable]
 public class World
 {
     public string GameName;

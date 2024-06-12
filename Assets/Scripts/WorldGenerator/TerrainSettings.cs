@@ -2,7 +2,7 @@ using Unity.Burst;
 using UnityEngine;
 using Util;
 using UnityEngine.Rendering;
-namespace Generator
+namespace WorldGenerator
 {
     [BurstCompile]
     public struct TerrainSettings

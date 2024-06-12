@@ -1,16 +1,25 @@
 using Unity.Mathematics;
 using UnityEngine;
-using Generator;
-using System.Diagnostics;
-using Debug = UnityEngine.Debug;
-using Map = Generator.ChunkGrid<Generator.ChunkObject>;
+using WorldGenerator;
+using Map = WorldGenerator.ChunkGrid<WorldGenerator.ChunkObject>;
 using Unity.Burst;
 using Unity.VisualScripting;
+using System.Collections;
 
+namespace Services
+{
 [BurstCompile]
 public struct Weld
 {
-    public static void SetNeighbors(float2 coord)
+    public IEnumerator WeldChunks()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(20f);
+            SetNeighborsAll();
+        }
+    }
+    private static void SetNeighbors(float2 coord)
     {
         // Set the neighbors of the chunk
         ChunkObject thisChunk = Map.Instance[coord];
@@ -55,4 +64,5 @@ public struct Weld
             SetNeighbors(chunkObject.Coord);
         }
     }
+}
 }

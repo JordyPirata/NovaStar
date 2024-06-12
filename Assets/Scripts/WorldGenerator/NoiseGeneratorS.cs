@@ -2,7 +2,7 @@ using Unity.Mathematics;
 using UnityEngine;
 
 
-namespace Generator
+namespace WorldGenerator
 {
     public class NoiseGeneratorS : MonoBehaviour
     {
@@ -16,8 +16,8 @@ namespace Generator
             }
         }
         public ComputeShader computeShader;
-        private readonly int length = ChunkManager.Length;
-        private readonly int seed = ChunkManager.seed;
+        private readonly int length = ChunkConfig.Length;
+        private readonly int seed = ChunkConfig.seed;
         private static readonly int Coords = Shader.PropertyToID("coords");
         private static int kernel;
         private static readonly int Values = Shader.PropertyToID("values");
@@ -30,16 +30,16 @@ namespace Generator
         public float[] GenerateNoise(float2 coords)
         {
             // Calculate the initial x and y
-			var iCoordX = (int)coords.x * ChunkManager.width - (int)coords.x;
-			var iCoordY = (int)coords.y * ChunkManager.depth - (int)coords.y;
+			var iCoordX = (int)coords.x * ChunkConfig.width - (int)coords.x;
+			var iCoordY = (int)coords.y * ChunkConfig.depth - (int)coords.y;
             
-            var allCoords = new float2[ChunkManager.Length];
-            var heights = new float[ChunkManager.Length];
+            var allCoords = new float2[ChunkConfig.Length];
+            var heights = new float[ChunkConfig.Length];
             int initialY = iCoordY, i = 0;
 
-			for (var y = 0; y < ChunkManager.width; y++)
+			for (var y = 0; y < ChunkConfig.width; y++)
 			{
-				for (var x = 0; x < ChunkManager.depth; x++)
+				for (var x = 0; x < ChunkConfig.depth; x++)
 				{
 					// Calculate the actual x and y
 					allCoords[i] = new int2(iCoordX, iCoordY);

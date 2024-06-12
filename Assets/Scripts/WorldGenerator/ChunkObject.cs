@@ -1,7 +1,7 @@
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace Generator
+namespace WorldGenerator
 {
     public class ChunkObject
     {
@@ -13,7 +13,6 @@ namespace Generator
         private bool _isAvailable;
         public ChunkObject(GameObject gameObject)
         {
-
             GameObject = gameObject;
             Terrain = GameObject.GetComponent<Terrain>();
             _isAvailable = true;
@@ -23,8 +22,8 @@ namespace Generator
         {
             if (!_isAvailable) return null;
             Coord = coord;
-            Position = coord * ChunkManager.width;
-            Bounds = new(Position, Vector2.one * ChunkManager.width);
+            Position = coord * ChunkConfig.width;
+            Bounds = new(Position, Vector2.one * ChunkConfig.width);
             _isAvailable = false;
             return this;
         }
@@ -37,8 +36,8 @@ namespace Generator
         public bool UpdateStatus()
         {
             // get the distance from the viewer to the nearest edge of the chunk
-            var viewerDstFromNearestEdge = Mathf.Sqrt(Bounds.SqrDistance(ChunkManager.viewerPosition));
-            var visible = viewerDstFromNearestEdge <= ChunkManager.maxViewDst;
+            var viewerDstFromNearestEdge = Mathf.Sqrt(Bounds.SqrDistance(ChunkConfig.viewerPosition));
+            var visible = viewerDstFromNearestEdge <= ChunkConfig.maxViewDst;
             // set the visibility of the chunk
             SetVisible(visible);
             return visible;
@@ -55,8 +54,8 @@ namespace Generator
         public bool CheckDistanceAndRelease()
         {
             // if the distance from the viewer to the chunk is greater than the max view distance
-            if (!(Vector2.Distance(Position, ChunkManager.viewerPosition) >
-                  ChunkManager.maxViewDst + ChunkManager.width * 2)) return false;
+            if (!(Vector2.Distance(Position, ChunkConfig.viewerPosition) >
+                  ChunkConfig.maxViewDst + ChunkConfig.width * 2)) return false;
             Release();
             return true;
         }
