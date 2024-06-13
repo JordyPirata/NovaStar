@@ -32,11 +32,8 @@ public class WorldPanel : MonoBehaviour
                 seed = Random.Range(0, int.MaxValue)
             };
         }
-        else
-        {
-            game = _game;
-            TMPro.text = game.GameName;
-        }
+        game = _game;
+        TMPro.text = game.GameName;
         
         // Create a folder with the game name
         game.GameDirectory = Path.Combine(Application.persistentDataPath, game.GameName);
