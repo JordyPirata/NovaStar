@@ -5,7 +5,8 @@ using Console = UnityEngine.Debug;
 using UnityEngine.Localization.Settings;
 using System.Collections;
 using Unity.VisualScripting;
-
+namespace Services
+{
 public class SettingsService : ISettingsService
 {
     private AudioMixer Mixer => Resources.Load<AudioMixer>("MainMixer");
@@ -75,4 +76,5 @@ public class SettingsService : ISettingsService
     {
         return settings;
     }
+}
 }
