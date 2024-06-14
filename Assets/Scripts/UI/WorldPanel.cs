@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
-using Repository;
+using Services;
 using TMPro;
 using Console = UnityEngine.Debug;
 using UnityEngine.UI;
@@ -10,6 +8,11 @@ using UnityEngine.Localization;
 
 public class WorldPanel : MonoBehaviour
 {
+    private IRepository GameRepository;
+    void Awake()
+    {
+        GameRepository = ServiceLocator.GetService<IRepository>();
+    }
     // Variables
     string message;
     public World game;
@@ -93,7 +96,7 @@ public class WorldPanel : MonoBehaviour
     public async void LoadWorld(string directoryPath)
     {
         
-        string GameName = IOUtil.GetLastDirectory(directoryPath);
+        string GameName = IOUtil.GetNameDirectory(directoryPath);
         string GamePath = Path.Combine(directoryPath, string.Concat(GameName, ".bin"));
         // Load the game
         (message, game) = await GameRepository.Read<World>(GamePath);

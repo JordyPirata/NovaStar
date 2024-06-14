@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace Repository
+namespace Services.Repository
 {
     public class Serializer
     {

@@ -2,7 +2,7 @@ using UnityEngine;
 using System.IO;
 public class IOUtil : MonoBehaviour
 {
-    public static string GetLastDirectory(string path)
+    public static string GetNameDirectory(string path)
     {
         // split when '/' && '\'is found
         string[] directories = path.Split('/', '\\');
@@ -13,7 +13,7 @@ public class IOUtil : MonoBehaviour
         int count = 0;
         foreach (var dir in Directory.GetDirectories(root))
         {
-            var nameDir = GetLastDirectory(dir);
+            var nameDir = GetNameDirectory(dir);
             if (baseName == nameDir.Split("(")[0])
             {
                count ++;

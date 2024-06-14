@@ -1,106 +1,67 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.Audio;
-using UnityEngine.Localization.Settings;
-using System.IO;
 using UnityEngine.UI;
-using Console = UnityEngine.Debug;
-using Repository;
-// TODO: Make ServiceLocator for the SettingsMenu to avoid using the Singleton pattern
+
 namespace Menus
 {
     public class SettingsMenu : MonoBehaviour
     {
+        private ISettingsService SettingsService;
         private void Awake()
         {
-            settingsFile = Path.Combine(Application.persistentDataPath, "settings.bin");
+            SettingsService = ServiceLocator.GetService<ISettingsService>();
             LoadSettings();
         }
-        
-        private static string message;
+    
         public Button onButton, offButton, englishButton, spanishButton;
         public Slider overallVolumeSlider, musicVolumeSlider, sfxVolumeSlider, sensitibilitySlider;
-        private static Settings settings = new();
-        public AudioMixer audioMixer;
-        private static string settingsFile;  
         public void SetOverallVolume(float volume)
         {
-            audioMixer.FindMatchingGroups("Master")[0].audioMixer.SetFloat("Master", volume);
-            settings.overallVolume = volume;
-
+            SettingsService.SetVolume(volume, ISettingsService.Master, "Master");
         }
         public void SetMusicVolume(float volume)
         {
-            audioMixer.FindMatchingGroups("Music")[0].audioMixer.SetFloat("Music", volume);
-            settings.musicVolume = volume;
+            SettingsService.SetVolume(volume, ISettingsService.Music, "Music");
         }
         public void SetSFXVolume(float volume)
         {
-            audioMixer.FindMatchingGroups("SFX")[0].audioMixer.SetFloat("SFX", volume);
-            settings.sfxVolume = volume;
+            SettingsService.SetVolume(volume, ISettingsService.SFX, "SFX");
         }
         public void SetSensitibility(float sensitibility)
         {
-            settings.mouseSensitivity = sensitibility;
+            SettingsService.SetSensitibility(sensitibility);
         }
         public void SetFullscreen(bool isFullscreen)
         {
+            SettingsService.SetFullscreen(isFullscreen);
             if (isFullscreen)
             {
-                settings.fullscreen = true;
                 onButton.interactable = false;
                 offButton.interactable = true;
+                return;
             }
-            else
-            {
-                settings.fullscreen = false;
-                offButton.interactable = false;
-                onButton.interactable = true;
-            }
-            Screen.fullScreen = isFullscreen;
+            offButton.interactable = false;
+            onButton.interactable = true;
+            
         }
         public void SetLanguage(int language)
         {
+            SettingsService.SetLanguage(language);
             if (language == 0)
             {
-                settings.language = 0;
-                StartCoroutine(SetLocale(0));
                 englishButton.interactable = false;
                 spanishButton.interactable = true;
+                return;
             }
-            else
-            {
-                settings.language = 1;
-                StartCoroutine(SetLocale(1));
-                spanishButton.interactable = false;
-                englishButton.interactable = true;
-            }
+            spanishButton.interactable = false;
+            englishButton.interactable = true;
+            
         }
-        IEnumerator SetLocale(int localeID)
-        {
-            yield return LocalizationSettings.InitializationOperation;
-            LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[localeID];
-        }
-        public async void SaveSettings()
-        {
-            message = await GameRepository.Create(settings, settingsFile);
-            Console.Log(message);
-        }
+
         // Load settings from file
-        public async void LoadSettings()
+        public void LoadSettings()
         {
-            // Read the settings from the file
-            if (GameRepository.Exists(settingsFile))
-            {
-                (message, settings) = await GameRepository.Read<Settings>(settingsFile);
-            }
-            else
-            {
-                settings = new Settings();
-                SaveSettings();
-                LoadSettings();
-            }
-            Console.Log(message);
+            Settings settings = SettingsService.GetSettings();
+            
             // Set the settings
             SetLanguage(settings.language);
             SetFullscreen(settings.fullscreen);

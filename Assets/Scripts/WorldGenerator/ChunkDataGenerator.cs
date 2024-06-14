@@ -1,9 +1,9 @@
 using Unity.Mathematics;
 using UnityEngine;
-using Repository;
 using System.IO;
 using Unity.Burst;
 using System.Threading.Tasks;
+using Services;
 
 namespace WorldGenerator
 {
@@ -15,14 +15,16 @@ public struct ChunkDataGenerator
 {
 
     static string message;
+    private static IRepository GameRepository => ServiceLocator.GetService<IRepository>();
+
     public static async Task<Chunk> Generate(float2 coord)
     {
-
+        
         string chunkName = $"Chunk({coord.x},{coord.y})";
         string chunkPath = Path.Combine(Application.persistentDataPath, string.Concat(chunkName, ".bin"));
         Chunk chunk;
         // Check if the chunk exists
-        if (GameRepository.Exists(chunkPath))
+        if (GameRepository.ExistsFile(chunkPath))
         {
             // Load the chunk
             (message, chunk) = await GameRepository.Read<Chunk>(chunkPath);

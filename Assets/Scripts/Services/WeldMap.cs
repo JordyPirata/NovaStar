@@ -12,9 +12,9 @@ namespace Services
 /// This class is responsible for welding the chunks together
 /// </summary>
 [BurstCompile]
-public struct WeldMap
+public struct WeldMap: IWeldMap
 {
-    public IEnumerator WeldChunks()
+    public readonly IEnumerator WeldChunks()
     {
         while (true)
         {
