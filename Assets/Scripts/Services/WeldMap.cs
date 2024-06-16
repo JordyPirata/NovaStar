@@ -56,7 +56,7 @@ public struct WeldMap: IWeldMap
             topNeighbor.SetNeighbors(topNeighbor.leftNeighbor, topNeighbor.topNeighbor, topNeighbor.rightNeighbor, terrain);
         }
     }
-    public static void SetNeighborsAll()
+    private static void SetNeighborsAll()
     {
         if (Map.AllChunks() == null)
         {

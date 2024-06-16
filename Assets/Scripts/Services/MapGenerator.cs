@@ -13,13 +13,7 @@ namespace Services
 [BurstCompile]
 public readonly struct MapGenerator: IMapGenerator
 {
-    private static float2 ViewerCoordinate
-    {
-        get
-        {
-            return ServiceLocator.GetService<IPlayerInfo>().GetPlayerCoordinate();
-        }
-    }
+    private static IPlayerInfo PlayerInfo => ServiceLocator.GetService<IPlayerInfo>();
     public async void GenerateMap()
     {
         await UpdateChunks();
@@ -55,7 +49,7 @@ public readonly struct MapGenerator: IMapGenerator
         {   
             // get the player coordinate
             
-            await MapGenerator.UpdateVisibleChunks(ViewerCoordinate);
+            await UpdateVisibleChunks(PlayerInfo.GetPlayerCoordinate());
             // delay the update of the chunks by system time
             await Task.Delay(2000);
             await Task.Yield();

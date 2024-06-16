@@ -11,8 +11,8 @@ public class PlayerInfo : MonoBehaviour , IPlayerInfo
     [SerializeField]
     private Transform player;
     [SerializeField]
-    private float2 viewerCoordinate;
-    private float2 viewerPosition;
+    private static float2 viewerCoordinate;
+    private static float2 viewerPosition;
     public void Start()
     {
         StartCoroutine(SetPlayerPosition());
