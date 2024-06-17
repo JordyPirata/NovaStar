@@ -4,31 +4,22 @@ using UnityEngine;
 
 namespace WorldGenerator
 {
-    public class NoiseGeneratorS : MonoBehaviour
+    public class NoiseGeneratorS 
     {
+        // Singleton
         private static NoiseGeneratorS instance;
-        public static NoiseGeneratorS Instance { get { return instance; } }
-        private void Awake()
-        {
-            if (instance == null)
-            {
-                instance = this;
-            }
-        }
-        public ComputeShader computeShader;
+        public static NoiseGeneratorS Instance => instance ??= new NoiseGeneratorS();
+        private readonly ComputeShader computeShader = Resources.Load<ComputeShader>("NoiseGenerator");
         private readonly int length = ChunkConfig.Length;
         private readonly int seed = ChunkConfig.seed;
         private static readonly int Coords = Shader.PropertyToID("coords");
         private static int kernel;
         private static readonly int Values = Shader.PropertyToID("values");
         private static readonly int Seed = Shader.PropertyToID("seed");
-
-        public void Start()
-        {
-	        kernel = computeShader.FindKernel("CSMain");
-        }
         public float[] GenerateNoise(float2 coords)
         {
+            // Get the kernel
+            kernel = computeShader.FindKernel("CSMain");
             // Calculate the initial x and y
 			var iCoordX = (int)coords.x * ChunkConfig.width - (int)coords.x;
 			var iCoordY = (int)coords.y * ChunkConfig.depth - (int)coords.y;

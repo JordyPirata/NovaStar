@@ -7,14 +7,17 @@ using System.Collections;
 using Unity.VisualScripting;
 namespace Services
 {
-public class SettingsService : ISettingsService
+public class SettingsService : MonoBehaviour, ISettingsService
 {
     private AudioMixer Mixer => Resources.Load<AudioMixer>("MainMixer");
     private IRepository GameRepository => ServiceLocator.GetService<IRepository>();
     private static string message;
-    private static readonly string settingsFile = Path.Combine(Application.persistentDataPath, "settings.bin");
+    private static string settingsFile;
     private static Settings settings = new();
-
+    public void Awake()
+    {
+        settingsFile = Path.Combine(Application.persistentDataPath, "settings.bin");
+    }
     public async void LoadSettings()
     {
         if (!GameRepository.ExistsFile(settingsFile))
@@ -22,8 +25,11 @@ public class SettingsService : ISettingsService
             settings = new Settings();
             SaveSettings();
         }
-        (message, settings) = await GameRepository.Read<Settings>(settingsFile);
-        Console.Log(message);
+        else
+        {
+            (message, settings) = await GameRepository.Read<Settings>(settingsFile);
+            Console.Log(message);
+        }
         SetLanguage(settings.language);
         SetFullscreen(settings.fullscreen);
     }
@@ -43,6 +49,7 @@ public class SettingsService : ISettingsService
     public void SetLanguage(int language)
     {
         settings.language = language;
+        StartCoroutine(SetLocale(language));
     }
     public IEnumerator SetLocale(int localeID)
     {
@@ -70,11 +77,6 @@ public class SettingsService : ISettingsService
                 settings.sfxVolume = volume;
                 break;
         }
-    }
-
-    public Settings GetSettings()
-    {
-        return settings;
     }
 }
 }

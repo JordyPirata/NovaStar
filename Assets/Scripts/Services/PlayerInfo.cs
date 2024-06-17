@@ -8,16 +8,17 @@ namespace Services
 
 public class PlayerInfo : MonoBehaviour , IPlayerInfo
 {
-    [SerializeField]
     private Transform player;
     [SerializeField]
     private static float2 viewerCoordinate;
     private static float2 viewerPosition;
-    public void Start()
+    public void Init (Transform player)
     {
+        this.player = player;
         StartCoroutine(SetPlayerPosition());
     }
-    IEnumerator SetPlayerPosition()
+
+    private IEnumerator SetPlayerPosition()
     {
         while (true)
         {
@@ -25,7 +26,7 @@ public class PlayerInfo : MonoBehaviour , IPlayerInfo
             UpdatePlayer();
         }
     }
-    public void UpdatePlayer()
+    private void UpdatePlayer()
     {
         viewerPosition = new float2(player.position.x, player.position.z);
         viewerCoordinate = new float2(Mathf.RoundToInt(viewerPosition.x / width), Mathf.RoundToInt(viewerPosition.y / depth));

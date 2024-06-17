@@ -19,5 +19,4 @@ public interface ISettingsService
     public void SetSensitibility(float sensitibility);
     public void SaveSettings();
     public void LoadSettings();
-    public Settings GetSettings();
 }

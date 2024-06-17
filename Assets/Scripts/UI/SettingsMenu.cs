@@ -5,12 +5,7 @@ namespace Menus
 {
     public class SettingsMenu : MonoBehaviour
     {
-        private ISettingsService SettingsService;
-        private void Awake()
-        {
-            SettingsService = ServiceLocator.GetService<ISettingsService>();
-            LoadSettings();
-        }
+        private ISettingsService SettingsService => ServiceLocator.GetService<ISettingsService>();
     
         public Button onButton, offButton, englishButton, spanishButton;
         public Slider overallVolumeSlider, musicVolumeSlider, sfxVolumeSlider, sensitibilitySlider;
@@ -60,18 +55,12 @@ namespace Menus
         // Load settings from file
         public void LoadSettings()
         {
-            Settings settings = SettingsService.GetSettings();
-            
-            // Set the settings
-            SetLanguage(settings.language);
-            SetFullscreen(settings.fullscreen);
-
-            overallVolumeSlider.value = settings.overallVolume;
-            musicVolumeSlider.value = settings.musicVolume;
-            sfxVolumeSlider.value = settings.sfxVolume;
-
-            sensitibilitySlider.value = settings.mouseSensitivity;
-            
+            SettingsService.LoadSettings();
+        }
+        // Save settings to file
+        public void SaveSettings()
+        {
+            SettingsService.SaveSettings();
         }
     }
 }
