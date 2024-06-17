@@ -7,7 +7,6 @@ An immersive exploration and crafting game developed in Unity.
 > This project is currently under active development. Features and functionalities described below are subject to change as development progresses.
 
 ## Table of Contents
-## Table of Contents
 1. [Module Descriptions](#module-descriptions)
 2. [User Descriptions](#user-descriptions)
 3. [Features and Functions](#features-and-functions)
