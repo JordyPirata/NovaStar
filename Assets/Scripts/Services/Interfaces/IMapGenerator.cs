@@ -3,5 +3,6 @@
 /// </summary>
 interface IMapGenerator
 {
-    void GenerateMap();
+    void StartService();
+    void StopService();
 }

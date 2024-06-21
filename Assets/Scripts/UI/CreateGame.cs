@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class CreateGame : MonoBehaviour
@@ -44,6 +46,13 @@ public class CreateGame : MonoBehaviour
                 gameObject.SetActive(false);
                 }
             );
+            world.playButton.onClick.AddListener(() => {
+                // Load the game Scene
+                SceneManager.LoadScene("Game");
+                // Send the game to the game scene
+                
+
+            });
 
         }
     }

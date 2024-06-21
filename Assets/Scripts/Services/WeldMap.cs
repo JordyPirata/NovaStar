@@ -11,15 +11,24 @@ namespace Services
 /// <summary>
 /// This class is responsible for welding the chunks together
 /// </summary>
-[BurstCompile]
-public struct WeldMap: IWeldMap
+
+public class WeldMap : MonoBehaviour, IWeldMap
 {
-    public readonly IEnumerator WeldChunks()
+    public void StartService()
+    {
+        StartCoroutine(WeldChunks());
+    }
+    public void StopService()
+    {
+        StopCoroutine(WeldChunks());
+    }
+
+    private IEnumerator WeldChunks()
     {
         while (true)
         {
             yield return new WaitForSeconds(20f);
-            SetNeighborsAll();
+            SetAllNeighbors();
         }
     }
     private static void SetNeighbors(float2 coord)
@@ -56,7 +65,7 @@ public struct WeldMap: IWeldMap
             topNeighbor.SetNeighbors(topNeighbor.leftNeighbor, topNeighbor.topNeighbor, topNeighbor.rightNeighbor, terrain);
         }
     }
-    private static void SetNeighborsAll()
+    private static void SetAllNeighbors()
     {
         if (Map.AllChunks() == null)
         {

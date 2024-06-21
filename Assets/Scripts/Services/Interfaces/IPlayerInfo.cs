@@ -2,7 +2,9 @@ using Unity.Mathematics;
 
 interface IPlayerInfo
 {
-    void Init(UnityEngine.Transform player);
+    void Init();
     float2 GetPlayerPosition();
     float2 GetPlayerCoordinate();
+    void StartService();
+    void StopService();
 }

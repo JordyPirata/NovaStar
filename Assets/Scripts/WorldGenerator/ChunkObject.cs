@@ -32,6 +32,7 @@ namespace WorldGenerator
         public void Release()
         {
             _isAvailable = true;
+            GameObject.SetActive(false);
         }
         // Update the status of the chunk
         public bool UpdateStatus()
@@ -51,7 +52,6 @@ namespace WorldGenerator
             GameObject.SetActive(visible);
         }
         public bool IsVisible()
-        
         {
             return GameObject.activeSelf;
         }

@@ -29,7 +29,7 @@ namespace WorldGenerator
                 heightmapResolution = chunk.width,
                 size = new Vector3(chunk.width, chunk.height, chunk.width)
             };
-            terrainData.SetHeightsDelayLOD(0, 0,TransferData.TransferDataFromArrayTo2DArray(chunk.heights,chunk.width,chunk.depth));
+            terrainData.SetHeights(0, 0,TransferData.TransferDataFromArrayTo2DArray(chunk.heights,chunk.width,chunk.depth));
             terrain.terrainData = terrainData;
             
             return terrain;

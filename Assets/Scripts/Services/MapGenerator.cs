@@ -4,19 +4,30 @@ using Map = WorldGenerator.ChunkGrid<WorldGenerator.ChunkObject>;
 using Unity.Burst;
 using System.Threading.Tasks;
 using WorldGenerator;
+using System;
 
 namespace Services
 {
 /// <summary>
 /// This class is responsible for showing the chunks that are visible to the player
 /// </summary>
-[BurstCompile]
-public readonly struct MapGenerator: IMapGenerator
+
+public class MapGenerator : IMapGenerator
 {
+    private bool isRunning = false;
     private static IPlayerInfo PlayerInfo => ServiceLocator.GetService<IPlayerInfo>();
-    public async void GenerateMap()
+    public async void StartService()
     {
-        await UpdateChunks();
+        isRunning = true;
+        await GenerateMap();
+    }
+    public void StopService()
+    {
+        isRunning = false;
+        foreach (var chunk in Map.AllChunks())
+        {
+            chunk.Release();
+        }
     }
     private static readonly int chunkVisibleInViewDst = Mathf.RoundToInt(ChunkConfig.maxViewDst / ChunkConfig.width);
     private static async Task UpdateVisibleChunks(float2 viewerCoordinate)
@@ -43,9 +54,9 @@ public readonly struct MapGenerator: IMapGenerator
         }
     }
 
-    private async readonly Task UpdateChunks()
+    private async Task GenerateMap()
     {
-        while (true)
+        while (isRunning)
         {   
             // get the player coordinate
             

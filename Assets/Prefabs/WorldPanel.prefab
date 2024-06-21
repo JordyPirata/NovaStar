@@ -417,8 +417,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -120, y: 0}
-  m_SizeDelta: {x: 300, y: 45}
+  m_AnchoredPosition: {x: -173.90213, y: 0}
+  m_SizeDelta: {x: 192.1957, y: 45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8376409365618184315
 CanvasRenderer:
@@ -600,10 +600,10 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 682998198142600378}
   - {fileID: 2835554791834259591}
   - {fileID: 1104397739167996919}
   - {fileID: 5490594417769739768}
-  - {fileID: 682998198142600378}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -639,6 +639,18 @@ MonoBehaviour:
   TMPro: {fileID: 4455915011969676881}
   editButton: {fileID: 2825366439523463216}
   playButton: {fileID: 4640603755495987134}
+  localizedString:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  references:
+    version: 2
+    RefIds: []
 --- !u!114 &8327502238929218251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -712,7 +724,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8327502238929218251}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6419078914297952662
 GameObject:
   m_ObjectHideFlags: 0

@@ -27,7 +27,7 @@ public class WorldPanel : MonoBehaviour
     {
         if (_game == null)
         {
-            game = new World
+            _game = new World()
             {
                 // Set the game name
                 GameName = TMPro.text,

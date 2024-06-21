@@ -12,10 +12,18 @@ public class PlayerInfo : MonoBehaviour , IPlayerInfo
     [SerializeField]
     private static float2 viewerCoordinate;
     private static float2 viewerPosition;
-    public void Init (Transform player)
+    public void Init ()
     {
-        this.player = player;
+        var PlayerObj = GameObject.Find("Player");
+        player = PlayerObj.transform;
+    }
+    public void StartService()
+    {
         StartCoroutine(SetPlayerPosition());
+    }
+    public void StopService()
+    {
+        StopCoroutine(SetPlayerPosition());
     }
 
     private IEnumerator SetPlayerPosition()
@@ -40,6 +48,6 @@ public class PlayerInfo : MonoBehaviour , IPlayerInfo
     {
         return viewerCoordinate;
     }
-    }
+}
 
 }
