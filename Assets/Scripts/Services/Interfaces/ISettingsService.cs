@@ -4,9 +4,9 @@ using UnityEngine.Audio;
 
 public interface ISettingsService
 {
-    public const string Master = "Master";
-    public const string Music = "Music";
-    public const string SFX = "SFX";
+    public const string MasterGroup = "Master";
+    public const string MusicGroup = "Music";
+    public const string SFXGroup = "SFX";
     public IEnumerator SetLocale(int localeID);
     /// <summary>
     /// Use Constants from ISettingsService to set the volume of the audio mixer groups

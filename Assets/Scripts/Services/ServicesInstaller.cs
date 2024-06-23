@@ -1,10 +1,6 @@
 using UnityEngine;
 using Services;
 using Services.Repository;
-using Unity.VisualScripting;
-using System.Collections;
-using UnityEditor.SearchService;
-using UnityEngine.SceneManagement;
 
 public class ServiceInstaller : MonoBehaviour
 {
@@ -12,7 +8,7 @@ public class ServiceInstaller : MonoBehaviour
     {
         // DontDestroyOnLoad(gameObject)
         DontDestroyOnLoad(this);
-        InstallServices();       
+        InstallServices();
     }
     public void InstallServices()
     {
@@ -21,6 +17,7 @@ public class ServiceInstaller : MonoBehaviour
         ServiceLocator.Register<IWeldMap>(gameObject.AddComponent<WeldMap>()); 
         ServiceLocator.Register<IMapGenerator>(new MapGenerator());
         ServiceLocator.Register<IRepository>(new GameRepository());
-        ServiceLocator.Register<ISceneLoader>(new SceneLoader());
+        ServiceLocator.Register<ISceneLoader>(gameObject.AddComponent<SceneLoader>());
+        ServiceLocator.Register<ICreateGame>(new CreateGame());
     }
 }

@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using System.IO;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class CreateGame : MonoBehaviour
+public class GamePanelGen : MonoBehaviour
 {
     public Scrollbar scrollbar;
     public RectTransform contentPanel;
@@ -36,24 +35,21 @@ public class CreateGame : MonoBehaviour
         string[] directories = Directory.GetDirectories(Application.persistentDataPath);
         foreach (string directory in directories)
         {
-            WorldPanel world = Instantiate(worldPrefab, contentPanel).GetComponent<WorldPanel>();
-            world.LoadWorld(directory);
-            world.CreateWorld(world.game);
-            worlds.Add(world);
+            WorldPanel worldPanel = Instantiate(worldPrefab, contentPanel).GetComponent<WorldPanel>();
+            worldPanel.LoadWorld(directory);
+            worldPanel.CreateWorld(worldPanel.game);
+            worlds.Add(worldPanel);
             // Add liseners to the buttons
-            world.editButton.onClick.AddListener(() => {
-                editPanel.SetActive(true);
-                gameObject.SetActive(false);
-                }
-            );
-            world.playButton.onClick.AddListener(() => {
-                // Load the game Scene
-                SceneManager.LoadScene("Game");
-                // Send the game to the game scene
-                
-
-            });
+            AddLiseners(worldPanel);
 
         }
+    }
+    public void AddLiseners(WorldPanel worldPanel)
+    {   
+        worldPanel.editButton.onClick.AddListener(() => {
+            editPanel.SetActive(true);
+            gameObject.SetActive(false);
+            }
+        );
     }
 }

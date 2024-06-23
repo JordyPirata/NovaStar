@@ -67,13 +67,13 @@ public class SettingsService : MonoBehaviour, ISettingsService
         Mixer.FindMatchingGroups(groupingID)[0].audioMixer.SetFloat(floatName, volume);
         switch (groupingID)
         {
-            case ISettingsService.Master:
+            case ISettingsService.MasterGroup:
                 settings.overallVolume = volume;
                 break;
-            case ISettingsService.Music:
+            case ISettingsService.MusicGroup:
                 settings.musicVolume = volume;
                 break;
-            case ISettingsService.SFX:
+            case ISettingsService.SFXGroup:
                 settings.sfxVolume = volume;
                 break;
         }

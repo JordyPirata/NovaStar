@@ -11,15 +11,15 @@ namespace Menus
         public Slider overallVolumeSlider, musicVolumeSlider, sfxVolumeSlider, sensitibilitySlider;
         public void SetOverallVolume(float volume)
         {
-            SettingsService.SetVolume(volume, ISettingsService.Master, "Master");
+            SettingsService.SetVolume(volume, ISettingsService.MasterGroup, "Master");
         }
         public void SetMusicVolume(float volume)
         {
-            SettingsService.SetVolume(volume, ISettingsService.Music, "Music");
+            SettingsService.SetVolume(volume, ISettingsService.MusicGroup, "Music");
         }
         public void SetSFXVolume(float volume)
         {
-            SettingsService.SetVolume(volume, ISettingsService.SFX, "SFX");
+            SettingsService.SetVolume(volume, ISettingsService.SFXGroup, "SFX");
         }
         public void SetSensitibility(float sensitibility)
         {
