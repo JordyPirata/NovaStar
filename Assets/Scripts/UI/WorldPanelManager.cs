@@ -4,52 +4,52 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class GamePanelGen : MonoBehaviour
+public class WorldPanelManager : MonoBehaviour
 {
     public Scrollbar scrollbar;
     public RectTransform contentPanel;
     public VerticalLayoutGroup layout;
-    public List<WorldPanel> worlds = new();
     public GameObject worldPrefab;
     public GameObject editPanel;
     public void Awake()
     {
         LoadWorlds();
     }
-    public void Update()
-    {
-        // Resize the panel
-        contentPanel.sizeDelta = new Vector2(contentPanel.sizeDelta.x, layout.preferredHeight);
-    }
     public void CreateWorld()
     {
-        GameObject world = Instantiate(worldPrefab, contentPanel);
-        WorldPanel worldPanel = world.GetComponent<WorldPanel>();
-        worldPanel.CreateWorld(null);
+        WorldPanel worldPanel = InstantiateWorldPanel();
+        worldPanel.CreateWorld();
         worldPanel.SaveWorld();
-        worlds.Add(worldPanel);
-        scrollbar.value = 0;
+        // Add liseners to the buttons
+        AddLiseners(worldPanel);
     }
     public void LoadWorlds()
     {
         string[] directories = Directory.GetDirectories(Application.persistentDataPath);
         foreach (string directory in directories)
         {
-            WorldPanel worldPanel = Instantiate(worldPrefab, contentPanel).GetComponent<WorldPanel>();
+            WorldPanel worldPanel = InstantiateWorldPanel();
             worldPanel.LoadWorld(directory);
-            worldPanel.CreateWorld(worldPanel.game);
-            worlds.Add(worldPanel);
+            worldPanel.SetWorld(worldPanel.game);
             // Add liseners to the buttons
             AddLiseners(worldPanel);
-
         }
     }
-    public void AddLiseners(WorldPanel worldPanel)
+    private void AddLiseners(WorldPanel worldPanel)
     {   
         worldPanel.editButton.onClick.AddListener(() => {
             editPanel.SetActive(true);
             gameObject.SetActive(false);
             }
         );
+    }
+    private WorldPanel InstantiateWorldPanel()
+    {
+        WorldPanel worldPanel = Instantiate(worldPrefab, contentPanel).GetComponent<WorldPanel>();
+        // Resize the content When a new world is created
+        contentPanel.sizeDelta = new Vector2(contentPanel.sizeDelta.x, layout.preferredHeight);
+        // Scroll to the top
+        scrollbar.value = 0;
+        return worldPanel;
     }
 }

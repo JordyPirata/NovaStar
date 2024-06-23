@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Services
 {
-    public class CreateGame : ICreateGame
+    public class WorldDataGen : ICreateWorld
     {
         private IRepository GameRepository = ServiceLocator.GetService<IRepository>();
         private string message;
@@ -15,49 +15,49 @@ namespace Services
         {
             World game = new()
             {
-                GameName = GameName,
+                Name = GameName,
                 seed = Random.Range(0, int.MaxValue)
             };
-            game.GameDirectory = Path.Combine(Application.persistentDataPath, game.GameName);
-            game.GamePath = Path.Combine(game.GameDirectory, string.Concat(game.GameName, ".bin"));
+            game.Directory = Path.Combine(Application.persistentDataPath, game.Name);
+            game.WorldPath = Path.Combine(game.Directory, string.Concat(game.Name, ".bin"));
             return game;
         }
         
         public async Task<World> UpdateWorld(World game, string newGameName)
         {
-            if (!GameRepository.ExistsDirectory(game.GameDirectory))
+            if (!GameRepository.ExistsDirectory(game.Directory))
             {
                 throw new System.Exception("Game not found");
             }
-            _ = GameRepository.Delete(game.GamePath);
+            _ = GameRepository.Delete(game.WorldPath);
             // Rename Directory
-            Directory.Move(game.GameDirectory, Path.Combine(Application.persistentDataPath, newGameName));
+            Directory.Move(game.Directory, Path.Combine(Application.persistentDataPath, newGameName));
             // Set the new game
-            game.GameName = newGameName;
+            game.Name = newGameName;
             game = UpdateDir(newGameName, game);
             // Update the game
-            message = await GameRepository.Create(game, game.GamePath);
+            message = await GameRepository.Create(game, game.WorldPath);
             Console.Log(message);
             return game;
         }
         private World UpdateDir(string GameName, World game)
         {
-            game.GameDirectory = Path.Combine(Application.persistentDataPath, GameName);
-            game.GamePath = Path.Combine(game.GameDirectory, string.Concat(GameName, ".bin"));
+            game.Directory = Path.Combine(Application.persistentDataPath, GameName);
+            game.WorldPath = Path.Combine(game.Directory, string.Concat(GameName, ".bin"));
             return game;
         }
         public async Task<World> SaveWorld(World world)
         {
-            if (GameRepository.ExistsDirectory(world.GameDirectory))
+            if (GameRepository.ExistsDirectory(world.Directory))
             {
-                int o = IOUtil.TimesRepeatDir(Application.persistentDataPath, world.GameName);
+                int o = IOUtil.TimesRepeatDir(Application.persistentDataPath, world.Name);
                 // Set the game name add (n) to the name an increment it
-                world.GameName = string.Concat(world.GameName, "(", o, ")");
+                world.Name = string.Concat(world.Name, "(", o, ")");
                 // Set the text of the TextMeshPro component
-                world = UpdateDir(world.GameName, world);
+                world = UpdateDir(world.Name, world);
             }
-            Directory.CreateDirectory(world.GameDirectory);
-            message = await GameRepository.Create(world, world.GamePath);
+            Directory.CreateDirectory(world.Directory);
+            message = await GameRepository.Create(world, world.WorldPath);
             Console.Log(message);
             return world;
         }

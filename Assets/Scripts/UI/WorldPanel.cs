@@ -7,10 +7,10 @@ using UnityEngine.Localization;
 
 public class WorldPanel : MonoBehaviour
 {
-    private ICreateGame GameGenerator;
+    private ICreateWorld GameGenerator;
     void Awake()
     {
-        GameGenerator = ServiceLocator.GetService<ICreateGame>();
+        GameGenerator = ServiceLocator.GetService<ICreateWorld>();
     }
     // Variables
     public World game;
@@ -21,9 +21,17 @@ public class WorldPanel : MonoBehaviour
     public LocalizedString localizedString;
 
     // Access to the buttons of the world panel
-    public void CreateWorld(World _game)
+    /// <summary>
+    /// Set Null for Create new World
+    /// </summary>
+    /// <param name="_game"></param>
+    public void SetWorld(World _game)
     {
-        game = ServiceLocator.GetService<ICreateGame>().CreateWorld(TMPro.text) ?? _game;
+        game = _game;
+    }
+    public void CreateWorld()
+    {
+        game = ServiceLocator.GetService<ICreateWorld>().CreateWorld(TMPro.text);
     }
     public async void UpdateWorld()
     {
@@ -35,19 +43,19 @@ public class WorldPanel : MonoBehaviour
     {
         // Save the game
         game = await GameGenerator.SaveWorld(game);
-        TMPro.text = game.GameName;
+        TMPro.text = game.Name;
     }
 
     public void DeleteGame()
     {
         // Delete the game
-        Directory.Delete(game.GameDirectory, true);
+        Directory.Delete(game.Directory, true);
         Destroy(gameObject);
     }
     public async void LoadWorld(string directoryPath)
     {
         game = await GameGenerator.LoadWorld(directoryPath);
-        TMPro.text = game.GameName;
+        TMPro.text = game.Name;
     }
     public void PlayGame()
     {

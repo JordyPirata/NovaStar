@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 
 namespace Services
 {
-    public interface ICreateGame
+    public interface ICreateWorld
     {
         public World CreateWorld(string GameName);
         public Task<World> UpdateWorld(World game, string newGameName);

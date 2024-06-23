@@ -3,8 +3,6 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Mathematics;
 using Unity.Jobs;
-using UnityEditor.Localization.Plugins.XLIFF.V12;
-using Unity.VisualScripting;
 
 namespace WorldGenerator
 {

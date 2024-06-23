@@ -1,8 +1,8 @@
 [System.Serializable]
 public class World
 {
-    public string GameName;
-    public string GamePath;
-    public string GameDirectory;
+    public string Name;
+    public string WorldPath;
+    public string Directory;
     public int seed;
 }
