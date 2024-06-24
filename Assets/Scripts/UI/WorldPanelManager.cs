@@ -11,13 +11,14 @@ public class WorldPanelManager : MonoBehaviour
     public VerticalLayoutGroup layout;
     public GameObject worldPrefab;
     public GameObject editPanel;
-    public void Awake()
+    public void Start()
     {
         LoadWorlds();
     }
     public void CreateWorld()
     {
         WorldPanel worldPanel = InstantiateWorldPanel();
+        ResizeContent();
         worldPanel.CreateWorld();
         worldPanel.SaveWorld();
         // Add liseners to the buttons
@@ -34,6 +35,7 @@ public class WorldPanelManager : MonoBehaviour
             // Add liseners to the buttons
             AddLiseners(worldPanel);
         }
+        ResizeContent();
     }
     private void AddLiseners(WorldPanel worldPanel)
     {   
@@ -45,11 +47,13 @@ public class WorldPanelManager : MonoBehaviour
     }
     private WorldPanel InstantiateWorldPanel()
     {
-        WorldPanel worldPanel = Instantiate(worldPrefab, contentPanel).GetComponent<WorldPanel>();
-        // Resize the content When a new world is created
+        WorldPanel worldPanel = Instantiate(worldPrefab, contentPanel).GetComponent<WorldPanel>();  
+        return worldPanel;
+    }
+    private void ResizeContent()
+    {
         contentPanel.sizeDelta = new Vector2(contentPanel.sizeDelta.x, layout.preferredHeight);
         // Scroll to the top
         scrollbar.value = 0;
-        return worldPanel;
     }
 }

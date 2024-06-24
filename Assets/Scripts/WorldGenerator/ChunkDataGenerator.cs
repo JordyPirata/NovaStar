@@ -16,12 +16,12 @@ public struct ChunkDataGenerator
 
     static string message;
     private static IRepository GameRepository => ServiceLocator.GetService<IRepository>();
+    private static string WorldDirectory => ServiceLocator.GetService<IWorldData>().GetWorldDirectory();
 
     public static async Task<Chunk> Generate(float2 coord)
     {
-        
         string chunkName = $"Chunk({coord.x},{coord.y})";
-        string chunkPath = Path.Combine(Application.persistentDataPath, string.Concat(chunkName, ".bin"));
+        string chunkPath = Path.Combine(WorldDirectory, string.Concat(chunkName, ".bin"));
         Chunk chunk;
         // Check if the chunk exists
         if (GameRepository.ExistsFile(chunkPath))
@@ -54,7 +54,7 @@ public struct ChunkDataGenerator
     private static async void SaveChunk(Chunk Chunk)
     {
         message = await GameRepository.Create(Chunk,
-            Path.Combine(Application.persistentDataPath, string.Concat(Chunk.ChunkName, ".bin")));
+            Path.Combine(WorldDirectory, string.Concat(Chunk.ChunkName, ".bin")));
         Debug.Log(message + " " + Chunk.ChunkName);
     }
 

@@ -1,6 +1,5 @@
 using UnityEngine;
 using Unity.Mathematics;
-using static WorldGenerator.ChunkConfig;
 using Unity.Burst;
 using System.Collections;
 
@@ -38,7 +37,7 @@ public class PlayerInfo : MonoBehaviour , IPlayerInfo
         {
             yield return new WaitForSeconds(0.3f);
             viewerPosition = new float2(player.position.x, player.position.z);
-            viewerCoordinate = new float2(Mathf.RoundToInt(viewerPosition.x / width), Mathf.RoundToInt(viewerPosition.y / depth));
+            viewerCoordinate = new float2(Mathf.RoundToInt(viewerPosition.x / ChunkConfig.width), Mathf.RoundToInt(viewerPosition.y / ChunkConfig.depth));
         }
     }
     public float2 GetPlayerPosition()

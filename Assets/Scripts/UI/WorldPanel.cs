@@ -60,6 +60,8 @@ public class WorldPanel : MonoBehaviour
     public void PlayGame()
     {
         // Load the game
+        ServiceLocator.GetService<IWorldData>().SetWorld(game);
         ServiceLocator.GetService<ISceneLoader>().LoadScene(ISceneLoader.Game);
+        
     }
 }
