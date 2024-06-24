@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -11,12 +12,12 @@ public interface ISettingsService
     /// <summary>
     /// Use Constants from ISettingsService to set the volume of the audio mixer groups
     /// </summary>
-    public void SetVolume(float volume, string groupingID, string floatName);
+    public float SetVolume(float volume, string groupingID, string floatName);
     // public void SetQuality(int qualityIndex);
-    public void SetFullscreen(bool isFullscreen);
+    public bool SetFullscreen(bool isFullscreen);
     // public void SetResolution(int resolutionIndex);
-    public void SetLanguage(int language);
-    public void SetSensitibility(float sensitibility);
+    public int SetLanguage(int language);
+    public float SetSensitibility(float sensitibility);
     public void SaveSettings();
-    public void LoadSettings();
+    public Task<Settings> LoadSettings();
 }

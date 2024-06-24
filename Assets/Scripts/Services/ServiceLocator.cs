@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
-
+/// <summary>
+/// Dependency Injection Service Locator
+/// </summary>
 public class ServiceLocator
 {
     private static readonly Dictionary<Type, object> services = new();

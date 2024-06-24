@@ -6,6 +6,9 @@ using Console = UnityEngine.Debug;
 
 namespace Services
 {
+/// <summary>
+/// Load and unload scenes
+/// </summary>
 public class SceneLoader : MonoBehaviour, ISceneLoader
 {
     public const string GameScene = "Game";
@@ -26,7 +29,7 @@ public class SceneLoader : MonoBehaviour, ISceneLoader
             case MenuScene:
                 Console.Log("Menu Scene Loaded");
                 // Add code here to initialize your services for the "Menu" scene
-                // For example:
+                // For example:d
                 // ServiceC.Initialize();    
                 break;
             }
@@ -36,9 +39,9 @@ public class SceneLoader : MonoBehaviour, ISceneLoader
             switch (scene.name)
             {
             case GameScene:
-                ServiceLocator.GetService<IPlayerInfo>().StopService();
                 ServiceLocator.GetService<IMapGenerator>().StopService();
                 ServiceLocator.GetService<IWeldMap>().StopService();
+                ServiceLocator.GetService<IPlayerInfo>().StopService();
                 Console.Log("Game Scene Unloaded");
                 break;    
             case MenuScene:

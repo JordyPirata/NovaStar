@@ -5,8 +5,12 @@ using Console = UnityEngine.Debug;
 using UnityEngine.Localization.Settings;
 using System.Collections;
 using Unity.VisualScripting;
+using System.Threading.Tasks;
 namespace Services
 {
+/// <summary>
+/// CRUD operations for the settings
+/// </summary>
 public class SettingsService : MonoBehaviour, ISettingsService
 {
     private AudioMixer Mixer => Resources.Load<AudioMixer>("MainMixer");
@@ -18,7 +22,7 @@ public class SettingsService : MonoBehaviour, ISettingsService
     {
         settingsFile = Path.Combine(Application.persistentDataPath, "settings.bin");
     }
-    public async void LoadSettings()
+    public async Task<Settings> LoadSettings()
     {
         if (!GameRepository.ExistsFile(settingsFile))
         {
@@ -32,6 +36,11 @@ public class SettingsService : MonoBehaviour, ISettingsService
         }
         SetLanguage(settings.language);
         SetFullscreen(settings.fullscreen);
+        SetVolume(settings.overallVolume, ISettingsService.MasterGroup, "Master");
+        SetVolume(settings.musicVolume, ISettingsService.MusicGroup, "Music");
+        SetVolume(settings.sfxVolume, ISettingsService.SFXGroup, "SFX");
+        SetSensitibility(settings.mouseSensitivity);
+        return settings;
     }
 
     public async void SaveSettings()
@@ -40,16 +49,18 @@ public class SettingsService : MonoBehaviour, ISettingsService
         Console.Log(message);
     }
 
-    public void SetFullscreen(bool isFullscreen)
+    public bool SetFullscreen(bool isFullscreen)
     {
         settings.fullscreen = isFullscreen;
         Screen.fullScreen = isFullscreen;
+        return isFullscreen;
     }
     
-    public void SetLanguage(int language)
+    public int SetLanguage(int language)
     {
         settings.language = language;
         StartCoroutine(SetLocale(language));
+        return language;
     }
     public IEnumerator SetLocale(int localeID)
     {
@@ -57,12 +68,13 @@ public class SettingsService : MonoBehaviour, ISettingsService
         LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[localeID];
     }
 
-    public void SetSensitibility(float sensitibility)
+    public float SetSensitibility(float sensitibility)
     {
         settings.mouseSensitivity = sensitibility;
+        return sensitibility;
     }
 
-    public void SetVolume(float volume, string groupingID, string floatName)
+    public float SetVolume(float volume, string groupingID, string floatName)
     {
         Mixer.FindMatchingGroups(groupingID)[0].audioMixer.SetFloat(floatName, volume);
         switch (groupingID)
@@ -77,6 +89,7 @@ public class SettingsService : MonoBehaviour, ISettingsService
                 settings.sfxVolume = volume;
                 break;
         }
+        return volume;
     }
 }
 }

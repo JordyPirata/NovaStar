@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace Services
 {
+    /// <summary>
+    /// Create a new world or load an existing one
+    /// </summary>
     public class WorldDataGen : ICreateWorld
     {
-        private IRepository GameRepository = ServiceLocator.GetService<IRepository>();
+        private readonly IRepository GameRepository = ServiceLocator.GetService<IRepository>();
         private string message;
 
         public World CreateWorld(string GameName)
@@ -31,7 +34,14 @@ namespace Services
             }
             _ = GameRepository.Delete(game.WorldPath);
             // Rename Directory
-            Directory.Move(game.Directory, Path.Combine(Application.persistentDataPath, newGameName));
+            try
+            {
+                Directory.Move(game.Directory, Path.Combine(Application.persistentDataPath, newGameName));
+            }
+            catch (IOException e)
+            {
+                Console.Log(e.Message);
+            }
             // Set the new game
             game.Name = newGameName;
             game = UpdateDir(newGameName, game);
@@ -57,6 +67,7 @@ namespace Services
                 world = UpdateDir(world.Name, world);
             }
             Directory.CreateDirectory(world.Directory);
+            
             message = await GameRepository.Create(world, world.WorldPath);
             Console.Log(message);
             return world;

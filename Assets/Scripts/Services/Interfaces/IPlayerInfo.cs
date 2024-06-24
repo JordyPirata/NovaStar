@@ -7,4 +7,5 @@ interface IPlayerInfo
     float2 GetPlayerCoordinate();
     void StartService();
     void StopService();
+
 }
