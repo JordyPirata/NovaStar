@@ -35,14 +35,9 @@ namespace WorldGenerator
             return terrain;
         }
         public static Material GetDefaultTerrainMaterial ()
-		{
-			Shader shader = GraphicsSettings.renderPipelineAsset.defaultTerrainMaterial.shader;
-		
-			if (shader == null) shader = Shader.Find("HDRP/TerrainLit");
-			if (shader == null) shader = Shader.Find("Nature/Terrain/Standard");
-			if (shader == null) shader = Shader.Find("Lightweight Render Pipeline/Terrain/Lit");
+        {
 
-			return new Material(shader);
+			return Resources.Load<Material>("Uranio");
             
 		}
     }

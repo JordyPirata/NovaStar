@@ -5,19 +5,23 @@ StructuredBuffer<float2> coords;
 RWStructuredBuffer<float> values;
 int seed;
 
-[numthreads(52,1,1)]
-  
-void CSMain (uint3 id : SV_DispatchThreadID)
+fnl_state GetFnlState(int seed)
 {
-    // TODO: Perlin Implementation
-    
     fnl_state noise = fnlCreateState(seed);
     noise.noise_type = FNL_NOISE_OPENSIMPLEX2;
     noise.fractal_type = FNL_FRACTAL_FBM;
     noise.frequency = 0.001;
     noise.octaves = 4;
+    return noise;
+}
+
+[numthreads(52,1,1)]
+  
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    // TODO: Perlin Implementation
+    fnl_state noise = GetFnlState(seed);
 
     // Gather noise data
-    
     values[id.x] = fnlGetNoise2D(noise, coords[id.x].x, coords[id.x].y) * 0.5 + 0.5;
 }

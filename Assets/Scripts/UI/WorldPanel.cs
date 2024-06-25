@@ -18,6 +18,7 @@ public class WorldPanel : MonoBehaviour
     public TMP_InputField TMPro;
     public Button editButton;
     public Button playButton;
+    public Button deleteButton;
     public LocalizedString localizedString;
 
     // Access to the buttons of the world panel

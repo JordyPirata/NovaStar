@@ -417,8 +417,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -173.90213, y: 0}
-  m_SizeDelta: {x: 192.1957, y: 45}
+  m_AnchoredPosition: {x: -134.99997, y: 0}
+  m_SizeDelta: {x: 270, y: 45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8376409365618184315
 CanvasRenderer:
@@ -632,13 +632,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   game:
-    GameName: 
-    GamePath: 
-    GameDirectory: 
+    Name: 
+    WorldPath: 
+    Directory: 
     seed: 0
   TMPro: {fileID: 4455915011969676881}
   editButton: {fileID: 2825366439523463216}
   playButton: {fileID: 4640603755495987134}
+  deleteButton: {fileID: 7113127905114985487}
   localizedString:
     m_TableReference:
       m_TableCollectionName: 

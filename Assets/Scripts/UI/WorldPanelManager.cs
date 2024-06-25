@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -14,6 +15,11 @@ public class WorldPanelManager : MonoBehaviour
     public void Start()
     {
         LoadWorlds();
+        StartCoroutine(ScrollToTop());
+    }
+    public void Update()
+    {
+        ResizeContent();
     }
     public void CreateWorld()
     {
@@ -35,7 +41,7 @@ public class WorldPanelManager : MonoBehaviour
             // Add liseners to the buttons
             AddLiseners(worldPanel);
         }
-        ResizeContent();
+        StartCoroutine(ScrollToTop());
     }
     private void AddLiseners(WorldPanel worldPanel)
     {   
@@ -47,13 +53,17 @@ public class WorldPanelManager : MonoBehaviour
     }
     private WorldPanel InstantiateWorldPanel()
     {
-        WorldPanel worldPanel = Instantiate(worldPrefab, contentPanel).GetComponent<WorldPanel>();  
+        WorldPanel worldPanel = Instantiate(worldPrefab, contentPanel).GetComponent<WorldPanel>();
+        StartCoroutine(ScrollToTop());
         return worldPanel;
+    }
+    private IEnumerator ScrollToTop()
+    {
+        yield return new WaitForSeconds(0.03f);
+        scrollbar.value = 0;
     }
     private void ResizeContent()
     {
         contentPanel.sizeDelta = new Vector2(contentPanel.sizeDelta.x, layout.preferredHeight);
-        // Scroll to the top
-        scrollbar.value = 0;
     }
 }

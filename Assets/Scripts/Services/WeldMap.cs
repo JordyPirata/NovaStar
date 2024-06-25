@@ -75,6 +75,7 @@ public class WeldMap : MonoBehaviour, IWeldMap
         {
             SetNeighbors(chunkObject.Coord);
         }
+        Debug.Log("SetNeighbors");
     }
 }
 }
