@@ -31,6 +31,7 @@ namespace WorldGenerator
         // Release the chunk
         public void Release()
         {
+            if (GameObject == null) return;
             _isAvailable = true;
             GameObject.SetActive(false);
         }
