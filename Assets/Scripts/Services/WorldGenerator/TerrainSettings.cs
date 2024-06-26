@@ -37,7 +37,7 @@ namespace WorldGenerator
         public static Material GetDefaultTerrainMaterial ()
         {
 
-			return Resources.Load<Material>("Uranio");
+			return Resources.Load<Material>("Ground1");
             
 		}
     }
