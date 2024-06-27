@@ -1,17 +1,18 @@
+using Models;
 using Unity.Burst;
 using UnityEngine;
 using Util;
-using UnityEngine.Rendering;
-namespace WorldGenerator
+
+namespace Services.WorldGenerator
 {
     [BurstCompile]
     public struct TerrainSettings
     {
         public const bool allowAutoConnect = true;
         public const int groupingID = 0;
-        public const int pixelError = 0;
+        public const int pixelError = 5;
         public const int heightmapMaximumLOD = 0;
-        public const int basemapDistance = 257;
+        public const int basemapDistance = 100;
         private static Material DefaultTerrainMaterial { get{return GetDefaultTerrainMaterial();}}
 
         public static Terrain ApplySettings(Terrain terrain, Chunk chunk)

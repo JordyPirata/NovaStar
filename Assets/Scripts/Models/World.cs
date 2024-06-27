@@ -1,8 +1,11 @@
-[System.Serializable]
-public class World
+namespace Models
 {
-    public string Name;
-    public string WorldPath;
-    public string Directory;
-    public int seed;
+    [System.Serializable]
+    public class World
+    {
+        public string Name;
+        public string WorldPath;
+        public string Directory;
+        public int seed;
+    }
 }

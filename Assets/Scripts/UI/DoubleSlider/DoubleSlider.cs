@@ -1,9 +1,11 @@
 ﻿#region Includes
+
 using UnityEngine;
 using UnityEngine.Events;
+
 #endregion
 
-namespace Menus
+namespace UI.DoubleSlider
 {
     [RequireComponent(typeof(RectTransform))]
     public class DoubleSlider : MonoBehaviour

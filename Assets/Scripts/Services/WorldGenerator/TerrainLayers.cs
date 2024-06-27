@@ -1,5 +1,6 @@
 using UnityEngine;
-namespace WorldGenerator
+
+namespace Services.WorldGenerator
 {
     ///<summary>
     /// This class is responsible for setting the terrain layers

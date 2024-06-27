@@ -1,6 +1,8 @@
+using Services;
+using Services.Interfaces;
 using UnityEngine;
 
-namespace Menus
+namespace UI
 {
     public class MainMenu : MonoBehaviour
     {

@@ -1,9 +1,11 @@
 ﻿#region Includes
+
 using UnityEngine;
 using UnityEngine.UI;
+
 #endregion
 
-namespace Menus
+namespace UI.DoubleSlider
 {
     public class Label : MonoBehaviour
     {

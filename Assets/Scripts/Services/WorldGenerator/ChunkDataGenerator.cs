@@ -1,11 +1,13 @@
+using System.IO;
+using System.Threading.Tasks;
+using Config;
+using Models;
+using Services.Interfaces;
+using Unity.Burst;
 using Unity.Mathematics;
 using UnityEngine;
-using System.IO;
-using Unity.Burst;
-using System.Threading.Tasks;
-using Services;
 
-namespace WorldGenerator
+namespace Services.WorldGenerator
 {
 /// <summary>
 ///  This struct is responsible for generating the chunk data

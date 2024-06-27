@@ -1,8 +1,8 @@
-using UnityEngine;
 using System.Collections.Generic;
-using Map = WorldGenerator.ChunkGrid<WorldGenerator.ChunkObject>;
+using UnityEngine;
+using Map = Services.WorldGenerator.ChunkGrid<Services.WorldGenerator.ChunkObject>;
 
-namespace WorldGenerator
+namespace Services.WorldGenerator
 {
     ///<summary>
     /// This class is responsible for generating chunks and adding them to the pool

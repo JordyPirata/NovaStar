@@ -1,7 +1,9 @@
+using Config;
+using Services.Interfaces;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace WorldGenerator
+namespace Services.WorldGenerator
 {
     public class ChunkObject
     {

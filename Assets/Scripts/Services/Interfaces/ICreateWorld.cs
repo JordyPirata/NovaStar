@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
+using Models;
 
-namespace Services
+namespace Services.Interfaces
 {
     public interface ICreateWorld
     {

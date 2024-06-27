@@ -11,8 +11,10 @@ using UnityEngine;
 #if ENABLE_INPUT_SYSTEM
 #endif
 
-public class MobileDisableAutoSwitchControls : MonoBehaviour
+namespace StarterAssets.Mobile.Scripts.Utilities
 {
+    public class MobileDisableAutoSwitchControls : MonoBehaviour
+    {
     
 #if ENABLE_INPUT_SYSTEM && (UNITY_IOS || UNITY_ANDROID)
 
@@ -31,4 +33,5 @@ public class MobileDisableAutoSwitchControls : MonoBehaviour
 
 #endif
     
+    }
 }

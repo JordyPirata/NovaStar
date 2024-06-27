@@ -1,8 +1,10 @@
-using System;
+using Models;
+using Services;
+using Services.Interfaces;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Menus
+namespace UI
 {
     public class SettingsMenu : MonoBehaviour
     {

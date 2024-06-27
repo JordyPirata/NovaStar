@@ -1,23 +1,26 @@
-[System.Serializable]
-public class Settings
+namespace Models
 {
-    // Constructor for the settings class
-    public Settings()
+    [System.Serializable]
+    public class Settings
     {
-        overallVolume = -50f;
-        musicVolume = -50f;
-        sfxVolume = -50f;
-        fullscreen = true;
-        language = 0;
-        mouseSensitivity = 0.5f;
-    }
-    // Settings class to store the settings of the game
-    public float overallVolume { get; set; }
-    public float musicVolume { get; set; }
-    public float sfxVolume { get; set; }
-    public bool fullscreen { get; set; }
-    public int language { get; set; }
-    public float mouseSensitivity { get; set; }
+        // Constructor for the settings class
+        public Settings()
+        {
+            overallVolume = -50f;
+            musicVolume = -50f;
+            sfxVolume = -50f;
+            fullscreen = true;
+            language = 0;
+            mouseSensitivity = 0.5f;
+        }
+        // Settings class to store the settings of the game
+        public float overallVolume { get; set; }
+        public float musicVolume { get; set; }
+        public float sfxVolume { get; set; }
+        public bool fullscreen { get; set; }
+        public int language { get; set; }
+        public float mouseSensitivity { get; set; }
 
+    }
 }
 
