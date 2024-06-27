@@ -1,10 +1,11 @@
 using Unity.Mathematics;
 using UnityEngine;
-using WorldGenerator;
-using Map = WorldGenerator.ChunkGrid<WorldGenerator.ChunkObject>;
+using Map = Services.WorldGenerator.ChunkGrid<Services.WorldGenerator.ChunkObject>;
 using Unity.Burst;
 using Unity.VisualScripting;
 using System.Collections;
+using Services.Interfaces;
+using Services.WorldGenerator;
 
 namespace Services
 {

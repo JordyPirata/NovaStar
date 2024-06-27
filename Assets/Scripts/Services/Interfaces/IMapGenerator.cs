@@ -1,8 +1,11 @@
-/// <summary>
-/// Need Init the IPlayerInfo service
-/// </summary>
-interface IMapGenerator
+namespace Services.Interfaces
 {
-    void StartService();
-    void StopService();
+    /// <summary>
+    /// Need Init the IPlayerInfo service
+    /// </summary>
+    public interface IMapGenerator
+    {
+        void StartService();
+        void StopService();
+    }
 }

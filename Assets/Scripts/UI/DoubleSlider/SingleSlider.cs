@@ -1,10 +1,12 @@
 #region Includes
+
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+
 #endregion
 
-namespace Menus
+namespace UI.DoubleSlider
 {
     [RequireComponent(typeof(Slider))]
     public class SingleSlider : MonoBehaviour

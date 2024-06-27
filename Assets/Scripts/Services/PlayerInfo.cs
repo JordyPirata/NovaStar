@@ -2,6 +2,8 @@ using UnityEngine;
 using Unity.Mathematics;
 using Unity.Burst;
 using System.Collections;
+using Config;
+using Services.Interfaces;
 
 namespace Services
 {

@@ -1,10 +1,10 @@
-using System;
+using Config;
 using Unity.Burst;
 using Unity.Collections;
-using Unity.Mathematics;
 using Unity.Jobs;
+using Unity.Mathematics;
 
-namespace WorldGenerator
+namespace Services.WorldGenerator
 {
 	[BurstCompile]
 	public struct NoiseGeneratorJ

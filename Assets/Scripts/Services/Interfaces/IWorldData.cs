@@ -1,8 +1,13 @@
-public interface IWorldData
+using Models;
+
+namespace Services.Interfaces
 {
-    string GetWorldDirectory();
-    string GetWorldName();
-    string GetWorldPath();
-    int GetWorldSeed();
-    void SetWorld(World world);
+    public interface IWorldData
+    {
+        string GetWorldDirectory();
+        string GetWorldName();
+        string GetWorldPath();
+        int GetWorldSeed();
+        void SetWorld(World world);
+    }
 }

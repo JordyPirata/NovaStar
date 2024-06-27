@@ -1,9 +1,11 @@
-using UnityEngine;
-using Unity.Mathematics;
 using System;
 using System.Threading.Tasks;
+using Models;
 using Unity.Burst;
-namespace WorldGenerator
+using Unity.Mathematics;
+using UnityEngine;
+
+namespace Services.WorldGenerator
 {
 [BurstCompile]
 public struct ChunkGenerator
