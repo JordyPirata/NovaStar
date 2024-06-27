@@ -9,12 +9,15 @@ namespace Services.WorldGenerator
         // Singleton
         private static NoiseGeneratorS instance;
         public static NoiseGeneratorS Instance => instance ??= new NoiseGeneratorS();
+        // Load the compute shader
         private readonly ComputeShader computeShader = Resources.Load<ComputeShader>("NoiseGenerator");
+        // Constants
         private const int width = ChunkConfig.width;
         private const int depth = ChunkConfig.depth;
         private readonly int length = ChunkConfig.Length;
         private readonly int seed = ChunkConfig.seed;
         private static int kernel;
+        // Shader properties
         private static readonly int GradientsId = Shader.PropertyToID("GRADIENTS_2D");
         private static readonly int RandVecsId = Shader.PropertyToID("RAND_VECS_2D");
         private static readonly int CoordsId = Shader.PropertyToID("coords");
