@@ -35,11 +35,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1175118294634496
-    m_Localized: Ingles
+    m_Localized: "Ingl\xE9s"
     m_Metadata:
       m_Items: []
   - m_Id: 1175255666479104
-    m_Localized: Espanol
+    m_Localized: "Espa\xF1ol"
     m_Metadata:
       m_Items: []
   - m_Id: 1176111019282432
@@ -67,7 +67,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 2580025010638848
-    m_Localized: Musica
+    m_Localized: "M\xFAsica"
     m_Metadata:
       m_Items: []
   - m_Id: 2950046668902400
