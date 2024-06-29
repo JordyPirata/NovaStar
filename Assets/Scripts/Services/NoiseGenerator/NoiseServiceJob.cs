@@ -3,14 +3,15 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
+using Services.Interfaces;
+using Services.NoiseGenerator;
 
-namespace Services.WorldGenerator
+namespace Services
 {
-	[BurstCompile]
-	public struct NoiseGeneratorJ
+    public class NoiseServiceJob : INoiseService
 	{
 		// Generate noise for the chunk
-		public static float[] UseJobs(float2 coords)
+		public float[] GenerateNoise(float2 coords)
 		{
 			// Calculate the initial x and y
 			var iCoordX = (int)coords.x * ChunkConfig.width - (int)coords.x;

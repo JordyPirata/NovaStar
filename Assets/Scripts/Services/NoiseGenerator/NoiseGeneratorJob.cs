@@ -2,7 +2,7 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 
-namespace Services.WorldGenerator
+namespace Services.NoiseGenerator
 {
 
 public struct NoiseGeneratorJob : IJobParallelFor

@@ -19,10 +19,10 @@ namespace Services
             ServiceLocator.Register<IWeldMap>(gameObject.AddComponent<WeldMap>()); 
             ServiceLocator.Register<IMapGenerator>(new MapGenerator());
             ServiceLocator.Register<IRepository>(new GameRepository());
-            //Last revision
             ServiceLocator.Register<ISceneLoader>(gameObject.AddComponent<SceneLoader>());
             ServiceLocator.Register<ICreateWorld>(new WorldDataGen());
             ServiceLocator.Register<IWorldData>(gameObject.AddComponent<WorldData>());
+            ServiceLocator.Register<INoiseService>(new NoiseServiceShader());
         }
     }
 }

@@ -1,14 +1,12 @@
 using Config;
 using Unity.Mathematics;
 using UnityEngine;
+using Services.Interfaces;
 
-namespace Services.WorldGenerator
+namespace Services
 {
-    public class NoiseGeneratorS 
+    public class NoiseServiceShader : INoiseService
     {
-        // Singleton
-        private static NoiseGeneratorS instance;
-        public static NoiseGeneratorS Instance => instance ??= new NoiseGeneratorS();
         // Load the compute shader
         private readonly ComputeShader computeShader = Resources.Load<ComputeShader>("NoiseGenerator");
         // Constants
