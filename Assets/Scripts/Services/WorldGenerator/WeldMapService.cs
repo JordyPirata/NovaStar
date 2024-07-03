@@ -1,7 +1,6 @@
 using Unity.Mathematics;
 using UnityEngine;
 using Map = Services.WorldGenerator.ChunkGrid<Services.WorldGenerator.ChunkObject>;
-using Unity.Burst;
 using Unity.VisualScripting;
 using System.Collections;
 using Services.Interfaces;
@@ -13,7 +12,7 @@ namespace Services
 /// This class is responsible for welding the chunks together
 /// </summary>
 
-public class WeldMap : MonoBehaviour, IWeldMap
+public class WeldMapService : MonoBehaviour, IWeldMap
 {
     public void StartService()
     {

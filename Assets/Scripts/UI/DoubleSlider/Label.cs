@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 #endregion
 
-namespace UI.DoubleSlider
+namespace UI
 {
     public class Label : MonoBehaviour
     {

@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UI.DoubleSlider;
 using UnityEngine.UI;
 using TMPro;
-using System;
 
+
+namespace UI
+{
 public class EditWorld : MonoBehaviour
 {
     public DoubleSlider temperatureSlider;
@@ -14,12 +15,13 @@ public class EditWorld : MonoBehaviour
     Image image;
 
     public GameObject Panel;
+    public Texture2D newTexture; // Referencia pública para asignar desde el editor de Unity.
+
     void Awake()
     {
         image = Panel.GetComponent<Image>();
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         temperatureSlider.OnValueChanged.AddListener(OnTemperatureChanged);
@@ -28,11 +30,24 @@ public class EditWorld : MonoBehaviour
 
     private void OnHumidityChanged(float arg0, float arg1)
     {
-        throw new NotImplementedException();
+        ChangePanelImage();
     }
 
     private void OnTemperatureChanged(float arg0, float arg1)
     {
-        throw new NotImplementedException();
+        // Implementación pendiente.
     }
+
+    // Método para cambiar la imagen del panel utilizando una Texture2D.
+    public void ChangePanelImage()
+    {
+        if (image != null && newTexture != null)
+        {
+            // Convierte la Texture2D a Sprite.
+            Sprite newSprite = Sprite.Create(newTexture, new Rect(0.0f, 0.0f, newTexture.width, newTexture.height), new Vector2(0.5f, 0.5f));
+            
+            image.sprite = newSprite; // Cambia la imagen del panel.
+        }
+    }
+}
 }

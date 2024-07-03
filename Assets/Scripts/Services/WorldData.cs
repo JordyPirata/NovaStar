@@ -32,4 +32,5 @@ namespace Services
         {
             return world.seed;
         }
-    }}
+    }
+}

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 #endregion
 
-namespace UI.DoubleSlider
+namespace UI
 {
     [RequireComponent(typeof(Slider))]
     public class SingleSlider : MonoBehaviour

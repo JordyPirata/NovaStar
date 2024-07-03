@@ -14,7 +14,7 @@ namespace Services
 /// This class is responsible for showing the chunks that are visible to the player
 /// </summary>
 
-public class MapGenerator : IMapGenerator
+public class MapGeneratorService : IMapGenerator
 {
     private bool isRunning = false;
     private static IPlayerInfo PlayerInfo => ServiceLocator.GetService<IPlayerInfo>();

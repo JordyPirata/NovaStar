@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 #endregion
 
-namespace UI.DoubleSlider
+namespace UI
 {
     [RequireComponent(typeof(RectTransform))]
     public class DoubleSlider : MonoBehaviour
