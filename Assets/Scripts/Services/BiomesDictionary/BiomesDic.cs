@@ -3,8 +3,14 @@ using System.Collections.Generic;
 using Models.Biomes;
 using Unity.Mathematics;
 using UnityEngine;
+using Services.Interfaces;
 
-public class BiomesDic 
+namespace Services
+{
+/// <summary>
+///  This class is a dictionary of biomes that can be used to get a biome by its type or by its humidity and temperature values.
+/// </summary>
+public class BiomesDic : IBiomeDic
 {
     private static Dictionary<Type, Biome> Biomes;
     private static void InitializeBiomes()
@@ -48,11 +54,9 @@ public class BiomesDic
                 temperatureRange = new float2(0.7f, 1.0f),
                 color = new Color(218, 165, 32) // #daa520 gold
             },
-            
-            
         };
     }
-    public static Biome GetBiome(Type type)
+    public Biome GetBiome(Type type)
     {
         if (Biomes == null)
         {
@@ -62,7 +66,7 @@ public class BiomesDic
         return Biomes!.TryGetValue(type, out var biome)? biome : null;
         
     }
-    public static Biome GetBiomeByValues(float humidity, float temperature)
+    public Biome GetBiomeByValues(float humidity, float temperature)
     {
         if (Biomes == null)
         {
@@ -79,4 +83,5 @@ public class BiomesDic
         return null;
     }
     
+}
 }

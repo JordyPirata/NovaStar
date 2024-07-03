@@ -23,5 +23,6 @@ public class ServiceInstaller : MonoBehaviour
         ServiceLocator.Register<IWorldData>(gameObject.AddComponent<WorldData>());
         // Last revision
         ServiceLocator.Register<INoiseService>(new NoiseServiceShader());
+        ServiceLocator.Register<IBiomeDic>(new BiomesDic());
     }
 }

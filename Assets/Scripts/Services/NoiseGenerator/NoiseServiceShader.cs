@@ -88,6 +88,12 @@ namespace Services
 
             return computeBuffer;
         }
+
+        public float[,] GenerateNoiseMap(float2 singleCoords, int width, int height)
+        {
+            throw new System.NotImplementedException();
+        }
+
         // Initialize the constants
         private readonly float[] Gradients2D =
         {
