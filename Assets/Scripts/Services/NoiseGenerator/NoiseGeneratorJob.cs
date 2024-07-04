@@ -1,10 +1,11 @@
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 
 namespace Services.NoiseGenerator
 {
-
+[BurstCompile]
 public struct NoiseGeneratorJob : IJobParallelFor
 {
     public NativeArray<float2> AllCoords;

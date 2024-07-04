@@ -89,7 +89,7 @@ namespace Services
             return computeBuffer;
         }
 
-        public float[,] GenerateNoiseMap(float2 singleCoords, int width, int height)
+        public float[,] GenerateNoise(float2 singleCoords, int width, int height)
         {
             throw new System.NotImplementedException();
         }
