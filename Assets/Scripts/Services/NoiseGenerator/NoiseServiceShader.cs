@@ -2,6 +2,7 @@ using Config;
 using Unity.Mathematics;
 using UnityEngine;
 using Services.Interfaces;
+using UnityEngine.Diagnostics;
 
 namespace Services
 {
@@ -9,11 +10,6 @@ namespace Services
     {
         // Load the compute shader
         private readonly ComputeShader computeShader = Resources.Load<ComputeShader>("NoiseGenerator");
-        // Constants
-        private const int width = ChunkConfig.width;
-        private const int depth = ChunkConfig.depth;
-        private readonly int length = ChunkConfig.Length;
-        private readonly int seed = ChunkConfig.seed;
         private static int kernel;
         // Shader properties
         private static readonly int GradientsId = Shader.PropertyToID("GRADIENTS_2D");
@@ -21,16 +17,103 @@ namespace Services
         private static readonly int CoordsId = Shader.PropertyToID("coords");
         private static readonly int ValuesID = Shader.PropertyToID("values");
         private static readonly int Seed = Shader.PropertyToID("seed");
+        private static readonly int Numthreads = Shader.PropertyToID("threads");
+
         public float[] GenerateNoise(float2 coords)
         {
             // Get the kernel
             kernel = computeShader.FindKernel("CSMain");
             // Calculate the initial x and y
-			var iCoordX = (int)coords.x * width - (int)coords.x;
-			var iCoordY = (int)coords.y * depth - (int)coords.y;
+			var iCoordX = (int)coords.x * ChunkConfig.width - (int)coords.x;
+			var iCoordY = (int)coords.y * ChunkConfig.depth - (int)coords.y;
+
+            // Loop through the coordinates
+            var allCoords = LoopCoords(ChunkConfig.Length, iCoordX, iCoordY, ChunkConfig.width, ChunkConfig.depth);
+            var heights = new float[ChunkConfig.Length];
+
+            // Initialize the buffers 
+            var coordsBuffer = InitCoordsBuffer(allCoords);
+            var valuesBuffer = new ComputeBuffer(ChunkConfig.Length, sizeof(float));
+
+            // Initialize the Gradients and RandVecs buffers for Vulkan compatibility
+
+            var Gradients2DBuffer = new ComputeBuffer(Gradients2D.Length, sizeof(float));
+                Gradients2DBuffer.SetData(Gradients2D);
+
+            var RandVecs2DBuffer = new ComputeBuffer(RandVecs2D.Length, sizeof(float));
+                RandVecs2DBuffer.SetData(RandVecs2D);
+			
+            // Set the Compute Shader Buffer
+            computeShader.SetBuffer(kernel, CoordsId, coordsBuffer);
+            computeShader.SetBuffer(kernel, ValuesID, valuesBuffer);
+            computeShader.SetBuffer(kernel, GradientsId, Gradients2DBuffer);
+            computeShader.SetBuffer(kernel, RandVecsId, RandVecs2DBuffer);
+            computeShader.SetInt(Seed, ChunkConfig.seed);
+            computeShader.SetInt(Numthreads, 257);
+
+            // Dispatch the shader
+            computeShader.Dispatch(kernel, 257, 1, 1); 
             
-            var allCoords = new float2[length];
-            var heights = new float[length];
+            // Get the data from the buffer
+            valuesBuffer.GetData(heights);
+            
+            // Release the buffers
+            coordsBuffer.Release();
+            valuesBuffer.Release();
+            Gradients2DBuffer.Release();
+            RandVecs2DBuffer.Release();
+
+            return heights;
+        }
+        public float[,] GenerateNoise(float2 singleCoords, int width, int height)
+        {
+            // Get the kernel
+            kernel = computeShader.FindKernel("CSMain");
+            // Calculate the initial x and y
+            var iCoordX = (int)singleCoords.x * width;
+            var iCoordY = (int)singleCoords.y * height;
+            int Length = width * height;
+
+            // Loop through the coordinates
+            var allCoords = LoopCoords(Length, iCoordX, iCoordY, width, height);
+            var heights = new float[Length];
+
+            // Initialize the buffer
+            var coordsBuffer = InitCoordsBuffer(allCoords);
+            var valuesBuffer = new ComputeBuffer(Length, sizeof(float));
+
+            var Gradients2DBuffer = new ComputeBuffer(Gradients2D.Length, sizeof(float));
+                Gradients2DBuffer.SetData(Gradients2D);
+
+            var RandVecs2DBuffer = new ComputeBuffer(RandVecs2D.Length, sizeof(float));
+                RandVecs2DBuffer.SetData(RandVecs2D);
+            // Calculate max factor for assigning threads
+            var maxFactor = MaxFactor(Length);
+            int numthreads = Length / maxFactor;
+
+            // Set the Compute Shader Buffer
+            computeShader.SetBuffer(kernel, CoordsId, coordsBuffer);
+            computeShader.SetBuffer(kernel, ValuesID, valuesBuffer);
+            computeShader.SetBuffer(kernel, GradientsId, Gradients2DBuffer);
+            computeShader.SetBuffer(kernel, RandVecsId, RandVecs2DBuffer);
+            computeShader.SetInt(Seed, ChunkConfig.seed);
+            computeShader.SetInt(Numthreads, numthreads);
+            computeShader.Dispatch(kernel, numthreads, 1, 1); 
+
+            // Get the data from the buffer
+            valuesBuffer.GetData(heights);
+            
+            // Release the buffers
+            coordsBuffer.Release();
+            valuesBuffer.Release();
+            Gradients2DBuffer.Release();
+            RandVecs2DBuffer.Release();
+
+            return Util.TransferData.TransferDataFromArrayTo2DArray(heights, width, height);
+        }
+        private float2[] LoopCoords(int Length, int iCoordX, int iCoordY, int width, int depth)
+        {
+            var allCoords = new float2[Length];
             int initialY = iCoordY, i = 0;
 
 			for (var y = 0; y < width; y++)
@@ -47,36 +130,7 @@ namespace Services
 				// Reset the y
 				iCoordY = initialY;
 			}
-
-            // Initialize the buffer
-            var coordsBuffer = InitCoordsBuffer(allCoords);
-            var valuesBuffer = new ComputeBuffer(length, sizeof(float));
-
-            var Gradients2DBuffer = new ComputeBuffer(Gradients2D.Length, sizeof(float));
-                Gradients2DBuffer.SetData(Gradients2D);
-
-            var RandVecs2DBuffer = new ComputeBuffer(RandVecs2D.Length, sizeof(float));
-                RandVecs2DBuffer.SetData(RandVecs2D);
-			
-            // Set the buffer
-            computeShader.SetBuffer(kernel, CoordsId, coordsBuffer);
-            computeShader.SetBuffer(kernel, ValuesID, valuesBuffer);
-            computeShader.SetBuffer(kernel, GradientsId, Gradients2DBuffer);
-            computeShader.SetBuffer(kernel, RandVecsId, RandVecs2DBuffer);
-            computeShader.SetInt(Seed, seed);
-            // Dispatch the shader
-            computeShader.Dispatch(kernel, Mathf.CeilToInt(length / 257), 1, 1); 
-            
-            // Get the data from the buffer
-            valuesBuffer.GetData(heights);
-            
-            // Release the buffers
-            coordsBuffer.Release();
-            valuesBuffer.Release();
-            Gradients2DBuffer.Release();
-            RandVecs2DBuffer.Release();
-
-            return heights;
+            return allCoords;
         }
         
         private ComputeBuffer InitCoordsBuffer(float2[] data)
@@ -88,11 +142,23 @@ namespace Services
 
             return computeBuffer;
         }
-
-        public float[,] GenerateNoise(float2 singleCoords, int width, int height)
+        
+        public int MaxFactor(int number)
         {
-            throw new System.NotImplementedException();
+            // Loop through the number
+            for (int i = number / 2; i > 1; i--)
+            {
+                // Check if the number is divisible by i
+                if (number % i == 0)
+                {
+                    // Return the factor
+                    return i;
+                }
+            }
+            // Return 1 if the number is prime
+            return 1;
         }
+        
 
         // Initialize the constants
         private readonly float[] Gradients2D =
