@@ -4,6 +4,7 @@ using Models;
 using Services;
 using Services.Interfaces;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.UI;
@@ -65,10 +66,14 @@ namespace UI
             game = await GameGenerator.LoadWorld(directoryPath);
             TMPro.text = game.Name;
         }
+        public void OnSelect()
+        {
+            // Set the world
+            ServiceLocator.GetService<IWorldData>().SetWorld(game);
+            Debug.Log($"World Selected {game.Name}");
+        }
         public void PlayGame()
         {
-            // Load the game
-            ServiceLocator.GetService<IWorldData>().SetWorld(game);
             ServiceLocator.GetService<ISceneLoader>().LoadScene(ISceneLoader.Game);
         
         }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Services;
+using Unity.Mathematics;
 
 
 namespace UI
@@ -15,7 +17,7 @@ public class EditWorld : MonoBehaviour
     Image image;
 
     public GameObject Panel;
-    public Texture2D newTexture; // Referencia pública para asignar desde el editor de Unity.
+    public Texture2D newTexture;
 
     public void Awake()
     {
@@ -24,13 +26,15 @@ public class EditWorld : MonoBehaviour
 
     public void Start()
     {
+        newTexture = ServiceLocator.GetService<ITextureMapGen>().GenerateTextureMap(new float2(0, 0), 300, 300);
         temperatureSlider.OnValueChanged.AddListener(OnTemperatureChanged);
         humiditySlider.OnValueChanged.AddListener(OnHumidityChanged);
+        ChangePanelImage();
     }
 
     private void OnHumidityChanged(float arg0, float arg1)
     {
-        ChangePanelImage();
+        
     }
 
     private void OnTemperatureChanged(float arg0, float arg1)

@@ -1,7 +1,5 @@
 using Services.Interfaces;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
-using UnityEngine.UI;
 using Unity.Mathematics;
 using Config;
 
@@ -18,13 +16,14 @@ namespace Services
                 filterMode = FilterMode.Point,
                 wrapMode = TextureWrapMode.Clamp
             };
-            texture2D.Apply();
             // Get reference of the state of the noise service
-            NoiseServiceState state = new()
-            {
-                fractalType = FractalType.FBm,
-            };
+            NoiseServiceState state = new();
             NoiseService.SetState(state);
+            state.seed = 0;
+            state.noiseType = NoiseType.OpenSimplex2;
+            state.fractalType = FractalType.FBm;
+            state.octaves = 6;
+            state.frequency = 0.001f;
             var temperatureMap = NoiseService.GenerateNoise(coords, width, height);
 
             for (var x = 0; x < width; x++)
