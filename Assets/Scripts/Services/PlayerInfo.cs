@@ -10,7 +10,7 @@ namespace Services
 /// <summary>
 /// MonoState Service that holds the actual Player data
 /// </summary>
-public class PlayerInfo : MonoBehaviour , IPlayerInfo
+public class PlayerInfo : MonoBehaviour, IPlayerInfo
 {
     private Transform player;
     [SerializeField]

@@ -14,7 +14,7 @@ namespace Services
         public void SetWorld(World world)
         {
             WorldData.world = world;
-            ChunkConfig.seed = world.seed;
+            ChunkConfig.Seed = world.seed;
         }
         public string GetWorldDirectory()
         {

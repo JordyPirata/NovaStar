@@ -17,12 +17,12 @@ public class EditWorld : MonoBehaviour
     public GameObject Panel;
     public Texture2D newTexture; // Referencia pública para asignar desde el editor de Unity.
 
-    void Awake()
+    public void Awake()
     {
         image = Panel.GetComponent<Image>();
     }
 
-    void Start()
+    public void Start()
     {
         temperatureSlider.OnValueChanged.AddListener(OnTemperatureChanged);
         humiditySlider.OnValueChanged.AddListener(OnHumidityChanged);

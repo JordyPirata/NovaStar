@@ -11,5 +11,7 @@ namespace Services.Interfaces
         /// Generate noise Map
         /// </summary> 
         float[,] GenerateNoise(float2 coords, int width, int height);
+
+        public void SetState(NoiseServiceState state);
     }
 }

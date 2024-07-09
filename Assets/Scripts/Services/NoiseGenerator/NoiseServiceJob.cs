@@ -93,5 +93,9 @@ namespace Services
 			allCoords.Dispose();
 			return Util.TransferData.TransferDataFromArrayTo2DArray(result, width, height);
 		}
-	}
+        public void SetState(NoiseServiceState state)
+        {
+            throw new System.NotImplementedException();
+        }
+    }
 }

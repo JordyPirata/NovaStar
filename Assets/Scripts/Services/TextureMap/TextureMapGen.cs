@@ -2,23 +2,41 @@ using Services.Interfaces;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
+using Unity.Mathematics;
+using Config;
 
 namespace Services
 {
-    public class TextureMapGen
+    public class TextureMapGen : ITextureMapGen
     {
-        private readonly INoiseService noiseService = ServiceLocator.GetService<INoiseService>();
-        private readonly IBiomeDic biomeDic = ServiceLocator.GetService<IBiomeDic>();
-        public Texture2D Texture2D { get; private set; }
-
-        public void Init ()
+        private readonly INoiseService NoiseService = ServiceLocator.GetService<INoiseService>();
+        private readonly IBiomeDic BiomeDic = ServiceLocator.GetService<IBiomeDic>();
+        public Texture2D GenerateTextureMap(float2 coords, int width, int height)
         {
-            Texture2D = new Texture2D(512, 512)
+            Texture2D texture2D = new(width, height)
             {
                 filterMode = FilterMode.Point,
                 wrapMode = TextureWrapMode.Clamp
             };
-            Texture2D.Apply();
+            texture2D.Apply();
+            // Get reference of the state of the noise service
+            NoiseServiceState state = new()
+            {
+                fractalType = FractalType.FBm,
+            };
+            NoiseService.SetState(state);
+            var temperatureMap = NoiseService.GenerateNoise(coords, width, height);
+
+            for (var x = 0; x < width; x++)
+            {
+                for (var y = 0; y < height; y++)
+                {
+                    var color = new Color(temperatureMap[x, y], temperatureMap[x, y], temperatureMap[x, y]);
+                    texture2D.SetPixel(x, y, color);
+                }
+            }
+            texture2D.Apply();
+            return texture2D;
         }
     }
 }

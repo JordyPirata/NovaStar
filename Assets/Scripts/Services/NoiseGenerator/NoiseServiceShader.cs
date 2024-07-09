@@ -2,7 +2,6 @@ using Config;
 using Unity.Mathematics;
 using UnityEngine;
 using Services.Interfaces;
-using UnityEngine.Diagnostics;
 
 namespace Services
 {
@@ -11,14 +10,23 @@ namespace Services
         // Load the compute shader
         private readonly ComputeShader computeShader = Resources.Load<ComputeShader>("NoiseGenerator");
         private static int kernel;
+
+        public NoiseServiceState state;
+        
         // Shader properties
         private static readonly int GradientsId = Shader.PropertyToID("GRADIENTS_2D");
         private static readonly int RandVecsId = Shader.PropertyToID("RAND_VECS_2D");
         private static readonly int CoordsId = Shader.PropertyToID("coords");
         private static readonly int ValuesID = Shader.PropertyToID("values");
         private static readonly int Seed = Shader.PropertyToID("seed");
-        private static readonly int Numthreads = Shader.PropertyToID("threads");
-
+        private static readonly int NoiseType = Shader.PropertyToID("noise_type");
+        private static readonly int FractalType = Shader.PropertyToID("fractal_type");
+        private static readonly int Frequency = Shader.PropertyToID("frequency");
+        private static readonly int Octaves = Shader.PropertyToID("octaves");
+        private static readonly int Lacunarity = Shader.PropertyToID("lacunarity");
+        private static readonly int Gain = Shader.PropertyToID("gain");
+        
+        
         public float[] GenerateNoise(float2 coords)
         {
             // Get the kernel
@@ -48,8 +56,7 @@ namespace Services
             computeShader.SetBuffer(kernel, ValuesID, valuesBuffer);
             computeShader.SetBuffer(kernel, GradientsId, Gradients2DBuffer);
             computeShader.SetBuffer(kernel, RandVecsId, RandVecs2DBuffer);
-            computeShader.SetInt(Seed, ChunkConfig.seed);
-            computeShader.SetInt(Numthreads, 257);
+            computeShader.SetInt(Seed, ChunkConfig.Seed);
 
             // Dispatch the shader
             computeShader.Dispatch(kernel, 257, 1, 1); 
@@ -68,7 +75,7 @@ namespace Services
         public float[,] GenerateNoise(float2 singleCoords, int width, int height)
         {
             // Get the kernel
-            kernel = computeShader.FindKernel("CSMain");
+            kernel = computeShader.FindKernel("CSMain2");
             // Calculate the initial x and y
             var iCoordX = (int)singleCoords.x * width;
             var iCoordY = (int)singleCoords.y * height;
@@ -88,17 +95,21 @@ namespace Services
             var RandVecs2DBuffer = new ComputeBuffer(RandVecs2D.Length, sizeof(float));
                 RandVecs2DBuffer.SetData(RandVecs2D);
             // Calculate max factor for assigning threads
-            var maxFactor = MaxFactor(Length);
-            int numthreads = Length / maxFactor;
 
             // Set the Compute Shader Buffer
             computeShader.SetBuffer(kernel, CoordsId, coordsBuffer);
             computeShader.SetBuffer(kernel, ValuesID, valuesBuffer);
             computeShader.SetBuffer(kernel, GradientsId, Gradients2DBuffer);
             computeShader.SetBuffer(kernel, RandVecsId, RandVecs2DBuffer);
-            computeShader.SetInt(Seed, ChunkConfig.seed);
-            computeShader.SetInt(Numthreads, numthreads);
-            computeShader.Dispatch(kernel, numthreads, 1, 1); 
+            computeShader.SetInt(Seed, state.seed);
+            computeShader.SetInt(NoiseType, (int)state.noiseType);
+            computeShader.SetInt(FractalType, (int)state.fractalType);
+            computeShader.SetFloat(Frequency, state.frequency);
+            computeShader.SetInt(Octaves, state.octaves);
+            computeShader.SetFloat(Lacunarity, state.lacunarity);
+            computeShader.SetFloat(Gain, state.gain);
+                
+            computeShader.Dispatch(kernel, Mathf.CeilToInt(Length / 20), 1, 1); 
 
             // Get the data from the buffer
             valuesBuffer.GetData(heights);
@@ -142,23 +153,11 @@ namespace Services
 
             return computeBuffer;
         }
-        
-        public int MaxFactor(int number)
+        // Get reference of the state
+        public void SetState(NoiseServiceState state)
         {
-            // Loop through the number
-            for (int i = number / 2; i > 1; i--)
-            {
-                // Check if the number is divisible by i
-                if (number % i == 0)
-                {
-                    // Return the factor
-                    return i;
-                }
-            }
-            // Return 1 if the number is prime
-            return 1;
+            this.state = state;
         }
-        
 
         // Initialize the constants
         private readonly float[] Gradients2D =

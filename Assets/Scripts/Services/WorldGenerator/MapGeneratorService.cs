@@ -1,9 +1,7 @@
 using Unity.Mathematics;
 using UnityEngine;
 using Map = Services.WorldGenerator.ChunkGrid<Services.WorldGenerator.ChunkObject>;
-using Unity.Burst;
 using System.Threading.Tasks;
-using System;
 using Config;
 using Services.Interfaces;
 using Services.WorldGenerator;

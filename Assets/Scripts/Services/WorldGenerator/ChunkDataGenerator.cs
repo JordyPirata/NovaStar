@@ -46,7 +46,7 @@ public struct ChunkDataGenerator
                 ChunkName = chunkName,
                 width = ChunkConfig.width,
                 depth = ChunkConfig.depth,
-                height = ChunkConfig.height,
+                height = ChunkConfig.Height,
                 heights = NoiseGenerator.GenerateNoise(coord),
             };
             // Add the chunk to the list

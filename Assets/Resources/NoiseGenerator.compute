@@ -1,4 +1,5 @@
 #pragma kernel CSMain
+#pragma kernel CSMain2
 
 // Switch between using floats or doubles for input position
 typedef float FNLfloat;
@@ -1056,6 +1057,12 @@ void fnlDomainWarp2D(fnl_state state, inout FNLfloat x, inout FNLfloat y)
 StructuredBuffer<float2> coords;
 RWStructuredBuffer<float> values;
 int seed;
+int noise_type;
+int fractal_type;
+float frequency;
+int octaves;
+float lacunarity;
+float gain;
 
 // Initialize noise state
 fnl_state GetFnlState(int seed)
@@ -1079,4 +1086,20 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 
     // Gather noise data
     values[id.x] = fnlGetNoise2D(noise, coords[id.x].x, coords[id.x].y) * 0.5 + 0.5;
+}
+[numthreads(20,1,1)]
+
+void CSMain2 (uint3 id : SV_DispatchThreadID)
+{
+    fnl_state noise = fnlCreateState(seed);
+    noise.noise_type = noise_type;
+    noise.fractal_type = fractal_type;
+    noise.frequency = frequency;
+    noise.octaves = octaves;
+    noise.lacunarity = lacunarity;
+    noise.gain = gain;
+
+    // Gather noise data
+    values[id.x] = fnlGetNoise2D(noise, coords[id.x].x, coords[id.x].y) * 0.5 + 0.5;
+
 }
