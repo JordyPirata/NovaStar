@@ -10,8 +10,6 @@ namespace Services
         // Load the compute shader
         private readonly ComputeShader computeShader = Resources.Load<ComputeShader>("NoiseGenerator");
         private static int kernel;
-
-        public NoiseServiceState state;
         
         // Shader properties
         private static readonly int GradientsId = Shader.PropertyToID("GRADIENTS_2D");
@@ -25,7 +23,6 @@ namespace Services
         private static readonly int Octaves = Shader.PropertyToID("octaves");
         private static readonly int Lacunarity = Shader.PropertyToID("lacunarity");
         private static readonly int Gain = Shader.PropertyToID("gain");
-        
         
         public float[] GenerateNoise(float2 coords)
         {
@@ -72,7 +69,7 @@ namespace Services
 
             return heights;
         }
-        public float[,] GenerateNoise(float2 singleCoords, int width, int height)
+        public float[,] GenerateNoise(float2 singleCoords, int width, int height, NoiseServiceState state)
         {
             // Get the kernel
             kernel = computeShader.FindKernel("CSMain2");
@@ -152,11 +149,6 @@ namespace Services
             computeBuffer.SetData(data);
 
             return computeBuffer;
-        }
-        // Get reference of the state
-        public void SetState(NoiseServiceState state)
-        {
-            this.state = state;
         }
 
         // Initialize the constants

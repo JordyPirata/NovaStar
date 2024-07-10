@@ -8,33 +8,42 @@ namespace Services
     public class TextureMapGen : ITextureMapGen
     {
         private readonly INoiseService NoiseService = ServiceLocator.GetService<INoiseService>();
-        private readonly IBiomeDic BiomeDic = ServiceLocator.GetService<IBiomeDic>();
-        public Texture2D GenerateTextureMap(float2 coords, int width, int height)
+        private readonly IBiomeDic BiomeService = ServiceLocator.GetService<IBiomeDic>();
+        public Texture2D GenerateTextureMap(float2 coords, int width, int height, int _seed)
         {
             Texture2D texture2D = new(width, height)
             {
-                filterMode = FilterMode.Point,
+                filterMode = FilterMode.Trilinear,
                 wrapMode = TextureWrapMode.Clamp
             };
             // Get reference of the state of the noise service
-            NoiseServiceState state = new();
-            NoiseService.SetState(state);
-            state.seed = 0;
-            state.noiseType = NoiseType.OpenSimplex2;
-            state.fractalType = FractalType.FBm;
-            state.octaves = 6;
-            state.frequency = 0.001f;
-            var temperatureMap = NoiseService.GenerateNoise(coords, width, height);
+            NoiseServiceState state = new()
+            {
+                seed = _seed --,
+                noiseType = NoiseType.Perlin,
+                fractalType = FractalType.FBm,
+                octaves = 6,
+                frequency = 0.1f,
+            };
+            var temperatureMap = NoiseService.GenerateNoise(coords, width, height, state);
+            NoiseServiceState state2 = new()
+            {
+                seed = _seed ++,
+                noiseType = NoiseType.OpenSimplex2,
+                fractalType = FractalType.FBm,
+                octaves = 6,
+                frequency = 0.1f,
+            };
+            var moistureMap = NoiseService.GenerateNoise(coords, width, height, state2);
 
             for (var x = 0; x < width; x++)
             {
                 for (var y = 0; y < height; y++)
                 {
-                    var color = new Color(temperatureMap[x, y], temperatureMap[x, y], temperatureMap[x, y]);
+                    Color color = BiomeService.GetBiomeByValues(moistureMap[x, y], temperatureMap[x, y])?.color ?? Color.black;
                     texture2D.SetPixel(x, y, color);
                 }
             }
-            texture2D.Apply();
             return texture2D;
         }
     }

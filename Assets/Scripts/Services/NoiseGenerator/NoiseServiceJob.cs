@@ -93,7 +93,8 @@ namespace Services
 			allCoords.Dispose();
 			return Util.TransferData.TransferDataFromArrayTo2DArray(result, width, height);
 		}
-        public void SetState(NoiseServiceState state)
+
+        public float[,] GenerateNoise(float2 coords, int width, int height, NoiseServiceState state)
         {
             throw new System.NotImplementedException();
         }

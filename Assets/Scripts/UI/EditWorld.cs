@@ -26,7 +26,8 @@ public class EditWorld : MonoBehaviour
 
     public void Start()
     {
-        newTexture = ServiceLocator.GetService<ITextureMapGen>().GenerateTextureMap(new float2(0, 0), 300, 300);
+        newTexture = ServiceLocator.GetService<ITextureMapGen>().GenerateTextureMap(new float2(0, 0), 200, 200, 1);
+        newTexture.Apply();
         temperatureSlider.OnValueChanged.AddListener(OnTemperatureChanged);
         humiditySlider.OnValueChanged.AddListener(OnHumidityChanged);
         ChangePanelImage();
