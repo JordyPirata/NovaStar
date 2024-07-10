@@ -19,7 +19,7 @@ namespace Services
             // Get reference of the state of the noise service
             NoiseServiceState state = new()
             {
-                seed = _seed --,
+                seed = _seed - 1,
                 noiseType = NoiseType.Perlin,
                 fractalType = FractalType.FBm,
                 octaves = 6,
@@ -28,7 +28,7 @@ namespace Services
             var temperatureMap = NoiseService.GenerateNoise(coords, width, height, state);
             NoiseServiceState state2 = new()
             {
-                seed = _seed ++,
+                seed = _seed + 1,
                 noiseType = NoiseType.OpenSimplex2,
                 fractalType = FractalType.FBm,
                 octaves = 6,
@@ -40,7 +40,7 @@ namespace Services
             {
                 for (var y = 0; y < height; y++)
                 {
-                    Color color = BiomeService.GetBiomeByValues(moistureMap[x, y], temperatureMap[x, y])?.color ?? Color.black;
+                    Color32 color = BiomeService.GetBiomeByValues(moistureMap[x, y], temperatureMap[x, y])?.color ?? new Color32(0, 0, 0, 255);
                     texture2D.SetPixel(x, y, color);
                 }
             }

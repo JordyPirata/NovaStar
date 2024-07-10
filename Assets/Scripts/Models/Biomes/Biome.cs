@@ -7,6 +7,6 @@ namespace Models.Biomes
     {
         public float2 humidityRange;
         public float2 temperatureRange;
-        public Color color;
+        public Color32 color;
     }
 }
