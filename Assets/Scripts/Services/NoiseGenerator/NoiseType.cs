@@ -1,4 +1,4 @@
-﻿namespace Config
+﻿namespace Services.NoiseGenerator
 {
     public enum NoiseType 
     { 

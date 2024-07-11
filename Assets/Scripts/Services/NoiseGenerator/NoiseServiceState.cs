@@ -1,10 +1,11 @@
 using System;
-using Config;
+using Services.NoiseGenerator;
 
 namespace Services
 {
     public class NoiseServiceState
     {
+        public Kernel kernel = Kernel.HumidityNoise;
         public int seed = 1337;
         public NoiseType noiseType = NoiseType.OpenSimplex2;
         public FractalType fractalType = FractalType.None;

@@ -1,7 +1,7 @@
 using Services.Interfaces;
 using UnityEngine;
 using Unity.Mathematics;
-using Config;
+using Services.NoiseGenerator;
 
 namespace Services
 {
@@ -19,20 +19,18 @@ namespace Services
             // Get reference of the state of the noise service
             NoiseServiceState state = new()
             {
+                kernel = Kernel.TempNoise,
                 seed = _seed - 1,
                 noiseType = NoiseType.Perlin,
                 fractalType = FractalType.FBm,
-                octaves = 6,
-                frequency = 0.1f,
             };
             var temperatureMap = NoiseService.GenerateNoise(coords, width, height, state);
             NoiseServiceState state2 = new()
             {
+                kernel = Kernel.HumidityNoise,
                 seed = _seed + 1,
                 noiseType = NoiseType.OpenSimplex2,
                 fractalType = FractalType.FBm,
-                octaves = 6,
-                frequency = 0.1f,
             };
             var moistureMap = NoiseService.GenerateNoise(coords, width, height, state2);
 

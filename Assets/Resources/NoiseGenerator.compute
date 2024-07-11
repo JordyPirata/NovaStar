@@ -1,5 +1,6 @@
 #pragma kernel CSMain
-#pragma kernel CSMain2
+#pragma kernel HumidityNoise
+#pragma kernel TempNoise
 
 // Switch between using floats or doubles for input position
 typedef float FNLfloat;
@@ -1087,9 +1088,10 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     // Gather noise data
     values[id.x] = fnlGetNoise2D(noise, coords[id.x].x, coords[id.x].y) * 0.5 + 0.5;
 }
+
 [numthreads(20,1,1)]
 
-void CSMain2 (uint3 id : SV_DispatchThreadID)
+void HumidityNoise (uint3 id : SV_DispatchThreadID)
 {
     fnl_state noise = fnlCreateState(seed);
     noise.noise_type = noise_type;
@@ -1103,3 +1105,26 @@ void CSMain2 (uint3 id : SV_DispatchThreadID)
     values[id.x] = fnlGetNoise2D(noise, coords[id.x].x, coords[id.x].y) * 0.5 + 0.5;
 
 }
+
+float CosFunction(float x, float size)
+{
+    return cos(x* 3.14159265f / size);
+}
+
+[numthreads(20,1,1)]
+
+void TempNoise (uint3 id : SV_DispatchThreadID)
+{
+    fnl_state noise = fnlCreateState(seed);
+    noise.noise_type = noise_type;
+    noise.fractal_type = fractal_type;
+    noise.frequency = frequency;
+    noise.octaves = octaves;
+    noise.lacunarity = lacunarity;
+    noise.gain = gain;
+
+    // Gather noise data
+    values[id.x] = (fnlGetNoise2D(noise, coords[id.x].x, coords[id.x].y) - CosFunction(coords[id.x].x, 50))* 0.314159265f + 0.5;
+
+}
+

@@ -72,7 +72,7 @@ namespace Services
         public float[,] GenerateNoise(float2 singleCoords, int width, int height, NoiseServiceState state)
         {
             // Get the kernel
-            kernel = computeShader.FindKernel("CSMain2");
+            kernel = computeShader.FindKernel(state.kernel.ToString());
             // Calculate the initial x and y
             var iCoordX = (int)singleCoords.x * width;
             var iCoordY = (int)singleCoords.y * height;
