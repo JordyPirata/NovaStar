@@ -5942,7 +5942,7 @@ PrefabInstance:
     - target: {fileID: 114000014059051830, guid: 993056a060aa043d5b3070e8f953f603,
         type: 3}
       propertyPath: _maxValue
-      value: 1
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 114000014059051830, guid: 993056a060aa043d5b3070e8f953f603,
         type: 3}
@@ -5958,6 +5958,11 @@ PrefabInstance:
         type: 3}
       propertyPath: _wholeNumbers
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000014059051830, guid: 993056a060aa043d5b3070e8f953f603,
+        type: 3}
+      propertyPath: _initialMaxValue
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 114000014059051830, guid: 993056a060aa043d5b3070e8f953f603,
         type: 3}

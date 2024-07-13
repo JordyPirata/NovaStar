@@ -1124,7 +1124,7 @@ void TempNoise (uint3 id : SV_DispatchThreadID)
     noise.gain = gain;
 
     // Gather noise data
-    values[id.x] = (fnlGetNoise2D(noise, coords[id.x].x, coords[id.x].y) - CosFunction(coords[id.x].x, 50))* 0.314159265f + 0.5;
+    values[id.x] = (fnlGetNoise2D(noise, coords[id.x].x, coords[id.x].y) - CosFunction(coords[id.x].x, 100))* 0.25f + 0.5;
 
 }
 
