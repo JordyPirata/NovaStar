@@ -18,7 +18,6 @@ namespace UI
         [SerializeField] private RectTransform _fillArea;
 
         [Header("Configuration")]
-        [SerializeField] private bool _setupOnStart;
         [SerializeField] private float _minValue;
         [SerializeField] private float _maxValue;
         [SerializeField] private float _minDistance;
@@ -83,10 +82,6 @@ namespace UI
             }
 
             _fillRect = _fillArea.transform.GetChild(0).transform as RectTransform;
-        }
-        private void Start()
-        {
-            if (!_setupOnStart) { return; }
             Setup(_minValue, _maxValue, _initialMinValue, _initialMaxValue);
         }
 

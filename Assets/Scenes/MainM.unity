@@ -132,7 +132,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1000014065899200, guid: 993056a060aa043d5b3070e8f953f603, type: 3}
       propertyPath: m_Name
-      value: DoubleSlider (2)
+      value: TemperatureSlider
       objectReference: {fileID: 0}
     - target: {fileID: 114000010864452518, guid: 993056a060aa043d5b3070e8f953f603,
         type: 3}
@@ -207,7 +207,7 @@ PrefabInstance:
     - target: {fileID: 114000014059051830, guid: 993056a060aa043d5b3070e8f953f603,
         type: 3}
       propertyPath: _wholeNumbers
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114000014059051830, guid: 993056a060aa043d5b3070e8f953f603,
         type: 3}
@@ -5263,6 +5263,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1140382367}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1024442097 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114000014059051830, guid: 993056a060aa043d5b3070e8f953f603,
+    type: 3}
+  m_PrefabInstance: {fileID: 1140382367}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a66396f9ac4e41338e97ef9c375ad7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1029605538
 GameObject:
   m_ObjectHideFlags: 0
@@ -5803,7 +5815,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1000014065899200, guid: 993056a060aa043d5b3070e8f953f603, type: 3}
       propertyPath: m_Name
-      value: DoubleSlider (1)
+      value: HumiditySlider
       objectReference: {fileID: 0}
     - target: {fileID: 114000010864452518, guid: 993056a060aa043d5b3070e8f953f603,
         type: 3}
@@ -5878,7 +5890,7 @@ PrefabInstance:
     - target: {fileID: 114000014059051830, guid: 993056a060aa043d5b3070e8f953f603,
         type: 3}
       propertyPath: _wholeNumbers
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114000014059051830, guid: 993056a060aa043d5b3070e8f953f603,
         type: 3}
@@ -6418,8 +6430,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25d45e9f2c0aeb94e801ec44895fff21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  temperatureSlider: {fileID: 0}
-  humiditySlider: {fileID: 0}
+  temperatureSlider: {fileID: 1920279610}
+  humiditySlider: {fileID: 1024442097}
   Panel: {fileID: 1381986987}
   newTexture: {fileID: 0}
 --- !u!1 &1303498474
@@ -9161,6 +9173,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1916534924}
   m_CullTransparentMesh: 1
+--- !u!114 &1920279610 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114000014059051830, guid: 993056a060aa043d5b3070e8f953f603,
+    type: 3}
+  m_PrefabInstance: {fileID: 30385801}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a66396f9ac4e41338e97ef9c375ad7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1941766065
 GameObject:
   m_ObjectHideFlags: 0

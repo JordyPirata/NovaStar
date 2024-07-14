@@ -71,7 +71,7 @@ namespace UI
         protected virtual void UpdateLabel()
         {
             if (_label == null) { return; }
-            _label.Text = Value.ToString();
+            _label.Text = Value.ToString("F0");
         }
     }
 }

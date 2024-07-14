@@ -1,15 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Services;
 using Unity.Mathematics;
-
+using Util;
 
 namespace UI
 {
-public class EditWorld : MonoBehaviour
+    public class EditWorld : MonoBehaviour
 {
     public DoubleSlider temperatureSlider;
     public DoubleSlider humiditySlider;
@@ -26,21 +24,35 @@ public class EditWorld : MonoBehaviour
 
     public void Start()
     {
-        newTexture = ServiceLocator.GetService<ITextureMapGen>().GenerateTextureMap(new float2(0, 0), 200, 200, 1);
+        TextureMapState state = new()
+        {
+            seed = 0,
+            width = 200,
+            height = 200,
+            coords = new float2(0, 0),
+            temperatureRange = new float2(-10, 30),
+            humidityRange = new float2(0, 400)
+        };
+        newTexture = ServiceLocator.GetService<ITextureMapGen>().GenerateTextureMap(state);
         newTexture.Apply();
-        temperatureSlider.OnValueChanged.AddListener(OnTemperatureChanged);
-        humiditySlider.OnValueChanged.AddListener(OnHumidityChanged);
+        EventHandler handler = new(temperatureSlider.OnValueChanged, humiditySlider.OnValueChanged);
+        handler.OnValueChanged.AddListener(OnValueChanged);
         ChangePanelImage();
     }
 
-    private void OnHumidityChanged(float arg0, float arg1)
+    private void OnValueChanged(float2 t, float2 h)
     {
-        
-    }
-
-    private void OnTemperatureChanged(float arg0, float arg1)
-    {
-        // Implementación pendiente.
+        TextureMapState state = new()
+        {
+            seed = 0,
+            width = 200,
+            height = 200,
+            coords = new float2(0, 0),
+            temperatureRange = t,
+            humidityRange = h
+        };
+        newTexture = ServiceLocator.GetService<ITextureMapGen>().GenerateTextureMap(state);
+        newTexture.Apply();
     }
 
     // Método para cambiar la imagen del panel utilizando una Texture2D.
