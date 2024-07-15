@@ -5,7 +5,7 @@ namespace Util
 {
     public class EventHandler
     {
-        public UnityEvent<float2, float2> OnValueChanged;
+        public UnityEvent<float2, float2> OnValueChanged = new();
         public float2 lastTemperature = new(-10, 30);
         public float2 lastHumidity = new(0, 400);
         public EventHandler(UnityEvent<float, float> temperatureChanged, UnityEvent<float, float> humidityChanged)

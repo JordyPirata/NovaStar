@@ -7,7 +7,7 @@ namespace Services
         public int width;
         public int height;
         public float2 coords;
-        public float2 temperatureRange;
-        public float2 humidityRange;
+        public int2 temperatureRange;
+        public int2 humidityRange;
     }
 }

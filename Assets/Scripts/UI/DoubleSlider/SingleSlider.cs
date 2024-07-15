@@ -1,5 +1,6 @@
 #region Includes
 
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -71,7 +72,7 @@ namespace UI
         protected virtual void UpdateLabel()
         {
             if (_label == null) { return; }
-            _label.Text = Value.ToString("F0");
+            _label.Text =((int)Value).ToString();
         }
     }
 }

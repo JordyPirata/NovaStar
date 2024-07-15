@@ -4,6 +4,7 @@ using TMPro;
 using Services;
 using Unity.Mathematics;
 using Util;
+using Unity.VisualScripting;
 
 namespace UI
 {
@@ -30,8 +31,8 @@ namespace UI
             width = 200,
             height = 200,
             coords = new float2(0, 0),
-            temperatureRange = new float2(-10, 30),
-            humidityRange = new float2(0, 400)
+            temperatureRange = new int2(-10, 30),
+            humidityRange = new int2(0, 400)
         };
         newTexture = ServiceLocator.GetService<ITextureMapGen>().GenerateTextureMap(state);
         newTexture.Apply();
@@ -42,14 +43,15 @@ namespace UI
 
     private void OnValueChanged(float2 t, float2 h)
     {
+        Debug.Log("Temperature: " + math.int2(t) + " Humidity: " + math.int2(h));
         TextureMapState state = new()
         {
             seed = 0,
             width = 200,
             height = 200,
             coords = new float2(0, 0),
-            temperatureRange = t,
-            humidityRange = h
+            temperatureRange = math.int2(t),
+            humidityRange = math.int2(h)
         };
         newTexture = ServiceLocator.GetService<ITextureMapGen>().GenerateTextureMap(state);
         newTexture.Apply();
