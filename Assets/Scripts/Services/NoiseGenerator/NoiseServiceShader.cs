@@ -23,6 +23,8 @@ namespace Services
         private static readonly int Octaves = Shader.PropertyToID("octaves");
         private static readonly int Lacunarity = Shader.PropertyToID("lacunarity");
         private static readonly int Gain = Shader.PropertyToID("gain");
+        private static readonly int Amplitude = Shader.PropertyToID("amplitude");
+        private static readonly int Distance = Shader.PropertyToID("distance");
         
         public float[] GenerateNoise(float2 coords)
         {
@@ -105,6 +107,8 @@ namespace Services
             computeShader.SetInt(Octaves, state.octaves);
             computeShader.SetFloat(Lacunarity, state.lacunarity);
             computeShader.SetFloat(Gain, state.gain);
+            computeShader.SetFloat(Amplitude, state.amplitude);
+            computeShader.SetFloat(Distance, state.distance);
                 
             computeShader.Dispatch(kernel, Mathf.CeilToInt(Length / 20), 1, 1); 
 

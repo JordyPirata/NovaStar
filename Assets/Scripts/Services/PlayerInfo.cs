@@ -16,7 +16,7 @@ public class PlayerInfo : MonoBehaviour, IPlayerInfo
     [SerializeField]
     private static float2 viewerCoordinate;
     private static float2 viewerPosition;
-    public void Init ()
+    public void Init()
     {
         var PlayerObj = GameObject.Find("Player");
         if (PlayerObj != null) // Verifica si el objeto Player fue encontrado

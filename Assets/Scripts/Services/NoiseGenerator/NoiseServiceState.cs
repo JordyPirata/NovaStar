@@ -13,5 +13,7 @@ namespace Services
         public float frequency = 0.01f;
         public float lacunarity = 2.0f;
         public float gain = 0.5f;
+        public float amplitude = .25f;
+        public float distance = 0.5f;
     }
 }
