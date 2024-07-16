@@ -2,6 +2,7 @@ using Services.Interfaces;
 using UnityEngine;
 using Unity.Mathematics;
 using Services.NoiseGenerator;
+using System;
 
 namespace Services
 {
@@ -13,12 +14,17 @@ namespace Services
         {
             int2 baseTempRange = new(-10, 30);
             int2 baseHumidityRange = new(0, 400);
-            // change state temperature range into range between 0 and .25f
-            float tempRange = ConvertRange(state.temperatureRange.x, baseTempRange.x, baseTempRange.y, 0, .25f);
-            float humRange = math.length(baseHumidityRange);
+            // change state temperature and humidity range to 0 - 0.25
+            float2 tempRange = ConvertRange(state.temperatureRange, baseTempRange);
+            float2 humidityRange = ConvertRange(state.humidityRange, baseHumidityRange);
+            Debug.Log("Temp Range: " + tempRange + " Humidity Range: " + humidityRange);
             
-            float TAmp = .25f, HAmp = .25f;
-            float Tdist = .5f, Hdist = .5f;
+            float TAmp = math.distance(tempRange.x, tempRange.y), HAmp = math.length(humidityRange);
+            float Tdist =TAmp*2 + math.distance(0, tempRange.x)* 2;
+            float Hdist = HAmp  + math.distance(0, humidityRange.x);
+
+            Debug.Log("Temp Amp: " + TAmp + " Humidity Amp: " + Tdist);
+            Debug.Log("Temp Dist: " + Tdist + " Humidity Dist: " + Hdist);
             Texture2D texture2D = new(state.width, state.height)
             {
                 filterMode = FilterMode.Trilinear,
@@ -31,6 +37,8 @@ namespace Services
                 seed = state.seed - 1,
                 noiseType = NoiseType.Perlin,
                 fractalType = FractalType.FBm,
+                octaves = 2,
+                frequency = 0.1f,
                 amplitude = TAmp,
                 distance = Tdist
             };
@@ -39,8 +47,10 @@ namespace Services
             {
                 kernel = Kernel.HumidityNoise,
                 seed = state.seed + 1,
-                noiseType = NoiseType.OpenSimplex2,
+                noiseType = NoiseType.Perlin,
                 fractalType = FractalType.FBm,
+                octaves = 2,
+                frequency = 0.1f,
                 amplitude = HAmp,
                 distance = Hdist
             };
@@ -56,10 +66,14 @@ namespace Services
             }
             return texture2D;
         }
-        (float, float) ConvertRange(float value, float2 range)
+        float2 ConvertRange(float2 value, float2 range)
         {
-            float amplitude = (float)((value - range.x) / (range.y - range.x) * 0.25);
-            return (amplitude, math.length(range));
+            value.x = Convert025(value.x, range);
+            value.y = Convert025(value.y, range);
+            return value;
+        }
+        float Convert025(float value, float2 range){
+            return (float)((value - range.x) / (range.y - range.x) * 0.25);
         }
     }
 }

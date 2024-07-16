@@ -55,6 +55,7 @@ namespace UI
         };
         newTexture = ServiceLocator.GetService<ITextureMapGen>().GenerateTextureMap(state);
         newTexture.Apply();
+        ChangePanelImage();
     }
 
     // Método para cambiar la imagen del panel utilizando una Texture2D.
