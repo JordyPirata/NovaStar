@@ -38,7 +38,6 @@ namespace Services
                 noiseType = NoiseType.Perlin,
                 fractalType = FractalType.FBm,
                 octaves = 2,
-                frequency = 0.1f,
                 amplitude = TAmp,
                 distance = Tdist
             };
@@ -50,7 +49,6 @@ namespace Services
                 noiseType = NoiseType.Perlin,
                 fractalType = FractalType.FBm,
                 octaves = 2,
-                frequency = 0.1f,
                 amplitude = HAmp,
                 distance = Hdist
             };
