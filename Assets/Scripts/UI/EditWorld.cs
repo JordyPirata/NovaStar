@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Services;
+using Services.Interfaces;
 using Unity.Mathematics;
 using Util;
 using Unity.VisualScripting;
@@ -16,7 +17,7 @@ namespace UI
     Image image;
 
     public GameObject Panel;
-    public Texture2D newTexture;
+    private Texture2D newTexture;
 
     public void Awake()
     {
@@ -59,7 +60,7 @@ namespace UI
     }
 
     // Método para cambiar la imagen del panel utilizando una Texture2D.
-    public void ChangePanelImage()
+    private void ChangePanelImage()
     {
         if (image != null && newTexture != null)
         {
@@ -68,6 +69,11 @@ namespace UI
             
             image.sprite = newSprite; // Cambia la imagen del panel.
         }
+    }
+
+    public void PlayGame()
+    {
+        ServiceLocator.GetService<ISceneLoader>().LoadScene(ISceneLoader.Game);
     }
 }
 }

@@ -66,14 +66,14 @@ namespace UI
             game = await GameGenerator.LoadWorld(directoryPath);
             TMPro.text = game.Name;
         }
-        public void OnSelect()
+        public void EditWorld()
         {
             // Set the world
             ServiceLocator.GetService<IWorldData>().SetWorld(game);
-            Debug.Log($"World Selected {game.Name}");
         }
         public void PlayGame()
         {
+            ServiceLocator.GetService<IWorldData>().SetWorld(game);
             ServiceLocator.GetService<ISceneLoader>().LoadScene(ISceneLoader.Game);
         
         }

@@ -83,6 +83,18 @@ MonoBehaviour:
     m_Key: NewWorld
     m_Metadata:
       m_Items: []
+  - m_Id: 57334774826496000
+    m_Key: Temperature
+    m_Metadata:
+      m_Items: []
+  - m_Id: 57334885799391232
+    m_Key: Humidity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 57345000745168896
+    m_Key: WorldSeed
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

@@ -86,6 +86,18 @@ MonoBehaviour:
     m_Localized: New World
     m_Metadata:
       m_Items: []
+  - m_Id: 57334774826496000
+    m_Localized: Temperature
+    m_Metadata:
+      m_Items: []
+  - m_Id: 57334885799391232
+    m_Localized: Humidity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 57345000745168896
+    m_Localized: World Seed
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -18,7 +18,7 @@ namespace Services
         }
         public string GetWorldDirectory()
         {
-            return world.Directory;   
+            return world.Directory;
         }
         public string GetWorldName()
         {
