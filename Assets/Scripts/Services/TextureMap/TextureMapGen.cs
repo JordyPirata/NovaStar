@@ -17,14 +17,11 @@ namespace Services
             // change state temperature and humidity range to 0 - 0.25
             float2 tempRange = ConvertRange(state.temperatureRange, baseTempRange);
             float2 humidityRange = ConvertRange(state.humidityRange, baseHumidityRange);
-            Debug.Log("Temp Range: " + tempRange + " Humidity Range: " + humidityRange);
             
             float TAmp = math.distance(tempRange.x, tempRange.y), HAmp = math.length(humidityRange);
             float Tdist =TAmp*2 + math.distance(0, tempRange.x)* 2;
             float Hdist = HAmp  + math.distance(0, humidityRange.x);
 
-            Debug.Log("Temp Amp: " + TAmp + " Humidity Amp: " + Tdist);
-            Debug.Log("Temp Dist: " + Tdist + " Humidity Dist: " + Hdist);
             Texture2D texture2D = new(state.width, state.height)
             {
                 filterMode = FilterMode.Trilinear,
@@ -42,6 +39,7 @@ namespace Services
                 distance = Tdist
             };
             var temperatureMap = NoiseService.GenerateNoise(state.coords, state.width, state.height, noiseState);
+            
             NoiseServiceState noiseState2 = new()
             {
                 kernel = Kernel.HumidityNoise,

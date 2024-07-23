@@ -2,6 +2,8 @@ using System.Collections;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
+using Services.Interfaces;
+using Services;
 
 namespace UI
 {
@@ -48,6 +50,7 @@ namespace UI
             worldPanel.editButton.onClick.AddListener(() => {
                     editPanel.SetActive(true);
                     gameObject.SetActive(false);
+                    ServiceLocator.GetService<IWorldData>().SetWorld(worldPanel.game);
                 }
             );
         }

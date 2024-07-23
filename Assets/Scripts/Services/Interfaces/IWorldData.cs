@@ -4,10 +4,11 @@ namespace Services.Interfaces
 {
     public interface IWorldData
     {
-        string GetWorldDirectory();
-        string GetWorldName();
-        string GetWorldPath();
-        int GetWorldSeed();
+        string GetDirectory();
+        string GetName();
+        string GetPath();
+        int GetSeed();
+        void SetSeed(int seed);
         void SetWorld(World world);
     }
 }

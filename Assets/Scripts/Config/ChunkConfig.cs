@@ -7,6 +7,5 @@ namespace Config
         public static int Length => width * depth;
         public const float maxViewDst = 750;
         public static int Height = 150;
-        public static int Seed = 1337;
     }
 }

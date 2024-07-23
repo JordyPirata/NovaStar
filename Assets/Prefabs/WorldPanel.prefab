@@ -758,6 +758,12 @@ MonoBehaviour:
     WorldPath: 
     Directory: 
     seed: 0
+    temperatureRange:
+      x: 0
+      y: 0
+    humidityRange:
+      x: 0
+      y: 0
   TMPro: {fileID: 684680317443867836}
   editButton: {fileID: 2825366439523463216}
   playButton: {fileID: 4640603755495987134}
@@ -1032,19 +1038,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4470918581695616278}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: WorldPanel, Assembly-CSharp
-        m_MethodName: CreateWorld
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &7832383838465605009
 GameObject:
   m_ObjectHideFlags: 0

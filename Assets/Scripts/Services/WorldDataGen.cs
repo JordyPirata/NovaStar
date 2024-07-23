@@ -12,7 +12,7 @@ namespace Services
     /// <summary>
     /// Create a new world or load an existing one
     /// </summary>
-    public class WorldDataGen : ICreateWorld
+    public class WorldDataGen : IWorldCRUD
     {
         private readonly IRepository GameRepository = ServiceLocator.GetService<IRepository>();
         private string message;

@@ -14,23 +14,28 @@ namespace Services
         public void SetWorld(World world)
         {
             WorldData.world = world;
-            ChunkConfig.Seed = world.seed;
+            Debug.Log("WorldData SetWorld: " + world.Name);
         }
-        public string GetWorldDirectory()
+        public string GetDirectory()
         {
             return world.Directory;
         }
-        public string GetWorldName()
+        public string GetName()
         {
             return world.Name;
         }
-        public string GetWorldPath()
+        public string GetPath()
         {
             return world.WorldPath;
         }
-        public int GetWorldSeed()
+        public int GetSeed()
         {
             return world.seed;
+        }
+
+        public void SetSeed(int seed)
+        {
+            world.seed = seed;
         }
     }
 }

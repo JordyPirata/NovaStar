@@ -14,10 +14,10 @@ namespace UI
 {
     public class WorldPanel : MonoBehaviour
     {
-        private ICreateWorld GameGenerator;
+        private IWorldCRUD GameGenerator;
         void Awake()
         {
-            GameGenerator = ServiceLocator.GetService<ICreateWorld>();
+            GameGenerator = ServiceLocator.GetService<IWorldCRUD>();
         }
 
         // Variables
@@ -40,7 +40,7 @@ namespace UI
         }
         public void CreateWorld()
         {
-            game = ServiceLocator.GetService<ICreateWorld>().CreateWorld(TMPro.text);
+            game = ServiceLocator.GetService<IWorldCRUD>().CreateWorld(TMPro.text);
         }
         public async void UpdateWorld()
         {
@@ -65,11 +65,6 @@ namespace UI
         {
             game = await GameGenerator.LoadWorld(directoryPath);
             TMPro.text = game.Name;
-        }
-        public void EditWorld()
-        {
-            // Set the world
-            ServiceLocator.GetService<IWorldData>().SetWorld(game);
         }
         public void PlayGame()
         {

@@ -10,6 +10,7 @@ namespace Services
         // Load the compute shader
         private readonly ComputeShader computeShader = Resources.Load<ComputeShader>("NoiseGenerator");
         private static int kernel;
+        private readonly IWorldData worldData = ServiceLocator.GetService<IWorldData>();
         
         // Shader properties
         private static readonly int GradientsId = Shader.PropertyToID("GRADIENTS_2D");
@@ -55,7 +56,7 @@ namespace Services
             computeShader.SetBuffer(kernel, ValuesID, valuesBuffer);
             computeShader.SetBuffer(kernel, GradientsId, Gradients2DBuffer);
             computeShader.SetBuffer(kernel, RandVecsId, RandVecs2DBuffer);
-            computeShader.SetInt(Seed, ChunkConfig.Seed);
+            computeShader.SetInt(Seed, worldData.GetSeed());
 
             // Dispatch the shader
             computeShader.Dispatch(kernel, 257, 1, 1); 

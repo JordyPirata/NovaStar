@@ -352,7 +352,7 @@ PrefabInstance:
     - target: {fileID: 224000012454744822, guid: 993056a060aa043d5b3070e8f953f603,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 10.687023
+      value: 12.392427
       objectReference: {fileID: 0}
     - target: {fileID: 224000012454744822, guid: 993056a060aa043d5b3070e8f953f603,
         type: 3}
@@ -362,7 +362,7 @@ PrefabInstance:
     - target: {fileID: 224000012604155856, guid: 993056a060aa043d5b3070e8f953f603,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 10.687023
+      value: 12.392427
       objectReference: {fileID: 0}
     - target: {fileID: 224000012604155856, guid: 993056a060aa043d5b3070e8f953f603,
         type: 3}
@@ -2405,7 +2405,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &402284717
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5468,7 +5468,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1029605539
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6197,7 +6197,7 @@ PrefabInstance:
     - target: {fileID: 224000012454744822, guid: 993056a060aa043d5b3070e8f953f603,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 10.687023
+      value: 12.392427
       objectReference: {fileID: 0}
     - target: {fileID: 224000012454744822, guid: 993056a060aa043d5b3070e8f953f603,
         type: 3}
@@ -6207,7 +6207,7 @@ PrefabInstance:
     - target: {fileID: 224000012604155856, guid: 993056a060aa043d5b3070e8f953f603,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 10.687023
+      value: 12.392427
       objectReference: {fileID: 0}
     - target: {fileID: 224000012604155856, guid: 993056a060aa043d5b3070e8f953f603,
         type: 3}
@@ -6491,8 +6491,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 341268999}
   m_HandleRect: {fileID: 341268998}
   m_Direction: 2
-  m_Value: 0.99999964
-  m_Size: 0.56053734
+  m_Value: 0.9999998
+  m_Size: 0.5605374
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -6726,7 +6726,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   temperatureSlider: {fileID: 1920279610}
   humiditySlider: {fileID: 1024442097}
-  Panel: {fileID: 1381986987}
+  InputSeed: {fileID: 2074680543}
+  image: {fileID: 1381986989}
 --- !u!1 &1303498474
 GameObject:
   m_ObjectHideFlags: 0
@@ -9944,7 +9945,7 @@ GameObject:
   - component: {fileID: 2074680544}
   - component: {fileID: 2074680543}
   m_Layer: 0
-  m_Name: InputField (TMP)
+  m_Name: SeedInputField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

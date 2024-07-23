@@ -18,7 +18,7 @@ public struct ChunkDataGenerator
 
     static string message;
     private static IRepository GameRepository => ServiceLocator.GetService<IRepository>();
-    private static string WorldDirectory => ServiceLocator.GetService<IWorldData>().GetWorldDirectory();
+    private static string WorldDirectory => ServiceLocator.GetService<IWorldData>().GetDirectory();
     private static INoiseService NoiseGenerator => ServiceLocator.GetService<INoiseService>();
 
     public static async Task<Chunk> Generate(float2 coord)

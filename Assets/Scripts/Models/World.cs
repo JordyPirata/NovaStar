@@ -1,3 +1,5 @@
+using Unity.Mathematics;
+
 namespace Models
 {
     [System.Serializable]
@@ -7,5 +9,7 @@ namespace Models
         public string WorldPath;
         public string Directory;
         public int seed;
+        public int2 temperatureRange;
+        public int2 humidityRange;
     }
 }

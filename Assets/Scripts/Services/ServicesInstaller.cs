@@ -19,7 +19,7 @@ public class ServiceInstaller : MonoBehaviour
         ServiceLocator.Register<IMapGenerator>(new MapGeneratorService());
         ServiceLocator.Register<IRepository>(new GameRepository());
         ServiceLocator.Register<ISceneLoader>(gameObject.AddComponent<SceneLoader>());
-        ServiceLocator.Register<ICreateWorld>(new WorldDataGen());
+        ServiceLocator.Register<IWorldCRUD>(new WorldDataGen());
         ServiceLocator.Register<IWorldData>(gameObject.AddComponent<WorldData>());
         // Last revision
         ServiceLocator.Register<INoiseService>(new NoiseServiceShader());

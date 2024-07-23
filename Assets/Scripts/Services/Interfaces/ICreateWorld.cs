@@ -3,7 +3,7 @@ using Models;
 
 namespace Services.Interfaces
 {
-    public interface ICreateWorld
+    public interface IWorldCRUD
     {
         public World CreateWorld(string GameName);
         public Task<World> UpdateWorld(World game, string newGameName);
