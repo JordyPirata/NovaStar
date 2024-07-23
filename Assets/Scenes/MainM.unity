@@ -352,7 +352,7 @@ PrefabInstance:
     - target: {fileID: 224000012454744822, guid: 993056a060aa043d5b3070e8f953f603,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 12.392427
+      value: 13.266998
       objectReference: {fileID: 0}
     - target: {fileID: 224000012454744822, guid: 993056a060aa043d5b3070e8f953f603,
         type: 3}
@@ -362,7 +362,7 @@ PrefabInstance:
     - target: {fileID: 224000012604155856, guid: 993056a060aa043d5b3070e8f953f603,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 12.392427
+      value: 13.266998
       objectReference: {fileID: 0}
     - target: {fileID: 224000012604155856, guid: 993056a060aa043d5b3070e8f953f603,
         type: 3}
@@ -6197,7 +6197,7 @@ PrefabInstance:
     - target: {fileID: 224000012454744822, guid: 993056a060aa043d5b3070e8f953f603,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 12.392427
+      value: 13.266998
       objectReference: {fileID: 0}
     - target: {fileID: 224000012454744822, guid: 993056a060aa043d5b3070e8f953f603,
         type: 3}
@@ -6207,7 +6207,7 @@ PrefabInstance:
     - target: {fileID: 224000012604155856, guid: 993056a060aa043d5b3070e8f953f603,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 12.392427
+      value: 13.266998
       objectReference: {fileID: 0}
     - target: {fileID: 224000012604155856, guid: 993056a060aa043d5b3070e8f953f603,
         type: 3}
@@ -6726,6 +6726,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   temperatureSlider: {fileID: 1920279610}
   humiditySlider: {fileID: 1024442097}
+  worldName: {fileID: 939131301}
   InputSeed: {fileID: 2074680543}
   image: {fileID: 1381986989}
 --- !u!1 &1303498474

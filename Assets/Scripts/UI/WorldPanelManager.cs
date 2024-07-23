@@ -30,7 +30,7 @@ namespace UI
             worldPanel.CreateWorld();
             worldPanel.SaveWorld();
             // Add liseners to the buttons
-            AddLiseners(worldPanel);
+            OnEditClick(worldPanel);
         }
         public void LoadWorlds()
         {
@@ -41,16 +41,18 @@ namespace UI
                 worldPanel.LoadWorld(directory);
                 worldPanel.SetWorld(worldPanel.game);
                 // Add liseners to the buttons
-                AddLiseners(worldPanel);
+                OnEditClick(worldPanel);
             }
             StartCoroutine(ScrollToTop());
         }
-        private void AddLiseners(WorldPanel worldPanel)
+        private void OnEditClick(WorldPanel worldPanel)
         {   
             worldPanel.editButton.onClick.AddListener(() => {
+                    ServiceLocator.GetService<IWorldData>().SetWorld(worldPanel.game);
                     editPanel.SetActive(true);
                     gameObject.SetActive(false);
-                    ServiceLocator.GetService<IWorldData>().SetWorld(worldPanel.game);
+                    editPanel.GetComponent<EditWorld>().InitializeWorld();
+                    
                 }
             );
         }
