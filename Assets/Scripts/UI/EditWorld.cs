@@ -25,9 +25,9 @@ public class EditWorld : MonoBehaviour
     {
         // Get the services
         worldData = ServiceLocator.GetService<IWorldData>();
-        textureMapGen = ServiceLocator.GetService<ITextureMapGen>(); 
-        
-        AddListeners();       
+        textureMapGen = ServiceLocator.GetService<ITextureMapGen>();
+
+        StartCoroutine(AddListeners());
     }
     public void InitializeWorld()
     {
@@ -58,8 +58,9 @@ public class EditWorld : MonoBehaviour
         // Generate the texture map
         StartCoroutine(GenerateImage());
     }
-    private void AddListeners()
+    IEnumerator AddListeners()
     {
+        yield return new WaitForSeconds(0.1f);
         // Add the listener to the sliders
         InputSeed.onValueChanged.AddListener(OnSeedValueChanged);
         EventHandler handler = new(temperatureSlider.OnValueChanged, humiditySlider.OnValueChanged);
@@ -93,7 +94,9 @@ public class EditWorld : MonoBehaviour
         int2 intT = math.int2(t), intH = math.int2(h);
         Debug.Log($"Temperature: {intT.x} - {intT.y}, Humidity: {intH.x} - {intH.y}");
         state.temperatureRange = intT;
+        worldData.SetTemperatureRange(intT);
         state.humidityRange = intH;
+        worldData.SetHumidityRange(intH);
         StartCoroutine(GenerateImage());
     }
 

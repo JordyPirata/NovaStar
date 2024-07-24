@@ -1,3 +1,4 @@
+using System;
 using Config;
 using Models;
 using Services.Interfaces;
@@ -11,7 +12,11 @@ namespace Services
     /// </summary>
     public class WorldData : MonoBehaviour, IWorldData
     {
-        private readonly IWorldCRUD worldCRUD;
+        private IWorldCRUD worldCRUD;
+        public void Awake()
+        {
+            worldCRUD = ServiceLocator.GetService<IWorldCRUD>();
+        }
         private static World world;
         public void SetWorld(World world)
         {
