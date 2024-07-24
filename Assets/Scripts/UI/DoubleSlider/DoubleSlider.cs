@@ -40,10 +40,12 @@ namespace UI
         public float MinValue
         {
             get { return _sliderMin.Value; }
+            set {MinValueChanged(value);}
         }
         public float MaxValue
         {
             get { return _sliderMax.Value; }
+            set {MaxValueChanged(value);}
         }
         public bool WholeNumbers
         {

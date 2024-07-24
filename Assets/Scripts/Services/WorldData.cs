@@ -1,6 +1,7 @@
 using Config;
 using Models;
 using Services.Interfaces;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Services
@@ -10,6 +11,7 @@ namespace Services
     /// </summary>
     public class WorldData : MonoBehaviour, IWorldData
     {
+        private readonly IWorldCRUD worldCRUD;
         private static World world;
         public void SetWorld(World world)
         {
@@ -36,6 +38,27 @@ namespace Services
         public void SetSeed(int seed)
         {
             world.seed = seed;
+            worldCRUD.UpdateWorld(world, world.Name);
+        }
+
+        public int2 GetHumidityRange()
+        {
+            return world.humidityRange;
+        }
+        public void SetHumidityRange(int2 humidityRange)
+        {
+            world.humidityRange = humidityRange;
+            worldCRUD.UpdateWorld(world, world.Name);
+        }
+
+        public int2 GetTemperatureRange()
+        {
+            return world.temperatureRange;
+        }
+        public void SetTemperatureRange(int2 temperatureRange)
+        {
+            world.temperatureRange = temperatureRange;
+            worldCRUD.UpdateWorld(world, world.Name);
         }
     }
 }

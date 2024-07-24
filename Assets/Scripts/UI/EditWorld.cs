@@ -31,6 +31,19 @@ public class EditWorld : MonoBehaviour
     }
     public void InitializeWorld()
     {
+        // Convert the seed to string
+        InputSeed.text = worldData.GetSeed().ToString();
+
+        // Set world name
+        worldName.text = worldData.GetName();
+
+        // Set the sliders
+        temperatureSlider.MinValue = worldData.GetTemperatureRange().x;
+        temperatureSlider.MaxValue = worldData.GetTemperatureRange().y;
+        humiditySlider.MinValue = worldData.GetHumidityRange().x;
+        humiditySlider.MaxValue = worldData.GetHumidityRange().y;
+        
+
         // Set the TextureMapState
         state = new()
         {
@@ -42,12 +55,6 @@ public class EditWorld : MonoBehaviour
             humidityRange = math.int2(new float2(humiditySlider.MinValue, humiditySlider.MaxValue))
         };
 
-        // Convert the seed to string
-        InputSeed.text = worldData.GetSeed().ToString();
-
-        // Set world name
-        worldName.text = worldData.GetName();
-
         // Generate the texture map
         StartCoroutine(GenerateImage());
     }
@@ -56,7 +63,7 @@ public class EditWorld : MonoBehaviour
         // Add the listener to the sliders
         InputSeed.onValueChanged.AddListener(OnSeedValueChanged);
         EventHandler handler = new(temperatureSlider.OnValueChanged, humiditySlider.OnValueChanged);
-        handler.OnValueChanged.AddListener(OnSlidersValueChanged);;
+        handler.OnValueChanged.AddListener(OnSlidersValueChanged);
     }
 
     public void OnSeedValueChanged(string seed)

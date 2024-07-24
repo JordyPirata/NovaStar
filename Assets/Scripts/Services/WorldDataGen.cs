@@ -3,8 +3,10 @@ using System.IO;
 using Console = UnityEngine.Debug;
 using System.Threading.Tasks;
 using Models;
+using Random = UnityEngine.Random;
 using Services.Interfaces;
 using Util;
+using Unity.Mathematics;
 
 
 namespace Services
@@ -22,7 +24,9 @@ namespace Services
             World game = new()
             {
                 Name = GameName,
-                seed = Random.Range(0, int.MaxValue)
+                seed = Random.Range(0, int.MaxValue),
+                temperatureRange = new(-10, 30),
+                humidityRange = new(0, 400)
             };
             game.Directory = Path.Combine(Application.persistentDataPath, game.Name);
             game.WorldPath = Path.Combine(game.Directory, string.Concat(game.Name, ".bin"));
