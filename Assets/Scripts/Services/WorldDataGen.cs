@@ -32,7 +32,16 @@ namespace Services
             game.WorldPath = Path.Combine(game.Directory, string.Concat(game.Name, ".bin"));
             return game;
         }
-        
+        public async Task<World>UpdateWorld(World game)
+        {
+            if (!GameRepository.ExistsDirectory(game.Directory))
+            {
+                throw new System.Exception("Game not found");
+            }
+            message = await GameRepository.Create(game, game.WorldPath);
+            Console.Log(message);
+            return game;
+        }
         public async Task<World> UpdateWorld(World game, string newGameName)
         {
             if (!GameRepository.ExistsDirectory(game.Directory))

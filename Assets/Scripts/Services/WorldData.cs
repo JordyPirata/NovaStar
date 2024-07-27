@@ -43,7 +43,6 @@ namespace Services
         public void SetSeed(int seed)
         {
             world.seed = seed;
-            worldCRUD.UpdateWorld(world, world.Name);
         }
 
         public int2 GetHumidityRange()
@@ -53,7 +52,6 @@ namespace Services
         public void SetHumidityRange(int2 humidityRange)
         {
             world.humidityRange = humidityRange;
-            worldCRUD.UpdateWorld(world, world.Name);
         }
 
         public int2 GetTemperatureRange()
@@ -63,7 +61,11 @@ namespace Services
         public void SetTemperatureRange(int2 temperatureRange)
         {
             world.temperatureRange = temperatureRange;
-            worldCRUD.UpdateWorld(world, world.Name);
+        }
+
+        public void UpdateWorld()
+        {
+            worldCRUD.UpdateWorld(world);
         }
     }
 }
