@@ -25,8 +25,10 @@ public class EditWorld : MonoBehaviour
     {
         // Get the services
         worldData = ServiceLocator.GetService<IWorldData>();
-        textureMapGen = ServiceLocator.GetService<ITextureMapGen>();
-
+        textureMapGen = ServiceLocator.GetService<ITextureMapGen>();        
+    }
+    public void Start()
+    {
         StartCoroutine(AddListeners());
     }
     public void InitializeWorld()
@@ -37,12 +39,7 @@ public class EditWorld : MonoBehaviour
         // Set world name
         worldName.text = worldData.GetName();
 
-        // Set the sliders
-        temperatureSlider.MinValue = worldData.GetTemperatureRange().x;
-        temperatureSlider.MaxValue = worldData.GetTemperatureRange().y;
-        humiditySlider.MinValue = worldData.GetHumidityRange().x;
-        humiditySlider.MaxValue = worldData.GetHumidityRange().y;
-        
+        StartCoroutine(SetSliders());
 
         // Set the TextureMapState
         state = new()
@@ -58,13 +55,22 @@ public class EditWorld : MonoBehaviour
         // Generate the texture map
         StartCoroutine(GenerateImage());
     }
-    IEnumerator AddListeners()
+    private IEnumerator AddListeners()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.03f);
         // Add the listener to the sliders
         InputSeed.onValueChanged.AddListener(OnSeedValueChanged);
         EventHandler handler = new(temperatureSlider.OnValueChanged, humiditySlider.OnValueChanged);
         handler.OnValueChanged.AddListener(OnSlidersValueChanged);
+    }
+    private IEnumerator SetSliders()
+    {
+        yield return new WaitForSeconds(0.05f);
+        // Set the sliders
+        temperatureSlider.MinValue = worldData.GetTemperatureRange().x;
+        temperatureSlider.MaxValue = worldData.GetTemperatureRange().y;
+        humiditySlider.MinValue = worldData.GetHumidityRange().x;
+        humiditySlider.MaxValue = worldData.GetHumidityRange().y;
     }
 
     public void OnSeedValueChanged(string seed)
@@ -102,7 +108,7 @@ public class EditWorld : MonoBehaviour
 
     IEnumerator GenerateImage()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return 
         newTexture = textureMapGen.GenerateTextureMap(state);
         newTexture.Apply();
         ChangePanelImage();
