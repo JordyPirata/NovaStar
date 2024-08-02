@@ -12,6 +12,8 @@ namespace UI
 {
 public class EditWorld : MonoBehaviour
 {
+    public GameObject createGamePanel;
+    public Button backButton;
     public DoubleSlider temperatureSlider;
     public DoubleSlider humiditySlider;
     public TMP_Text worldName;
@@ -25,13 +27,21 @@ public class EditWorld : MonoBehaviour
     {
         // Get the services
         worldData = ServiceLocator.GetService<IWorldData>();
-        textureMapGen = ServiceLocator.GetService<ITextureMapGen>();        
+        textureMapGen = ServiceLocator.GetService<ITextureMapGen>();
+        // Set the TextureMapState
+        state = new()
+        {
+            seed = worldData.GetSeed(),
+            width = 200,
+            height = 200,
+            coords = new float2(0, 0),
+            temperatureRange = math.int2(new float2(-10, 30)),
+            humidityRange = math.int2(new float2(0, 400))
+        };
+
+        AddListeners(); // Add listeners to the UI elements
     }
-    public void Start()
-    {
-        StartCoroutine(AddListeners());
-    }
-    public void InitializeWorld()
+    public void OnEnable()
     {
         // Convert the seed to string
         InputSeed.text = worldData.GetSeed().ToString();
@@ -40,32 +50,29 @@ public class EditWorld : MonoBehaviour
         worldName.text = worldData.GetName();
 
         StartCoroutine(SetSliders());
-
-        // Set the TextureMapState
-        state = new()
-        {
-            seed = worldData.GetSeed(),
-            width = 200,
-            height = 200,
-            coords = new float2(0, 0),
-            temperatureRange = math.int2(new float2(temperatureSlider.MinValue, temperatureSlider.MaxValue)),
-            humidityRange = math.int2(new float2(humiditySlider.MinValue, humiditySlider.MaxValue))
-        };
-
+        
         // Generate the texture map
-        StartCoroutine(GenerateImage());
+        StartCoroutine(GenerateImage());        
     }
-    private IEnumerator AddListeners()
+
+    private void AddListeners()
     {
-        yield return new WaitForSeconds(0.03f);
         // Add the listener to the sliders
         InputSeed.onValueChanged.AddListener(OnSeedValueChanged);
+
+        // Back button event
+        backButton.onClick.AddListener(() => {
+            createGamePanel.SetActive(true);
+            gameObject.SetActive(false);
+            worldData.UpdateWorld();
+        });
+
         EventHandler handler = new(temperatureSlider.OnValueChanged, humiditySlider.OnValueChanged);
         handler.OnValueChanged.AddListener(OnSlidersValueChanged);
     }
     private IEnumerator SetSliders()
     {
-        yield return new WaitForSeconds(0.05f);
+        yield return new WaitForSeconds(0.1f);
         // Set the sliders
         temperatureSlider.MinValue = worldData.GetTemperatureRange().x;
         temperatureSlider.MaxValue = worldData.GetTemperatureRange().y;
@@ -106,7 +113,7 @@ public class EditWorld : MonoBehaviour
         StartCoroutine(GenerateImage());
     }
 
-    IEnumerator GenerateImage()
+    private IEnumerator GenerateImage()
     {
         yield return 
         newTexture = textureMapGen.GenerateTextureMap(state);

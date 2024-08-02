@@ -23,7 +23,6 @@ namespace UI
         {
             get { return _slider.interactable; }
             set { _slider.interactable = value; }
-
         }
         public float Value
         {

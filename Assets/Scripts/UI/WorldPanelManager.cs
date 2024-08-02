@@ -51,7 +51,6 @@ namespace UI
                     ServiceLocator.GetService<IWorldData>().SetWorld(worldPanel.game);
                     editPanel.SetActive(true);
                     gameObject.SetActive(false);
-                    editPanel.GetComponent<EditWorld>().InitializeWorld();
                     
                 }
             );

@@ -40,12 +40,20 @@ namespace UI
         public float MinValue
         {
             get { return _sliderMin.Value; }
-            set {_sliderMin.Value = value;}
+            set 
+            {
+                _sliderMin.Value = value;
+                MinValueChanged(value);
+            }
         }
         public float MaxValue
         {
             get { return _sliderMax.Value; }
-            set {_sliderMax.Value = value;}
+            set 
+            {
+                _sliderMax.Value = value;
+                MaxValueChanged(value);
+            }
         }
         public bool WholeNumbers
         {
@@ -107,7 +115,7 @@ namespace UI
 
         private void MinValueChanged(float value)
         {
-            float offset = ((MinValue - _minValue) / (_maxValue - _minValue)) * _fillArea.rect.width;
+            float offset = (MinValue - _minValue) / (_maxValue - _minValue) * _fillArea.rect.width;
 
             _fillRect.offsetMin = new Vector2(offset, _fillRect.offsetMin.y);
 

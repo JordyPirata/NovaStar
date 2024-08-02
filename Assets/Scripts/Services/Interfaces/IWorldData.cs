@@ -15,5 +15,6 @@ namespace Services.Interfaces
         void SetTemperatureRange(int2 temperatureRange);
         void SetSeed(int seed);
         void SetWorld(World world);
+        void UpdateWorld();
     }
 }
