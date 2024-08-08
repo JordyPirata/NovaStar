@@ -92,9 +92,11 @@ namespace UI
             }
 
             _fillRect = _fillArea.transform.GetChild(0).transform as RectTransform;
+
+            
             
         }
-        void Start()
+        public void Start()
         {
             Setup(_minValue, _maxValue, _initialMinValue, _initialMaxValue);
         }

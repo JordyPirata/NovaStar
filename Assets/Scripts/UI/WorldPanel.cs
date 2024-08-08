@@ -12,12 +12,13 @@ using UnityEngine.UI;
 
 namespace UI
 {
+    // TODO: FIX 
     public class WorldPanel : MonoBehaviour
     {
-        private IWorldCRUD GameGenerator;
+        private IWorldCRUD WorldCRUD;
         void Awake()
         {
-            GameGenerator = ServiceLocator.GetService<IWorldCRUD>();
+            WorldCRUD = ServiceLocator.GetService<IWorldCRUD>();
         }
 
         // Variables
@@ -29,30 +30,22 @@ namespace UI
         public Button deleteButton;
         public LocalizedString localizedString;
 
-        // Access to the buttons of the world panel
-        /// <summary>
-        /// Set Null for Create new World
-        /// </summary>
-        /// <param name="_game"></param>
-        public void SetWorld(World _game)
-        {
-            game = _game;
-        }
         public void CreateWorld()
         {
-            game = ServiceLocator.GetService<IWorldCRUD>().CreateWorld(TMPro.text);
+            game = WorldCRUD.CreateWorld(TMPro.text);
+            TMPro.text = game.Name;
         }
-        public async void UpdateWorld()
+        public void UpdateWorld()
         {
             // Update the game
-            game = await GameGenerator.UpdateWorld(game, TMPro.text);
+            WorldCRUD.UpdateWorld(game, TMPro.text);
+            game.Name = TMPro.text;
         }
 
-        public async void SaveWorld()
+        public void SaveWorld()
         {
             // Save the game
-            game = await GameGenerator.SaveWorld(game);
-            TMPro.text = game.Name;
+            WorldCRUD.SaveWorld(game);
         }
 
         public void DeleteGame()
@@ -63,7 +56,7 @@ namespace UI
         }
         public async void LoadWorld(string directoryPath)
         {
-            game = await GameGenerator.LoadWorld(directoryPath);
+            game = await WorldCRUD.ReadWorld(directoryPath);
             TMPro.text = game.Name;
         }
         public void PlayGame()

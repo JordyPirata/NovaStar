@@ -14,25 +14,45 @@ namespace Services
     /// <summary>
     /// Create a new world or load an existing one
     /// </summary>
-    public class WorldDataGen : IWorldCRUD
+    public class WorldCRUD : IWorldCRUD
     {
         private readonly IRepository GameRepository = ServiceLocator.GetService<IRepository>();
         private string message;
 
         public World CreateWorld(string GameName)
         {
-            World game = new()
+            
+            World world = new()
             {
                 Name = GameName,
                 seed = Random.Range(0, int.MaxValue),
                 temperatureRange = new(-10, 30),
                 humidityRange = new(0, 400)
             };
-            game.Directory = Path.Combine(Application.persistentDataPath, game.Name);
-            game.WorldPath = Path.Combine(game.Directory, string.Concat(game.Name, ".bin"));
+            world.Directory = Path.Combine(Application.persistentDataPath, world.Name);
+            world.WorldPath = Path.Combine(world.Directory, string.Concat(world.Name, ".bin"));
+            if (GameRepository.ExistsDirectory(world.Directory))
+            {
+                int o = IOUtil.TimesRepeatDir(Application.persistentDataPath, world.Name);
+                // Set the game name add (n) to the name an increment it
+                world.Name = string.Concat(world.Name, "(", o, ")");
+                // Set the text of the TextMeshPro component
+                world = UpdateDir(world.Name, world);
+            }
+            return world;
+        }
+        public async Task<World> ReadWorld(string directoryPath)
+        {
+            World game;
+            string GameName = IOUtil.GetNameDirectory(directoryPath);
+            string GamePath = Path.Combine(directoryPath, string.Concat(GameName, ".bin"));
+            // Load the game
+            (message, game) = await GameRepository.Read<World>(GamePath);
+            Console.Log(message);
             return game;
         }
-        public async Task<World>UpdateWorld(World game)
+
+        public async Task UpdateWorld(World game)
         {
             if (!GameRepository.ExistsDirectory(game.Directory))
             {
@@ -40,9 +60,8 @@ namespace Services
             }
             message = await GameRepository.Create(game, game.WorldPath);
             Console.Log(message);
-            return game;
         }
-        public async Task<World> UpdateWorld(World game, string newGameName)
+        public async Task UpdateWorld(World game, string newGameName)
         {
             if (!GameRepository.ExistsDirectory(game.Directory))
             {
@@ -64,7 +83,6 @@ namespace Services
             // Update the game
             message = await GameRepository.Create(game, game.WorldPath);
             Console.Log(message);
-            return game;
         }
         private World UpdateDir(string GameName, World game)
         {
@@ -72,31 +90,13 @@ namespace Services
             game.WorldPath = Path.Combine(game.Directory, string.Concat(GameName, ".bin"));
             return game;
         }
-        public async Task<World> SaveWorld(World world)
+        public async Task SaveWorld(World world)
         {
-            if (GameRepository.ExistsDirectory(world.Directory))
-            {
-                int o = IOUtil.TimesRepeatDir(Application.persistentDataPath, world.Name);
-                // Set the game name add (n) to the name an increment it
-                world.Name = string.Concat(world.Name, "(", o, ")");
-                // Set the text of the TextMeshPro component
-                world = UpdateDir(world.Name, world);
-            }
             Directory.CreateDirectory(world.Directory);
             
             message = await GameRepository.Create(world, world.WorldPath);
             Console.Log(message);
-            return world;
         }
-        public async Task<World> LoadWorld(string directoryPath)
-        {
-            World game;
-            string GameName = IOUtil.GetNameDirectory(directoryPath);
-            string GamePath = Path.Combine(directoryPath, string.Concat(GameName, ".bin"));
-            // Load the game
-            (message, game) = await GameRepository.Read<World>(GamePath);
-            Console.Log(message);
-            return game;
-        }
+        
     }
 }

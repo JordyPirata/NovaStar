@@ -7,11 +7,14 @@ using Unity.Mathematics;
 using Util;
 using System.Collections;
 using Unity.VisualScripting;
+using UnityEngine.Events;
+using System.Linq;
 
 namespace UI
 {
 public class EditWorld : MonoBehaviour
 {
+    public Event OnWorldChanged;
     public GameObject createGamePanel;
     public Button backButton;
     public DoubleSlider temperatureSlider;
@@ -28,33 +31,48 @@ public class EditWorld : MonoBehaviour
         // Get the services
         worldData = ServiceLocator.GetService<IWorldData>();
         textureMapGen = ServiceLocator.GetService<ITextureMapGen>();
-        // Set the TextureMapState
+        
+    }
+    public void OnEnable()
+    {
         state = new()
         {
             seed = worldData.GetSeed(),
             width = 200,
             height = 200,
             coords = new float2(0, 0),
-            temperatureRange = math.int2(new float2(-10, 30)),
-            humidityRange = math.int2(new float2(0, 400))
+            temperatureRange = worldData.GetTemperatureRange(),
+            humidityRange = worldData.GetHumidityRange()
         };
 
         AddListeners(); // Add listeners to the UI elements
-    }
-    public void OnEnable()
-    {
         // Convert the seed to string
         InputSeed.text = worldData.GetSeed().ToString();
 
         // Set world name
         worldName.text = worldData.GetName();
-
-        StartCoroutine(SetSliders());
         
-        // Generate the texture map
-        StartCoroutine(GenerateImage());        
+        // Set the sliders
+        StartCoroutine(SetSliders());
     }
-
+    public void OnDisable()
+    {
+        // Remove the listeners
+        InputSeed.onValueChanged.RemoveAllListeners();
+        backButton.onClick.RemoveAllListeners();
+        temperatureSlider.OnValueChanged.RemoveAllListeners();
+        humiditySlider.OnValueChanged.RemoveAllListeners();
+    }
+    public IEnumerator SetSliders()
+    {
+        yield return new WaitForSeconds(1);
+        
+        temperatureSlider.MinValue = worldData.GetTemperatureRange().x;
+        temperatureSlider.MaxValue = worldData.GetTemperatureRange().y;
+        humiditySlider.MinValue = worldData.GetHumidityRange().x;
+        humiditySlider.MaxValue = worldData.GetHumidityRange().y;
+        Debug.Log("SetSliders Temperature: "  + worldData.GetTemperatureRange() + " Temperature: " + worldData.GetHumidityRange());
+    }
     private void AddListeners()
     {
         // Add the listener to the sliders
@@ -67,17 +85,9 @@ public class EditWorld : MonoBehaviour
             worldData.UpdateWorld();
         });
 
-        EventHandler handler = new(temperatureSlider.OnValueChanged, humiditySlider.OnValueChanged);
-        handler.OnValueChanged.AddListener(OnSlidersValueChanged);
-    }
-    private IEnumerator SetSliders()
-    {
-        yield return new WaitForSeconds(0.1f);
-        // Set the sliders
-        temperatureSlider.MinValue = worldData.GetTemperatureRange().x;
-        temperatureSlider.MaxValue = worldData.GetTemperatureRange().y;
-        humiditySlider.MinValue = worldData.GetHumidityRange().x;
-        humiditySlider.MaxValue = worldData.GetHumidityRange().y;
+        // Add the listener to the sliders
+        temperatureSlider.OnValueChanged.AddListener(OnTemperatureChanged);
+        humiditySlider.OnValueChanged.AddListener(OnHumidityChanged);
     }
 
     public void OnSeedValueChanged(string seed)
@@ -94,7 +104,7 @@ public class EditWorld : MonoBehaviour
             Debug.Log($"El valor ingresado '{seed}' es un número válido: {seedValue}");
             worldData.SetSeed(seedValue);
             state.seed = seedValue;
-            StartCoroutine(GenerateImage());
+            GenerateImage();
         }
         else
         {
@@ -102,28 +112,27 @@ public class EditWorld : MonoBehaviour
             Debug.LogError($"El valor ingresado '{seed}' no es un número válido.");
         }
     }
-    private void OnSlidersValueChanged(float2 t, float2 h)
+    private void OnTemperatureChanged(float x , float y)
     {
-        int2 intT = math.int2(t), intH = math.int2(h);
-        Debug.Log($"Temperature: {intT.x} - {intT.y}, Humidity: {intH.x} - {intH.y}");
+        int2 intT = new((int)x, (int)y);
         state.temperatureRange = intT;
         worldData.SetTemperatureRange(intT);
+        GenerateImage();
+    }
+
+    private void OnHumidityChanged(float x, float y)
+    {
+        int2 intH = new((int)x, (int)y);
         state.humidityRange = intH;
         worldData.SetHumidityRange(intH);
-        StartCoroutine(GenerateImage());
+        GenerateImage();
     }
 
-    private IEnumerator GenerateImage()
+    private void GenerateImage()
     {
-        yield return 
         newTexture = textureMapGen.GenerateTextureMap(state);
         newTexture.Apply();
-        ChangePanelImage();
-    }
-
-    // Método para cambiar la imagen del panel utilizando una Texture2D.
-    private void ChangePanelImage()
-    {
+        // Cambia la imagen del panel.
         if (image != null && newTexture != null)
         {
             // Convierte la Texture2D a Sprite.

@@ -14,6 +14,11 @@ namespace UI
         public VerticalLayoutGroup layout;
         public GameObject worldPrefab;
         public GameObject editPanel;
+        private IWorldData worldDataService;
+        public void Awake()
+        {
+            worldDataService = ServiceLocator.GetService<IWorldData>();
+        }
         public void Start()
         {
             LoadWorlds();
@@ -26,7 +31,6 @@ namespace UI
         public void CreateWorld()
         {
             WorldPanel worldPanel = InstantiateWorldPanel();
-            ResizeContent();
             worldPanel.CreateWorld();
             worldPanel.SaveWorld();
             // Add liseners to the buttons
@@ -39,7 +43,6 @@ namespace UI
             {
                 WorldPanel worldPanel = InstantiateWorldPanel();
                 worldPanel.LoadWorld(directory);
-                worldPanel.SetWorld(worldPanel.game);
                 // Add liseners to the buttons
                 OnEditClick(worldPanel);
             }
@@ -48,10 +51,9 @@ namespace UI
         private void OnEditClick(WorldPanel worldPanel)
         {   
             worldPanel.editButton.onClick.AddListener(() => {
-                    ServiceLocator.GetService<IWorldData>().SetWorld(worldPanel.game);
+                    worldDataService.SetWorld(worldPanel.game);
                     editPanel.SetActive(true);
                     gameObject.SetActive(false);
-                    
                 }
             );
         }
