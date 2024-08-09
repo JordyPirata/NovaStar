@@ -54,7 +54,7 @@ namespace UI
             Directory.Delete(game.Directory, true);
             Destroy(gameObject);
         }
-        public async void LoadWorld(string directoryPath)
+        public async void ReadWorld(string directoryPath)
         {
             game = await WorldCRUD.ReadWorld(directoryPath);
             TMPro.text = game.Name;
@@ -63,7 +63,6 @@ namespace UI
         {
             ServiceLocator.GetService<IWorldData>().SetWorld(game);
             ServiceLocator.GetService<ISceneLoader>().LoadScene(ISceneLoader.Game);
-        
         }
     }
 }

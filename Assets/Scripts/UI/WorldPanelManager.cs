@@ -42,7 +42,7 @@ namespace UI
             foreach (string directory in directories)
             {
                 WorldPanel worldPanel = InstantiateWorldPanel();
-                worldPanel.LoadWorld(directory);
+                worldPanel.ReadWorld(directory);
                 // Add liseners to the buttons
                 OnEditClick(worldPanel);
             }

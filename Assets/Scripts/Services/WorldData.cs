@@ -21,7 +21,9 @@ namespace Services
         public void SetWorld(World world)
         {
             WorldData.world = world;
-            Debug.Log("WorldData SetWorld: " + world.Name);
+            Debug.Log("WorldData SetWorld: " + world.Name + "\n" 
+            + world.Directory + "\n" + world.WorldPath + "\n" + world.seed
+            + "\n" + world.humidityRange + "\n" + world.temperatureRange);
         }
         public string GetDirectory()
         {

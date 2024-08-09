@@ -71,7 +71,7 @@ public class EditWorld : MonoBehaviour
         temperatureSlider.MaxValue = worldData.GetTemperatureRange().y;
         humiditySlider.MinValue = worldData.GetHumidityRange().x;
         humiditySlider.MaxValue = worldData.GetHumidityRange().y;
-        Debug.Log("SetSliders Temperature: "  + worldData.GetTemperatureRange() + " Temperature: " + worldData.GetHumidityRange());
+        Debug.Log("Sliders set to: " + worldData.GetTemperatureRange() + " " + worldData.GetHumidityRange());
     }
     private void AddListeners()
     {
