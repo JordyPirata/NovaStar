@@ -65,13 +65,14 @@ public class EditWorld : MonoBehaviour
     }
     public IEnumerator SetSliders()
     {
-        yield return new WaitForSeconds(1);
-        
-        temperatureSlider.MinValue = worldData.GetTemperatureRange().x;
-        temperatureSlider.MaxValue = worldData.GetTemperatureRange().y;
-        humiditySlider.MinValue = worldData.GetHumidityRange().x;
-        humiditySlider.MaxValue = worldData.GetHumidityRange().y;
-        Debug.Log("Sliders set to: " + worldData.GetTemperatureRange() + " " + worldData.GetHumidityRange());
+        yield return new WaitForSeconds(0.03f);
+        float2 temperatureRange = worldData.GetTemperatureRange();
+        float2 humidityRange = worldData.GetHumidityRange();
+        temperatureSlider.MinValue = temperatureRange.x;
+        temperatureSlider.MaxValue = temperatureRange.y;
+        humiditySlider.MinValue = humidityRange.x;
+        humiditySlider.MaxValue = humidityRange.y;
+        Debug.Log("Sliders set to: " + temperatureRange + " " + humidityRange);
     }
     private void AddListeners()
     {
