@@ -98,6 +98,18 @@ MonoBehaviour:
     m_Localized: Semilla del Mundo
     m_Metadata:
       m_Items: []
+  - m_Id: 68883625873993728
+    m_Localized: Pausa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 68884164095471616
+    m_Localized: Reanudar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 68888902836908032
+    m_Localized: "Men\xFA"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

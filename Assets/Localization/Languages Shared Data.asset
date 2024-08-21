@@ -95,6 +95,18 @@ MonoBehaviour:
     m_Key: WorldSeed
     m_Metadata:
       m_Items: []
+  - m_Id: 68883625873993728
+    m_Key: Pause
+    m_Metadata:
+      m_Items: []
+  - m_Id: 68884164095471616
+    m_Key: Resume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 68888902836908032
+    m_Key: Menu
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

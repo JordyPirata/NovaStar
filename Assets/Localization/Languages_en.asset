@@ -98,6 +98,18 @@ MonoBehaviour:
     m_Localized: World Seed
     m_Metadata:
       m_Items: []
+  - m_Id: 68883625873993728
+    m_Localized: Pause
+    m_Metadata:
+      m_Items: []
+  - m_Id: 68884164095471616
+    m_Localized: Resume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 68888902836908032
+    m_Localized: Menu
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
