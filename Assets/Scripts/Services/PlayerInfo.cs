@@ -15,7 +15,7 @@ public class PlayerInfo : MonoBehaviour, IPlayerInfo
     private Transform player;
     [SerializeField]
     private static float2 viewerCoordinate;
-    private static float2 viewerPosition;
+    private static float3 viewerPosition;
     public void Init()
     {
         var PlayerObj = GameObject.Find("Player");
@@ -37,16 +37,16 @@ public class PlayerInfo : MonoBehaviour, IPlayerInfo
     {
         while (true)
         {
-            yield return new WaitForSeconds(0.3f);
-            viewerPosition = new float2(player.position.x, player.position.z);
-            viewerCoordinate = new float2(Mathf.RoundToInt(viewerPosition.x / ChunkConfig.width), Mathf.RoundToInt(viewerPosition.y / ChunkConfig.depth));
+            yield return new WaitForSeconds(0.01f);
+            viewerPosition = player.position;
+            viewerCoordinate = new float2(Mathf.RoundToInt(viewerPosition.x / ChunkConfig.width), Mathf.RoundToInt(viewerPosition.z / ChunkConfig.depth));
         }
     }
-    public float2 GetPlayerPosition()
+    public float3 GetPlayerPosition()
     {
         if (player == null) // Verifica si player es null antes de acceder a su posición
         {
-            return new float2(0, 0); // Retorna una posición predeterminada o maneja la situación como prefieras
+            return new float3(0, 0, 0); // Retorna una posición predeterminada o maneja la situación como prefieras
         }
         return viewerPosition;
     }
