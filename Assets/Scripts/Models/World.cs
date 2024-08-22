@@ -5,6 +5,7 @@ namespace Models
     [System.Serializable]
     public class World
     {
+        public bool IsGenerated;
         public string Name;
         public string WorldPath;
         public string Directory;

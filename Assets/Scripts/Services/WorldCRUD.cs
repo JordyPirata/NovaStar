@@ -24,6 +24,7 @@ namespace Services
             
             World world = new()
             {
+                IsGenerated = false,
                 Name = GameName,
                 seed = Random.Range(0, int.MaxValue),
                 temperatureRange = new(-10, 30),
