@@ -16,5 +16,8 @@ namespace Services.Interfaces
         void SetSeed(int seed);
         void SetWorld(World world);
         void UpdateWorld();
+        void SaveWorld();
+        bool SetIsGenerated(bool isGenerated);
+        bool GetIsGenerated();
     }
 }

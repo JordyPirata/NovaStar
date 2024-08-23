@@ -69,5 +69,21 @@ namespace Services
         {
             worldCRUD.UpdateWorld(world);
         }
+
+        public void SaveWorld()
+        {
+            worldCRUD.SaveWorld(world);
+        }
+
+        public bool SetIsGenerated(bool isGenerated)
+        {
+            world.IsGenerated = isGenerated;
+            return world.IsGenerated;
+        }
+
+        public bool GetIsGenerated()
+        {
+            return world.IsGenerated;
+        }
     }
 }

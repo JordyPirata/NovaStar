@@ -24,12 +24,12 @@ public class EditWorld : MonoBehaviour
     public Image image;
     private Texture2D newTexture;
     private TextureMapState state;
-    private IWorldData worldData;
+    private IWorldData WorldData;
     private ITextureMapGen textureMapGen;
     public void Awake()
     {
         // Get the services
-        worldData = ServiceLocator.GetService<IWorldData>();
+        WorldData = ServiceLocator.GetService<IWorldData>();
         textureMapGen = ServiceLocator.GetService<ITextureMapGen>();
         
     }
@@ -37,20 +37,20 @@ public class EditWorld : MonoBehaviour
     {
         state = new()
         {
-            seed = worldData.GetSeed(),
+            seed = WorldData.GetSeed(),
             width = 200,
             height = 200,
             coords = new float2(0, 0),
-            temperatureRange = worldData.GetTemperatureRange(),
-            humidityRange = worldData.GetHumidityRange()
+            temperatureRange = WorldData.GetTemperatureRange(),
+            humidityRange = WorldData.GetHumidityRange()
         };
 
         AddListeners(); // Add listeners to the UI elements
         // Convert the seed to string
-        InputSeed.text = worldData.GetSeed().ToString();
+        InputSeed.text = WorldData.GetSeed().ToString();
 
         // Set world name
-        worldName.text = worldData.GetName();
+        worldName.text = WorldData.GetName();
         
         // Set the sliders
         StartCoroutine(SetSliders());
@@ -66,8 +66,8 @@ public class EditWorld : MonoBehaviour
     public IEnumerator SetSliders()
     {
         yield return new WaitForSeconds(0.03f);
-        float2 temperatureRange = worldData.GetTemperatureRange();
-        float2 humidityRange = worldData.GetHumidityRange();
+        float2 temperatureRange = WorldData.GetTemperatureRange();
+        float2 humidityRange = WorldData.GetHumidityRange();
         temperatureSlider.MinValue = temperatureRange.x;
         temperatureSlider.MaxValue = temperatureRange.y;
         humiditySlider.MinValue = humidityRange.x;
@@ -83,7 +83,7 @@ public class EditWorld : MonoBehaviour
         backButton.onClick.AddListener(() => {
             createGamePanel.SetActive(true);
             gameObject.SetActive(false);
-            worldData.UpdateWorld();
+            WorldData.UpdateWorld();
         });
 
         // Add the listener to the sliders
@@ -103,7 +103,7 @@ public class EditWorld : MonoBehaviour
         {
             // La conversión fue exitosa, ahora puedes usar seedValue
             Debug.Log($"El valor ingresado '{seed}' es un número válido: {seedValue}");
-            worldData.SetSeed(seedValue);
+            WorldData.SetSeed(seedValue);
             state.seed = seedValue;
             GenerateImage();
         }
@@ -117,7 +117,7 @@ public class EditWorld : MonoBehaviour
     {
         int2 intT = new((int)x, (int)y);
         state.temperatureRange = intT;
-        worldData.SetTemperatureRange(intT);
+        WorldData.SetTemperatureRange(intT);
         GenerateImage();
     }
 
@@ -125,7 +125,7 @@ public class EditWorld : MonoBehaviour
     {
         int2 intH = new((int)x, (int)y);
         state.humidityRange = intH;
-        worldData.SetHumidityRange(intH);
+        WorldData.SetHumidityRange(intH);
         GenerateImage();
     }
 
@@ -145,6 +145,8 @@ public class EditWorld : MonoBehaviour
 
     public void PlayGame()
     {
+        WorldData.SetIsGenerated(true);
+        WorldData.SaveWorld();
         ServiceLocator.GetService<ISceneLoader>().LoadScene(ISceneLoader.Game);
     }
 }

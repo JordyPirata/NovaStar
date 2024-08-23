@@ -16,9 +16,11 @@ namespace UI
     public class WorldPanel : MonoBehaviour
     {
         private IWorldCRUD WorldCRUD;
+        private IWorldData WorldData;
         void Awake()
         {
             WorldCRUD = ServiceLocator.GetService<IWorldCRUD>();
+            WorldData = ServiceLocator.GetService<IWorldData>();
         }
 
         // Variables
@@ -57,12 +59,19 @@ namespace UI
         public async void ReadWorld(string directoryPath)
         {
             game = await WorldCRUD.ReadWorld(directoryPath);
+            if (game.IsGenerated)
+            {
+                editButton.interactable = false;
+            }
             TMPro.text = game.Name;
         }
         public void PlayGame()
         {
-            ServiceLocator.GetService<IWorldData>().SetWorld(game);
+            WorldData.SetWorld(game);
+            WorldData.SetIsGenerated(true);
+            WorldData.SaveWorld();
             ServiceLocator.GetService<ISceneLoader>().LoadScene(ISceneLoader.Game);
+            
         }
     }
 }
