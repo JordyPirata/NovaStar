@@ -21,9 +21,10 @@ public class ServiceInstaller : MonoBehaviour
         ServiceLocator.Register<ISceneLoader>(gameObject.AddComponent<SceneLoader>());
         ServiceLocator.Register<IWorldCRUD>(new WorldCRUD());
         ServiceLocator.Register<IWorldData>(gameObject.AddComponent<WorldData>());
-        // Last revision
         ServiceLocator.Register<INoiseService>(new NoiseServiceShader());
         ServiceLocator.Register<IBiomeDic>(new BiomesDic());
         ServiceLocator.Register<ITextureMapGen>(new TextureMapGen());
+        // Last revision
+        ServiceLocator.Register<IInputActions>(new PlayerInputService());
     }
 }
