@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using InputSystem;
 using Services;
-
+// TODO: Change to use Unity's Event System
 [RequireComponent(typeof(CharacterController))]
 public class FirstPersonCharacter : MonoBehaviour
 {
