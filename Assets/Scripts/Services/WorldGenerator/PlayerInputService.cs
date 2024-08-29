@@ -1,15 +1,13 @@
+using InputSystem;
 namespace Services
 {
 public class PlayerInputService : IInputActions
 {
-    private InputActions inputActions;
-
-    public InputActions InputActions => inputActions;
-
-    public void Awake()
+    public PlayerInputService()
     {
-        inputActions = new InputActions();
+        InputActions = new InputActions();
     }
+    public InputActions InputActions { get; set; }
 
 }    
 }

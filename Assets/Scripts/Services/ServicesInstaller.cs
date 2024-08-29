@@ -13,6 +13,7 @@ public class ServiceInstaller : MonoBehaviour
     }
     public void InstallServices()
     {
+        ServiceLocator.Register<IInputActions>(new PlayerInputService());
         ServiceLocator.Register<ISettingsService>(gameObject.AddComponent<SettingsService>());
         ServiceLocator.Register<IPlayerInfo>(gameObject.AddComponent<PlayerInfo>());
         ServiceLocator.Register<IWeldMap>(gameObject.AddComponent<WeldMapService>()); 
@@ -24,7 +25,6 @@ public class ServiceInstaller : MonoBehaviour
         ServiceLocator.Register<INoiseService>(new NoiseServiceShader());
         ServiceLocator.Register<IBiomeDic>(new BiomesDic());
         ServiceLocator.Register<ITextureMapGen>(new TextureMapGen());
-        // Last revision
-        ServiceLocator.Register<IInputActions>(new PlayerInputService());
+        
     }
 }
