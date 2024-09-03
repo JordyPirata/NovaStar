@@ -37,7 +37,7 @@ public class PlayerInfo : MonoBehaviour, IPlayerInfo
     {
         while (true)
         {
-            yield return new WaitForSeconds(0.01f);
+            yield return new WaitForFixedUpdate();
             viewerPosition = player.position;
             viewerCoordinate = new float2(Mathf.RoundToInt(viewerPosition.x / ChunkConfig.width), Mathf.RoundToInt(viewerPosition.z / ChunkConfig.depth));
         }

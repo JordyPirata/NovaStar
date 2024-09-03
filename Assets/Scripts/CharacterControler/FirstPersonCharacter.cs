@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using InputSystem;
 using Services;
+using UnityEngine.InputSystem.Controls;
 // TODO: Change to use Unity's Event System
 [RequireComponent(typeof(CharacterController))]
 public class FirstPersonCharacter : MonoBehaviour
@@ -31,10 +33,12 @@ public class FirstPersonCharacter : MonoBehaviour
     // Crouch Vars
     private float initHeight;
     [SerializeField] private float crouchHeight;
-
+    // Sprint Vars
+    [SerializeField] private bool sprinting = false;
     private void Awake()
     {
         inputActions = ServiceLocator.GetService<IInputActions>().InputActions;
+        //lookSensitivity = ServiceLocator.GetService<ISettingsService>().GetSensitibility();
     }
     private void Start()
     {
@@ -47,11 +51,20 @@ public class FirstPersonCharacter : MonoBehaviour
 
     private void OnEnable()
     {
-        inputActions.Enable();
+        inputActions.Player.Enable();
+        inputActions.Player.Jump.performed += DoJump;
+        inputActions.Player.Run.performed += OnSprint;
+    }
+    private void OnDisable()
+    {
+        inputActions.Player.Run.performed -= OnSprint;
+        inputActions.Player.Jump.performed -= DoJump;
+        inputActions.Player.Disable();
     }
 
     private void Update()
     {
+        ApplyGravity();
         DoMovement();
         DoLooking();
         DoZoom();
@@ -71,21 +84,34 @@ public class FirstPersonCharacter : MonoBehaviour
         
         transform.Rotate(Vector3.up * lookX);
     }
-
+    private void ApplyGravity()
+    {
+        velocity.y += gravity * Time.deltaTime;
+        controller.Move(velocity * Time.deltaTime);
+    }
+    private void OnSprint(InputAction.CallbackContext context)
+    {
+        Debug.Log(context);
+    }
     private void DoMovement()
     {
+        float targetSpeed = movementSpeed;
         grounded = controller.isGrounded;
         if (grounded && velocity.y < 0)
         {
             velocity.y = -2f;
         }
-
+        
         Vector2 movement = GetPlayerMovement();
         Vector3 move = transform.right * movement.x + transform.forward * movement.y;
-        controller.Move(move * movementSpeed * Time.deltaTime);
-
-        velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+        controller.Move(movementSpeed * Time.deltaTime * move);
+    }
+    private void DoJump(InputAction.CallbackContext context)
+    {
+        if (context.performed && grounded)
+        {
+            velocity.y = Mathf.Sqrt(2.0f * -2.0f * gravity);
+        }
     }
 
     private void DoZoom()
@@ -128,11 +154,6 @@ public class FirstPersonCharacter : MonoBehaviour
     public void SetBaseFOV(float fov)
     {
         baseFOV = fov;
-    }
-
-    private void OnDisable()
-    {
-        inputActions.Disable();
     }
 
     public Vector2 GetPlayerMovement()

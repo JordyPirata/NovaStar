@@ -21,5 +21,6 @@ namespace Services.Interfaces
         public float SetSensitibility(float sensitibility);
         public void SaveSettings();
         public Task<Settings> LoadSettings();
+        public float GetSensitibility();
     }
 }

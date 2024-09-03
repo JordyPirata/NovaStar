@@ -4,7 +4,6 @@ using UnityEngine;
 using Console = UnityEngine.Debug;
 using UnityEngine.Localization.Settings;
 using System.Collections;
-using Unity.VisualScripting;
 using System.Threading.Tasks;
 using Models;
 using Services.Interfaces;
@@ -94,5 +93,10 @@ public class SettingsService : MonoBehaviour, ISettingsService
         }
         return volume;
     }
-}
+
+        public float GetSensitibility()
+        {
+            return settings.mouseSensitivity;
+        }
+    }
 }
