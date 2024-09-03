@@ -21,7 +21,7 @@ public class FirstPersonCharacter : MonoBehaviour
 
     // Movement Vars
     private Vector3 velocity;
-    public float gravity = -9.81f;
+    public float gravity = -15.0f;
     private bool grounded;
 
     // Zoom Vars - Zoom code adapted from @torahhorse's First Person Drifter scripts.
@@ -53,11 +53,13 @@ public class FirstPersonCharacter : MonoBehaviour
     {
         inputActions.Player.Enable();
         inputActions.Player.Jump.performed += DoJump;
-        inputActions.Player.Run.performed += OnSprint;
+        inputActions.Player.Run.started += OnSprint;
+        inputActions.Player.Run.canceled += OnSprint;
     }
     private void OnDisable()
     {
-        inputActions.Player.Run.performed -= OnSprint;
+        inputActions.Player.Run.started += OnSprint;
+        inputActions.Player.Run.canceled += OnSprint;
         inputActions.Player.Jump.performed -= DoJump;
         inputActions.Player.Disable();
     }
@@ -92,6 +94,8 @@ public class FirstPersonCharacter : MonoBehaviour
     private void OnSprint(InputAction.CallbackContext context)
     {
         Debug.Log(context);
+        if(context.started) sprinting = true;
+        if (context.canceled) sprinting = false;
     }
     private void DoMovement()
     {
