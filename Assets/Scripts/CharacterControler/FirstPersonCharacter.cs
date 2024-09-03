@@ -99,7 +99,7 @@ public class FirstPersonCharacter : MonoBehaviour
     }
     private void DoMovement()
     {
-        float targetSpeed = movementSpeed;
+        float targetSpeed = sprinting ? movementSpeed * 2 : movementSpeed;
         grounded = controller.isGrounded;
         if (grounded && velocity.y < 0)
         {
@@ -108,7 +108,7 @@ public class FirstPersonCharacter : MonoBehaviour
         
         Vector2 movement = GetPlayerMovement();
         Vector3 move = transform.right * movement.x + transform.forward * movement.y;
-        controller.Move(movementSpeed * Time.deltaTime * move);
+        controller.Move(targetSpeed * Time.deltaTime * move);
     }
     private void DoJump(InputAction.CallbackContext context)
     {

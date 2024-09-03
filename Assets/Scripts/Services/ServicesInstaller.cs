@@ -27,6 +27,7 @@ public class ServiceInstaller : MonoBehaviour
         ServiceLocator.Register<INoiseService>(new NoiseServiceShader());
         ServiceLocator.Register<IBiomeDic>(new BiomesDic());
         ServiceLocator.Register<ITextureMapGen>(new TextureMapGen());
+        // new
         ServiceLocator.Register<IFadeController>(fadeController);
         
     }
