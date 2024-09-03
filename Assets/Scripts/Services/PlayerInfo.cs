@@ -33,6 +33,11 @@ public class PlayerInfo : MonoBehaviour, IPlayerInfo
         StopCoroutine(SetPlayerPosition());
     }
 
+    public void GroundPlayer()
+    {
+        throw new System.NotImplementedException();
+    }
+
     private IEnumerator SetPlayerPosition()
     {
         while (true)
@@ -59,5 +64,7 @@ public class PlayerInfo : MonoBehaviour, IPlayerInfo
         return viewerCoordinate;
     }
 }
+
+
 
 }

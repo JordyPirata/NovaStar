@@ -67,11 +67,13 @@ namespace UI
         }
         public void PlayGame()
         {
-            WorldData.SetWorld(game);
-            WorldData.SetIsGenerated(true);
-            WorldData.SaveWorld();
-            ServiceLocator.GetService<ISceneLoader>().LoadScene(ISceneLoader.Game);
-            
+            ServiceLocator.GetService<IFadeController>().FadeIn(()=>
+            {
+                WorldData.SetWorld(game);
+                WorldData.SetIsGenerated(true);
+                WorldData.SaveWorld();
+                ServiceLocator.GetService<ISceneLoader>().LoadScene(ISceneLoader.Game); 
+            });
         }
     }
 }

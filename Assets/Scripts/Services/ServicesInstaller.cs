@@ -2,9 +2,11 @@ using Services.Interfaces;
 using Services.Repository;
 using UnityEngine;
 using Services;
+using UI;
 
 public class ServiceInstaller : MonoBehaviour
 {
+    [SerializeField] private FadeController fadeController;
     public void Awake()
     {
         // DontDestroyOnLoad(gameObject)
@@ -25,6 +27,7 @@ public class ServiceInstaller : MonoBehaviour
         ServiceLocator.Register<INoiseService>(new NoiseServiceShader());
         ServiceLocator.Register<IBiomeDic>(new BiomesDic());
         ServiceLocator.Register<ITextureMapGen>(new TextureMapGen());
+        ServiceLocator.Register<IFadeController>(fadeController);
         
     }
 }

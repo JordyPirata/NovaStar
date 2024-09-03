@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Config;
 using Services.Interfaces;
 using Services.WorldGenerator;
+using UI;
 
 namespace Services
 {
@@ -14,6 +15,7 @@ namespace Services
 
 public class MapGeneratorService : IMapGenerator
 {
+    
     private bool isRunning = false;
     private static IPlayerInfo PlayerInfo => ServiceLocator.GetService<IPlayerInfo>();
     public async void StartService()
@@ -30,6 +32,7 @@ public class MapGeneratorService : IMapGenerator
         }
     }
     private static readonly int chunkVisibleInViewDst = Mathf.RoundToInt(ChunkConfig.maxViewDst / ChunkConfig.width);
+
     private static async Task UpdateVisibleChunks(float2 viewerCoordinate)
     {
 
@@ -56,14 +59,20 @@ public class MapGeneratorService : IMapGenerator
 
     private async Task GenerateMap()
     {
+        bool firstLoop = true;
         while (isRunning)
-        {   
+        {
             // get the player coordinate
-            
             await UpdateVisibleChunks(PlayerInfo.GetPlayerCoordinate());
             // delay the update of the chunks by system time
             await Task.Delay(2000);
-            await Task.Yield();
+            await Task.Yield();           
+            if (firstLoop)
+            {
+                ServiceLocator.GetService<IFadeController>().FadeOut();
+                PlayerInfo.GroundPlayer();
+                firstLoop = false;
+            }
         }
     }
 }

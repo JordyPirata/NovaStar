@@ -10,5 +10,6 @@ namespace Services.Interfaces
         void StartService();
         void StopService();
 
+        void GroundPlayer();
     }
 }
