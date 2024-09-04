@@ -22,6 +22,7 @@ public struct ChunkGenerator
     //set position of the chunks
     private static GameObject SetAttributes(GameObject ChunkGameObject, Chunk Chunk)
     {
+        if (ChunkGameObject == null) return null;
         ChunkGameObject.transform.position = Chunk.position;
         ChunkGameObject.name = Chunk.ChunkName;
         ChunkGameObject.layer = LayerMask.NameToLayer("Terrain");
