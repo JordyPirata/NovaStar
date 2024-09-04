@@ -1,3 +1,4 @@
+using Services.PlayerPath;
 using Unity.Mathematics;
 
 namespace Services.Interfaces
@@ -10,6 +11,7 @@ namespace Services.Interfaces
         void StartService();
         void StopService();
 
-        void GroundPlayer();
+        /*
+        PlayerMediator GetPlayerMediator();*/
     }
 }

@@ -4,6 +4,7 @@ using Unity.Burst;
 using System.Collections;
 using Config;
 using Services.Interfaces;
+using Services.PlayerPath;
 
 namespace Services
 {
@@ -16,6 +17,7 @@ public class PlayerInfo : MonoBehaviour, IPlayerInfo
     [SerializeField]
     private static float2 viewerCoordinate;
     private static float3 viewerPosition;
+
     public void Init()
     {
         var PlayerObj = GameObject.Find("Player");
@@ -33,10 +35,10 @@ public class PlayerInfo : MonoBehaviour, IPlayerInfo
         StopCoroutine(SetPlayerPosition());
     }
 
-    public void GroundPlayer()
+    /*public PlayerMediator GetPlayerMediator()
     {
-        throw new System.NotImplementedException();
-    }
+        return playerMediator;
+    }*/
 
     private IEnumerator SetPlayerPosition()
     {
@@ -64,7 +66,4 @@ public class PlayerInfo : MonoBehaviour, IPlayerInfo
         return viewerCoordinate;
     }
 }
-
-
-
 }

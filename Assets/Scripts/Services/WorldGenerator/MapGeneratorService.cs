@@ -4,6 +4,7 @@ using Map = Services.WorldGenerator.ChunkGrid<Services.WorldGenerator.ChunkObjec
 using System.Threading.Tasks;
 using Config;
 using Services.Interfaces;
+using Services.PlayerPath;
 using Services.WorldGenerator;
 using UI;
 
@@ -15,7 +16,6 @@ namespace Services
 
 public class MapGeneratorService : IMapGenerator
 {
-    
     private bool isRunning = false;
     private static IPlayerInfo PlayerInfo => ServiceLocator.GetService<IPlayerInfo>();
     public async void StartService()
@@ -70,7 +70,7 @@ public class MapGeneratorService : IMapGenerator
             if (firstLoop)
             {
                 ServiceLocator.GetService<IFadeController>().FadeOut();
-                PlayerInfo.GroundPlayer();
+                ServiceLocator.GetService<ISceneReferences>().GetPlayerMediator().MapLoaded();
                 firstLoop = false;
             }
         }
