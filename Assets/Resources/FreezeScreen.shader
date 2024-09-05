@@ -3,7 +3,7 @@ Shader "Unlit/FreezeScreen"
     Properties
     {
         _Ice ("Ice Texture", 2D) = "white" {}
-        _Aperture ("Aperture", Range(0,.5)) = 0.125
+        _Aperture ("Aperture", Range(0,0.15)) = 0.075
     }
     SubShader
     {

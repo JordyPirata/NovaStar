@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using InputSystem;
-using Services;
+using Services.Interfaces;
+
 using UnityEngine.InputSystem.Controls;
 // TODO: Change to use Unity's Event System
 [RequireComponent(typeof(CharacterController))]
@@ -38,7 +39,7 @@ public class FirstPersonCharacter : MonoBehaviour
     private void Awake()
     {
         inputActions = ServiceLocator.GetService<IInputActions>().InputActions;
-        //lookSensitivity = ServiceLocator.GetService<ISettingsService>().GetSensitibility();
+        lookSensitivity = ServiceLocator.GetService<ISettingsService>().GetSensitibility() * 10;
     }
     private void Start()
     {

@@ -21,7 +21,7 @@ namespace Services.PlayerPath
 
         private void Update()
         {
-            _raycastController.LookForGround();
+           // _raycastController.LookForGround();
         }
     }
     

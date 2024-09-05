@@ -1,7 +1,5 @@
 ﻿using System;
 using Services;
-using Services.PlayerPath;
-using UnityEditor.Localization.Plugins.XLIFF.V20;
 using UnityEngine;
 
 namespace Config
