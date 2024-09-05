@@ -10,13 +10,14 @@ namespace Services.PlayerPath
     {
         private IRayCastController _raycastController;
         private IPlayerMediator _playerMediator;
+        private ILifeService _lifeService;
 
-        private void Awake()
+        private void Start()
         {
             _playerMediator = ServiceLocator.GetService<IPlayerMediator>();
             _raycastController = ServiceLocator.GetService<IRayCastController>();
+            _lifeService = ServiceLocator.GetService<ILifeService>();
             _raycastController.Configure(_playerMediator, transform);
-            
         }
 
         public void MapLoaded()

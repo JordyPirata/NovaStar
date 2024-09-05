@@ -5,6 +5,8 @@ using Services;
 using UI;
 using Services.PlayerPath;
 
+[RequireComponent(typeof(FadeController))]
+
 public class ServiceInstaller : MonoBehaviour
 {
     [SerializeField] private FadeController fadeController;
@@ -31,6 +33,7 @@ public class ServiceInstaller : MonoBehaviour
         // new services
         ServiceLocator.Register<IRayCastController>(new RayCastsController());
         ServiceLocator.Register<IPlayerMediator>(gameObject.AddComponent<PlayerMediator>());
+        ServiceLocator.Register<ILifeService>(new LifeService());
         
     }
 }

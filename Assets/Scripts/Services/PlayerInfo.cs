@@ -14,7 +14,6 @@ namespace Services
 public class PlayerInfo : MonoBehaviour, IPlayerInfo
 {
     private Transform player;
-    [SerializeField]
     private static float2 viewerCoordinate;
     private static float3 viewerPosition;
 
