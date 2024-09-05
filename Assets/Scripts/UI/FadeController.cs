@@ -1,7 +1,7 @@
 ﻿using System;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Events;
+using Services.Interfaces;
 using UnityEngine.UI;
 
 namespace UI

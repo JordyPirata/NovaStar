@@ -53,12 +53,16 @@ public class FirstPersonCharacter : MonoBehaviour
     private void OnEnable()
     {
         inputActions.Player.Enable();
+        inputActions.Player.Crouch.canceled += DoCrouch;    
+        inputActions.Player.Crouch.performed += DoCrouch;
         inputActions.Player.Jump.performed += DoJump;
         inputActions.Player.Run.started += OnSprint;
         inputActions.Player.Run.canceled += OnSprint;
     }
     private void OnDisable()
     {
+        inputActions.Player.Crouch.canceled -= DoCrouch;
+        inputActions.Player.Crouch.performed -= DoCrouch;
         inputActions.Player.Run.started += OnSprint;
         inputActions.Player.Run.canceled += OnSprint;
         inputActions.Player.Jump.performed -= DoJump;
@@ -69,9 +73,12 @@ public class FirstPersonCharacter : MonoBehaviour
     {
         ApplyGravity();
         DoMovement();
-        DoLooking();
         DoZoom();
-        DoCrouch();
+    }
+    private void LateUpdate()
+    {   
+        DoLooking();
+        UpdateZoom();
     }
 
     private void DoLooking()
@@ -94,9 +101,8 @@ public class FirstPersonCharacter : MonoBehaviour
     }
     private void OnSprint(InputAction.CallbackContext context)
     {
-        Debug.Log(context);
         if(context.started) sprinting = true;
-        if (context.canceled) sprinting = false;
+        if(context.canceled) sprinting = false;
     }
     private void DoMovement()
     {
@@ -132,13 +138,13 @@ public class FirstPersonCharacter : MonoBehaviour
         UpdateZoom();
     }
 
-    private void DoCrouch()
+    private void DoCrouch(InputAction.CallbackContext context)
     {
-        if (inputActions.Player.Crouch.ReadValue<float>() > 0)
+        if (context.performed)
         {
             controller.height = crouchHeight;
         }
-        else
+        if (context.canceled)
         {
             if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.up), 2.0f, -1))
             {

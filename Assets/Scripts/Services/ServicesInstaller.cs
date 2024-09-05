@@ -3,13 +3,13 @@ using Services.Repository;
 using UnityEngine;
 using Services;
 using UI;
+using Services.PlayerPath;
 
 public class ServiceInstaller : MonoBehaviour
 {
     [SerializeField] private FadeController fadeController;
     public void Awake()
     {
-        // DontDestroyOnLoad(gameObject)
         DontDestroyOnLoad(this);
         InstallServices();
     }
@@ -27,8 +27,10 @@ public class ServiceInstaller : MonoBehaviour
         ServiceLocator.Register<INoiseService>(new NoiseServiceShader());
         ServiceLocator.Register<IBiomeDic>(new BiomesDic());
         ServiceLocator.Register<ITextureMapGen>(new TextureMapGen());
-        // new
         ServiceLocator.Register<IFadeController>(fadeController);
+        // new services
+        ServiceLocator.Register<IRayCastController>(new RayCastsController());
+        ServiceLocator.Register<IPlayerMediator>(gameObject.AddComponent<PlayerMediator>());
         
     }
 }

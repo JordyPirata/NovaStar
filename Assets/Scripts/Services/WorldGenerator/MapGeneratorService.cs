@@ -66,11 +66,11 @@ public class MapGeneratorService : IMapGenerator
             await UpdateVisibleChunks(PlayerInfo.GetPlayerCoordinate());
             // delay the update of the chunks by system time
             await Task.Delay(2000);
-            await Task.Yield();           
+            await Task.Yield();         
             if (firstLoop)
             {
                 ServiceLocator.GetService<IFadeController>().FadeOut();
-                ServiceLocator.GetService<ISceneReferences>().GetPlayerMediator().MapLoaded();
+                ServiceLocator.GetService<IPlayerMediator>().MapLoaded();
                 firstLoop = false;
             }
         }

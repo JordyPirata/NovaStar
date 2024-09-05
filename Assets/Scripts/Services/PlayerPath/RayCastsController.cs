@@ -1,14 +1,15 @@
 ﻿using System;
 using UnityEngine;
+using Services.Interfaces;
 
 namespace Services.PlayerPath
 {
-    public class RayCastsController
+    public class RayCastsController: IRayCastController
     {
-        private IRayCastController _mediator;
+        private IPlayerMediator _mediator;
         private Transform _playerTransform;
         
-        public void Configure(IRayCastController playerMediator, Transform playerTransform)
+        public void Configure(IPlayerMediator playerMediator, Transform playerTransform)
         {
             _mediator = playerMediator;
             _playerTransform = playerTransform;

@@ -1,5 +1,5 @@
 using InputSystem;
-namespace Services
+namespace Services.Interfaces
 {
 public class PlayerInputService : IInputActions
 {
