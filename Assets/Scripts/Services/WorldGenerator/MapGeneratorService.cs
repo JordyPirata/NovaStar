@@ -4,7 +4,7 @@ using Map = Services.WorldGenerator.ChunkGrid<Services.WorldGenerator.ChunkObjec
 using System.Threading.Tasks;
 using Config;
 using Services.Interfaces;
-using Services.PlayerPath;
+using Services.Player;
 using Services.WorldGenerator;
 using UI;
 

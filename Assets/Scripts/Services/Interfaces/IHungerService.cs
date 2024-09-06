@@ -1,8 +1,8 @@
-namespace Services.Interfaces 
+namespace Services.Interfaces
 {
-    public interface IStaminaService
+    interface IHungerService
     {
-        int Stamina { get; set; }
+        int Hunger { get; set; }
         void StartService();
         void StopService();
         void IncreaseStat(int amount);

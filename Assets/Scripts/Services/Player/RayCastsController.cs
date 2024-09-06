@@ -2,7 +2,7 @@
 using UnityEngine;
 using Services.Interfaces;
 
-namespace Services.PlayerPath
+namespace Services.Player
 {
     public class RayCastsController: IRayCastController
     {

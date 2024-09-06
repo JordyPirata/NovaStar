@@ -3,7 +3,7 @@ using Services.Repository;
 using UnityEngine;
 using Services;
 using UI;
-using Services.PlayerPath;
+using Services.Player;
 
 [RequireComponent(typeof(FadeController))]
 
@@ -33,7 +33,10 @@ public class ServiceInstaller : MonoBehaviour
         // new services
         ServiceLocator.Register<IRayCastController>(new RayCastsController());
         ServiceLocator.Register<IPlayerMediator>(gameObject.AddComponent<PlayerMediator>());
-        ServiceLocator.Register<ILifeService>(new LifeService());
-        
+        ServiceLocator.Register<ILifeService>(gameObject.AddComponent<LifeService>());
+        ServiceLocator.Register<IStaminaService>(gameObject.AddComponent<StaminaService>());
+        ServiceLocator.Register<IHydrationService>(gameObject.AddComponent<HydrationService>());
+        ServiceLocator.Register<IHungerService>(gameObject.AddComponent<HungerService>());
+        ServiceLocator.Register<ITemperatureService>(gameObject.AddComponent<TemperatureService>());
     }
 }

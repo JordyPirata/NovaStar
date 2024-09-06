@@ -1,4 +1,4 @@
-using Services.PlayerPath;
+using Services.Player;
 using Unity.Mathematics;
 
 namespace Services.Interfaces
