@@ -8,6 +8,7 @@ namespace UI
 {
 public class MiniMap : MonoBehaviour
 {
+    [SerializeField] GameObject minimapPanel;
     private IPlayerInfo playerInfo;
     public void Awake()
     {
@@ -15,11 +16,10 @@ public class MiniMap : MonoBehaviour
     }
     public void Update()
     {
-        float3 playerPosiotion = playerInfo.GetPlayerPosition();
+        float3 playerPosiotion = playerInfo.PlayerPosition();
         
         // Set the Minimap camera
         gameObject.transform.position = new Vector3(playerPosiotion.x, playerPosiotion.y + 10, playerPosiotion.z);
-        
     }
 }
 }

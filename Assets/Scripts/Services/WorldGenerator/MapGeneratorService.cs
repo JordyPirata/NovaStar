@@ -63,7 +63,7 @@ public class MapGeneratorService : IMapGenerator
         while (isRunning)
         {
             // get the player coordinate
-            await UpdateVisibleChunks(PlayerInfo.GetPlayerCoordinate());
+            await UpdateVisibleChunks(PlayerInfo.PlayerCoordinate());
             // delay the update of the chunks by system time
             await Task.Delay(2000);
             await Task.Yield();         

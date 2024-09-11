@@ -48,7 +48,7 @@ public class PlayerInfo : MonoBehaviour, IPlayerInfo
             viewerCoordinate = new float2(Mathf.RoundToInt(viewerPosition.x / ChunkConfig.width), Mathf.RoundToInt(viewerPosition.z / ChunkConfig.depth));
         }
     }
-    public float3 GetPlayerPosition()
+    public float3 PlayerPosition()
     {
         if (player == null) // Verifica si player es null antes de acceder a su posición
         {
@@ -56,13 +56,23 @@ public class PlayerInfo : MonoBehaviour, IPlayerInfo
         }
         return viewerPosition;
     }
-    public float2 GetPlayerCoordinate()
+    public float2 PlayerCoordinate()
     {
         if (player == null) // Verifica si viewerPosition es null
         {
             return new float2(0, 0); // Retorna una coordenada predeterminada o maneja la situación como prefieras
         }
         return viewerCoordinate;
+    }
+
+    public void PlayerDied()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public Transform PlayerTransform()
+    {
+        return player;
     }
 }
 }

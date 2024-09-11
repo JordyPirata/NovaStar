@@ -42,7 +42,7 @@ namespace Services.WorldGenerator
         {
             
             // get the distance from the viewer to the nearest edge of the chunk
-            Vector3 player =  playerInfo.GetPlayerPosition();
+            Vector3 player =  playerInfo.PlayerPosition();
             var viewerDstFromNearestEdge = Mathf.Sqrt(Bounds.SqrDistance(new Vector2(player.x, player.z)));
             var visible = viewerDstFromNearestEdge <= ChunkConfig.maxViewDst;
             // set the visibility of the chunk
@@ -62,7 +62,7 @@ namespace Services.WorldGenerator
         public bool CheckDistanceAndRelease()
         {
             // if the distance from the viewer to the chunk is greater than the max view distance
-            Vector3 player =  playerInfo.GetPlayerPosition();
+            Vector3 player =  playerInfo.PlayerPosition();
             if (!(Vector2.Distance(Position, new Vector2(player.x,player.z)) >
                   ChunkConfig.maxViewDst + ChunkConfig.width * 2)) return false;
             Release();

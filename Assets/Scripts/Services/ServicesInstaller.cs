@@ -6,10 +6,12 @@ using UI;
 using Services.Player;
 
 [RequireComponent(typeof(FadeController))]
+[RequireComponent(typeof(PlayerMediator))]
 
 public class ServiceInstaller : MonoBehaviour
 {
     [SerializeField] private FadeController fadeController;
+    [SerializeField] private PlayerMediator playerMediator;
     public void Awake()
     {
         DontDestroyOnLoad(this);
@@ -32,11 +34,11 @@ public class ServiceInstaller : MonoBehaviour
         ServiceLocator.Register<IFadeController>(fadeController);
         // new services
         ServiceLocator.Register<IRayCastController>(new RayCastsController());
-        ServiceLocator.Register<IPlayerMediator>(gameObject.AddComponent<PlayerMediator>());
         ServiceLocator.Register<ILifeService>(gameObject.AddComponent<LifeService>());
         ServiceLocator.Register<IStaminaService>(gameObject.AddComponent<StaminaService>());
         ServiceLocator.Register<IHydrationService>(gameObject.AddComponent<HydrationService>());
         ServiceLocator.Register<IHungerService>(gameObject.AddComponent<HungerService>());
         ServiceLocator.Register<ITemperatureService>(gameObject.AddComponent<TemperatureService>());
+        ServiceLocator.Register<IPlayerMediator>(playerMediator);
     }
 }

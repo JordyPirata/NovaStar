@@ -4,7 +4,7 @@ namespace Services.Interfaces
 {
     public interface IRayCastController
     {
-        public void Configure(IPlayerMediator playerMediator, Transform transform);
+        public void Configure(IPlayerMediator mediator, Transform playerTransform);
         public void LookForGround();
     }
 }

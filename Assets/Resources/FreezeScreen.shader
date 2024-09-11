@@ -3,7 +3,7 @@ Shader "Unlit/FreezeScreen"
     Properties
     {
         _Ice ("Ice Texture", 2D) = "white" {}
-        _Aperture ("Aperture", Range(0,0.15)) = 0.075
+        _Aperture ("Aperture", Range(0,1)) = 0.15
     }
     SubShader
     {
@@ -64,7 +64,7 @@ Shader "Unlit/FreezeScreen"
                 // color with alpha 0 is transparent
                 
                 float4 blendFactor = MakeBlend(i.uv2);
-                float4 transparent = float4(1,1,1,0);
+                float4 transparent = float4(0,0,0,0);
                 float4 Image = lerp(IceColor, transparent, blendFactor);
                 
                 return saturate(Image);
