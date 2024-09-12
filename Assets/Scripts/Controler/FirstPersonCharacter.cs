@@ -5,7 +5,8 @@ using UnityEngine.InputSystem;
 using InputSystem;
 using Services.Interfaces;
 
-using UnityEngine.InputSystem.Controls;
+namespace Controler
+{
 // TODO: Change to use Unity's Event System
 [RequireComponent(typeof(CharacterController))]
 public class FirstPersonCharacter : MonoBehaviour
@@ -16,7 +17,7 @@ public class FirstPersonCharacter : MonoBehaviour
     
     [SerializeField] private Camera cam;
     [SerializeField] private float movementSpeed = 2.0f;
-    [SerializeField] public float lookSensitivity = 1.0f;
+    [SerializeField] private float lookSensitivity = 1.0f;
     
     private float xRotation = 0f;
 
@@ -176,4 +177,5 @@ public class FirstPersonCharacter : MonoBehaviour
     {
         return inputActions.Player.Look.ReadValue<Vector2>();
     }
+}
 }
