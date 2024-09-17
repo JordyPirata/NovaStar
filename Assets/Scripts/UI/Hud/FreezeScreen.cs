@@ -1,4 +1,5 @@
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,11 @@ namespace UI
     {
         private Image freezeImage;
         public Material freezeMaterial;
+        public float Value
+        {
+            get => freezeMaterial.GetFloat("_Aperture");
+            set => ChangeFreezeScreen(value);
+        }
 
         public void Awake()
         {
@@ -19,8 +25,14 @@ namespace UI
         /// </summary>
         public void ChangeFreezeScreen(float value)
         {
-            value = Mathf.Clamp(value, 0f, 1f);
+            // Change into a normalized value between 0 and .15
+            value = Normalize(value, 0, 0.15f);
             freezeMaterial.SetFloat("_Aperture", value);
+        }
+        private float Normalize(float value, float min, float max)
+        {
+            // normalize value between 0 and .15
+            return value * (max - min) + min;
         }
     }
 }
