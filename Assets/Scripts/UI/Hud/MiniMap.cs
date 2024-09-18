@@ -4,7 +4,7 @@ using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 
-namespace UI
+namespace UI.Hud
 {
 public class MiniMap : MonoBehaviour
 {

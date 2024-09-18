@@ -23,6 +23,10 @@ public class SceneLoader : MonoBehaviour, ISceneLoader
                 ServiceLocator.GetService<IPlayerInfo>().StartService();
                 ServiceLocator.GetService<IMapGenerator>().StartService();
                 ServiceLocator.GetService<IWeldMap>().StartService();
+                ServiceLocator.GetService<ILifeService>().StartService();
+                ServiceLocator.GetService<IHungerService>().StartService();
+                ServiceLocator.GetService<IStaminaService>().StartService();
+                ServiceLocator.GetService<IThirstService>().StartService();
                 Console.Log("Game Scene Loaded");
                 break;    
             case MenuScene:
@@ -41,6 +45,10 @@ public class SceneLoader : MonoBehaviour, ISceneLoader
                 ServiceLocator.GetService<IMapGenerator>().StopService();
                 ServiceLocator.GetService<IWeldMap>().StopService();
                 ServiceLocator.GetService<IPlayerInfo>().StopService();
+                ServiceLocator.GetService<ILifeService>().StopService();
+                ServiceLocator.GetService<IHungerService>().StopService();
+                ServiceLocator.GetService<IStaminaService>().StopService();
+                ServiceLocator.GetService<IThirstService>().StopService();
                 Console.Log("Game Scene Unloaded");
                 break;    
             case MenuScene:

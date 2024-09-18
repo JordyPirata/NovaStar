@@ -36,9 +36,10 @@ public class ServiceInstaller : MonoBehaviour
         ServiceLocator.Register<IRayCastController>(new RayCastsController());
         ServiceLocator.Register<ILifeService>(gameObject.AddComponent<LifeService>());
         ServiceLocator.Register<IStaminaService>(gameObject.AddComponent<StaminaService>());
-        ServiceLocator.Register<IHydrationService>(gameObject.AddComponent<HydrationService>());
+        ServiceLocator.Register<IThirstService>(gameObject.AddComponent<HydrationService>());
         ServiceLocator.Register<IHungerService>(gameObject.AddComponent<HungerService>());
         ServiceLocator.Register<ITemperatureService>(gameObject.AddComponent<TemperatureService>());
         ServiceLocator.Register<IPlayerMediator>(playerMediator);
+        ServiceLocator.Register<IHUDService>(gameObject.AddComponent<HUDHolder>());
     }
 }

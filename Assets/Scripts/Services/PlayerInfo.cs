@@ -4,7 +4,6 @@ using Unity.Burst;
 using System.Collections;
 using Config;
 using Services.Interfaces;
-using Services.Player;
 
 namespace Services
 {

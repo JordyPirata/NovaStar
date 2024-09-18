@@ -1,5 +1,6 @@
 using Services.Interfaces;
-public class HydrationService : StatService, IHydrationService
+using UnityEngine.Events;
+public class HydrationService : StatService, IThirstService
 {
     public int Hydration { get => Stat; set => Stat = value; }
 }

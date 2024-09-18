@@ -3,7 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace UI.Hud
 {
     public class FreezeScreen : MonoBehaviour
     {

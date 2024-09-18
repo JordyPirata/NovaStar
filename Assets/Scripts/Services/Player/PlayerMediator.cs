@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Services.Interfaces;
 using System.IO.Compression;
+using Unity.Mathematics;
 
 namespace Services.Player
 {
@@ -14,24 +15,33 @@ namespace Services.Player
         private IHungerService _hungerService;
         private ILifeService _lifeService;
         private IStaminaService _staminaService;
-        private IHydrationService _hydrationService;
+        private IThirstService _hydrationService;
         private ITemperatureService _temperatureService;
-
+        private IHUDService _hudService;
         private void Awake()
         {
             _raycastController = ServiceLocator.GetService<IRayCastController>();
             _lifeService = ServiceLocator.GetService<ILifeService>();
             _playerInfo = ServiceLocator.GetService<IPlayerInfo>();
             _staminaService = ServiceLocator.GetService<IStaminaService>();    
-            _hydrationService = ServiceLocator.GetService<IHydrationService>();
+            _hydrationService = ServiceLocator.GetService<IThirstService>();
             _hungerService = ServiceLocator.GetService<IHungerService>();
             _temperatureService = ServiceLocator.GetService<ITemperatureService>();
+            _hudService = ServiceLocator.GetService<IHUDService>();
         }
         private void Start()
         {
             _raycastController.Configure(this, _playerInfo.PlayerTransform());
+            AddListeners();
         }
-        public void Notify(object sender, string eventMessage)
+        private void AddListeners()
+        {
+            _hungerService.OnStatChanged += () => {_hudService.HungerValue = _hungerService.Hunger * 0.01f;};
+            _hydrationService.OnStatChanged += () => {_hudService.ThirstValue = _hydrationService.Hydration * 0.01f;};
+            _staminaService.OnStatChanged += () => {_hudService.StaminaValue = _staminaService.Stamina * 0.01f;};
+            _lifeService.OnStatChanged += () => {_hudService.HealthValue = _lifeService.Life * 0.01f;};
+        }
+        public void Notify(object sender, Event eventMessage)
         {
             /*
             switch (eventMessage)
@@ -49,5 +59,4 @@ namespace Services.Player
             _raycastController.LookForGround();
         }
     }
-    
 }
