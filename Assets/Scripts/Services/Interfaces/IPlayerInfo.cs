@@ -6,7 +6,6 @@ namespace Services.Interfaces
 {
     public interface IPlayerInfo
     {
-        void Init();
         Transform PlayerTransform();
         float3 PlayerPosition();
         float2 PlayerCoordinate();

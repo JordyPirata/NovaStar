@@ -17,17 +17,14 @@ namespace Services
             {
                 switch (scene.name)
                 {
-                    case "Game":
-                        healthBar = GetComponentInChildren<HealthBar>();
-                        if (healthBar == null)
-                        {
-                            Debug.LogError("HealthBar not found");
-                        }
-                        staminaBar = GetComponentInChildren<StaminaBar>();
-                        hungerBar = GetComponentInChildren<HungerBar>();
-                        thirstBar = GetComponentInChildren<ThirstBar>();
-                        miniMap = GetComponentInChildren<MiniMap>();
-                        freezeScreen = GetComponentInChildren<FreezeScreen>();
+                    case SceneLoader.GameScene:
+                        // Search for the HUD in the scene
+                        healthBar = FindObjectOfType<HealthBar>();
+                        staminaBar = FindObjectOfType<StaminaBar>();
+                        hungerBar = FindObjectOfType<HungerBar>();
+                        thirstBar = FindObjectOfType<ThirstBar>();
+                        miniMap = FindObjectOfType<MiniMap>();
+                        freezeScreen = FindObjectOfType<FreezeScreen>();
                         break;
                 }
             };

@@ -19,7 +19,6 @@ public class SceneLoader : MonoBehaviour, ISceneLoader
             switch (scene.name)
             {
             case GameScene:
-                ServiceLocator.GetService<IPlayerInfo>().Init();
                 ServiceLocator.GetService<IPlayerInfo>().StartService();
                 ServiceLocator.GetService<IMapGenerator>().StartService();
                 ServiceLocator.GetService<IWeldMap>().StartService();
