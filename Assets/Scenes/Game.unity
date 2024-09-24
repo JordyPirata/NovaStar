@@ -347,7 +347,7 @@ GameObject:
   - component: {fileID: 183609783}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3764,9 +3764,9 @@ MonoBehaviour:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 183609780}
   - {fileID: 1619380709}
   - {fileID: 440870765}
   - {fileID: 897160840}
   - {fileID: 384628571}
   - {fileID: 886796664}
-  - {fileID: 183609780}

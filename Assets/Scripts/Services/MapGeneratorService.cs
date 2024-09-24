@@ -1,12 +1,12 @@
 using Unity.Mathematics;
 using UnityEngine;
-using Map = Services.WorldGenerator.ChunkGrid<Services.WorldGenerator.ChunkObject>;
 using System.Threading.Tasks;
 using Config;
 using Services.Interfaces;
 using Services.Player;
 using Services.WorldGenerator;
 using UI;
+using UnityEditor.SearchService;
 
 namespace Services
 {
@@ -16,10 +16,13 @@ namespace Services
 
 public class MapGeneratorService : IMapGenerator
 {
-    private bool isRunning = false;
+    private bool isRunning;
+    bool firstLoop;
     private static IPlayerInfo PlayerInfo => ServiceLocator.GetService<IPlayerInfo>();
+    private static IMap<ChunkObject> Map => ServiceLocator.GetService<IMap<ChunkObject>>();
     public async void StartService()
     {
+        firstLoop = true;
         isRunning = true;
         await GenerateMap();
     }
@@ -30,49 +33,52 @@ public class MapGeneratorService : IMapGenerator
         {
             chunk.Release();
         }
+        
     }
     private static readonly int chunkVisibleInViewDst = Mathf.RoundToInt(ChunkConfig.maxViewDst / ChunkConfig.width);
 
-    private static async Task UpdateVisibleChunks(float2 viewerCoordinate)
+    private void MapLoop(float2 viewerCoordinate)
     {
-
         for (var yOffset = -chunkVisibleInViewDst; yOffset <= chunkVisibleInViewDst; yOffset++)
         {
             for (var xOffset = -chunkVisibleInViewDst; xOffset <= chunkVisibleInViewDst; xOffset++)
             {
 
                 float2 viewedChunkCoord = new(viewerCoordinate.x + xOffset, viewerCoordinate.y + yOffset);
-                // if the chunk is in the map
-                if (Map.ContainsKey(viewedChunkCoord))
-                {
-                    // update the status of the chunk
-                    Map.Instance[viewedChunkCoord].UpdateStatus();
-                }
-                else
-                {
-                    Map.Add(viewedChunkCoord, await ChunkGenerator.GenerateChunk(viewedChunkCoord));
-                }
+                GenerateChunk(viewedChunkCoord);
 
             }
+        }
+        if (firstLoop) 
+        {
+            SceneLoader.OnMapLoaded.Invoke();
+            firstLoop = false;
+        }
+        
+    }
+    private async void GenerateChunk(float2 viewedChunkCoord)
+    {
+        if (Map.ContainsKey(viewedChunkCoord))
+        {
+            // update the status of the chunk
+            Map[viewedChunkCoord].UpdateStatus();
+        }
+        else
+        {
+            Map.Add(viewedChunkCoord, await ChunkGenerator.GenerateChunk(viewedChunkCoord));
         }
     }
 
     private async Task GenerateMap()
     {
-        bool firstLoop = true;
         while (isRunning)
         {
-            // get the player coordinate
-            await UpdateVisibleChunks(PlayerInfo.PlayerCoordinate());
             // delay the update of the chunks by system time
-            await Task.Delay(2000);
-            await Task.Yield();         
-            if (firstLoop)
-            {
-                ServiceLocator.GetService<IFadeController>().FadeOut();
-                ServiceLocator.GetService<IPlayerMediator>().MapLoaded();
-                firstLoop = false;
-            }
+            await Task.Delay(3000);
+            // get the player coordinate
+            MapLoop(PlayerInfo.PlayerCoordinate());
+            // delay the update of the chunks by system time
+            
         }
     }
 }

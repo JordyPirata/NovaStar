@@ -5,6 +5,7 @@ using UnityEngine;
 using Services.Interfaces;
 using System.IO.Compression;
 using Unity.Mathematics;
+using System.Threading.Tasks;
 
 namespace Services.Player
 {
@@ -18,7 +19,8 @@ namespace Services.Player
         private IThirstService _hydrationService;
         private ITemperatureService _temperatureService;
         private IHUDService _hudService;
-        private void Awake()
+
+        private void Start()
         {
             _raycastController = ServiceLocator.GetService<IRayCastController>();
             _lifeService = ServiceLocator.GetService<ILifeService>();
@@ -28,18 +30,25 @@ namespace Services.Player
             _hungerService = ServiceLocator.GetService<IHungerService>();
             _temperatureService = ServiceLocator.GetService<ITemperatureService>();
             _hudService = ServiceLocator.GetService<IHUDService>();
+            SubscribeToEvents();
         }
-        private void Start()
+        private void SubscribeToEvents()
         {
-            _raycastController.Configure(this, _playerInfo.PlayerTransform());
-            AddListeners();
-        }
-        private void AddListeners()
-        {
+            
+            SceneLoader.OnMapLoaded += MapLoaded;
             _hungerService.OnStatChanged += () => {_hudService.HungerValue = _hungerService.Hunger * 0.01f;};
             _hydrationService.OnStatChanged += () => {_hudService.ThirstValue = _hydrationService.Hydration * 0.01f;};
             _staminaService.OnStatChanged += () => {_hudService.StaminaValue = _staminaService.Stamina * 0.01f;};
             _lifeService.OnStatChanged += () => {_hudService.HealthValue = _lifeService.Life * 0.01f;};
+            
+        }
+        private void UnsubscribeToEvents()
+        {
+            SceneLoader.OnMapLoaded -= MapLoaded;
+            _hungerService.OnStatChanged -= () => {_hudService.HungerValue = _hungerService.Hunger * 0.01f;};
+            _hydrationService.OnStatChanged -= () => {_hudService.ThirstValue = _hydrationService.Hydration * 0.01f;};
+            _staminaService.OnStatChanged -= () => {_hudService.StaminaValue = _staminaService.Stamina * 0.01f;};
+            _lifeService.OnStatChanged -= () => {_hudService.HealthValue = _lifeService.Life * 0.01f;};
         }
         public void Notify(object sender, Event eventMessage)
         {
@@ -56,7 +65,18 @@ namespace Services.Player
 
         public void MapLoaded()
         {
+            StartCoroutine(ExcecuteAfter());
+        }
+        private void OnDestroy()
+        {
+            UnsubscribeToEvents();
+        }
+
+        private IEnumerator ExcecuteAfter()
+        {
+            yield return new WaitForSeconds(4);
             _raycastController.LookForGround();
+            ServiceLocator.GetService<IFadeController>().FadeOut();
         }
     }
 }

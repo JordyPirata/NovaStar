@@ -5,10 +5,16 @@ using UnityEngine;
 
 namespace Services.WorldGenerator
 {
+    // Make it null-able type
     public class ChunkObject
     {
         public GameObject GameObject { get; set; }
         public Terrain Terrain { get; set; }
+        public TerrainData TerrainData 
+        {
+            get => Terrain.terrainData;
+            set => Terrain.terrainData = value;
+        }
         public float2 Coord { get; set; }
         private Bounds Bounds { get; set; }
         private Vector2 Position { get; set; }
@@ -44,6 +50,7 @@ namespace Services.WorldGenerator
             // get the distance from the viewer to the nearest edge of the chunk
             Vector3 player =  playerInfo.PlayerPosition();
             var viewerDstFromNearestEdge = Mathf.Sqrt(Bounds.SqrDistance(new Vector2(player.x, player.z)));
+            //var viewerDstFromNearestEdge = Vector2.Distance(Position, new Vector2(player.x,player.z));
             var visible = viewerDstFromNearestEdge <= ChunkConfig.maxViewDst;
             // set the visibility of the chunk
             SetVisible(visible);

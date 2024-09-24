@@ -3,15 +3,15 @@ using Services.Repository;
 using UnityEngine;
 using Services;
 using UI;
+using Services.WorldGenerator;
 using Services.Player;
+using Unity.VisualScripting;
 
 [RequireComponent(typeof(FadeController))]
-[RequireComponent(typeof(PlayerMediator))]
 
 public class ServiceInstaller : MonoBehaviour
 {
     [SerializeField] private FadeController fadeController;
-    [SerializeField] private PlayerMediator playerMediator;
     public void Awake()
     {
         DontDestroyOnLoad(this);
@@ -19,11 +19,13 @@ public class ServiceInstaller : MonoBehaviour
     }
     public void InstallServices()
     {
+        ServiceLocator.Register<IMap<ChunkObject>>(new Map<ChunkObject>());
         ServiceLocator.Register<IInputActions>(new PlayerInputService());
         ServiceLocator.Register<ISettingsService>(gameObject.AddComponent<SettingsService>());
         ServiceLocator.Register<IPlayerInfo>(gameObject.AddComponent<PlayerInfo>());
         ServiceLocator.Register<IWeldMap>(gameObject.AddComponent<WeldMapService>()); 
         ServiceLocator.Register<IMapGenerator>(new MapGeneratorService());
+        // ServiceLocator.Register<IMapGenerator>(gameObject.AddComponent<MapGeneratorC>());
         ServiceLocator.Register<IRepository>(new GameRepository());
         ServiceLocator.Register<ISceneLoader>(gameObject.AddComponent<SceneLoader>());
         ServiceLocator.Register<IWorldCRUD>(new WorldCRUD());
@@ -39,7 +41,7 @@ public class ServiceInstaller : MonoBehaviour
         ServiceLocator.Register<IThirstService>(gameObject.AddComponent<HydrationService>());
         ServiceLocator.Register<IHungerService>(gameObject.AddComponent<HungerService>());
         ServiceLocator.Register<ITemperatureService>(gameObject.AddComponent<TemperatureService>());
-        ServiceLocator.Register<IPlayerMediator>(playerMediator);
+        ServiceLocator.Register<IPlayerMediator>(gameObject.AddComponent<PlayerMediator>());
         ServiceLocator.Register<IHUDService>(gameObject.AddComponent<HUDHolder>());
     }
 }

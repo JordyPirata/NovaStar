@@ -2016,7 +2016,7 @@ RectTransform:
   m_Father: {fileID: 938581737}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -8887,10 +8887,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 683286059536392146, guid: f5a8d62b98c04ed41a0cb209012b7423,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1810645996181022462, guid: f5a8d62b98c04ed41a0cb209012b7423,
         type: 3}
       propertyPath: m_Name
       value: GameServices
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247662020351534956, guid: f5a8d62b98c04ed41a0cb209012b7423,
+        type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 8050637390777121426, guid: f5a8d62b98c04ed41a0cb209012b7423,
         type: 3}

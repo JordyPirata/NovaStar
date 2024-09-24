@@ -4,6 +4,7 @@ namespace Services.Interfaces
 {
 interface IHUDService
 {
+    public void Initialize();
     public float HealthValue { get; set; }
     public float StaminaValue { get; set; }
     public float HungerValue { get; set; }

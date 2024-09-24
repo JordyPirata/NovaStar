@@ -1,5 +1,8 @@
+using System;
 using Services.Interfaces;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using Console = UnityEngine.Debug;
 
@@ -12,6 +15,8 @@ public class SceneLoader : MonoBehaviour, ISceneLoader
 {
     public const string GameScene = "Game";
     public const string MenuScene = "MainM";
+    public static UnityAction OnMapLoaded { get; set; } = new UnityAction(() => { }); 
+    
     public void Start()
     {
         SceneManager.sceneLoaded += (scene, mode) =>
@@ -26,6 +31,8 @@ public class SceneLoader : MonoBehaviour, ISceneLoader
                 ServiceLocator.GetService<IHungerService>().StartService();
                 ServiceLocator.GetService<IStaminaService>().StartService();
                 ServiceLocator.GetService<IThirstService>().StartService();
+                ServiceLocator.GetService<IHUDService>().Initialize();
+                ServiceLocator.GetService<IRayCastController>().Initialize();
                 Console.Log("Game Scene Loaded");
                 break;    
             case MenuScene:
@@ -62,7 +69,7 @@ public class SceneLoader : MonoBehaviour, ISceneLoader
     }
     public void LoadScene(string sceneName)
     {
-        SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
+        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
         
     }
 }

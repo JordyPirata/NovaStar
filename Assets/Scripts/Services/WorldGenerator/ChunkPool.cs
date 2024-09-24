@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Map = Services.WorldGenerator.ChunkGrid<Services.WorldGenerator.ChunkObject>;
+using Services.Interfaces;
+using Models;
 
 namespace Services.WorldGenerator
 {
@@ -14,9 +15,11 @@ namespace Services.WorldGenerator
         [SerializeField] private GameObject ChunkPrefab;
         private readonly List<ChunkObject> chunkList = new();
         private static ChunkPool instance;
+        private static IMap<ChunkObject> Map;
         public static ChunkPool Instance { get { return instance; } }
         public void Awake()
-        {
+        {   
+            Map = ServiceLocator.GetService<IMap<ChunkObject>>();
             if (instance == null)
             {
                 instance = this;
