@@ -11,6 +11,7 @@ namespace Services.Player
 {
     public class PlayerMediator : MonoBehaviour, IPlayerMediator
     {
+        private IFirstPersonCharacter _firstPersonCharacter;
         private IPlayerInfo _playerInfo;
         private IRayCastController _raycastController;
         private IHungerService _hungerService;
@@ -22,6 +23,7 @@ namespace Services.Player
 
         private void Start()
         {
+            _firstPersonCharacter = ServiceLocator.GetService<IFirstPersonCharacter>();
             _raycastController = ServiceLocator.GetService<IRayCastController>();
             _lifeService = ServiceLocator.GetService<ILifeService>();
             _playerInfo = ServiceLocator.GetService<IPlayerInfo>();
@@ -32,24 +34,27 @@ namespace Services.Player
             _hudService = ServiceLocator.GetService<IHUDService>();
             SubscribeToEvents();
         }
+
         private void SubscribeToEvents()
         {
-            
-            SceneLoader.OnMapLoaded += MapLoaded;
+            Debug.Log("Subscribing to events");
+            EventManager.OnMapLoaded += MapLoaded;
             _hungerService.OnStatChanged += () => {_hudService.HungerValue = _hungerService.Hunger * 0.01f;};
+            
             _hydrationService.OnStatChanged += () => {_hudService.ThirstValue = _hydrationService.Hydration * 0.01f;};
             _staminaService.OnStatChanged += () => {_hudService.StaminaValue = _staminaService.Stamina * 0.01f;};
             _lifeService.OnStatChanged += () => {_hudService.HealthValue = _lifeService.Life * 0.01f;};
             
         }
+        /*
         private void UnsubscribeToEvents()
         {
-            SceneLoader.OnMapLoaded -= MapLoaded;
+            EventManager.OnMapLoaded -= MapLoaded;
             _hungerService.OnStatChanged -= () => {_hudService.HungerValue = _hungerService.Hunger * 0.01f;};
             _hydrationService.OnStatChanged -= () => {_hudService.ThirstValue = _hydrationService.Hydration * 0.01f;};
             _staminaService.OnStatChanged -= () => {_hudService.StaminaValue = _staminaService.Stamina * 0.01f;};
             _lifeService.OnStatChanged -= () => {_hudService.HealthValue = _lifeService.Life * 0.01f;};
-        }
+        }*/
         public void Notify(object sender, Event eventMessage)
         {
             /*
@@ -67,10 +72,11 @@ namespace Services.Player
         {
             StartCoroutine(ExcecuteAfter());
         }
+        /*
         private void OnDestroy()
         {
             UnsubscribeToEvents();
-        }
+        }*/
 
         private IEnumerator ExcecuteAfter()
         {

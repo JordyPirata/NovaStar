@@ -344,7 +344,6 @@ GameObject:
   - component: {fileID: 183609778}
   - component: {fileID: 183609781}
   - component: {fileID: 183609782}
-  - component: {fileID: 183609783}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -459,23 +458,17 @@ MonoBehaviour:
   cam: {fileID: 278524695}
   movementSpeed: 10
   lookSensitivity: 2
-  gravity: -9.81
+  gravity: -15
   zoomFOV: 35
   zoomSpeed: 9
   crouchHeight: 0
+  Grounded: 1
+  GroundedOffset: -0.2
   sprinting: 0
---- !u!114 &183609783
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 183609777}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfe98042d17548efa5268e6c0f9039d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  GroundedRadius: 0.4
+  GroundLayers:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!1 &278524692
 GameObject:
   m_ObjectHideFlags: 0

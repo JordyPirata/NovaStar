@@ -11,11 +11,14 @@ namespace Services
 /// <summary>
 /// Load and unload scenes
 /// </summary>
-public class SceneLoader : MonoBehaviour, ISceneLoader
+public class EventManager : MonoBehaviour, IEventManager
 {
     public const string GameScene = "Game";
     public const string MenuScene = "MainM";
-    public static UnityAction OnMapLoaded { get; set; } = new UnityAction(() => { }); 
+    public static Action OnMapLoaded;
+    public static UnityAction OnGamePaused;
+    public static UnityEvent OnGameResumed;
+
     
     public void Start()
     {

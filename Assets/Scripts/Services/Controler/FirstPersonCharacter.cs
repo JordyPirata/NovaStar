@@ -5,16 +5,21 @@ using UnityEngine.InputSystem;
 using InputSystem;
 using Services.Interfaces;
 
-namespace Controler
+namespace Services
 {
 // TODO: Change to use Unity's Event System
 [RequireComponent(typeof(CharacterController))]
-public class FirstPersonCharacter : MonoBehaviour
+public class FirstPersonCharacter : MonoBehaviour, IFirstPersonCharacter
 {
     private InputActions inputActions;
 
-    private CharacterController controller;
-    
+    public CharacterController Controller { get; set; }
+
+    public Transform PlayerTransform 
+    {
+        get => Controller.transform;
+    }
+
     [SerializeField] private Camera cam;
     [SerializeField] private float movementSpeed = 2.0f;
     [SerializeField] private float lookSensitivity = 1.0f;
@@ -24,19 +29,29 @@ public class FirstPersonCharacter : MonoBehaviour
     // Movement Vars
     private Vector3 velocity;
     public float gravity = -15.0f;
-    private bool grounded;
-
+    /*
     // Zoom Vars - Zoom code adapted from @torahhorse's First Person Drifter scripts.
-    public float zoomFOV = 35.0f;
+    public float zoomFOV = 350.0f;
     public float zoomSpeed = 9f;
     private float targetFOV;
-    private float baseFOV;
+    private float baseFOV;*/
 
-    // Crouch Vars
+
     private float initHeight;
     [SerializeField] private float crouchHeight;
     // Sprint Vars
+    [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
+    public bool Grounded = true;
+
+    [Tooltip("Useful for rough ground")]
+    public float GroundedOffset = -0.14f;
     [SerializeField] private bool sprinting = false;
+    [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
+    public float GroundedRadius = 0.6f;
+
+    [Tooltip("What layers the character uses as ground")]
+    public LayerMask GroundLayers;
+    
     private void Awake()
     {
         inputActions = ServiceLocator.GetService<IInputActions>().InputActions;
@@ -44,13 +59,13 @@ public class FirstPersonCharacter : MonoBehaviour
     }
     private void Start()
     {
-        controller = GetComponent<CharacterController>();
-        initHeight = controller.height;
+        Controller = GetComponent<CharacterController>();
+        initHeight = Controller.height;
         Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible = false;
-        SetBaseFOV(cam.fieldOfView);
+        // SetBaseFOV(cam.fieldOfView);
     }
-
+    
     private void OnEnable()
     {
         inputActions.Player.Enable();
@@ -59,13 +74,17 @@ public class FirstPersonCharacter : MonoBehaviour
         inputActions.Player.Jump.performed += DoJump;
         inputActions.Player.Run.started += OnSprint;
         inputActions.Player.Run.canceled += OnSprint;
+        // inputActions.Player.Zoom.performed += DoZoom;
+        // inputActions.Player.Zoom.canceled += DoZoom;
     }
     private void OnDisable()
     {
+        // inputActions.Player.Zoom.performed -= DoZoom;
+        // inputActions.Player.Zoom.canceled -= DoZoom;
         inputActions.Player.Crouch.canceled -= DoCrouch;
         inputActions.Player.Crouch.performed -= DoCrouch;
-        inputActions.Player.Run.started += OnSprint;
-        inputActions.Player.Run.canceled += OnSprint;
+        inputActions.Player.Run.started -= OnSprint;
+        inputActions.Player.Run.canceled -= OnSprint;
         inputActions.Player.Jump.performed -= DoJump;
         inputActions.Player.Disable();
     }
@@ -73,13 +92,12 @@ public class FirstPersonCharacter : MonoBehaviour
     private void Update()
     {
         ApplyGravity();
+        GroundedCheck();
         DoMovement();
-        DoZoom();
     }
     private void LateUpdate()
     {   
         DoLooking();
-        UpdateZoom();
     }
 
     private void DoLooking()
@@ -98,7 +116,7 @@ public class FirstPersonCharacter : MonoBehaviour
     private void ApplyGravity()
     {
         velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+        Controller.Move(velocity * Time.deltaTime);
     }
     private void OnSprint(InputAction.CallbackContext context)
     {
@@ -108,26 +126,44 @@ public class FirstPersonCharacter : MonoBehaviour
     private void DoMovement()
     {
         float targetSpeed = sprinting ? movementSpeed * 2 : movementSpeed;
-        grounded = controller.isGrounded;
-        if (grounded && velocity.y < 0)
+        Grounded = Controller.isGrounded;
+        if (Grounded && velocity.y < 0)
         {
             velocity.y = -2f;
         }
         
         Vector2 movement = GetPlayerMovement();
         Vector3 move = transform.right * movement.x + transform.forward * movement.y;
-        controller.Move(targetSpeed * Time.deltaTime * move);
+        Controller.Move(targetSpeed * Time.deltaTime * move);
+    }
+    private void GroundedCheck()
+    {
+        // set sphere position, with offset
+        Vector3 spherePosition = new(transform.position.x, transform.position.y - GroundedOffset,
+            transform.position.z);
+        Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
+            QueryTriggerInteraction.Ignore);
     }
     private void DoJump(InputAction.CallbackContext context)
     {
-        if (context.performed && grounded)
+        if (context.performed && Grounded)
         {
             velocity.y = Mathf.Sqrt(2.0f * -2.0f * gravity);
         }
     }
-
-    private void DoZoom()
+/*
+    private void DoZoom(InputAction.CallbackContext context)
     {
+        if (context.performed)
+        {
+            targetFOV = zoomFOV;
+        }
+        if (context.canceled)
+        {
+            targetFOV = baseFOV;
+        }
+        UpdateZoom();
+        <>
         if (inputActions.Player.Zoom.ReadValue<float>() > 0)
         {
             targetFOV = zoomFOV;
@@ -136,28 +172,28 @@ public class FirstPersonCharacter : MonoBehaviour
         {
             targetFOV = baseFOV;
         }
-        UpdateZoom();
+        <>
     }
-
+*/
     private void DoCrouch(InputAction.CallbackContext context)
     {
         if (context.performed)
         {
-            controller.height = crouchHeight;
+            Controller.height = crouchHeight;
         }
         if (context.canceled)
         {
             if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.up), 2.0f, -1))
             {
-                controller.height = crouchHeight;
+                Controller.height = crouchHeight;
             }
             else
             {
-                controller.height = initHeight;
+                Controller.height = initHeight;
             }
         }
     }
-
+    /*
     private void UpdateZoom()
     {
         cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, targetFOV, zoomSpeed * Time.deltaTime);
@@ -166,7 +202,7 @@ public class FirstPersonCharacter : MonoBehaviour
     public void SetBaseFOV(float fov)
     {
         baseFOV = fov;
-    }
+    }*/
 
     public Vector2 GetPlayerMovement()
     {
@@ -178,4 +214,9 @@ public class FirstPersonCharacter : MonoBehaviour
         return inputActions.Player.Look.ReadValue<Vector2>();
     }
 }
+    public interface IFirstPersonCharacter
+    {
+        public CharacterController Controller { get; }
+        public Transform PlayerTransform { get; }
+    }
 }

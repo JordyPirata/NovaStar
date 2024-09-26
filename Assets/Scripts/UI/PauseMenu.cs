@@ -6,10 +6,10 @@ namespace UI
 {
 public class PauseMenu : MonoBehaviour
 {
-    ISceneLoader sceneLoader;
+    IEventManager sceneLoader;
     public void Awake()
     {
-        sceneLoader = ServiceLocator.GetService<ISceneLoader>();
+        sceneLoader = ServiceLocator.GetService<IEventManager>();
     }
     public void OnEnable()
     {
@@ -23,7 +23,7 @@ public class PauseMenu : MonoBehaviour
     public void OnMenuButtonClicked()
     {
         Time.timeScale = 1;
-        sceneLoader.LoadScene(ISceneLoader.MainMenu);
+        sceneLoader.LoadScene(IEventManager.MainMenu);
     }
     public void OnExitButtonClicked()
     {

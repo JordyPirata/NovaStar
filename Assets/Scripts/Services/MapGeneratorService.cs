@@ -51,7 +51,8 @@ public class MapGeneratorService : IMapGenerator
         }
         if (firstLoop) 
         {
-            SceneLoader.OnMapLoaded.Invoke();
+            Debug.Log("Map Loaded");
+            EventManager.OnMapLoaded.Invoke();
             firstLoop = false;
         }
         

@@ -23,7 +23,7 @@ public class PlayerInfo : MonoBehaviour, IPlayerInfo
         {
             switch (scene.name)
             {
-                case SceneLoader.GameScene:
+                case EventManager.GameScene:
                     FindPlayer();
                     break;
             }
