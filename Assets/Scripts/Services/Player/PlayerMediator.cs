@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using Services.Interfaces;
-using System.IO.Compression;
-using Unity.Mathematics;
-using System.Threading.Tasks;
+
 
 namespace Services.Player
 {
@@ -39,11 +36,16 @@ namespace Services.Player
         {
             Debug.Log("Subscribing to events");
             EventManager.OnMapLoaded += MapLoaded;
+            // TODO - Remove annonymous functions to UnsubscribeToEvents
             _hungerService.OnStatChanged += () => {_hudService.HungerValue = _hungerService.Hunger * 0.01f;};
             _hydrationService.OnStatChanged += () => {_hudService.ThirstValue = _hydrationService.Hydration * 0.01f;};
             _staminaService.OnStatChanged += () => {_hudService.StaminaValue = _staminaService.Stamina * 0.01f;};
+            _staminaService.OnTiredChanged += () => 
+            {
+                if (_staminaService.IsTired) ServiceLocator.GetService<IInputActions>().InputActions.Player.Run.Disable();
+                else ServiceLocator.GetService<IInputActions>().InputActions.Player.Run.Enable();
+            };
             _lifeService.OnStatChanged += () => {_hudService.HealthValue = _lifeService.Life * 0.01f;};
-            
         }
         /*
         private void UnsubscribeToEvents()
@@ -54,14 +56,6 @@ namespace Services.Player
             _staminaService.OnStatChanged -= () => {_hudService.StaminaValue = _staminaService.Stamina * 0.01f;};
             _lifeService.OnStatChanged -= () => {_hudService.HealthValue = _lifeService.Life * 0.01f;};
         }*/
-        public void Notify(object sender, Event eventMessage)
-        {
-            /*
-            switch (eventMessage)
-            {
-            // case "PlayerDied":
-            }*/
-        }
         
         public void MapLoaded()
         {
@@ -76,9 +70,9 @@ namespace Services.Player
         {
             _playerInfo.PlayerDied();
         }
-        public void StaminaEmpty()
+        public void IsTired()
         {
-            ServiceLocator.GetService<IInputActions>().InputActions.Player.Run.Disable();
+            
         }
         private IEnumerator ExcecuteAfterMapLoaded()
         {

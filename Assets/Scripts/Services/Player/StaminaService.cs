@@ -5,13 +5,59 @@ using UnityEngine;
 
 namespace Services.Player
 {
-public class StaminaService : StatService, IStaminaService
+public class StaminaService : MonoBehaviour, IStaminaService
 {
-    public Action IsTen { get; set; } = new Action(() => { });
+    public int Stamina { get; private set; }
+    public Action OnStatChanged { get; set; }
+    public Action OnTiredChanged { get; set; }
+    public bool IsTired
+    {
+        get => IsTired;
+        set
+        {
+            if (IsTired != value)
+            {
+                IsTired = value;
+                OnTiredChanged?.Invoke();
+            }
+        }
+    }
 
-    public int Stamina { get => Stat; set => Stat = value; }
-    
-    protected override IEnumerator NaturalRecovery()
+    public void DecreaseStat(int amount)
+    {
+        OnStatChanged.Invoke();
+        if (Stamina - amount < 0) 
+        {
+            Stamina = 0;
+            return;
+        }
+        Stamina -= amount;
+        if (amount < 20) IsTired = true;
+    }
+
+    public void IncreaseStat(int amount)
+    {
+        OnStatChanged.Invoke();
+        if (Stamina + amount > 100) 
+        {
+            Stamina = 100;
+            return;
+        }
+        Stamina += amount;
+        if (amount > 20) IsTired = false;
+    }
+
+    public void StartService()
+    {
+        StartCoroutine(NaturalRecovery());
+    }
+
+    public void StopService()
+    {
+        StopCoroutine(NaturalRecovery());
+    }
+
+    protected IEnumerator NaturalRecovery()
     {
         Stamina = 100;
         while (true)
@@ -21,11 +67,6 @@ public class StaminaService : StatService, IStaminaService
             {
                 Stamina -= 10;
                 OnStatChanged.Invoke();
-                
-            }
-            if (Stamina == 10)
-            {
-                IsTen.Invoke();
             }
         }
     }
