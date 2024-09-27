@@ -35,7 +35,6 @@ public class EventManager : MonoBehaviour, IEventManager
                 ServiceLocator.GetService<IStaminaService>().StartService();
                 ServiceLocator.GetService<IThirstService>().StartService();
                 ServiceLocator.GetService<IHUDService>().Initialize();
-                ServiceLocator.GetService<IRayCastController>().Initialize();
                 Console.Log("Game Scene Loaded");
                 break;    
             case MenuScene:

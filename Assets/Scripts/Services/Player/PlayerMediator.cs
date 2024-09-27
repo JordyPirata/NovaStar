@@ -11,7 +11,7 @@ namespace Services.Player
 {
     public class PlayerMediator : MonoBehaviour, IPlayerMediator
     {
-        private IFirstPersonCharacter _firstPersonCharacter;
+        private IFirstPersonController _firstPersonCharacter;
         private IPlayerInfo _playerInfo;
         private IRayCastController _raycastController;
         private IHungerService _hungerService;
@@ -23,7 +23,7 @@ namespace Services.Player
 
         private void Start()
         {
-            _firstPersonCharacter = ServiceLocator.GetService<IFirstPersonCharacter>();
+            _firstPersonCharacter = ServiceLocator.GetService<IFirstPersonController>();
             _raycastController = ServiceLocator.GetService<IRayCastController>();
             _lifeService = ServiceLocator.GetService<ILifeService>();
             _playerInfo = ServiceLocator.GetService<IPlayerInfo>();
@@ -40,7 +40,6 @@ namespace Services.Player
             Debug.Log("Subscribing to events");
             EventManager.OnMapLoaded += MapLoaded;
             _hungerService.OnStatChanged += () => {_hudService.HungerValue = _hungerService.Hunger * 0.01f;};
-            
             _hydrationService.OnStatChanged += () => {_hudService.ThirstValue = _hydrationService.Hydration * 0.01f;};
             _staminaService.OnStatChanged += () => {_hudService.StaminaValue = _staminaService.Stamina * 0.01f;};
             _lifeService.OnStatChanged += () => {_hudService.HealthValue = _lifeService.Life * 0.01f;};
@@ -63,25 +62,28 @@ namespace Services.Player
             // case "PlayerDied":
             }*/
         }
-        public void PlayerDied()
-        {
-            _playerInfo.PlayerDied();
-        }
-
+        
         public void MapLoaded()
         {
-            StartCoroutine(ExcecuteAfter());
+            StartCoroutine(ExcecuteAfterMapLoaded());
         }
         /*
         private void OnDestroy()
         {
             UnsubscribeToEvents();
         }*/
-
-        private IEnumerator ExcecuteAfter()
+        public void PlayerDied()
+        {
+            _playerInfo.PlayerDied();
+        }
+        public void StaminaEmpty()
+        {
+            ServiceLocator.GetService<IInputActions>().InputActions.Player.Run.Disable();
+        }
+        private IEnumerator ExcecuteAfterMapLoaded()
         {
             yield return new WaitForSeconds(4);
-            _raycastController.LookForGround();
+            _raycastController.LookForGround(_playerInfo.PlayerTransform());
             ServiceLocator.GetService<IFadeController>().FadeOut();
         }
     }

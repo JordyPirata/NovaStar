@@ -4,12 +4,13 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using InputSystem;
 using Services.Interfaces;
+using Unity.VisualScripting;
 
 namespace Services
 {
 // TODO: Change to use Unity's Event System
 [RequireComponent(typeof(CharacterController))]
-public class FirstPersonCharacter : MonoBehaviour, IFirstPersonCharacter
+public class FirstPersonCharacter : MonoBehaviour
 {
     private InputActions inputActions;
 
@@ -45,7 +46,7 @@ public class FirstPersonCharacter : MonoBehaviour, IFirstPersonCharacter
 
     [Tooltip("Useful for rough ground")]
     public float GroundedOffset = -0.14f;
-    [SerializeField] private bool sprinting = false;
+    [SerializeField] public bool sprinting = false;
     [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
     public float GroundedRadius = 0.6f;
 
@@ -214,9 +215,25 @@ public class FirstPersonCharacter : MonoBehaviour, IFirstPersonCharacter
         return inputActions.Player.Look.ReadValue<Vector2>();
     }
 }
-    public interface IFirstPersonCharacter
+// TODO: Test this class
+    public interface IFirstPersonController
     {
-        public CharacterController Controller { get; }
+        public FirstPersonCharacter ControllerScript { get; }
         public Transform PlayerTransform { get; }
+        public bool Sprinting { get; set; }
+    }
+    public class ControllerReference : IFirstPersonController
+    {
+        public FirstPersonCharacter ControllerScript 
+        { 
+            get => ControllerScript? ControllerScript : GameObject.Find("Player").GetComponent<FirstPersonCharacter>();
+            set => ControllerScript = value;
+        }
+        public Transform PlayerTransform { get => ControllerScript.Controller.transform; }
+        public bool Sprinting 
+        { 
+            get => ControllerScript.sprinting;  
+            set => ControllerScript.sprinting = value; 
+        }
     }
 }

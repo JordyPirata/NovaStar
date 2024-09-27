@@ -4,7 +4,7 @@ namespace Services.Interfaces
 {
     public interface IRayCastController
     {
-        void Initialize();
-        public void LookForGround();
+        public void LookForGround(Transform playerTransform);
+        public void CheckFall(Transform playerTransform);
     }
 }

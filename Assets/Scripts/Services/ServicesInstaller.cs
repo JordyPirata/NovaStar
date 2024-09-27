@@ -34,7 +34,6 @@ public class ServiceInstaller : MonoBehaviour
         ServiceLocator.Register<IBiomeDic>(new BiomesDic());
         ServiceLocator.Register<ITextureMapGen>(new TextureMapGen());
         ServiceLocator.Register<IFadeController>(fadeController);
-        // new services
         ServiceLocator.Register<IRayCastController>(new RayCastsController());
         ServiceLocator.Register<ILifeService>(gameObject.AddComponent<LifeService>());
         ServiceLocator.Register<IStaminaService>(gameObject.AddComponent<StaminaService>());
@@ -42,6 +41,8 @@ public class ServiceInstaller : MonoBehaviour
         ServiceLocator.Register<IHungerService>(gameObject.AddComponent<HungerService>());
         ServiceLocator.Register<ITemperatureService>(gameObject.AddComponent<TemperatureService>());
         ServiceLocator.Register<IPlayerMediator>(gameObject.AddComponent<PlayerMediator>());
+        // new services
         ServiceLocator.Register<IHUDService>(gameObject.AddComponent<HUDHolder>());
+        ServiceLocator.Register<IFirstPersonController>(new ControllerReference());
     }
 }

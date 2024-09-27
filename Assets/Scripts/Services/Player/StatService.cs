@@ -4,7 +4,8 @@ using System;
 
 public abstract class StatService : MonoBehaviour
 {
-    public Action  OnStatChanged { get; set; } = new Action(() => { });
+    public Action OnStatChanged { get; set; } = new Action(() => { });
+    
     public int Stat { get; set; }
 
     public void StartService()
@@ -17,7 +18,7 @@ public abstract class StatService : MonoBehaviour
         StopCoroutine(NaturalRecovery());
     }
 
-    private IEnumerator NaturalRecovery()
+    protected virtual IEnumerator NaturalRecovery()
     {
         while (true)
         {
