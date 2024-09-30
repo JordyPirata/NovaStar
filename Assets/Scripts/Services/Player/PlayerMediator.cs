@@ -39,9 +39,10 @@ namespace Services.Player
             // TODO - Remove annonymous functions to UnsubscribeToEvents
             _hungerService.OnStatChanged += () => {_hudService.HungerValue = _hungerService.Hunger * 0.01f;};
             _hydrationService.OnStatChanged += () => {_hudService.ThirstValue = _hydrationService.Hydration * 0.01f;};
-            _staminaService.OnStatChanged += () => {_hudService.StaminaValue = _staminaService.Stamina * 0.01f;};
+            _staminaService.OnStatChanged += () => {_hudService.StaminaValue = _staminaService.Stamina * 0.01f;Debug.Log("Stamina: " +  _staminaService.Stamina );};
             _staminaService.OnTiredChanged += () => 
             {
+                Debug.Log("Tired changed");
                 if (_staminaService.IsTired) ServiceLocator.GetService<IInputActions>().InputActions.Player.Run.Disable();
                 else ServiceLocator.GetService<IInputActions>().InputActions.Player.Run.Enable();
             };
@@ -56,23 +57,35 @@ namespace Services.Player
             _staminaService.OnStatChanged -= () => {_hudService.StaminaValue = _staminaService.Stamina * 0.01f;};
             _lifeService.OnStatChanged -= () => {_hudService.HealthValue = _lifeService.Life * 0.01f;};
         }*/
-        
-        public void MapLoaded()
-        {
-            StartCoroutine(ExcecuteAfterMapLoaded());
-        }
         /*
         private void OnDestroy()
         {
             UnsubscribeToEvents();
         }*/
+        public void MapLoaded()
+        {
+            StartCoroutine(ExcecuteAfterMapLoaded());
+        }
+        
         public void PlayerDied()
         {
             _playerInfo.PlayerDied();
         }
-        public void IsTired()
+        public void Run()
         {
-            
+            StartCoroutine(LoopDecreaseStamina());
+        }
+        public void StopRunning()
+        {
+            StopCoroutine(LoopDecreaseStamina());
+        }
+        private IEnumerator LoopDecreaseStamina()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(1);
+                _staminaService.DecreaseStat(1);
+            }
         }
         private IEnumerator ExcecuteAfterMapLoaded()
         {

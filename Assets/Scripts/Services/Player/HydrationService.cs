@@ -3,34 +3,11 @@ using System.Collections;
 using UnityEngine;
 using System;
 using UnityEngine.Events;
-public class HydrationService : MonoBehaviour, IThirstService
+public class HydrationService : StatService, IThirstService
 {
-    public int Hydration { get; set; }
-    public Action OnStatChanged { get; set; }
+    public int Hydration { get => Stat; set => Stat = value; }
 
-    public void DecreaseStat(int amount)
-    {
-        Hydration -= amount;
-        OnStatChanged.Invoke();
-    }
-
-    public void IncreaseStat(int amount)
-    {
-        Hydration += amount;
-        OnStatChanged.Invoke();
-    }
-
-    public void StartService()
-    {
-        StartCoroutine(NaturalRecovery());
-    }
-
-    public void StopService()
-    {
-        StopCoroutine(NaturalRecovery());
-    }
-
-    protected IEnumerator NaturalRecovery()
+    protected override IEnumerator NaturalRecovery()
     {
         Hydration = 100;
         while (true)

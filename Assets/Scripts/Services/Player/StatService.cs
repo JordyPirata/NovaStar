@@ -2,11 +2,11 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-public abstract class StatService : MonoBehaviour
+public class StatService : MonoBehaviour
 {
     public Action OnStatChanged { get; set; } = new Action(() => { });
     
-    public int Stat { get; set; }
+    protected int Stat { get; set; }
 
     public void StartService()
     {
@@ -25,19 +25,21 @@ public abstract class StatService : MonoBehaviour
             yield return new WaitForSeconds(1);
             if (Stat < 100)
             {
-                Stat += 1;
+                IncreaseStat(1);
                 OnStatChanged.Invoke();
             }
         }
     }
 
-    public void DecreaseStat(int amount)
+    public virtual void DecreaseStat(int amount)
     {
         Stat -= amount;
+        OnStatChanged?.Invoke();
     }
 
-    public void IncreaseStat(int amount)
+    public virtual void IncreaseStat(int amount)
     {
         Stat += amount;
+        OnStatChanged?.Invoke();
     }
 }

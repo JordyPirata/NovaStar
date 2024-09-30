@@ -8,13 +8,14 @@ namespace Services.Player
 {
     public class RayCastsController: IRayCastController
     {
+        readonly IMap<ChunkObject> Map = ServiceLocator.GetService<IMap<ChunkObject>>();
         public void LookForGround( Transform playerTransform)
         {
             if (playerTransform == null)
             {
                 throw new Exception("RayCastsController: Player Transform not found, try calling Initialize() first");
             }
-            var height = ServiceLocator.GetService<IMap<ChunkObject>>()[0,0].TerrainData.GetHeight((int)playerTransform.position.x, (int)playerTransform.position.z);
+            var height = Map[0,0].TerrainData.GetHeight((int)playerTransform.position.x, (int)playerTransform.position.z);
             Debug.Log(height);
             if (Physics.Raycast(playerTransform.position, Vector3.down, out var hit , 5500))
             {

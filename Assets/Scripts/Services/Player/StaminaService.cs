@@ -5,25 +5,25 @@ using UnityEngine;
 
 namespace Services.Player
 {
-public class StaminaService : MonoBehaviour, IStaminaService
+public class StaminaService : StatService, IStaminaService
 {
-    public int Stamina { get; private set; }
-    public Action OnStatChanged { get; set; }
-    public Action OnTiredChanged { get; set; }
+    public int Stamina { get => Stat; private set => Stat = value; }
+    public Action OnTiredChanged { get; set; } 
+    private bool _isTired;
     public bool IsTired
     {
-        get => IsTired;
+        get => _isTired;
         set
         {
-            if (IsTired != value)
+            if (_isTired != value)
             {
-                IsTired = value;
+                _isTired = value;
                 OnTiredChanged?.Invoke();
             }
         }
     }
 
-    public void DecreaseStat(int amount)
+    public override void DecreaseStat(int amount)
     {
         OnStatChanged.Invoke();
         if (Stamina - amount < 0) 
@@ -32,10 +32,16 @@ public class StaminaService : MonoBehaviour, IStaminaService
             return;
         }
         Stamina -= amount;
-        if (amount < 20) IsTired = true;
+        CheckIsTired();
     }
 
-    public void IncreaseStat(int amount)
+    private void CheckIsTired()
+    {
+        if (Stamina < 20) IsTired = true;
+        else IsTired = false;
+    }
+
+    public override void IncreaseStat(int amount)
     {
         OnStatChanged.Invoke();
         if (Stamina + amount > 100) 
@@ -44,29 +50,19 @@ public class StaminaService : MonoBehaviour, IStaminaService
             return;
         }
         Stamina += amount;
-        if (amount > 20) IsTired = false;
+        CheckIsTired();
     }
 
-    public void StartService()
-    {
-        StartCoroutine(NaturalRecovery());
-    }
 
-    public void StopService()
+    protected override IEnumerator NaturalRecovery()
     {
-        StopCoroutine(NaturalRecovery());
-    }
-
-    protected IEnumerator NaturalRecovery()
-    {
-        Stamina = 100;
+        Stamina = 0;
         while (true)
         {
             yield return new WaitForSeconds(1);
             if (Stamina <= 100)
             {
-                Stamina -= 10;
-                OnStatChanged.Invoke();
+                IncreaseStat(2);
             }
         }
     }

@@ -2,34 +2,11 @@ using System.Collections;
 using Services.Interfaces;
 using UnityEngine;
 using System;
-public class LifeService : MonoBehaviour, ILifeService
+public class LifeService : StatService, ILifeService
 {
-    public int Life { get; set; }
-    public Action OnStatChanged { get; set; }
+    public int Life { get => Stat; set => Stat = value; }
 
-    public void DecreaseStat(int amount)
-    {
-        Life -= amount;
-        OnStatChanged.Invoke();
-    }
-
-    public void IncreaseStat(int amount)
-    {
-        Life += amount;
-        OnStatChanged.Invoke();
-    }
-
-    public void StartService()
-    {
-        StartCoroutine(NaturalRecovery());
-    }
-
-    public void StopService()
-    {
-        StopCoroutine(NaturalRecovery());
-    }
-
-    protected IEnumerator NaturalRecovery()
+    protected override IEnumerator NaturalRecovery()
     {
         Life = 100;
         while (true)

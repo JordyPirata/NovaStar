@@ -5,34 +5,11 @@ using UnityEngine;
 
 namespace Services.Player
 {
-public class HungerService : MonoBehaviour, IHungerService
+public class HungerService : StatService, IHungerService
 {
-    public int Hunger {get; set;}
-    public Action OnStatChanged { get; set; }
+    public int Hunger { get => Stat; set => Stat = value; }
 
-    public void DecreaseStat(int amount)
-    {
-        Hunger -= amount;
-        OnStatChanged.Invoke();
-    }
-
-    public void IncreaseStat(int amount)
-    {
-        Hunger += amount;
-        OnStatChanged.Invoke();
-    }
-
-    public void StartService()
-    {
-        StartCoroutine(NaturalRecovery());
-    }
-
-    public void StopService()
-    {
-        StopCoroutine(NaturalRecovery());
-    }
-
-    protected IEnumerator NaturalRecovery()
+    protected override IEnumerator NaturalRecovery()
     {
         Hunger = 100;
         while (true)

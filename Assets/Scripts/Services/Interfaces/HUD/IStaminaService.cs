@@ -6,7 +6,7 @@ namespace Services.Interfaces
     public interface IStaminaService
     {
         Action OnStatChanged { get; set; }
-        Action OnTiredChanged { get; set; }
+        Action OnTiredChanged { get; set; } 
         int Stamina { get; }
         bool IsTired { get; }
 
