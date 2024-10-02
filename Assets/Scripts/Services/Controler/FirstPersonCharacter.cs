@@ -13,9 +13,7 @@ namespace Services
 public class FirstPersonCharacter : MonoBehaviour
 {
     private InputActions inputActions;
-
     public CharacterController Controller { get; set; }
-
     public Transform PlayerTransform 
     {
         get => Controller.transform;
@@ -29,15 +27,8 @@ public class FirstPersonCharacter : MonoBehaviour
 
     // Movement Vars
     private Vector3 velocity;
+    public bool HasGravity = true;
     public float gravity = -15.0f;
-    /*
-    // Zoom Vars - Zoom code adapted from @torahhorse's First Person Drifter scripts.
-    public float zoomFOV = 350.0f;
-    public float zoomSpeed = 9f;
-    private float targetFOV;
-    private float baseFOV;*/
-
-
     private float initHeight;
     [SerializeField] private float crouchHeight;
     // Sprint Vars
@@ -69,19 +60,16 @@ public class FirstPersonCharacter : MonoBehaviour
     
     private void OnEnable()
     {
+        HasGravity = false;
         inputActions.Player.Enable();
         inputActions.Player.Crouch.canceled += DoCrouch;    
         inputActions.Player.Crouch.performed += DoCrouch;
         inputActions.Player.Jump.performed += DoJump;
         inputActions.Player.Run.started += OnSprint;
         inputActions.Player.Run.canceled += OnSprint;
-        // inputActions.Player.Zoom.performed += DoZoom;
-        // inputActions.Player.Zoom.canceled += DoZoom;
     }
     private void OnDisable()
     {
-        // inputActions.Player.Zoom.performed -= DoZoom;
-        // inputActions.Player.Zoom.canceled -= DoZoom;
         inputActions.Player.Crouch.canceled -= DoCrouch;
         inputActions.Player.Crouch.performed -= DoCrouch;
         inputActions.Player.Run.started -= OnSprint;
@@ -116,6 +104,7 @@ public class FirstPersonCharacter : MonoBehaviour
     }
     private void ApplyGravity()
     {
+        if(!HasGravity) return;
         velocity.y += gravity * Time.deltaTime;
         Controller.Move(velocity * Time.deltaTime);
     }
@@ -152,30 +141,6 @@ public class FirstPersonCharacter : MonoBehaviour
             velocity.y = Mathf.Sqrt(2.0f * -2.0f * gravity);
         }
     }
-/*
-    private void DoZoom(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            targetFOV = zoomFOV;
-        }
-        if (context.canceled)
-        {
-            targetFOV = baseFOV;
-        }
-        UpdateZoom();
-        <>
-        if (inputActions.Player.Zoom.ReadValue<float>() > 0)
-        {
-            targetFOV = zoomFOV;
-        }
-        else
-        {
-            targetFOV = baseFOV;
-        }
-        <>
-    }
-*/
     private void DoCrouch(InputAction.CallbackContext context)
     {
         if (context.performed)
@@ -194,16 +159,6 @@ public class FirstPersonCharacter : MonoBehaviour
             }
         }
     }
-    /*
-    private void UpdateZoom()
-    {
-        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, targetFOV, zoomSpeed * Time.deltaTime);
-    }
-
-    public void SetBaseFOV(float fov)
-    {
-        baseFOV = fov;
-    }*/
 
     public Vector2 GetPlayerMovement()
     {

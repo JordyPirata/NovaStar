@@ -6,7 +6,7 @@ using Services.WorldGenerator;
 
 namespace Services.Player
 {
-    public class RayCastsController: IRayCastController
+    public class RayCastsController:MonoBehaviour, IRayCastController
     {
         readonly IMap<ChunkObject> Map = ServiceLocator.GetService<IMap<ChunkObject>>();
         public void LookForGround( Transform playerTransform)

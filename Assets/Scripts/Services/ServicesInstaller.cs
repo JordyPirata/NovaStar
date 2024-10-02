@@ -34,7 +34,7 @@ public class ServiceInstaller : MonoBehaviour
         ServiceLocator.Register<IBiomeDic>(new BiomesDic());
         ServiceLocator.Register<ITextureMapGen>(new TextureMapGen());
         ServiceLocator.Register<IFadeController>(fadeController);
-        ServiceLocator.Register<IRayCastController>(new RayCastsController());
+        ServiceLocator.Register<IRayCastController>(gameObject.AddComponent<RayCastsController>());
         ServiceLocator.Register<ILifeService>(gameObject.AddComponent<LifeService>());
         ServiceLocator.Register<IStaminaService>(gameObject.AddComponent<StaminaService>());
         ServiceLocator.Register<IThirstService>(gameObject.AddComponent<HydrationService>());

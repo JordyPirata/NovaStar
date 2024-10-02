@@ -37,7 +37,7 @@ namespace Services.Player
             // TODO - Remove annonymous functions to UnsubscribeToEvents
             _hungerService.OnStatChanged += () => {_hudService.HungerValue = _hungerService.Hunger * 0.01f;};
             _hydrationService.OnStatChanged += () => {_hudService.ThirstValue = _hydrationService.Hydration * 0.01f;};
-            _staminaService.OnStatChanged += () => {_hudService.StaminaValue = _staminaService.Stamina * 0.01f;Debug.Log("Stamina: " +  _staminaService.Stamina );};
+            _staminaService.OnStatChanged += () => {_hudService.StaminaValue = _staminaService.Stamina * 0.01f;};
             _staminaService.OnTiredChanged += () => 
             {
                 Debug.Log("Tired changed");
@@ -87,7 +87,8 @@ namespace Services.Player
         private IEnumerator ExcecuteAfterMapLoaded()
         {
             yield return new WaitForSeconds(4);
-            _raycastController.LookForGround(_playerInfo.PlayerTransform());
+            _raycastController.LookForGround(_firstPersonCharacter.PlayerTransform);
+            _firstPersonCharacter.ControllerScript.HasGravity = true;
             ServiceLocator.GetService<IFadeController>().FadeOut();
         }
     }
