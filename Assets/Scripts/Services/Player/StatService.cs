@@ -23,23 +23,32 @@ public class StatService : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(1);
-            if (Stat < 100)
+            if (Stat <= 100)
             {
                 IncreaseStat(1);
-                OnStatChanged.Invoke();
             }
         }
     }
-
+    
     public virtual void DecreaseStat(int amount)
     {
+        OnStatChanged.Invoke();
+        if (Stat - amount <= 0) 
+        {
+            Stat = 0;
+            return;
+        }
         Stat -= amount;
-        OnStatChanged?.Invoke();
     }
 
     public virtual void IncreaseStat(int amount)
     {
+        OnStatChanged.Invoke();
+        if (Stat + amount >= 100) 
+        {
+            Stat = 100;
+            return;
+        }
         Stat += amount;
-        OnStatChanged?.Invoke();
     }
 }

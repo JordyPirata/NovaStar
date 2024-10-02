@@ -8,7 +8,7 @@ namespace Services.Interfaces
     {
         public IEnumerable<ChunkObject> AllChunks();
         public ChunkObject this[float2 coord] { get; set; }
-         public ChunkObject this[float x, float y] { get; set; }
+        public ChunkObject this[float x, float y] { get; set; }
         public bool ContainsKey(float2 coord);
         public void Add(float2 coord, ChunkObject chunk);
         public void Remove(float2 coord);

@@ -215,25 +215,4 @@ public class FirstPersonCharacter : MonoBehaviour
         return inputActions.Player.Look.ReadValue<Vector2>();
     }
 }
-// TODO: Test this class
-    public interface IFirstPersonController
-    {
-        public FirstPersonCharacter ControllerScript { get; }
-        public Transform PlayerTransform { get; }
-        public bool Sprinting { get; set; }
-    }
-    public class ControllerReference : IFirstPersonController
-    {
-        public FirstPersonCharacter ControllerScript 
-        { 
-            get => ControllerScript? ControllerScript : GameObject.Find("Player").GetComponent<FirstPersonCharacter>();
-            set => ControllerScript = value;
-        }
-        public Transform PlayerTransform { get => ControllerScript.Controller.transform; }
-        public bool Sprinting 
-        { 
-            get => ControllerScript.sprinting;  
-            set => ControllerScript.sprinting = value; 
-        }
-    }
 }

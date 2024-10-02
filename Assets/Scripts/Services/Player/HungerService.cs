@@ -11,7 +11,7 @@ public class HungerService : StatService, IHungerService
 
     protected override IEnumerator NaturalRecovery()
     {
-        Hunger = 100;
+        Hunger = 99;
         while (true)
         {
             yield return new WaitForSeconds(5);

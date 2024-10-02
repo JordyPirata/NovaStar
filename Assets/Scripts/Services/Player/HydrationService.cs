@@ -9,11 +9,11 @@ public class HydrationService : StatService, IThirstService
 
     protected override IEnumerator NaturalRecovery()
     {
-        Hydration = 100;
+        Hydration = 99;
         while (true)
         {
             yield return new WaitForSeconds(5);
-            if (Hydration <= 100 && Hydration > 0)
+            if (Hydration < 100 && Hydration > 0)
             {
                 Hydration -= 1;
                 OnStatChanged.Invoke();

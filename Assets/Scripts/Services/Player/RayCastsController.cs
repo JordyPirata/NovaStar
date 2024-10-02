@@ -34,7 +34,7 @@ namespace Services.Player
             {
                 throw new Exception("RayCastsController: Player Transform not found, try calling Initialize() first");
             }
-            if (Physics.Raycast(playerTransform.position, Vector3.down, out var hit , 5500))
+            if (Physics.Raycast(playerTransform.position, Vector3.down, out var hit , 1000))
             {
                 if (hit.distance > 2)
                 {

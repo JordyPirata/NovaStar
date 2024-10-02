@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using Services.Interfaces;
-
 
 namespace Services.Player
 {
@@ -56,8 +54,7 @@ namespace Services.Player
             _hydrationService.OnStatChanged -= () => {_hudService.ThirstValue = _hydrationService.Hydration * 0.01f;};
             _staminaService.OnStatChanged -= () => {_hudService.StaminaValue = _staminaService.Stamina * 0.01f;};
             _lifeService.OnStatChanged -= () => {_hudService.HealthValue = _lifeService.Life * 0.01f;};
-        }*/
-        /*
+        }
         private void OnDestroy()
         {
             UnsubscribeToEvents();

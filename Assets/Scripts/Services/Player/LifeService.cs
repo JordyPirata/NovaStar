@@ -8,11 +8,11 @@ public class LifeService : StatService, ILifeService
 
     protected override IEnumerator NaturalRecovery()
     {
-        Life = 100;
+        Life = 99;
         while (true)
         {
             yield return new WaitForSeconds(1);
-            if (Life <= 100 && Life > 0)
+            if (Life < 100)
             {
                 Life += 1;
                 OnStatChanged.Invoke();

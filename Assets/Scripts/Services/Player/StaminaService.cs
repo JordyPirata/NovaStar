@@ -22,11 +22,17 @@ public class StaminaService : StatService, IStaminaService
             }
         }
     }
+    
+    private void CheckIsTired()
+    {
+        if (Stamina < 20) IsTired = true;
+        else IsTired = false;
+    }
 
     public override void DecreaseStat(int amount)
     {
         OnStatChanged.Invoke();
-        if (Stamina - amount < 0) 
+        if (Stamina - amount <= 0) 
         {
             Stamina = 0;
             return;
@@ -34,17 +40,11 @@ public class StaminaService : StatService, IStaminaService
         Stamina -= amount;
         CheckIsTired();
     }
-
-    private void CheckIsTired()
-    {
-        if (Stamina < 20) IsTired = true;
-        else IsTired = false;
-    }
-
+    
     public override void IncreaseStat(int amount)
     {
         OnStatChanged.Invoke();
-        if (Stamina + amount > 100) 
+        if (Stamina + amount >= 100) 
         {
             Stamina = 100;
             return;
