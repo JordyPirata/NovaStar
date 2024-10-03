@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using Services.Interfaces;
+using System;
 
 namespace Services.Player
 {
@@ -29,36 +30,47 @@ namespace Services.Player
             _hudService = ServiceLocator.GetService<IHUDService>();
             SubscribeToEvents();
         }
-
+        // Actions
+        Action HungerAction;
+        Action ThirstAction;
+        Action StaminaAction;
+        Action LifeAction;
+        Action TemperatureAction;
+        Action TiredAction;
         private void SubscribeToEvents()
         {
-            Debug.Log("Subscribing to events");
-            EventManager.OnMapLoaded += MapLoaded;
-            // TODO - Remove annonymous functions to UnsubscribeToEvents
-            _hungerService.OnStatChanged += () => {_hudService.HungerValue = _hungerService.Hunger * 0.01f;};
-            _hydrationService.OnStatChanged += () => {_hudService.ThirstValue = _hydrationService.Hydration * 0.01f;};
-            _staminaService.OnStatChanged += () => {_hudService.StaminaValue = _staminaService.Stamina * 0.01f;};
-            _staminaService.OnTiredChanged += () => 
+            HungerAction = () => {_hudService.HungerValue = _hungerService.Hunger * 0.01f;};
+            ThirstAction = () => {_hudService.ThirstValue = _hydrationService.Hydration * 0.01f;};
+            StaminaAction = () => {_hudService.StaminaValue = _staminaService.Stamina * 0.01f;};
+            LifeAction = () => {_hudService.HealthValue = _lifeService.Life * 0.01f;};
+            TiredAction = () => 
             {
                 Debug.Log("Tired changed");
                 if (_staminaService.IsTired) ServiceLocator.GetService<IInputActions>().InputActions.Player.Run.Disable();
                 else ServiceLocator.GetService<IInputActions>().InputActions.Player.Run.Enable();
             };
-            _lifeService.OnStatChanged += () => {_hudService.HealthValue = _lifeService.Life * 0.01f;};
+            Debug.Log("Subscribing to events");
+            EventManager.OnMapLoaded += MapLoaded;
+
+            _hungerService.OnStatChanged += HungerAction;
+            _hydrationService.OnStatChanged += ThirstAction;
+            _staminaService.OnStatChanged += StaminaAction;
+            _lifeService.OnStatChanged += LifeAction;
+            _staminaService.OnTiredChanged += TiredAction;
         }
-        /*
         private void UnsubscribeToEvents()
         {
             EventManager.OnMapLoaded -= MapLoaded;
-            _hungerService.OnStatChanged -= () => {_hudService.HungerValue = _hungerService.Hunger * 0.01f;};
-            _hydrationService.OnStatChanged -= () => {_hudService.ThirstValue = _hydrationService.Hydration * 0.01f;};
-            _staminaService.OnStatChanged -= () => {_hudService.StaminaValue = _staminaService.Stamina * 0.01f;};
-            _lifeService.OnStatChanged -= () => {_hudService.HealthValue = _lifeService.Life * 0.01f;};
+            _hungerService.OnStatChanged -= HungerAction;
+            _hydrationService.OnStatChanged -= ThirstAction;
+            _staminaService.OnStatChanged -= StaminaAction;
+            _lifeService.OnStatChanged -= LifeAction;
+            _staminaService.OnTiredChanged -= TiredAction;
         }
         private void OnDestroy()
         {
             UnsubscribeToEvents();
-        }*/
+        }
         public void MapLoaded()
         {
             StartCoroutine(ExcecuteAfterMapLoaded());
