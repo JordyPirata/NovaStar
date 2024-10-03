@@ -2,11 +2,13 @@
 using UnityEngine;
 using Services.Interfaces;
 using System;
+using UnityEngine.InputSystem;
 
 namespace Services.Player
 {
     public class PlayerMediator : MonoBehaviour, IPlayerMediator
     {
+        private IInputActions _iInputActions;
         private IFirstPersonController _firstPersonCharacter;
         private IPlayerInfo _playerInfo;
         private IRayCastController _raycastController;
@@ -19,6 +21,7 @@ namespace Services.Player
 
         private void Start()
         {
+            _iInputActions = ServiceLocator.GetService<IInputActions>();
             _firstPersonCharacter = ServiceLocator.GetService<IFirstPersonController>();
             _raycastController = ServiceLocator.GetService<IRayCastController>();
             _lifeService = ServiceLocator.GetService<ILifeService>();
@@ -39,6 +42,7 @@ namespace Services.Player
         Action TiredAction;
         private void SubscribeToEvents()
         {
+            
             HungerAction = () => {_hudService.HungerValue = _hungerService.Hunger * 0.01f;};
             ThirstAction = () => {_hudService.ThirstValue = _hydrationService.Hydration * 0.01f;};
             StaminaAction = () => {_hudService.StaminaValue = _staminaService.Stamina * 0.01f;};
@@ -46,10 +50,12 @@ namespace Services.Player
             TiredAction = () => 
             {
                 Debug.Log("Tired changed");
-                if (_staminaService.IsTired) ServiceLocator.GetService<IInputActions>().InputActions.Player.Run.Disable();
-                else ServiceLocator.GetService<IInputActions>().InputActions.Player.Run.Enable();
             };
             Debug.Log("Subscribing to events");
+
+            _iInputActions.InputActions.Player.Run.performed += Run;
+            _iInputActions.InputActions.Player.Run.canceled += Run;
+
             EventManager.OnMapLoaded += MapLoaded;
 
             _hungerService.OnStatChanged += HungerAction;
@@ -60,7 +66,11 @@ namespace Services.Player
         }
         private void UnsubscribeToEvents()
         {
+            _iInputActions.InputActions.Player.Run.performed -= Run;
+            _iInputActions.InputActions.Player.Run.canceled -= Run;
+
             EventManager.OnMapLoaded -= MapLoaded;
+
             _hungerService.OnStatChanged -= HungerAction;
             _hydrationService.OnStatChanged -= ThirstAction;
             _staminaService.OnStatChanged -= StaminaAction;
@@ -80,21 +90,10 @@ namespace Services.Player
         {
             _playerInfo.PlayerDied();
         }
-        public void Run()
+        public void Run(InputAction.CallbackContext context)
         {
-            StartCoroutine(LoopDecreaseStamina());
-        }
-        public void StopRunning()
-        {
-            StopCoroutine(LoopDecreaseStamina());
-        }
-        private IEnumerator LoopDecreaseStamina()
-        {
-            while (true)
-            {
-                yield return new WaitForSeconds(1);
-                _staminaService.DecreaseStat(1);
-            }
+            if (context.performed) _staminaService.Increase = false;
+            if (context.canceled) _staminaService.Increase = true;
         }
         private IEnumerator ExcecuteAfterMapLoaded()
         {

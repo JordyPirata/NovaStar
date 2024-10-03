@@ -5,9 +5,11 @@ using UnityEngine;
 
 namespace Services.Player
 {
-public class StaminaService : StatService, IStaminaService
+public class StaminaService : MonoBehaviour, IStaminaService
 {
-    public int Stamina { get => Stat; private set => Stat = value; }
+    public bool Increase { get; set; }
+    public int Stamina { get; private set; }
+    public Action OnStatChanged { get; set; }
     public Action OnTiredChanged { get; set; } 
     private bool _isTired;
     public bool IsTired
@@ -22,14 +24,23 @@ public class StaminaService : StatService, IStaminaService
             }
         }
     }
-    
+    public void StartService()
+    {
+        StartCoroutine(ContinuousChange());
+        Increase = true;
+    }
+
+    public void StopService()
+    {
+        StopCoroutine(ContinuousChange());
+    }
     private void CheckIsTired()
     {
         if (Stamina < 20) IsTired = true;
         else IsTired = false;
     }
 
-    public override void DecreaseStat(int amount)
+    public void DecreaseStat(int amount)
     {
         OnStatChanged.Invoke();
         if (Stamina - amount <= 0) 
@@ -41,7 +52,7 @@ public class StaminaService : StatService, IStaminaService
         CheckIsTired();
     }
     
-    public override void IncreaseStat(int amount)
+    public void IncreaseStat(int amount)
     {
         OnStatChanged.Invoke();
         if (Stamina + amount >= 100) 
@@ -53,18 +64,25 @@ public class StaminaService : StatService, IStaminaService
         CheckIsTired();
     }
 
-
-    protected override IEnumerator NaturalRecovery()
+    /// <summary>
+    /// Increase or decrease stamina over time
+    /// </summary>
+    /// <param name="increase"> If true, stamina will increase over time, otherwise it will decrease</param> 
+    protected IEnumerator ContinuousChange()
     {
-        Stamina = 0;
         while (true)
         {
-            yield return new WaitForSeconds(1);
-            if (Stamina <= 100)
+            if (Increase)
             {
-                IncreaseStat(2);
+                yield return new WaitForSeconds(.20f);
+                IncreaseStat(1);
+            }
+            if (!Increase)
+            {
+                yield return new WaitForSeconds(.5f);
+                DecreaseStat(1);
             }
         }
-    }
+    }        
 }
 }
