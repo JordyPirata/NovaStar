@@ -15,10 +15,5 @@ namespace Services
         {
             get => ControllerScript.Controller.transform;
         }
-        public bool Sprinting 
-        { 
-            get => ControllerScript.sprinting;  
-            set => ControllerScript.sprinting = value; 
-        }
     }
 }

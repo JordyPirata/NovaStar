@@ -7,6 +7,5 @@ namespace Services.Interfaces
     {
         public FirstPersonCharacter ControllerScript { get; }
         public Transform PlayerTransform { get; }
-        public bool Sprinting { get; set; }
     }
 }

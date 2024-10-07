@@ -39,7 +39,7 @@ namespace Services.Player
         Action StaminaAction;
         Action LifeAction;
         Action TemperatureAction;
-        Action TiredAction;
+        Action<bool> TiredAction;
         private void SubscribeToEvents()
         {
             
@@ -47,9 +47,15 @@ namespace Services.Player
             ThirstAction = () => {_hudService.ThirstValue = _hydrationService.Hydration * 0.01f;};
             StaminaAction = () => {_hudService.StaminaValue = _staminaService.Stamina * 0.01f;};
             LifeAction = () => {_hudService.HealthValue = _lifeService.Life * 0.01f;};
-            TiredAction = () => 
+            TiredAction = (bool b ) => 
             {
-                Debug.Log("Tired changed");
+                if (b)
+                {
+                    _iInputActions.InputActions.Player.Run.Disable();
+                    FirstPersonCharacter.Sprinting = false;
+                    
+                }
+                else _iInputActions.InputActions.Player.Run.Enable();
             };
             Debug.Log("Subscribing to events");
 
@@ -99,6 +105,8 @@ namespace Services.Player
         {
             yield return new WaitForSeconds(4);
             _raycastController.LookForGround(_firstPersonCharacter.PlayerTransform);
+            yield return new WaitForSeconds(0.1f);
+            _iInputActions.InputActions.Player.Enable();
             _firstPersonCharacter.ControllerScript.HasGravity = true;
             ServiceLocator.GetService<IFadeController>().FadeOut();
         }

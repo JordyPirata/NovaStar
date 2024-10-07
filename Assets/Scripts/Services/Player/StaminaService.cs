@@ -2,17 +2,21 @@ using System.Collections;
 using Services.Interfaces;
 using System;
 using UnityEngine;
+using System.Threading.Tasks;
+
 
 namespace Services.Player
 {
 public class StaminaService : MonoBehaviour, IStaminaService
 {
+    private object lockObject = new();
     public bool Increase { get; set; }
     public int Stamina { get; private set; }
     public Action OnStatChanged { get; set; }
-    public Action OnTiredChanged { get; set; } 
+    public Action<bool> OnTiredChanged { get; set; }
+    private Coroutine invokeOnTiredChangedCoroutine;
     private bool _isTired;
-    public bool IsTired
+    private bool IsTired
     {
         get => _isTired;
         set
@@ -20,9 +24,15 @@ public class StaminaService : MonoBehaviour, IStaminaService
             if (_isTired != value)
             {
                 _isTired = value;
-                OnTiredChanged?.Invoke();
+                if (invokeOnTiredChangedCoroutine != null) return;
+                StartCoroutine(InvokeOnTiredChanged(value));
             }
         }
+    }
+    private IEnumerator InvokeOnTiredChanged(bool value)
+    {
+        OnTiredChanged?.Invoke(value);  
+        yield return new WaitForSeconds(5); 
     }
     public void StartService()
     {
@@ -49,7 +59,7 @@ public class StaminaService : MonoBehaviour, IStaminaService
             return;
         }
         Stamina -= amount;
-        CheckIsTired();
+        if (Stamina == 0) IsTired = true;
     }
     
     public void IncreaseStat(int amount)
@@ -75,12 +85,12 @@ public class StaminaService : MonoBehaviour, IStaminaService
             if (Increase)
             {
                 yield return new WaitForSeconds(.20f);
-                IncreaseStat(1);
+                IncreaseStat(2);
             }
             if (!Increase)
             {
-                yield return new WaitForSeconds(.5f);
-                DecreaseStat(1);
+                yield return new WaitForSeconds(.1f);
+                DecreaseStat(2);
             }
         }
     }        

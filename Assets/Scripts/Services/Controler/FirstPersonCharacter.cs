@@ -8,7 +8,6 @@ using Unity.VisualScripting;
 
 namespace Services
 {
-// TODO: Change to use Unity's Event System
 [RequireComponent(typeof(CharacterController))]
 public class FirstPersonCharacter : MonoBehaviour
 {
@@ -37,7 +36,7 @@ public class FirstPersonCharacter : MonoBehaviour
 
     [Tooltip("Useful for rough ground")]
     public float GroundedOffset = -0.14f;
-    [SerializeField] public bool sprinting = false;
+    public static bool Sprinting;
     [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
     public float GroundedRadius = 0.6f;
 
@@ -61,7 +60,6 @@ public class FirstPersonCharacter : MonoBehaviour
     private void OnEnable()
     {
         HasGravity = false;
-        inputActions.Player.Enable();
         inputActions.Player.Crouch.canceled += DoCrouch;    
         inputActions.Player.Crouch.performed += DoCrouch;
         inputActions.Player.Jump.performed += DoJump;
@@ -75,11 +73,11 @@ public class FirstPersonCharacter : MonoBehaviour
         inputActions.Player.Run.started -= OnSprint;
         inputActions.Player.Run.canceled -= OnSprint;
         inputActions.Player.Jump.performed -= DoJump;
-        inputActions.Player.Disable();
     }
 
     private void Update()
     {
+        Debug.Log("Sprinting: " + Sprinting);
         ApplyGravity();
         GroundedCheck();
         DoMovement();
@@ -110,12 +108,12 @@ public class FirstPersonCharacter : MonoBehaviour
     }
     private void OnSprint(InputAction.CallbackContext context)
     {
-        if(context.started) sprinting = true;
-        if(context.canceled) sprinting = false;
+        if(context.started) Sprinting = true;
+        else if(context.canceled) Sprinting = false;
     }
     private void DoMovement()
     {
-        float targetSpeed = sprinting ? movementSpeed * 2 : movementSpeed;
+        float targetSpeed = Sprinting ? movementSpeed * 2 : movementSpeed;
         Grounded = Controller.isGrounded;
         if (Grounded && velocity.y < 0)
         {
