@@ -16,10 +16,10 @@ public class EventManager : MonoBehaviour, IEventManager
     public const string GameScene = "Game";
     public const string MenuScene = "MainM";
     public static Action OnMapLoaded;
-    public static UnityAction OnGamePaused;
-    public static UnityEvent OnGameResumed;
-
-    
+    public static Action OnGamePaused;
+    public static Action OnGameResumed;
+    public static Action OnSceneGameLoaded;
+    public static Action OnMenuLoaded;
     public void Start()
     {
         SceneManager.sceneLoaded += (scene, mode) =>
@@ -27,6 +27,7 @@ public class EventManager : MonoBehaviour, IEventManager
             switch (scene.name)
             {
             case GameScene:
+                OnSceneGameLoaded?.Invoke();
                 ServiceLocator.GetService<IPlayerInfo>().StartService();
                 ServiceLocator.GetService<IMapGenerator>().StartService();
                 ServiceLocator.GetService<IWeldMap>().StartService();
@@ -38,6 +39,7 @@ public class EventManager : MonoBehaviour, IEventManager
                 Console.Log("Game Scene Loaded");
                 break;    
             case MenuScene:
+                OnMenuLoaded?.Invoke();
                 Console.Log("Menu Scene Loaded");
                 // Add code here to initialize your services for the "Menu" scene
                 // For example:d

@@ -26,7 +26,6 @@ public class FirstPersonCharacter : MonoBehaviour
 
     // Movement Vars
     private Vector3 velocity;
-    public bool HasGravity = true;
     public float gravity = -15.0f;
     private float initHeight;
     [SerializeField] private float crouchHeight;
@@ -36,13 +35,14 @@ public class FirstPersonCharacter : MonoBehaviour
 
     [Tooltip("Useful for rough ground")]
     public float GroundedOffset = -0.14f;
-    public static bool Sprinting;
+    private bool Sprinting;
     [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
     public float GroundedRadius = 0.6f;
 
     [Tooltip("What layers the character uses as ground")]
     public LayerMask GroundLayers;
-    
+    public bool CanMove;
+
     private void Awake()
     {
         inputActions = ServiceLocator.GetService<IInputActions>().InputActions;
@@ -59,7 +59,6 @@ public class FirstPersonCharacter : MonoBehaviour
     
     private void OnEnable()
     {
-        HasGravity = false;
         inputActions.Player.Crouch.canceled += DoCrouch;    
         inputActions.Player.Crouch.performed += DoCrouch;
         inputActions.Player.Jump.performed += DoJump;
@@ -74,17 +73,15 @@ public class FirstPersonCharacter : MonoBehaviour
         inputActions.Player.Run.canceled -= OnSprint;
         inputActions.Player.Jump.performed -= DoJump;
     }
-
-    private void Update()
-    {
-        Debug.Log("Sprinting: " + Sprinting);
+    void Update()
+    {   
+        if (!CanMove) return;
+        
         ApplyGravity();
         GroundedCheck();
         DoMovement();
-    }
-    private void LateUpdate()
-    {   
         DoLooking();
+        
     }
 
     private void DoLooking()
@@ -102,7 +99,6 @@ public class FirstPersonCharacter : MonoBehaviour
     }
     private void ApplyGravity()
     {
-        if(!HasGravity) return;
         velocity.y += gravity * Time.deltaTime;
         Controller.Move(velocity * Time.deltaTime);
     }
@@ -160,7 +156,7 @@ public class FirstPersonCharacter : MonoBehaviour
 
     public Vector2 GetPlayerMovement()
     {
-        return inputActions.Player.Move.ReadValue<Vector2>();
+        return inputActions.Player.Move.ReadValue<Vector2>(); 
     }
 
     public Vector2 GetPlayerLook()

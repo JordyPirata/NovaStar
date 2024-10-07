@@ -19,15 +19,7 @@ public class PlayerInfo : MonoBehaviour, IPlayerInfo
 
     public void Awake()
     {
-        SceneManager.sceneLoaded += (scene, mode) =>
-        {
-            switch (scene.name)
-            {
-                case EventManager.GameScene:
-                    FindPlayer();
-                    break;
-            }
-        };
+        EventManager.OnSceneGameLoaded += FindPlayer;
     }
     private void FindPlayer()
     {
