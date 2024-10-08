@@ -273,7 +273,7 @@ namespace InputSystem
                 {
                     ""name"": """",
                     ""id"": ""34b07bd6-1657-44d2-b6a5-720563ffa33d"",
-                    ""path"": ""<Keyboard>/escape"",
+                    ""path"": ""<Keyboard>/p"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""FPSControllerInputs"",

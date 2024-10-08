@@ -13,8 +13,6 @@ namespace Services
 /// </summary>
 public class EventManager : MonoBehaviour, IEventManager
 {
-    public const string GameScene = "Game";
-    public const string MenuScene = "MainM";
     public static Action OnMapLoaded;
     public static Action OnGamePaused;
     public static Action OnGameResumed;
@@ -22,11 +20,16 @@ public class EventManager : MonoBehaviour, IEventManager
     public static Action OnMenuLoaded;
     public void Start()
     {
+        SceneManager.activeSceneChanged += (current, next) =>
+        {
+            Console.Log($"Scene changed from {current.name} to {next.name}");
+        };
+
         SceneManager.sceneLoaded += (scene, mode) =>
         {
             switch (scene.name)
             {
-            case GameScene:
+            case IEventManager.Game:
                 OnSceneGameLoaded?.Invoke();
                 ServiceLocator.GetService<IPlayerInfo>().StartService();
                 ServiceLocator.GetService<IMapGenerator>().StartService();
@@ -38,7 +41,7 @@ public class EventManager : MonoBehaviour, IEventManager
                 ServiceLocator.GetService<IHUDService>().Initialize();
                 Console.Log("Game Scene Loaded");
                 break;    
-            case MenuScene:
+            case IEventManager.MainMenu:
                 OnMenuLoaded?.Invoke();
                 Console.Log("Menu Scene Loaded");
                 // Add code here to initialize your services for the "Menu" scene
@@ -51,7 +54,7 @@ public class EventManager : MonoBehaviour, IEventManager
         {
             switch (scene.name)
             {
-            case GameScene:
+            case IEventManager.Game:
                 ServiceLocator.GetService<IMapGenerator>().StopService();
                 ServiceLocator.GetService<IWeldMap>().StopService();
                 ServiceLocator.GetService<IPlayerInfo>().StopService();
@@ -61,7 +64,7 @@ public class EventManager : MonoBehaviour, IEventManager
                 ServiceLocator.GetService<IThirstService>().StopService();
                 Console.Log("Game Scene Unloaded");
                 break;    
-            case MenuScene:
+            case IEventManager.MainMenu:
                 Console.Log("Menu Scene Unloaded");
                 // Add code here to initialize your services for the "Menu" scene
                 // For example:
@@ -73,7 +76,7 @@ public class EventManager : MonoBehaviour, IEventManager
     }
     public void LoadScene(string sceneName)
     {
-        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+        SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
         
     }
 }

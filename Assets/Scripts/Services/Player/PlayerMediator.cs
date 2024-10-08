@@ -58,8 +58,8 @@ namespace Services.Player
             };
             Debug.Log("Subscribing to events");
 
-            _iInputActions.InputActions.Player.Run.performed += Run;
-            _iInputActions.InputActions.Player.Run.canceled += Run;
+            _iInputActions.InputActions.Player.Run.performed += OnPlayerRunning;
+            _iInputActions.InputActions.Player.Run.canceled += OnPlayerRunning;
 
             EventManager.OnMapLoaded += MapLoaded;
 
@@ -71,8 +71,8 @@ namespace Services.Player
         }
         private void UnsubscribeToEvents()
         {
-            _iInputActions.InputActions.Player.Run.performed -= Run;
-            _iInputActions.InputActions.Player.Run.canceled -= Run;
+            _iInputActions.InputActions.Player.Run.performed -= OnPlayerRunning;
+            _iInputActions.InputActions.Player.Run.canceled -= OnPlayerRunning;
 
             EventManager.OnMapLoaded -= MapLoaded;
 
@@ -95,7 +95,7 @@ namespace Services.Player
         {
             _playerInfo.PlayerDied();
         }
-        public void Run(InputAction.CallbackContext context)
+        public void OnPlayerRunning(InputAction.CallbackContext context)
         {
             if (context.performed) _staminaService.Increase = false;
             if (context.canceled) _staminaService.Increase = true;

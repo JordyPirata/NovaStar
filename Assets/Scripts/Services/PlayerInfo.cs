@@ -16,6 +16,7 @@ public class PlayerInfo : MonoBehaviour, IPlayerInfo
     private Transform player;
     private static float2 viewerCoordinate;
     private static float3 viewerPosition;
+    private bool isRunning;
 
     public void Awake()
     {
@@ -31,10 +32,12 @@ public class PlayerInfo : MonoBehaviour, IPlayerInfo
     }
     public void StartService()
     {
+        isRunning = true;
         StartCoroutine(SetPlayerPosition());
     }
     public void StopService()
     {
+        isRunning = false;
         StopCoroutine(SetPlayerPosition());
     }
 
@@ -45,7 +48,7 @@ public class PlayerInfo : MonoBehaviour, IPlayerInfo
 
     private IEnumerator SetPlayerPosition()
     {
-        while (true)
+        while (isRunning)
         {
             yield return new WaitForFixedUpdate();
             viewerPosition = player.position;
