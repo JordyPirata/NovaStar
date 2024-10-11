@@ -12,6 +12,7 @@ using Unity.VisualScripting;
 public class ServiceInstaller : MonoBehaviour
 {
     [SerializeField] private FadeController fadeController;
+    [SerializeField] private PlayerMediatorData playerMediatorData;
     public void Awake()
     {
         DontDestroyOnLoad(this);
@@ -40,7 +41,10 @@ public class ServiceInstaller : MonoBehaviour
         ServiceLocator.Register<IThirstService>(gameObject.AddComponent<HydrationService>());
         ServiceLocator.Register<IHungerService>(gameObject.AddComponent<HungerService>());
         ServiceLocator.Register<ITemperatureService>(gameObject.AddComponent<TemperatureService>());
-        ServiceLocator.Register<IPlayerMediator>(gameObject.AddComponent<PlayerMediator>());
+        ServiceLocator.Register<IInteractionService>(gameObject.AddComponent<InteractionService>());
+        var playerMediator = gameObject.AddComponent<PlayerMediator>();
+        ServiceLocator.Register<IPlayerMediator>(playerMediator);
+        playerMediator.Configure(playerMediatorData);
         // new services
         ServiceLocator.Register<IHUDService>(gameObject.AddComponent<HUDHolder>());
         ServiceLocator.Register<IFirstPersonController>(new ControllerReference());
