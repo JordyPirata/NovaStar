@@ -8892,6 +8892,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameServices
       objectReference: {fileID: 0}
+    - target: {fileID: 8050637390777121426, guid: f5a8d62b98c04ed41a0cb209012b7423,
+        type: 3}
+      propertyPath: playerMediatorData
+      value: 
+      objectReference: {fileID: 11400000, guid: 86883ede0d1eba24f9f69df4d41ea2ac,
+        type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

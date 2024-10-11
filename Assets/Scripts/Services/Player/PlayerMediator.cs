@@ -18,6 +18,7 @@ namespace Services.Player
         private IThirstService _hydrationService;
         private ITemperatureService _temperatureService;
         private IHUDService _hudService;
+        private IInteractionService _interactionService;
 
         private void Start()
         {
@@ -40,6 +41,7 @@ namespace Services.Player
         Action LifeAction;
         Action TemperatureAction;
         Action<bool> TiredAction;
+
         private void SubscribeToEvents()
         {
             
@@ -109,6 +111,12 @@ namespace Services.Player
             _iInputActions.InputActions.Player.Enable();
             
             ServiceLocator.GetService<IFadeController>().FadeOut();
+        }
+
+        public void Configure(PlayerMediatorData playerMediatorData)
+        {
+            _interactionService = ServiceLocator.GetService<IInteractionService>();
+            _interactionService.Configure(playerMediatorData.interactionDistance, playerMediatorData.interactionLayer);
         }
     }
 }

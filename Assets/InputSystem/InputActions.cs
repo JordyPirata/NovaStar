@@ -91,6 +91,15 @@ namespace InputSystem
                     ""processors"": """",
                     ""interactions"": ""Hold"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""23b3be3f-aa90-443a-b82e-679c743aa1df"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -311,6 +320,17 @@ namespace InputSystem
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b90d9625-46f8-4f3e-a636-ef4debecbcab"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -844,6 +864,7 @@ namespace InputSystem
             m_Player_PauseMenu = m_Player.FindAction("PauseMenu", throwIfNotFound: true);
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
             m_Player_Run = m_Player.FindAction("Run", throwIfNotFound: true);
+            m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -924,6 +945,7 @@ namespace InputSystem
         private readonly InputAction m_Player_PauseMenu;
         private readonly InputAction m_Player_Jump;
         private readonly InputAction m_Player_Run;
+        private readonly InputAction m_Player_Interact;
         public struct PlayerActions
         {
             private @InputActions m_Wrapper;
@@ -935,6 +957,7 @@ namespace InputSystem
             public InputAction @PauseMenu => m_Wrapper.m_Player_PauseMenu;
             public InputAction @Jump => m_Wrapper.m_Player_Jump;
             public InputAction @Run => m_Wrapper.m_Player_Run;
+            public InputAction @Interact => m_Wrapper.m_Player_Interact;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -965,6 +988,9 @@ namespace InputSystem
                 @Run.started += instance.OnRun;
                 @Run.performed += instance.OnRun;
                 @Run.canceled += instance.OnRun;
+                @Interact.started += instance.OnInteract;
+                @Interact.performed += instance.OnInteract;
+                @Interact.canceled += instance.OnInteract;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -990,6 +1016,9 @@ namespace InputSystem
                 @Run.started -= instance.OnRun;
                 @Run.performed -= instance.OnRun;
                 @Run.canceled -= instance.OnRun;
+                @Interact.started -= instance.OnInteract;
+                @Interact.performed -= instance.OnInteract;
+                @Interact.canceled -= instance.OnInteract;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -1134,6 +1163,7 @@ namespace InputSystem
             void OnPauseMenu(InputAction.CallbackContext context);
             void OnJump(InputAction.CallbackContext context);
             void OnRun(InputAction.CallbackContext context);
+            void OnInteract(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {
