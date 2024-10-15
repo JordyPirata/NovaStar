@@ -8,14 +8,14 @@ using UnityEngine;
 namespace Services.WorldGenerator
 {
 [BurstCompile]
-public struct ChunkGenerator
+public struct ChunkBuilder
 {
     public static async Task<ChunkObject> GenerateChunk(float2 chunkCoords)
     {
         Chunk chunkData = await ChunkDataGenerator.Generate(chunkCoords);
         var poolItem = ChunkPool.Instance.GetChunk(chunkCoords) ?? throw new Exception("chunk pool is full");
 
-        poolItem.GameObject = SetAttributes(poolItem!.GameObject, chunkData);
+        poolItem.GameObject = SetAttributes(poolItem.GameObject, chunkData);
         return poolItem;
     }
 

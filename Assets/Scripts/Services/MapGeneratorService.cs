@@ -66,7 +66,7 @@ public class MapGeneratorService : IMapGenerator
         }
         else
         {
-            Map.Add(viewedChunkCoord, await ChunkGenerator.GenerateChunk(viewedChunkCoord));
+            Map.Add(viewedChunkCoord, await ChunkBuilder.GenerateChunk(viewedChunkCoord));
         }
     }
 

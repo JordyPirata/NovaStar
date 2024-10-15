@@ -2,6 +2,7 @@ Shader "Custom/TerrainShader"
 {
     Properties
     {
+        _Color ("Color", Color) = (1,1,1,1)
 
         _TundraAlbedo ("Albedo Tundra Map", 2D) = "grey" {}
         _TundraHeight ("Height Tundra Map", 2D) = "grey" {}
@@ -57,6 +58,8 @@ Shader "Custom/TerrainShader"
         // Use shader model 3.0 target, to get nicer looking lighting
         #pragma target 3.0
 
+        fixed4 _Color;
+
         sampler2D _TundraAlbedo;
         sampler2D _TundraHeight;
         sampler2D _TundraNormal;
@@ -101,12 +104,8 @@ Shader "Custom/TerrainShader"
 
         struct Input
         {
-            float2 uv_MainTex;
+            float2 uv_TundraAlbedo;
         };
-
-        half _Glossiness;
-        half _Metallic;
-        fixed4 _Color;
 
         // Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
         // See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.
@@ -118,12 +117,13 @@ Shader "Custom/TerrainShader"
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
             // Albedo comes from a texture tinted by color
-            fixed4 c = tex2D (_TundraAlbedo, IN.uv_MainTex);
+            fixed4 c = tex2D (_TundraAlbedo, IN.uv_TundraAlbedo) * _Color;
             o.Albedo = c.rgb;
-            // Metallic and smoothness come from slider variables
-            o.Metallic = _Metallic;
-            o.Smoothness = _Glossiness;
             o.Alpha = c.a;
+            o.Normal = UnpackNormal(tex2D(_TundraNormal, IN.uv_TundraAlbedo));
+            // Metallic and smoothness come from slider variables
+            o.Metallic = _TundraMetallic;
+            o.Smoothness = _TundraGlossiness;
         }
         ENDCG
     }

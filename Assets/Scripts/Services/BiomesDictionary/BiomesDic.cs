@@ -58,20 +58,14 @@ public class BiomesDic : IBiomeDic
     }
     public Biome GetBiome(Type type)
     {
-        if (Biomes == null)
-        {
-            InitializeBiomes();
-        }
-        
+        if (Biomes == null) InitializeBiomes();
         return Biomes!.TryGetValue(type, out var biome)? biome : null;
         
     }
     public Biome GetBiomeByValues(float humidity, float temperature)
     {
-        if (Biomes == null)
-        {
-            InitializeBiomes();
-        }
+        if (Biomes == null) InitializeBiomes();
+        
         foreach (var biome in Biomes!.Values)
         {
             if (humidity >= biome.humidityRange.x && humidity <= biome.humidityRange.y &&

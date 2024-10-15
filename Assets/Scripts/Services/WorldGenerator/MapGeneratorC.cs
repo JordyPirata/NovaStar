@@ -57,7 +57,7 @@ public class MapGeneratorC : MonoBehaviour, IMapGenerator
         }
         else
         {
-            Map.Add(viewedChunkCoord, await ChunkGenerator.GenerateChunk(viewedChunkCoord));
+            Map.Add(viewedChunkCoord, await ChunkBuilder.GenerateChunk(viewedChunkCoord));
         }
     }
     private void Update()
