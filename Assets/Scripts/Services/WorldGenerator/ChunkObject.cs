@@ -1,4 +1,5 @@
 using Config;
+using Models;
 using Services.Interfaces;
 using Unity.Mathematics;
 using UnityEngine;
@@ -8,6 +9,7 @@ namespace Services.WorldGenerator
     // Make it null-able type
     public class ChunkObject
     {
+        public Chunk ChunkData { get; set; }
         public GameObject GameObject { get; set; }
         public Terrain Terrain { get; set; }
         public TerrainData TerrainData 

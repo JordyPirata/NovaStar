@@ -66,7 +66,14 @@ public class MapGeneratorService : IMapGenerator
         }
         else
         {
-            Map.Add(viewedChunkCoord, await ChunkBuilder.GenerateChunk(viewedChunkCoord));
+            var chunkBuilder = new ChunkBuilder(viewedChunkCoord);
+            await 
+            chunkBuilder.GenerateChunkData();
+            chunkBuilder.SetGameObject();
+            chunkBuilder.SetTerrain();
+            chunkBuilder.CalculateBiomes();
+            
+            Map.Add(viewedChunkCoord, chunkBuilder.GetChunkObject());
         }
     }
 
