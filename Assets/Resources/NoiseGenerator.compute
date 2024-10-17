@@ -1,6 +1,8 @@
-#pragma kernel CSMain
+#pragma kernel ChunkNoise
 #pragma kernel HumidityNoise
 #pragma kernel TempNoise
+#pragma kernel TempChunkNoise
+#pragma kernel HumidityChunkNoise
 
 // Switch between using floats or doubles for input position
 typedef float FNLfloat;
@@ -1057,6 +1059,7 @@ void fnlDomainWarp2D(fnl_state state, inout FNLfloat x, inout FNLfloat y)
 // IO Buffers
 StructuredBuffer<float2> coords;
 RWStructuredBuffer<float> values;
+// Noise parameters
 int seed;
 int noise_type;
 int fractal_type;
@@ -1082,13 +1085,29 @@ fnl_state GetFnlState(int seed)
 
 [numthreads(257,1,1)]
   
-void CSMain (uint3 id : SV_DispatchThreadID)
+void ChunkNoise (uint3 id : SV_DispatchThreadID)
 {
     // TODO: Perlin Implementation
     fnl_state noise = GetFnlState(seed);
 
     // Gather noise data
     values[id.x] = fnlGetNoise2D(noise, coords[id.x].x, coords[id.x].y) * 0.5 + 0.5;
+}
+
+[numthreads(257,1,1)]
+
+void HumidityChunkNoise (uint3 id : SV_DispatchThreadID)
+{
+    fnl_state noise = GetFnlState(seed);
+    noise.noise_type = noise_type;
+    noise.fractal_type = fractal_type;
+    noise.frequency = frequency;
+    noise.octaves = octaves;
+    noise.lacunarity = lacunarity;
+    noise.gain = gain;
+
+    // Gather noise data
+    values[id.x] = fnlGetNoise2D(noise, coords[id.x].x, coords[id.x].y) * amplitude + distance;
 }
 
 [numthreads(20,1,1)]
@@ -1111,6 +1130,23 @@ void HumidityNoise (uint3 id : SV_DispatchThreadID)
 float CosFunction(float x, float size)
 {
     return cos(x* 3.14159265f / size);
+}
+
+// 257 groups of 1 thread
+[numthreads(257,1,1)]
+
+void TempChunkNoise(uint3 id : SV_DispatchThreadID)
+{
+    fnl_state noise = fnlCreateState(seed);
+    noise.noise_type = noise_type;
+    noise.fractal_type = fractal_type;
+    noise.frequency = frequency;
+    noise.octaves = octaves;
+    noise.lacunarity = lacunarity;
+    noise.gain = gain;
+
+    // Gather noise data
+    values[id.x] = (fnlGetNoise2D(noise, coords[id.x].x, coords[id.x].y) + CosFunction(coords[id.x], 100)) * amplitude + distance;
 }
 
 [numthreads(20,1,1)]
