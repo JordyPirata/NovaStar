@@ -10,19 +10,19 @@ namespace Services
     {
         private readonly INoiseService NoiseService = ServiceLocator.GetService<INoiseService>();
         private readonly IBiomeDic BiomeService = ServiceLocator.GetService<IBiomeDic>();
-        public Texture2D GenerateTextureMap(TextureMapState state)
+        public Texture2D GenerateTextureMap(TextureMapState tetureMapState)
         {
             int2 baseTempRange = new(-10, 30);
             int2 baseHumidityRange = new(0, 400);
             // change state temperature and humidity range to 0 - 0.25
-            float2 tempRange = ConvertRange(state.temperatureRange, baseTempRange);
-            float2 humidityRange = ConvertRange(state.humidityRange, baseHumidityRange);
+            float2 tempRange = ConvertRange(tetureMapState.temperatureRange, baseTempRange);
+            float2 humidityRange = ConvertRange(tetureMapState.humidityRange, baseHumidityRange);
             
             float TAmp = math.distance(tempRange.x, tempRange.y), HAmp = math.length(humidityRange);
             float Tdist =TAmp*2 + math.distance(0, tempRange.x)* 2;
             float Hdist = HAmp  + math.distance(0, humidityRange.x);
 
-            Texture2D texture2D = new(state.width, state.height)
+            Texture2D texture2D = new(tetureMapState.width, tetureMapState.height)
             {
                 filterMode = FilterMode.Trilinear,
                 wrapMode = TextureWrapMode.Clamp
@@ -31,30 +31,30 @@ namespace Services
             NoiseServiceState noiseState = new()
             {
                 kernel = Kernel.TempNoise,
-                seed = state.seed - 1,
+                seed = tetureMapState.seed - 1,
                 noiseType = NoiseType.Perlin,
                 fractalType = FractalType.FBm,
                 octaves = 2,
                 amplitude = TAmp,
                 distance = Tdist
             };
-            var temperatureMap = NoiseService.GenerateNoise(state.coords, state.width, state.height, noiseState);
+            var temperatureMap = NoiseService.GenerateNoise(tetureMapState.coords, tetureMapState.width, tetureMapState.height, noiseState);
             
             NoiseServiceState noiseState2 = new()
             {
                 kernel = Kernel.HumidityNoise,
-                seed = state.seed + 1,
+                seed = tetureMapState.seed + 1,
                 noiseType = NoiseType.Perlin,
                 fractalType = FractalType.FBm,
                 octaves = 2,
                 amplitude = HAmp,
                 distance = Hdist
             };
-            var moistureMap = NoiseService.GenerateNoise(state.coords, state.width, state.height, noiseState2);
+            var moistureMap = NoiseService.GenerateNoise(tetureMapState.coords, tetureMapState.width, tetureMapState.height, noiseState2);
 
-            for (var x = 0; x < state.width; x++)
+            for (var x = 0; x < tetureMapState.width; x++)
             {
-                for (var y = 0; y < state.height; y++)
+                for (var y = 0; y < tetureMapState.height; y++)
                 {
                     Color32 color = BiomeService.GetBiomeByValues(moistureMap[x, y], temperatureMap[x, y])?.color ?? new Color32(0, 0, 0, 255);
                     texture2D.SetPixel(x, y, color);

@@ -37,7 +37,7 @@ namespace Services.WorldGenerator
         }
         public static Material GetDefaultTerrainMaterial ()
         {
-            return Resources.Load<Material>("Dirt") ?? new Material(Shader.Find("Standard"));   
+            return new Material(Shader.Find("Nature/Terrain/Standard"));   
 		}
     }
 }

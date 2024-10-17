@@ -1,6 +1,6 @@
 using Services.Player;
 
-namespace Services
+namespace Services.Interfaces
 {
     public interface IInventoryService
     {

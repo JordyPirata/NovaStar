@@ -60,47 +60,23 @@ Shader "Custom/TerrainShader"
 
         fixed4 _Color;
 
-        sampler2D _TundraAlbedo;
-        sampler2D _TundraHeight;
-        sampler2D _TundraNormal;
-        float _TundraNormalScale;
-        float _TundraGlossiness;
-        float _TundraMetallic;
+        sampler2D _TundraAlbedo, _TundraHeight, _TundraNormal;
+        half _TundraNormalScale, _TundraGlossiness, _TundraMetallic;
 
-        sampler2D _TaigaAlbedo;
-        sampler2D _TaigaHeight;
-        sampler2D _TaigaNormal;
-        float _TaigaNormalScale;
-        float _TaigaGlossiness;
-        float _TaigaMetallic;
+        sampler2D _TaigaAlbedo, _TaigaHeight, _TaigaNormal;
+        half _TaigaNormalScale, _TaigaGlossiness, _TaigaMetallic;
 
-        sampler2D _DesertAlbedo;
-        sampler2D _DesertHeight;
-        sampler2D _DesertNormal;
-        float _DesertNormalScale;
-        float _DesertGlossiness;
-        float _DesertMetallic;
+        sampler2D _DesertAlbedo, _DesertHeight, _DesertNormal;
+        half _DesertNormalScale, _DesertGlossiness, _DesertMetallic;
 
-        sampler2D _ForestAlbedo;
-        sampler2D _ForestHeight;
-        sampler2D _ForestNormal;
-        float _ForestNormalScale;
-        float _ForestGlossiness;
-        float _ForestMetallic;
+        sampler2D _ForestAlbedo, _ForestHeight, _ForestNormal;
+        half _ForestNormalScale, _ForestGlossiness, _ForestMetallic;
 
-        sampler2D _JungleAlbedo;
-        sampler2D _JungleHeight;
-        sampler2D _JungleNormal;
-        float _JungleNormalScale;
-        float _JungleGlossiness;
-        float _JungleMetallic;
+        sampler2D _JungleAlbedo, _JungleHeight, _JungleNormal;
+        half _JungleNormalScale, _JungleGlossiness, _JungleMetallic;
 
-        sampler2D _SavannaAlbedo;
-        sampler2D _SavannaHeight;
-        sampler2D _SavannaNormal;
-        float _SavannaNormalScale;
-        float _SavannaGlossiness;
-        float _SavannaMetallic;
+        sampler2D _SavannaAlbedo, _SavannaHeight, _SavannaNormal;
+        half _SavannaNormalScale, _SavannaGlossiness, _SavannaMetallic;
 
         struct Input
         {
@@ -117,7 +93,7 @@ Shader "Custom/TerrainShader"
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
             // Albedo comes from a texture tinted by color
-            fixed4 c = tex2D (_TundraAlbedo, IN.uv_TundraAlbedo) * _Color;
+            fixed4 c = tex2D(_TundraAlbedo, IN.uv_TundraAlbedo) * _Color;
             o.Albedo = c.rgb;
             o.Alpha = c.a;
             o.Normal = UnpackNormal(tex2D(_TundraNormal, IN.uv_TundraAlbedo));

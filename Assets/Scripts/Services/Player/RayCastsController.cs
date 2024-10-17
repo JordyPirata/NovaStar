@@ -20,7 +20,7 @@ namespace Services.Player
             if (Physics.Raycast(playerTransform.position, Vector3.down, out var hit , 5500))
             {
                 Debug.Log(hit.point);
-                hit.point = new Vector3(hit.point.x, hit.point.y, hit.point.z);
+                hit.point = new Vector3(hit.point.x, hit.point.y + 1, hit.point.z);
                 playerTransform.position = hit.point;
             }
             else

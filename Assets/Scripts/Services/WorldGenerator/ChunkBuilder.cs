@@ -44,10 +44,13 @@ public class ChunkBuilder
         terrainCollider.includeLayers = LayerMask.GetMask("Player");
         terrainCollider.terrainData = terrain.terrainData;
     }
-
+    
     public void CalculateBiomes()
     {
-        
+        // Generate temperature and humidity maps
+        // Calculate biome and create splatmap for terrain
+        // Set terrain data
+
     }
     public ChunkObject GetChunkObject()
     {
