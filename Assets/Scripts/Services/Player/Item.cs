@@ -1,5 +1,6 @@
 using Gameplay.Items;
 using UnityEngine;
+using Services.Interfaces;
 
 namespace Services.Player
 {
