@@ -59,7 +59,7 @@ namespace Services.Player
 
         private void Drag(PointerEventData eventData)
         {
-            movingInventorySpace.RectTransform.anchoredPosition += eventData.delta;
+            movingInventorySpace.RectTransform.position = eventData.position;
         }
 
         private void EndDrag()
