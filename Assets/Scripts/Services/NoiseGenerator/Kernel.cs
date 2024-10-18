@@ -3,8 +3,8 @@ namespace Services.NoiseGenerator
     public enum Kernel
     {
         ChunkNoise,
-        TempNoise,
         HumidityNoise,
+        TempNoise,
         TempChunkNoise,
         HumidityChunkNoise
     }

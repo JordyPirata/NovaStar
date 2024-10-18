@@ -1,8 +1,7 @@
 #pragma kernel ChunkNoise
 #pragma kernel HumidityNoise
-#pragma kernel TempNoise
 #pragma kernel TempChunkNoise
-#pragma kernel HumidityChunkNoise
+#pragma kernel TempNoise
 
 // Switch between using floats or doubles for input position
 typedef float FNLfloat;
@@ -1089,16 +1088,6 @@ void ChunkNoise (uint3 id : SV_DispatchThreadID)
 {
     // TODO: Perlin Implementation
     fnl_state noise = GetFnlState(seed);
-
-    // Gather noise data
-    values[id.x] = fnlGetNoise2D(noise, coords[id.x].x, coords[id.x].y) * 0.5 + 0.5;
-}
-
-[numthreads(257,1,1)]
-
-void HumidityChunkNoise (uint3 id : SV_DispatchThreadID)
-{
-    fnl_state noise = GetFnlState(seed);
     noise.noise_type = noise_type;
     noise.fractal_type = fractal_type;
     noise.frequency = frequency;
@@ -1146,7 +1135,9 @@ void TempChunkNoise(uint3 id : SV_DispatchThreadID)
     noise.gain = gain;
 
     // Gather noise data
-    values[id.x] = (fnlGetNoise2D(noise, coords[id.x].x, coords[id.x].y) + CosFunction(coords[id.x], 100)) * amplitude + distance;
+    float noiseValue = fnlGetNoise2D(noise, coords[id.x].x, coords[id.x].y);
+    float cosValue = CosFunction(coords[id.x].x, 100);
+    values[id.x] = (noiseValue + cosValue) * amplitude + distance;
 }
 
 [numthreads(20,1,1)]
@@ -1162,7 +1153,8 @@ void TempNoise (uint3 id : SV_DispatchThreadID)
     noise.gain = gain;
 
     // Gather noise data
-    values[id.x] = (fnlGetNoise2D(noise, coords[id.x].x, coords[id.x].y) + CosFunction(coords[id.x].x, 100)) * amplitude + distance;
-
+    float noiseValue = fnlGetNoise2D(noise, coords[id.x].x, coords[id.x].y);
+    float cosValue = CosFunction(coords[id.x].x, 100);
+    values[id.x] = (noiseValue + cosValue) * amplitude + distance;
 }
 

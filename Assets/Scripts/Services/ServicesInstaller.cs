@@ -6,6 +6,7 @@ using UI;
 using Services.WorldGenerator;
 using Services.Player;
 using Unity.VisualScripting;
+using Services.NoiseGenerator;
 
 [RequireComponent(typeof(FadeController))]
 
@@ -31,7 +32,7 @@ public class ServiceInstaller : MonoBehaviour
         ServiceLocator.Register<IEventManager>(gameObject.AddComponent<EventManager>());
         ServiceLocator.Register<IWorldCRUD>(new WorldCRUD());
         ServiceLocator.Register<IWorldData>(gameObject.AddComponent<WorldData>());
-        ServiceLocator.Register<INoiseService>(new NoiseServiceShader());
+        ServiceLocator.Register<INoiseDirector>(new NoiseDirectorService()); // new service
         ServiceLocator.Register<IBiomeDic>(new BiomesDic());
         ServiceLocator.Register<ITextureMapGen>(new TextureMapGen());
         ServiceLocator.Register<IFadeController>(fadeController);

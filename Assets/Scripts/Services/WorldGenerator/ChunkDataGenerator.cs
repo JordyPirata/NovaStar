@@ -6,6 +6,7 @@ using Services.Interfaces;
 using Unity.Burst;
 using Unity.Mathematics;
 using UnityEngine;
+using Services.NoiseGenerator;
 
 namespace Services.WorldGenerator
 {
@@ -19,7 +20,7 @@ public struct ChunkDataGenerator
     static string message;
     private static IRepository GameRepository => ServiceLocator.GetService<IRepository>();
     private static string WorldDirectory => ServiceLocator.GetService<IWorldData>().GetDirectory();
-    private static INoiseService NoiseGenerator => ServiceLocator.GetService<INoiseService>();
+    private static INoiseDirector NoiseDirector => ServiceLocator.GetService<INoiseDirector>();
 
     public static async Task<Chunk> Generate(float2 coord)
     {
@@ -39,6 +40,8 @@ public struct ChunkDataGenerator
         }
         else
         {
+            NoiseDirector.SetBuilder<INoiseBuilder<float[]>>(new ChunkNoiseBuilder());
+
             // Create the chunk
             chunk = new()
             {
@@ -47,7 +50,7 @@ public struct ChunkDataGenerator
                 width = ChunkConfig.width,
                 depth = ChunkConfig.depth,
                 height = ChunkConfig.Height,
-                heights = NoiseGenerator.GenerateNoise(coord),
+                heights = NoiseDirector.MakeNoise(coord) as float[],
             };
             // Add the chunk to the list
             SaveChunk(chunk);
