@@ -5,20 +5,20 @@ using Services.Interfaces;
 using Debug = UnityEngine.Debug;
 namespace Services.NoiseGenerator
 {
-public class ChunkNoiseBuilder : NoiseBuilder,  INoiseBuilder<float[]>
+public class ChunkNoiseBuilder : NoiseBuilder,  INoiseBuilder
 {
     public void SetKernel()
     {
-        kernel = computeShader.FindKernel("ChunkNoiseBuilder");
+        kernel = computeShader.FindKernel(Kernel.ChunkNoise.ToString());
     }
     public void Build()
     {
-        GenerateNoise();
+        BuildMatrixNoise();
     }
 
-    public float[] GetNoise()
+    public object GetNoise()
     {
-        return (float[])Noise;
+        return Noise;
     }
 
     public override void SetSize(int width, int depth)

@@ -1,14 +1,14 @@
 using Services.Interfaces;
 namespace Services.NoiseGenerator
 {
-public class HumidityNoiseBuilder : NoiseBuilder, INoiseBuilder<float[,]>
+public class HumidityNoiseBuilder : NoiseBuilder, INoiseBuilder
 {
     public void Build()
     {
         throw new System.NotImplementedException();
     }
 
-    public float[,] GetNoise()
+    public object GetNoise()
     {
         return (float[,])Noise;
     }

@@ -27,7 +27,7 @@ namespace Services
                 filterMode = FilterMode.Trilinear,
                 wrapMode = TextureWrapMode.Clamp
             };
-            NoiseDirector.SetBuilder<INoiseBuilder<float[]>>(new ChunkNoiseBuilder());
+            NoiseDirector.SetBuilder(new ChunkNoiseBuilder ());
             // Get reference of the state of the noise service
 
             //var temperatureMap = NoiseDirector.MakeNoise() as float[];

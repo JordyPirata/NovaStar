@@ -40,7 +40,7 @@ public struct ChunkDataGenerator
         }
         else
         {
-            NoiseDirector.SetBuilder<INoiseBuilder<float[]>>(new ChunkNoiseBuilder());
+            NoiseDirector.SetBuilder(new ChunkNoiseBuilder());
 
             // Create the chunk
             chunk = new()

@@ -1,14 +1,14 @@
 using Services.Interfaces;
 namespace Services.NoiseGenerator
 {
-    public class TempChunkNoiseBuilder : NoiseBuilder, INoiseBuilder<float[]>
+    public class TempChunkNoiseBuilder : NoiseBuilder, INoiseBuilder
     {
         public void Build()
         {
             throw new System.NotImplementedException();
         }
 
-        public float[] GetNoise()
+        public object GetNoise()
         {
             return (float[])Noise;
         }

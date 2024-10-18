@@ -1,16 +1,16 @@
 using Services.Interfaces;
 namespace Services.NoiseGenerator
 {
-public class TempNoiseBuilder : NoiseBuilder, INoiseBuilder<float[,]>
+public class TempNoiseBuilder : NoiseBuilder, INoiseBuilder
 {
     public void Build()
     {
         throw new System.NotImplementedException();
     }
 
-    public float[,] GetNoise()
+    public object GetNoise()
     {
-        return (float[,])Noise;
+        return Noise;
     }
 
     public void SetKernel()

@@ -6,18 +6,10 @@ namespace Services.NoiseGenerator
 {
 public class NoiseDirectorService : INoiseDirector
 {
-    private INoiseBuilder<object> Builder;
-    public void SetBuilder<INoiseBuilder>(INoiseBuilder builder)
+    private INoiseBuilder Builder;
+    public void SetBuilder(INoiseBuilder builder)
     {
-        if (builder is INoiseBuilder<float[]>)
-        {
-            Builder = (INoiseBuilder<object>)builder;
-        }
-        else if (builder is INoiseBuilder<float[,]>)
-        {
-            Builder = (INoiseBuilder<object>)builder;
-        }
-        throw new Exception("Invalid Builder");
+        Builder = builder;
     }
     /// <summary>
     /// Retuns noise based on the builder float[] or float[,]

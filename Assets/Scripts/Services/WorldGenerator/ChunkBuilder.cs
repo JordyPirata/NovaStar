@@ -23,7 +23,7 @@ public class ChunkBuilder
     public ChunkBuilder(float2 chunkCoords)
     {
         _ChunkCoords = chunkCoords;
-        _ChunkObject = ChunkPool.Instance.GetChunk(chunkCoords) ?? throw new Exception("chunk pool is full");
+        _ChunkObject = ChunkPool.Instance.GetChunk(_ChunkCoords);
     }
     public void SetGameObject()
     {

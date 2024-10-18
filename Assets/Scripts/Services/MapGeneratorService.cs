@@ -67,8 +67,7 @@ public class MapGeneratorService : IMapGenerator
         else
         {
             var chunkBuilder = new ChunkBuilder(viewedChunkCoord);
-            await 
-            chunkBuilder.GenerateChunkData();
+            await chunkBuilder.GenerateChunkData();
             chunkBuilder.SetGameObject();
             chunkBuilder.SetTerrain();
             chunkBuilder.CalculateBiomes();
