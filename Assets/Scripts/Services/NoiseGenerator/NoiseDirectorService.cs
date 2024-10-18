@@ -20,17 +20,7 @@ public class NoiseDirectorService : INoiseDirector
         switch (Builder)
         {
             case ChunkNoiseBuilder:
-                NoiseState noiseState = new()
-                {
-                    seed = 0,
-                    frequency = 0.01f,
-                    amplitude = 1f,
-                    lacunarity = 2f,
-                    gain = 0.5f,
-                    octaves = 3,
-                    fractalType = FractalType.FBM,
-                    noiseType = NoiseType.OpenSimplex2
-                };
+                NoiseState noiseState = new();
                 Builder.SetCoords(coords);
                 Builder.SetState(noiseState);
                 Builder.SetKernel();
