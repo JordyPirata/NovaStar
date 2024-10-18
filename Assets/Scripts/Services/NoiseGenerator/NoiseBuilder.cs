@@ -5,29 +5,97 @@ using Services.Interfaces;
 
 namespace Services
 {
-    public class NoiseServiceShader : INoiseService
+    public class NoiseBuilder 
     {
+        protected object Noise;
+        protected float2 Coords;
+        protected NoiseState State;
+        protected int Width;
+        protected int Height;
         // Load the compute shader
-        private readonly ComputeShader computeShader = Resources.Load<ComputeShader>("NoiseGenerator");
-        private static int kernel;
-        private readonly IWorldData worldData = ServiceLocator.GetService<IWorldData>();
+        protected readonly ComputeShader computeShader = Resources.Load<ComputeShader>("NoiseGenerator");
+        protected int kernel;
+        protected readonly IWorldData worldData = ServiceLocator.GetService<IWorldData>();
         
         // Shader properties
-        private static readonly int GradientsId = Shader.PropertyToID("GRADIENTS_2D");
-        private static readonly int RandVecsId = Shader.PropertyToID("RAND_VECS_2D");
-        private static readonly int CoordsId = Shader.PropertyToID("coords");
-        private static readonly int ValuesID = Shader.PropertyToID("values");
-        private static readonly int Seed = Shader.PropertyToID("seed");
-        private static readonly int NoiseType = Shader.PropertyToID("noise_type");
-        private static readonly int FractalType = Shader.PropertyToID("fractal_type");
-        private static readonly int Frequency = Shader.PropertyToID("frequency");
-        private static readonly int Octaves = Shader.PropertyToID("octaves");
-        private static readonly int Lacunarity = Shader.PropertyToID("lacunarity");
-        private static readonly int Gain = Shader.PropertyToID("gain");
-        private static readonly int Amplitude = Shader.PropertyToID("amplitude");
-        private static readonly int Distance = Shader.PropertyToID("distance");
-        
-        public float[] GenerateNoise(float2 coords)
+        protected readonly int GradientsId = Shader.PropertyToID("GRADIENTS_2D");
+        protected readonly int RandVecsId = Shader.PropertyToID("RAND_VECS_2D");
+        protected readonly int CoordsId = Shader.PropertyToID("coords");
+        protected readonly int ValuesID = Shader.PropertyToID("values");
+        protected readonly int Seed = Shader.PropertyToID("seed");
+        protected readonly int NoiseType = Shader.PropertyToID("noise_type");
+        protected readonly int FractalType = Shader.PropertyToID("fractal_type");
+        protected readonly int Frequency = Shader.PropertyToID("frequency");
+        protected readonly int Octaves = Shader.PropertyToID("octaves");
+        protected readonly int Lacunarity = Shader.PropertyToID("lacunarity");
+        protected readonly int Gain = Shader.PropertyToID("gain");
+        protected readonly int Amplitude = Shader.PropertyToID("amplitude");
+        protected readonly int Distance = Shader.PropertyToID("distance");
+        public void SetCoords(float2 coords)
+        {
+            Coords = coords;
+        }
+        public void SetState(NoiseState state)
+        {
+            State = state;
+        }
+        public virtual void SetSize(int width, int depth)
+        {
+            Width = width;
+            Height = depth;
+        }
+        public void BuildMatrixNoise()
+        {
+            // Calculate the initial x and y
+            var iCoordX = (int)Coords.x * ChunkConfig.width - (int)Coords.x;
+            var iCoordY = (int)Coords.y * ChunkConfig.depth - (int)Coords.y;
+
+            // Loop through the coordinates
+            var allCoords = LoopCoords(ChunkConfig.Length, iCoordX, iCoordY, ChunkConfig.width, ChunkConfig.depth);
+            var heights = new float[ChunkConfig.Length];
+
+            // Initialize the buffers 
+            var coordsBuffer = InitCoordsBuffer(allCoords);
+            var valuesBuffer = new ComputeBuffer(ChunkConfig.Length, sizeof(float));
+
+            // Initialize the Gradients and RandVecs buffers for Vulkan compatibility
+
+            var Gradients2DBuffer = new ComputeBuffer(Gradients2D.Length, sizeof(float));
+                Gradients2DBuffer.SetData(Gradients2D);
+
+            var RandVecs2DBuffer = new ComputeBuffer(RandVecs2D.Length, sizeof(float));
+                RandVecs2DBuffer.SetData(RandVecs2D);
+            
+            // Set the Compute Shader Buffer
+            computeShader.SetBuffer(kernel, CoordsId, coordsBuffer);
+            computeShader.SetBuffer(kernel, ValuesID, valuesBuffer);
+            computeShader.SetBuffer(kernel, GradientsId, Gradients2DBuffer);
+            computeShader.SetBuffer(kernel, RandVecsId, RandVecs2DBuffer);
+            computeShader.SetInt(Seed, worldData.GetSeed());
+            computeShader.SetInt(NoiseType, (int)State.noiseType);
+            computeShader.SetInt(FractalType, (int)State.fractalType);
+            computeShader.SetFloat(Frequency, State.frequency);
+            computeShader.SetInt(Octaves, State.octaves);
+            computeShader.SetFloat(Lacunarity, State.lacunarity);
+            computeShader.SetFloat(Gain, State.gain);
+            computeShader.SetFloat(Amplitude, State.amplitude);
+            computeShader.SetFloat(Distance, State.distance);
+
+            // Dispatch the shader
+            computeShader.Dispatch(kernel, 257, 1, 1);
+            
+            // Get the data from the buffer
+            valuesBuffer.GetData(heights);
+            
+            // Release the buffers
+            coordsBuffer.Release();
+            valuesBuffer.Release();
+            Gradients2DBuffer.Release();
+            RandVecs2DBuffer.Release();
+
+            Noise = heights;
+        }
+        private float[] BuildMatrixNoise(float2 coords)
         {
             // Get the kernel
             kernel = computeShader.FindKernel("CSMain");
@@ -72,17 +140,15 @@ namespace Services
 
             return heights;
         }
-        public float[,] GenerateNoise(float2 singleCoords, int width, int height, NoiseServiceState state)
+        protected void GenerateNoise()
         {
-            // Get the kernel
-            kernel = computeShader.FindKernel(state.kernel.ToString());
             // Calculate the initial x and y
-            var iCoordX = (int)singleCoords.x * width;
-            var iCoordY = (int)singleCoords.y * height;
-            int Length = width * height;
+            var iCoordX = (int)Coords.x * Width;
+            var iCoordY = (int)Coords.y * Height;
+            int Length = Width * Height;
 
             // Loop through the coordinates
-            var allCoords = LoopCoords(Length, iCoordX, iCoordY, width, height);
+            var allCoords = LoopCoords(Length, iCoordX, iCoordY, Width, Height);
             var heights = new float[Length];
 
             // Initialize the buffer
@@ -101,15 +167,15 @@ namespace Services
             computeShader.SetBuffer(kernel, ValuesID, valuesBuffer);
             computeShader.SetBuffer(kernel, GradientsId, Gradients2DBuffer);
             computeShader.SetBuffer(kernel, RandVecsId, RandVecs2DBuffer);
-            computeShader.SetInt(Seed, state.seed);
-            computeShader.SetInt(NoiseType, (int)state.noiseType);
-            computeShader.SetInt(FractalType, (int)state.fractalType);
-            computeShader.SetFloat(Frequency, state.frequency);
-            computeShader.SetInt(Octaves, state.octaves);
-            computeShader.SetFloat(Lacunarity, state.lacunarity);
-            computeShader.SetFloat(Gain, state.gain);
-            computeShader.SetFloat(Amplitude, state.amplitude);
-            computeShader.SetFloat(Distance, state.distance);
+            computeShader.SetInt(Seed, State.seed);
+            computeShader.SetInt(NoiseType, (int)State.noiseType);
+            computeShader.SetInt(FractalType, (int)State.fractalType);
+            computeShader.SetFloat(Frequency, State.frequency);
+            computeShader.SetInt(Octaves, State.octaves);
+            computeShader.SetFloat(Lacunarity, State.lacunarity);
+            computeShader.SetFloat(Gain, State.gain);
+            computeShader.SetFloat(Amplitude, State.amplitude);
+            computeShader.SetFloat(Distance, State.distance);
                 
             computeShader.Dispatch(kernel, Mathf.CeilToInt(Length / 20), 1, 1); 
 
@@ -122,9 +188,9 @@ namespace Services
             Gradients2DBuffer.Release();
             RandVecs2DBuffer.Release();
 
-            return Util.TransferData.TransferDataFromArrayTo2DArray(heights, width, height);
+            Noise = Util.TransferData.TransferDataFromArrayTo2DArray(heights, Width, Height);
         }
-        private float2[] LoopCoords(int Length, int iCoordX, int iCoordY, int width, int depth)
+        protected float2[] LoopCoords(int Length, int iCoordX, int iCoordY, int width, int depth)
         {
             var allCoords = new float2[Length];
             int initialY = iCoordY, i = 0;
@@ -146,7 +212,7 @@ namespace Services
             return allCoords;
         }
         
-        private ComputeBuffer InitCoordsBuffer(float2[] data)
+        protected ComputeBuffer InitCoordsBuffer(float2[] data)
         {
 	        var totalSize = sizeof(float) * 2; 
 
@@ -157,7 +223,7 @@ namespace Services
         }
 
         // Initialize the constants
-        private readonly float[] Gradients2D =
+        protected readonly float[] Gradients2D =
         {
             0.130526192220052f, 0.99144486137381f, 0.38268343236509f, 0.923879532511287f, 0.608761429008721f, 0.793353340291235f, 0.793353340291235f, 0.608761429008721f,
             0.923879532511287f, 0.38268343236509f, 0.99144486137381f, 0.130526192220051f, 0.99144486137381f, -0.130526192220051f, 0.923879532511287f, -0.38268343236509f,
@@ -192,7 +258,7 @@ namespace Services
             0.38268343236509f, 0.923879532511287f, 0.923879532511287f, 0.38268343236509f, 0.923879532511287f, -0.38268343236509f, 0.38268343236509f, -0.923879532511287f,
             -0.38268343236509f, -0.923879532511287f, -0.923879532511287f, -0.38268343236509f, -0.923879532511287f, 0.38268343236509f, -0.38268343236509f, 0.923879532511287f,
         };
-        private readonly float[] RandVecs2D =
+        protected readonly float[] RandVecs2D =
         {
             -0.2700222198f, -0.9628540911f, 0.3863092627f, -0.9223693152f, 0.04444859006f, -0.999011673f, -0.5992523158f, -0.8005602176f, -0.7819280288f, 0.6233687174f, 0.9464672271f, 0.3227999196f, -0.6514146797f, -0.7587218957f, 0.9378472289f, 0.347048376f,
             -0.8497875957f, -0.5271252623f, -0.879042592f, 0.4767432447f, -0.892300288f, -0.4514423508f, -0.379844434f, -0.9250503802f, -0.9951650832f, 0.0982163789f, 0.7724397808f, -0.6350880136f, 0.7573283322f, -0.6530343002f, -0.9928004525f, -0.119780055f,

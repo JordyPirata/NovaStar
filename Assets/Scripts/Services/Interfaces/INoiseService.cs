@@ -1,15 +1,11 @@
 using Unity.Mathematics;
+using Services.Interfaces;
+
 namespace Services.Interfaces
 {
-    public interface INoiseService
+    public interface INoiseDirector
     {
-        /// <summary>
-        ///  Generate noise for the chunk
-        /// </summary>
-        float[] GenerateNoise(float2 coords);
-        /// <summary>
-        /// Generate noise Map
-        /// </summary> 
-        float[,] GenerateNoise(float2 coords, int width, int height, NoiseServiceState state);
+        public void SetBuilder<T>(T builder);
+        public object MakeNoise(float2 coords);
     }
 }

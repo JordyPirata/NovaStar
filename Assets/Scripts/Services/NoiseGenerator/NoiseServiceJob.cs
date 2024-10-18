@@ -8,7 +8,7 @@ using Services.NoiseGenerator;
 
 namespace Services
 {
-    public class NoiseServiceJob : INoiseService
+    public class NoiseServiceJob 
 	{
 		// Generate noise for the chunk
 		public float[] GenerateNoise(float2 coords)
@@ -94,7 +94,7 @@ namespace Services
 			return Util.TransferData.TransferDataFromArrayTo2DArray(result, width, height);
 		}
 
-        public float[,] GenerateNoise(float2 coords, int width, int height, NoiseServiceState state)
+        public float[,] GenerateNoise(float2 coords, int width, int height, NoiseState state)
         {
             throw new System.NotImplementedException();
         }
