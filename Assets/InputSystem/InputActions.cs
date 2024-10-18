@@ -100,6 +100,15 @@ namespace InputSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""InventoryMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""2c49ec34-dc64-4ea9-b61b-17d8c85e23b9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -331,6 +340,17 @@ namespace InputSystem
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""75bbe1ce-b2dd-4e31-a18c-65ed6bb3910a"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InventoryMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -865,6 +885,7 @@ namespace InputSystem
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
             m_Player_Run = m_Player.FindAction("Run", throwIfNotFound: true);
             m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
+            m_Player_InventoryMenu = m_Player.FindAction("InventoryMenu", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -946,6 +967,7 @@ namespace InputSystem
         private readonly InputAction m_Player_Jump;
         private readonly InputAction m_Player_Run;
         private readonly InputAction m_Player_Interact;
+        private readonly InputAction m_Player_InventoryMenu;
         public struct PlayerActions
         {
             private @InputActions m_Wrapper;
@@ -958,6 +980,7 @@ namespace InputSystem
             public InputAction @Jump => m_Wrapper.m_Player_Jump;
             public InputAction @Run => m_Wrapper.m_Player_Run;
             public InputAction @Interact => m_Wrapper.m_Player_Interact;
+            public InputAction @InventoryMenu => m_Wrapper.m_Player_InventoryMenu;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -991,6 +1014,9 @@ namespace InputSystem
                 @Interact.started += instance.OnInteract;
                 @Interact.performed += instance.OnInteract;
                 @Interact.canceled += instance.OnInteract;
+                @InventoryMenu.started += instance.OnInventoryMenu;
+                @InventoryMenu.performed += instance.OnInventoryMenu;
+                @InventoryMenu.canceled += instance.OnInventoryMenu;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -1019,6 +1045,9 @@ namespace InputSystem
                 @Interact.started -= instance.OnInteract;
                 @Interact.performed -= instance.OnInteract;
                 @Interact.canceled -= instance.OnInteract;
+                @InventoryMenu.started -= instance.OnInventoryMenu;
+                @InventoryMenu.performed -= instance.OnInventoryMenu;
+                @InventoryMenu.canceled -= instance.OnInventoryMenu;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -1164,6 +1193,7 @@ namespace InputSystem
             void OnJump(InputAction.CallbackContext context);
             void OnRun(InputAction.CallbackContext context);
             void OnInteract(InputAction.CallbackContext context);
+            void OnInventoryMenu(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {
