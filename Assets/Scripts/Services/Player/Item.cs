@@ -12,7 +12,7 @@ namespace Services.Player
         public string ItemName => itemName;
         public override void Interact()
         {
-            UnityEngine.Debug.Log("interactuó");
+            Debug.Log("interactuó");
             amount = ServiceLocator.GetService<IInventoryService>().TryPickItem(this, amount);
             if (amount <= 0) Destroy(gameObject);
         }
