@@ -8,6 +8,8 @@ namespace Services
 {
     public class TextureMapGen : ITextureMapGen
     {
+        public const int Width = 200;
+        public const int Depth = 200;
         private readonly INoiseDirector NoiseDirector = ServiceLocator.GetService<INoiseDirector>();
         private readonly IBiomeDic BiomeService = ServiceLocator.GetService<IBiomeDic>();
         public Texture2D GenerateTextureMap(TextureMapState tetureMapState)
@@ -22,23 +24,25 @@ namespace Services
             float Tdist =TAmp*2 + math.distance(0, tempRange.x)* 2;
             float Hdist = HAmp  + math.distance(0, humidityRange.x);
 
-            Texture2D texture2D = new(tetureMapState.width, tetureMapState.height)
+            Texture2D texture2D = new(Width, Depth)
             {
                 filterMode = FilterMode.Trilinear,
                 wrapMode = TextureWrapMode.Clamp
             };
-            NoiseDirector.SetBuilder(new ChunkNoiseBuilder ());
+            
             // Get reference of the state of the noise service
+            NoiseDirector.SetBuilder(new TempNoiseBuilder());
+            var temperatureMap = NoiseDirector.MakeNoise(new float2(0,0)) as float[,];
 
-            //var temperatureMap = NoiseDirector.MakeNoise() as float[];
-            //var moistureMap = NoiseDirector.GenerateNoise(tetureMapState.coords, tetureMapState.width, tetureMapState.height, noiseState2);
+            NoiseDirector.SetBuilder(new HumidityNoiseBuilder());
+            var moistureMap = NoiseDirector.MakeNoise(new float2(0,0)) as float[,];
 
-            for (var x = 0; x < tetureMapState.width; x++)
+            for (var x = 0; x < Width; x++)
             {
-                for (var y = 0; y < tetureMapState.height; y++)
+                for (var y = 0; y < Depth; y++)
                 {
-                    //Color32 color = BiomeService.GetBiomeByValues(moistureMap[x, y], temperatureMap[x, y])?.color ?? new Color32(0, 0, 0, 255);
-                    //texture2D.SetPixel(x, y, color);
+                    Color32 color = BiomeService.GetBiomeByValues(moistureMap[x, y], temperatureMap[x, y])?.color ?? new Color32(0, 0, 0, 255);
+                    texture2D.SetPixel(x, y, color);
                 }
             }
             return texture2D;

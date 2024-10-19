@@ -5,7 +5,7 @@ public class TempNoiseBuilder : NoiseBuilder, INoiseBuilder
 {
     public void Build()
     {
-        throw new System.NotImplementedException();
+        BuildMatrixNoise();
     }
 
     public object GetNoise()
@@ -15,7 +15,7 @@ public class TempNoiseBuilder : NoiseBuilder, INoiseBuilder
 
     public void SetKernel()
     {
-        throw new System.NotImplementedException();
+        kernel = computeShader.FindKernel(Kernel.TempNoise.ToString());
     }
-    }
+}
 }

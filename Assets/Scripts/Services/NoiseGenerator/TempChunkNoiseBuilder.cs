@@ -1,21 +1,21 @@
 using Services.Interfaces;
 namespace Services.NoiseGenerator
 {
-    public class TempChunkNoiseBuilder : NoiseBuilder, INoiseBuilder
+public class TempChunkNoiseBuilder : NoiseBuilder, INoiseBuilder
+{
+    public void Build()
     {
-        public void Build()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public object GetNoise()
-        {
-            return (float[])Noise;
-        }
-
-        public void SetKernel()
-        {
-            throw new System.NotImplementedException();
-        }
+        BuildArrayNoise();
     }
+
+    public object GetNoise()
+    {
+        return Noise;
+    }
+
+    public void SetKernel()
+    {
+        kernel = computeShader.FindKernel(Kernel.TempChunkNoise.ToString());
+    }
+}
 }

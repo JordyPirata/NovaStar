@@ -20,19 +20,46 @@ public class NoiseDirectorService : INoiseDirector
         switch (Builder)
         {
             case ChunkNoiseBuilder:
+
                 NoiseState noiseState = new();
                 Builder.SetCoords(coords);
                 Builder.SetState(noiseState);
                 Builder.SetKernel();
                 Builder.Build();
                 return Builder.GetNoise();
+
             case HumidityNoiseBuilder:
+
+                NoiseState humidityState = new();
+                Builder.SetCoords(coords);
+                Builder.SetSize(TextureMapGen.Width, TextureMapGen.Depth);
+                Builder.SetState(humidityState);
                 Builder.SetKernel();
-                break;
+                Builder.Build();
+                return Builder.GetNoise();
+
+            case TempNoiseBuilder:
+
+                NoiseState tempState = new();
+                Builder.SetSize(TextureMapGen.Width, TextureMapGen.Depth);
+                Builder.SetCoords(coords - 1);
+                Builder.SetState(tempState);
+                Builder.SetKernel();
+                Builder.Build();
+                return Builder.GetNoise();
+            
+            case TempChunkNoiseBuilder:
+
+                NoiseState tempChunkState = new();
+                Builder.SetCoords(coords);
+                Builder.SetState(tempChunkState);
+                Builder.SetKernel();
+                Builder.Build();
+                return Builder.GetNoise();
+                
             default:
                 throw new Exception("Invalid Builder");
         }
-        return null;
     }
 }
 }

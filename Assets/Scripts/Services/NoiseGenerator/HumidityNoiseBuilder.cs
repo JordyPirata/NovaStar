@@ -5,17 +5,16 @@ public class HumidityNoiseBuilder : NoiseBuilder, INoiseBuilder
 {
     public void Build()
     {
-        throw new System.NotImplementedException();
+        BuildMatrixNoise();
     }
-
     public object GetNoise()
     {
-        return (float[,])Noise;
+        return Noise;
     }
 
     public void SetKernel()
     {
-        throw new System.NotImplementedException();
+        kernel = computeShader.FindKernel(Kernel.HumidityNoise.ToString());
     }
-    }
+}
 }
