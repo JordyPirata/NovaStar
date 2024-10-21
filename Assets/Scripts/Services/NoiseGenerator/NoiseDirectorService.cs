@@ -15,7 +15,7 @@ public class NoiseDirectorService : INoiseDirector
     /// Retuns noise based on the builder float[] or float[,]
     /// </summary>
     /// <returns></returns>
-    public object MakeNoise(float2 coords)
+    public object GetNoise(float2 coords)
     {
         switch (Builder)
         {
@@ -56,7 +56,16 @@ public class NoiseDirectorService : INoiseDirector
                 Builder.SetKernel();
                 Builder.Build();
                 return Builder.GetNoise();
-                
+
+            case HumidityChunkNoiseBuilder:
+
+                NoiseState humidityChunkState = new();
+                Builder.SetCoords(coords);
+                Builder.SetState(humidityChunkState);
+                Builder.SetKernel();
+                Builder.Build();
+                return Builder.GetNoise();
+            
             default:
                 throw new Exception("Invalid Builder");
         }

@@ -32,10 +32,10 @@ namespace Services
             
             // Get reference of the state of the noise service
             NoiseDirector.SetBuilder(new TempNoiseBuilder());
-            var temperatureMap = NoiseDirector.MakeNoise(new float2(0,0)) as float[,];
+            var temperatureMap = NoiseDirector.GetNoise(new float2(0,0)) as float[,];
 
             NoiseDirector.SetBuilder(new HumidityNoiseBuilder());
-            var moistureMap = NoiseDirector.MakeNoise(new float2(0,0)) as float[,];
+            var moistureMap = NoiseDirector.GetNoise(new float2(0,0)) as float[,];
 
             for (var x = 0; x < Width; x++)
             {
