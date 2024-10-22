@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: CraftingRecipesData
   m_EditorClassIdentifier: 
   craftingRecipes:
-  - craftingIngredients:
-    - item: 0
-      quantity: 0
+  - craftedItem: 1
+    craftedQuantity: 4
+    craftingIngredients:
+    - item: 2
+      quantity: 1
+    - item: 3
+      quantity: 1
