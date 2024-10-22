@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bff7ed39ac947e5ab0f42bfe5251344, type: 3}
   m_Name: PlayerMediatorData
   m_EditorClassIdentifier: 
-  interactionDistance: 4
+  interactionDistance: 10
   interactionLayer:
     serializedVersion: 2
     m_Bits: 128
