@@ -5,15 +5,18 @@ using Services;
 using UI;
 using Services.WorldGenerator;
 using Services.Player;
-using Unity.VisualScripting;
 using Services.NoiseGenerator;
+using Services.Splatmap;
 
 [RequireComponent(typeof(FadeController))]
+[RequireComponent(typeof(PlayerMediatorData))]
+[RequireComponent(typeof(BiomeTexturesService))]
 
 public class ServiceInstaller : MonoBehaviour
 {
     [SerializeField] private FadeController fadeController;
     [SerializeField] private PlayerMediatorData playerMediatorData;
+    [SerializeField] private BiomeTextures biomeTextures;
     public void Awake()
     {
         DontDestroyOnLoad(this);
@@ -49,5 +52,10 @@ public class ServiceInstaller : MonoBehaviour
         // new services
         ServiceLocator.Register<IHUDService>(gameObject.AddComponent<HUDHolder>());
         ServiceLocator.Register<IFirstPersonController>(new ControllerReference());
+        ServiceLocator.Register<INoiseDirector>(new NoiseDirectorService());
+        ServiceLocator.Register<ISplatMapService>(new SplatMapService());
+        var biomeTexturesService = new BiomeTexturesService();
+        biomeTexturesService.Configure(biomeTextures);
+        ServiceLocator.Register<IBiomeTexturesService>(new BiomeTexturesService());
     }
 }

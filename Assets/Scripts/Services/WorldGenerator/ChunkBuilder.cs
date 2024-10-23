@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Models;
 using Unity.Mathematics;
 using UnityEngine;
-using Services.NoiseGenerator;
 using Services.Interfaces;
 
 namespace Services.WorldGenerator
@@ -49,10 +48,11 @@ public class ChunkBuilder
     
     public void CalculateBiomes()
     {
-        // Generate temperature and humidity maps
-        ServiceLocator.GetService<ChunkMapsGenerator>().TemperatureMap(_ChunkCoords);
-        
+
+        ISplatMapService splatMapService = ServiceLocator.GetService<ISplatMapService>();
+        var textures = splatMapService.GenerateSplatMap(_ChunkCoords);
         // Calculate biome and create splatmap for terrain
+        var terrainMaterial = new Material(Shader.Find("Standard"));
         // Set terrain data
 
     }

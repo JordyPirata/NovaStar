@@ -4,6 +4,10 @@ namespace Services.NoiseGenerator
 {
 public class HumidityChunkNoiseBuilder : NoiseBuilder, INoiseBuilder
 {
+    public void SetKernel()
+    {
+        kernel = computeShader.FindKernel(Kernel.ChunkNoise.ToString());
+    }
     public void Build()
     {
         BuildArrayNoise();
@@ -14,9 +18,6 @@ public class HumidityChunkNoiseBuilder : NoiseBuilder, INoiseBuilder
         return Noise;
     }
 
-    public void SetKernel()
-    {
-        kernel = computeShader.FindKernel(Kernel.ChunkNoiseBuilder.ToString());
-    }
+    
 }
 }
