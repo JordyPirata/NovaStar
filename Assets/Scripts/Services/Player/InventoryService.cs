@@ -15,6 +15,7 @@ namespace Services.Player
         [SerializeField] private ItemsUIConfiguration itemsUIConfiguration;
         [SerializeField] private GameObject panelGameObject;
         [SerializeField] private MovingInventorySpace movingInventorySpace;
+        private Dictionary<string, int> _completeInventory;
         private InputActions _inputActions;
         private bool _open;
 
@@ -22,6 +23,7 @@ namespace Services.Player
         {
             _inputActions = ServiceLocator.GetService<IInputActions>().InputActions;
             _inputActions.Player.InventoryMenu.performed += OnInventoryMenu;
+            panelGameObject.SetActive(false);
             foreach (var inventorySpace in inventorySpaces)
             {
                 inventorySpace.Configure(itemsUIConfiguration, BeginDrag, Drag, EndDrag);
@@ -38,6 +40,7 @@ namespace Services.Player
 
         public int TryPickItem (Item item, int quantity)
         {
+            var startingQuantity = quantity;
             foreach (var inventorySpace in inventorySpaces)
             {
                 if (!inventorySpace.HasItem || item.ItemName == inventorySpace.ItemName)
@@ -46,6 +49,12 @@ namespace Services.Player
                     if (quantity == 0)
                         return quantity;
                 }
+            }
+
+            if (_completeInventory.ContainsKey(item.ItemName))
+            {
+                _completeInventory[item.ItemName] += startingQuantity - quantity;
+                Debug.Log($"Now you have {_completeInventory[item.ItemName]} units of {item.ItemName}");
             }
             return quantity;
         }
@@ -59,7 +68,7 @@ namespace Services.Player
 
         private void Drag(PointerEventData eventData)
         {
-            movingInventorySpace.RectTransform.anchoredPosition += eventData.delta;
+            movingInventorySpace.RectTransform.position = eventData.position;
         }
 
         private void EndDrag()
