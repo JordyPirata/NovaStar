@@ -13,7 +13,6 @@ namespace Services.WorldGenerator
 /// <summary>
 ///  This struct is responsible for generating the chunk data
 /// </summary>
-[BurstCompile]
 public struct ChunkDataGenerator
 {
 
@@ -50,7 +49,7 @@ public struct ChunkDataGenerator
                 width = ChunkConfig.width,
                 depth = ChunkConfig.depth,
                 height = ChunkConfig.Height,
-                heights = NoiseDirector.MakeNoise(coord) as float[],
+                heights = NoiseDirector.GetNoise(coord) as float[],
             };
             // Add the chunk to the list
             SaveChunk(chunk);

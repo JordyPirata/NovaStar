@@ -11,7 +11,7 @@ namespace Services
         protected float2 Coords;
         protected NoiseState State;
         protected int Width;
-        protected int Height;
+        protected int Depth;
         // Load the compute shader
         protected readonly ComputeShader computeShader = Resources.Load<ComputeShader>("NoiseGenerator");
         protected int kernel;
@@ -42,9 +42,9 @@ namespace Services
         public virtual void SetSize(int width, int depth)
         {
             Width = width;
-            Height = depth;
+            Depth = depth;
         }
-        public void BuildMatrixNoise()
+        public void BuildArrayNoise()
         {
             // Calculate the initial x and y
             var iCoordX = (int)Coords.x * ChunkConfig.width - (int)Coords.x;
@@ -95,60 +95,15 @@ namespace Services
 
             Noise = heights;
         }
-        private float[] BuildMatrixNoise(float2 coords)
-        {
-            // Get the kernel
-            kernel = computeShader.FindKernel("CSMain");
-            // Calculate the initial x and y
-			var iCoordX = (int)coords.x * ChunkConfig.width - (int)coords.x;
-			var iCoordY = (int)coords.y * ChunkConfig.depth - (int)coords.y;
-
-            // Loop through the coordinates
-            var allCoords = LoopCoords(ChunkConfig.Length, iCoordX, iCoordY, ChunkConfig.width, ChunkConfig.depth);
-            var heights = new float[ChunkConfig.Length];
-
-            // Initialize the buffers 
-            var coordsBuffer = InitCoordsBuffer(allCoords);
-            var valuesBuffer = new ComputeBuffer(ChunkConfig.Length, sizeof(float));
-
-            // Initialize the Gradients and RandVecs buffers for Vulkan compatibility
-
-            var Gradients2DBuffer = new ComputeBuffer(Gradients2D.Length, sizeof(float));
-                Gradients2DBuffer.SetData(Gradients2D);
-
-            var RandVecs2DBuffer = new ComputeBuffer(RandVecs2D.Length, sizeof(float));
-                RandVecs2DBuffer.SetData(RandVecs2D);
-			
-            // Set the Compute Shader Buffer
-            computeShader.SetBuffer(kernel, CoordsId, coordsBuffer);
-            computeShader.SetBuffer(kernel, ValuesID, valuesBuffer);
-            computeShader.SetBuffer(kernel, GradientsId, Gradients2DBuffer);
-            computeShader.SetBuffer(kernel, RandVecsId, RandVecs2DBuffer);
-            computeShader.SetInt(Seed, worldData.GetSeed());
-
-            // Dispatch the shader
-            computeShader.Dispatch(kernel, 257, 1, 1); 
-            
-            // Get the data from the buffer
-            valuesBuffer.GetData(heights);
-            
-            // Release the buffers
-            coordsBuffer.Release();
-            valuesBuffer.Release();
-            Gradients2DBuffer.Release();
-            RandVecs2DBuffer.Release();
-
-            return heights;
-        }
-        protected void GenerateNoise()
+        protected void BuildMatrixNoise()
         {
             // Calculate the initial x and y
             var iCoordX = (int)Coords.x * Width;
-            var iCoordY = (int)Coords.y * Height;
-            int Length = Width * Height;
+            var iCoordY = (int)Coords.y * Depth;
+            int Length = Width * Depth;
 
             // Loop through the coordinates
-            var allCoords = LoopCoords(Length, iCoordX, iCoordY, Width, Height);
+            var allCoords = LoopCoords(Length, iCoordX, iCoordY, Width, Depth);
             var heights = new float[Length];
 
             // Initialize the buffer
@@ -188,7 +143,7 @@ namespace Services
             Gradients2DBuffer.Release();
             RandVecs2DBuffer.Release();
 
-            Noise = Util.TransferData.TransferDataFromArrayTo2DArray(heights, Width, Height);
+            Noise = Util.TransferData.TransferDataFromArrayTo2DArray(heights, Width, Depth);
         }
         protected float2[] LoopCoords(int Length, int iCoordX, int iCoordY, int width, int depth)
         {

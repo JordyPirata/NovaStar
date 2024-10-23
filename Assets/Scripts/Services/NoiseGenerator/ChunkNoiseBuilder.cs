@@ -13,7 +13,7 @@ public class ChunkNoiseBuilder : NoiseBuilder,  INoiseBuilder
     }
     public void Build()
     {
-        BuildMatrixNoise();
+        BuildArrayNoise();
     }
 
     public object GetNoise()

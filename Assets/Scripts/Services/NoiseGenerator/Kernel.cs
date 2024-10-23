@@ -6,6 +6,6 @@ namespace Services.NoiseGenerator
         HumidityNoise,
         TempNoise,
         TempChunkNoise,
-        HumidityChunkNoise
+        HumidityChunkNoise, 
     }
 }

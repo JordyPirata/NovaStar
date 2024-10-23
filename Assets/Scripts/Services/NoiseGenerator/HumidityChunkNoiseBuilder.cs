@@ -1,8 +1,13 @@
 using Services.Interfaces;
+
 namespace Services.NoiseGenerator
 {
-public class TempChunkNoiseBuilder : NoiseBuilder, INoiseBuilder
+public class HumidityChunkNoiseBuilder : NoiseBuilder, INoiseBuilder
 {
+    public void SetKernel()
+    {
+        kernel = computeShader.FindKernel(Kernel.ChunkNoise.ToString());
+    }
     public void Build()
     {
         BuildArrayNoise();
@@ -13,9 +18,6 @@ public class TempChunkNoiseBuilder : NoiseBuilder, INoiseBuilder
         return Noise;
     }
 
-    public void SetKernel()
-    {
-        kernel = computeShader.FindKernel(Kernel.TempChunkNoise.ToString());
-    }
+    
 }
 }

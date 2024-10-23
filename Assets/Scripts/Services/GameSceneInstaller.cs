@@ -2,7 +2,6 @@ using System;
 using Services.Interfaces;
 using Services.Player;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Services
 {
