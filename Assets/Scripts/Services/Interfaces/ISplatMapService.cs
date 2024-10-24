@@ -5,6 +5,6 @@ namespace Services.Interfaces
 {
 public interface ISplatMapService
 {
-    public Texture2D[] GenerateSplatMap(float2 chunkCoords, float[] tempNoise, float[] humiditynoise);
+    public RenderTexture[] GenerateSplatMap(float2 chunkCoords, float[] tempNoise, float[] humiditynoise);
 }
 }

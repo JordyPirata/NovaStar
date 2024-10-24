@@ -56,11 +56,12 @@ public class ChunkBuilder
     public void CalculateBiomes()
     {
         
-        /* 
+        
         var textures = SplatMapService.GenerateSplatMap(_ChunkCoords, Chunk.temperature, Chunk.humidity); 
+        Debug.Log(textures.Length);
         // Calculate biome and create splatmap for terrain
         var terrainMaterial = new Material(Shader.Find("Standard"));
-        // Set terrain data */
+        // Set terrain data 
 
     }
     public ChunkObject GetChunkObject()
