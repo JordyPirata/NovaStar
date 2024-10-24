@@ -1,10 +1,6 @@
-// Purpose: Contains the TransferData struct, which contains a method to transfer a 1D array to a 2D array.
-using Unity.Burst;
-
 namespace Util
 {
-    [BurstCompile]
-    public struct TransferData
+    public class TransferData
     {
         public static float[,] TransferDataFromArrayTo2DArray(float[] array, int width, int depth)
         {
@@ -17,6 +13,10 @@ namespace Util
                 }
             }
             return newArray;
+        }
+        public static int GetIndex(int x, int y, int width)
+        {
+            return (y * width) + x;
         }
     }
 }

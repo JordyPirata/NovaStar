@@ -13,7 +13,7 @@ namespace Models
         public int depth;
         public int height;
         public float[] heights;
-        public float[] temperature;
+        public float[] temperatures;
         public float[] humidity;
     }
 }

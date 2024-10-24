@@ -5,6 +5,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using Services.Interfaces;
 using Services.NoiseGenerator;
+using System.Collections.Generic;
 
 namespace Services.WorldGenerator
 {
@@ -12,6 +13,7 @@ public class ChunkBuilder
 {
     private static readonly INoiseDirector NoiseDirector = ServiceLocator.GetService<INoiseDirector>();
     private static readonly ISplatMapService SplatMapService = ServiceLocator.GetService<ISplatMapService>();
+    public  static readonly IBiomeTexturesService TexturesService = ServiceLocator.GetService<IBiomeTexturesService>();
     private float2 _ChunkCoords;
     private ChunkObject _ChunkObject;
     private GameObject ChunkGO 
@@ -56,10 +58,9 @@ public class ChunkBuilder
     public void CalculateBiomes()
     {
         
-        
-        var textures = SplatMapService.GenerateSplatMap(_ChunkCoords, Chunk.temperature, Chunk.humidity); 
-        Debug.Log(textures.Length);
+        var textures = SplatMapService.GenerateSplatMap(_ChunkCoords, Chunk.temperatures, Chunk.humidity); 
         // Calculate biome and create splatmap for terrain
+        List<BiomeTexture> hi = TexturesService.GetBiomeTextures().Textures;
         var terrainMaterial = new Material(Shader.Find("Standard"));
         // Set terrain data 
 
