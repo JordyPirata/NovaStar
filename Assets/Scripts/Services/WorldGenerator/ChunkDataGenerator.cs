@@ -7,6 +7,8 @@ using Unity.Burst;
 using Unity.Mathematics;
 using UnityEngine;
 using Services.NoiseGenerator;
+using System.Diagnostics;
+using Debug = UnityEngine.Debug;
 
 namespace Services.WorldGenerator
 {
@@ -33,28 +35,40 @@ public struct ChunkDataGenerator
             (message, chunk) = await GameRepository.Read<Chunk>(chunkPath);
 
             chunk.position = new float3(coord.x * ChunkConfig.width, 0, coord.y * ChunkConfig.depth);
-            Debug.Log(message + " " + chunk.ChunkName);
-            // Add the chunk to the list
+            // Debug.Log(message + " " + chunk.ChunkName);
             return chunk;
         }
-        else
+        // Create the chunk
+        chunk = new()
         {
-            NoiseDirector.SetBuilder(new ChunkNoiseBuilder());
-
-            // Create the chunk
-            chunk = new()
-            {
-                position = new float3(coord.x * ChunkConfig.width, 0, coord.y * ChunkConfig.depth),
-                ChunkName = chunkName,
-                width = ChunkConfig.width,
-                depth = ChunkConfig.depth,
-                height = ChunkConfig.Height,
-                heights = NoiseDirector.GetNoise(coord) as float[],
-            };
-            // Add the chunk to the list
-            SaveChunk(chunk);
-            return chunk;
-        }
+            position = new float3(coord.x * ChunkConfig.width, 0, coord.y * ChunkConfig.depth),
+            ChunkName = chunkName,
+            width = ChunkConfig.width,
+            depth = ChunkConfig.depth,
+            height = ChunkConfig.Height,
+            heights = GenerateHighMap(coord),
+            temperature = GenerateTemperatureMap(coord),
+            humidity = GenerateHumidityMap(coord)
+        };
+        // Add the chunk to the list
+        SaveChunk(chunk);
+        return chunk;
+        
+    }
+    private static float[] GenerateHighMap(float2 coord)
+    {
+        NoiseDirector.SetBuilder(new ChunkNoiseBuilder());
+        return NoiseDirector.GetNoise(coord) as float[];
+    }
+    private  static float[] GenerateTemperatureMap(float2 coord)
+    {
+        NoiseDirector.SetBuilder(new TempChunkNoiseBuilder());
+        return NoiseDirector.GetNoise(coord) as float[];
+    }
+    private static float[] GenerateHumidityMap(float2 coord)
+    {
+        NoiseDirector.SetBuilder(new HumidityChunkNoiseBuilder());
+        return NoiseDirector.GetNoise(coord) as float[];
     }
     private static async void SaveChunk(Chunk Chunk)
     {

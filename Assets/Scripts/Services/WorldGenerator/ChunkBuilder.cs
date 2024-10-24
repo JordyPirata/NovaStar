@@ -4,11 +4,14 @@ using Models;
 using Unity.Mathematics;
 using UnityEngine;
 using Services.Interfaces;
+using Services.NoiseGenerator;
 
 namespace Services.WorldGenerator
 {
 public class ChunkBuilder
 {
+    private static readonly INoiseDirector NoiseDirector = ServiceLocator.GetService<INoiseDirector>();
+    private static readonly ISplatMapService SplatMapService = ServiceLocator.GetService<ISplatMapService>();
     private float2 _ChunkCoords;
     private ChunkObject _ChunkObject;
     private GameObject ChunkGO 
@@ -16,10 +19,15 @@ public class ChunkBuilder
         get => _ChunkObject.GameObject;
         set => _ChunkObject.GameObject = value;
     }
-    private Chunk _Chunk
+    private Chunk Chunk
     {
         get => _ChunkObject.ChunkData;
         set => _ChunkObject.ChunkData = value;
+    }
+    private Terrain _Terrain
+    {
+        get => _ChunkObject.Terrain;
+        set => _ChunkObject.Terrain = value;
     }    
     public ChunkBuilder(float2 chunkCoords)
     {
@@ -28,32 +36,31 @@ public class ChunkBuilder
     }
     public void SetGameObject()
     {
-        ChunkGO.transform.position = _Chunk.position;
-        ChunkGO.name = _Chunk.ChunkName;
+        ChunkGO.transform.position = Chunk.position;
+        ChunkGO.name = Chunk.ChunkName;
         ChunkGO.layer = LayerMask.NameToLayer("Terrain");
     }
     public async Task GenerateChunkData()
     {
-        _ChunkObject.ChunkData = await ChunkDataGenerator.Generate(_ChunkCoords);
+        Chunk = await ChunkDataGenerator.Generate(_ChunkCoords);
     }
 
     public void SetTerrain()
     {
         TerrainCollider terrainCollider = ChunkGO.GetComponent<TerrainCollider>();
-        Terrain terrain = ChunkGO.GetComponent<Terrain>();
-        terrain = TerrainSettings.ApplySettings(terrain, _Chunk);
+        _Terrain = TerrainSettings.ApplySettings(_Terrain, Chunk);
         terrainCollider.includeLayers = LayerMask.GetMask("Player");
-        terrainCollider.terrainData = terrain.terrainData;
+        terrainCollider.terrainData = _Terrain.terrainData;
     }
     
     public void CalculateBiomes()
     {
-
-        ISplatMapService splatMapService = ServiceLocator.GetService<ISplatMapService>();
-        var textures = splatMapService.GenerateSplatMap(_ChunkCoords);
+        
+        /* 
+        var textures = SplatMapService.GenerateSplatMap(_ChunkCoords, Chunk.temperature, Chunk.humidity); 
         // Calculate biome and create splatmap for terrain
         var terrainMaterial = new Material(Shader.Find("Standard"));
-        // Set terrain data
+        // Set terrain data */
 
     }
     public ChunkObject GetChunkObject()
