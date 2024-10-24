@@ -10,7 +10,6 @@ namespace Services.Splatmap
 public class SplatMapService : ISplatMapService 
 {
     private IBiomeDic BiomeDic => ServiceLocator.GetService<IBiomeDic>();
-    private INoiseDirector NoiseDirector => ServiceLocator.GetService<INoiseDirector>();
     private ComputeShader SplatMapShader => Resources.Load<ComputeShader>("SplatMapShader");
     // Shader Properties
     private int Kernel => SplatMapShader.FindKernel("CSMain");
@@ -18,15 +17,9 @@ public class SplatMapService : ISplatMapService
     private int SplatMap2Id => Shader.PropertyToID("SplatMap2");
     private int BiomeMapId => Shader.PropertyToID("BiomeMap");
 
-    public Texture2D[] GenerateSplatMap(float2 chunkCoords)
+    public Texture2D[] GenerateSplatMap(float2 chunkCoords, float[] tempNoise, float[] humiditynoise)
     {
-        NoiseDirector.SetBuilder(new HumidityChunkNoiseBuilder());
-        float[] humiditynoise = NoiseDirector.GetNoise(chunkCoords) as float[];
-
-        NoiseDirector.SetBuilder(new TempChunkNoiseBuilder());
-        float[] tempNoise = NoiseDirector.GetNoise(chunkCoords) as float[];
-
-        int[] BiomeArray = new int[humiditynoise.Length];
+        int[] BiomeArray = new int[tempNoise.Length];
 
         for (int i = 0; i < humiditynoise.Length; i++)
         {
