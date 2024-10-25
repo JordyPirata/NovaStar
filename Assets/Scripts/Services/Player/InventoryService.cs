@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Gameplay.Items;
+using Gameplay.Items.Crafting;
 using InputSystem;
 using Services.Interfaces;
 using UnityEngine;
@@ -18,9 +19,11 @@ namespace Services.Player
         private Dictionary<string, int> _completeInventory;
         private InputActions _inputActions;
         private bool _open;
+        private Action<Dictionary<string, int>> onInventoryUpdate;
 
         private void Awake()
         {
+            _completeInventory = new Dictionary<string, int>();
             _inputActions = ServiceLocator.GetService<IInputActions>().InputActions;
             _inputActions.Player.InventoryMenu.performed += OnInventoryMenu;
             panelGameObject.SetActive(false);
@@ -38,24 +41,120 @@ namespace Services.Player
             Cursor.lockState = _open ? CursorLockMode.None : CursorLockMode.Locked;
         }
 
-        public int TryPickItem (Item item, int quantity)
+        public int TryPickItem (string itemName, int quantity)
         {
             var startingQuantity = quantity;
             foreach (var inventorySpace in inventorySpaces)
             {
-                if (!inventorySpace.HasItem || item.ItemName == inventorySpace.ItemName)
+                if (!inventorySpace.HasItem || itemName == inventorySpace.ItemName)
                 {
-                    quantity = inventorySpace.PickItem(item, quantity);
-                    if (quantity == 0)
-                        return quantity;
+                    quantity = inventorySpace.PickItem(itemName, quantity);
                 }
             }
 
-            if (_completeInventory.ContainsKey(item.ItemName))
+            if (quantity == startingQuantity)
             {
-                _completeInventory[item.ItemName] += startingQuantity - quantity;
-                Debug.Log($"Now you have {_completeInventory[item.ItemName]} units of {item.ItemName}");
+                return quantity;
             }
+            if (_completeInventory.ContainsKey(itemName))
+            {
+                _completeInventory[itemName] += startingQuantity - quantity;
+                Debug.Log($"Now you have {_completeInventory[itemName]} units of {itemName}");
+            }
+            else
+            {
+                _completeInventory.Add(itemName, startingQuantity - quantity);
+                Debug.Log($"Now you have {_completeInventory[itemName]} units of {itemName}");
+            }
+            onInventoryUpdate?.Invoke(_completeInventory);
+            return quantity;
+        }
+        
+        private bool CanSaveItem (ItemData item, int quantity)
+        {
+            var startingQuantity = quantity;
+            foreach (var inventorySpace in inventorySpaces)
+            {
+                if (!inventorySpace.HasItem || item.itemName == inventorySpace.ItemName)
+                {
+                    quantity = inventorySpace.CanSaveItem(item, quantity);
+                }
+            }
+
+            if (quantity == startingQuantity)
+            {
+                return false;
+            }
+            onInventoryUpdate?.Invoke(_completeInventory);
+            if (quantity == 0)
+            {
+                return true;
+            }
+
+            if (quantity > 0)
+            {
+                return false;
+            }
+            throw new Exception("Trying save item got negative remainder");
+        }
+
+        public ref Action<Dictionary<string, int>> GetOnInventoryUpdated()
+        {
+            return ref onInventoryUpdate;
+        }
+
+        public void TryCraftItem(CraftingRecipe recipe)
+        {
+            if (CanSaveItem(recipe.CraftedItem, recipe.craftedQuantity)) ;
+            {
+                var restingItems = TryPickItem(recipe.CraftedItem.itemName, recipe.craftedQuantity);
+                if (restingItems != 0)
+                {
+                    Debug.LogError($"at crafting item {recipe.CraftedItem.itemName} got {restingItems} resting items");
+                }
+
+                foreach (var recipeCraftingIngredient in recipe.craftingIngredients)
+                {
+                    var restingDiscardedItems = TryDiscardItems(recipeCraftingIngredient.Item.itemName,
+                        recipeCraftingIngredient.quantity);
+                    if (restingDiscardedItems != 0)
+                        Debug.LogError(
+                            $"at discarding item {recipeCraftingIngredient.Item.itemName} got {restingDiscardedItems} resting items");
+                    
+                }
+            }
+        }
+
+        public int TryDiscardItems(string itemName, int quantity)
+        {
+            var startingQuantity = quantity;
+            foreach (var inventorySpace in inventorySpaces)
+            {
+                if (inventorySpace.HasItem && itemName == inventorySpace.ItemName)
+                {
+                    quantity = inventorySpace.DiscardItem(itemName, quantity);
+                }
+            }
+
+            if (quantity == startingQuantity)
+            {
+                return quantity;
+            }
+            if (_completeInventory.ContainsKey(itemName))
+            {
+                _completeInventory[itemName] -= startingQuantity - quantity;
+                Debug.Log($"Now you have {_completeInventory[itemName]} units of {itemName}");
+            }
+            else
+            {
+                Debug.LogError($"Tried to remove {itemName} from inventoryDictionary but doesnt contains the key");
+            }
+
+            if (_completeInventory[itemName] < 0)
+                Debug.LogError($"inventoryDictionary contains {_completeInventory[itemName]} units of {itemName}");
+            if (_completeInventory[itemName] == 0)
+                _completeInventory.Remove(itemName);
+            onInventoryUpdate?.Invoke(_completeInventory);
             return quantity;
         }
 

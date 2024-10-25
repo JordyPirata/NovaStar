@@ -44,15 +44,15 @@ namespace Services.Player
             private set => _itemName = value;
         }
 
-        public int PickItem(Item item, int amount)
+        public int PickItem(string itemName, int amount)
         {
             foreach (var itemUI in _itemsUIConfiguration.items)
             {
-                if (itemUI.itemName == item.ItemName)
+                if (itemUI.itemName == itemName)
                 {
                     if (!_hasItem)
                     {
-                        ItemName = item.ItemName;
+                        ItemName = itemName;
                         itemImage.sprite = itemUI.sprite;
                         itemImage.enabled = true;
                     }
@@ -72,7 +72,7 @@ namespace Services.Player
                 }
             }
 
-            throw new Exception($"El item con el nombre {item.ItemName} no se encuentra en la configuracion");
+            throw new Exception($"El item con el nombre {itemName} no se encuentra en la configuracion");
         }
         
         public int PickItem(InventorySpace item)
@@ -151,6 +151,52 @@ namespace Services.Player
             _endDrag += endDrag;
             _itemsUIConfiguration = itemsUIConfiguration;
             _rectTransform = GetComponent<RectTransform>();
+        }
+
+        public int CanSaveItem(ItemData item, int amount)
+        {
+            foreach (var itemUI in _itemsUIConfiguration.items)
+            {
+                if (itemUI.itemName == item.itemName)
+                {
+                    if (itemUI.maxAmount < amount + Quantity)
+                    {
+                        amount = amount + Quantity - itemUI.maxAmount;
+                        return amount;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                }
+            }
+            throw new Exception($"El item con el nombre {item.itemName} no se encuentra en la configuracion");
+        }
+
+        public int DiscardItem(string itemName, int quantity)
+        {
+            foreach (var itemUI in _itemsUIConfiguration.items)
+            {
+                if (itemUI.itemName == itemName)
+                {
+                    if (quantity < Quantity)
+                    {
+                        Quantity -= quantity;
+                        return 0;
+                    }
+                    else
+                    {
+                        var restingQuantity = quantity - Quantity;
+                        Quantity = 0;
+                        ItemName = string.Empty;
+                        itemImage.sprite = null;
+                        itemImage.enabled = false;
+                        _hasItem = false;
+                        return restingQuantity;
+                    }
+                }
+            }
+            throw new Exception($"El item con el nombre {itemName} no se encuentra en la configuracion");
         }
     }
 }
