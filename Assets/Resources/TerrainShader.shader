@@ -2,14 +2,15 @@ Shader "Custom/TerrainShader"
 {
     Properties
     {
-        _Color ("Color", Color) = (1,1,1,1)
+        _SplatMap1 ("SplatMap1", 2D) = "white" {}
+        _SplatMap2 ("SplatMap2", 2D) = "white" {}
 
         _TundraAlbedo ("Albedo Tundra Map", 2D) = "grey" {}
         _TundraHeight ("Height Tundra Map", 2D) = "grey" {}
         _TundraNormal ("Normal Tundra Map", 2D) = "bump" {}
         _TundraNormalScale ("Normal Scale", Float) = 1.0
-        _TundraGlossiness ("Smoothness", Range(0,1)) = 0.5
-        _TundraMetallic ("Metallic", Range(0,1)) = 0.0
+        _TundraGlossiness ("Smoothness", Range(0,1)) = 0.2
+        _TundraMetallic ("Metallic", Range(0,1)) = 0.2
 
         _TaigaAlbedo ("Albedo Taiga Map", 2D) = "grey" {}
         _TaigaHeight ("Height Taiga Map", 2D) = "grey" {}
@@ -93,7 +94,7 @@ Shader "Custom/TerrainShader"
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
             // Albedo comes from a texture tinted by color
-            fixed4 c = tex2D(_TundraAlbedo, IN.uv_TundraAlbedo) * _Color;
+            fixed4 c = tex2D(_TundraAlbedo, IN.uv_TundraAlbedo);
             o.Albedo = c.rgb;
             o.Alpha = c.a;
             o.Normal = UnpackNormal(tex2D(_TundraNormal, IN.uv_TundraAlbedo));
