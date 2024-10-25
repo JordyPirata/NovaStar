@@ -73,7 +73,7 @@ public class FirstPersonCharacter : MonoBehaviour
         inputActions.Player.Run.canceled -= OnSprint;
         inputActions.Player.Jump.performed -= DoJump;
     }
-    void Update()
+    void FixedUpdate()
     {   
         if (!CanMove) return;
         

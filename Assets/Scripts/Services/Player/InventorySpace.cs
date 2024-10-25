@@ -10,7 +10,7 @@ namespace Services.Player
     public class InventorySpace : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
     {
         [SerializeField] private TextMeshProUGUI quantityText;
-        [SerializeField] private Image itemImage;
+        [SerializeField] private Image itemImage, rarityOverImage;
         private bool _hasItem;
         private string _itemName;
         private int _quantity;
@@ -30,6 +30,7 @@ namespace Services.Player
                 if (value <= 0)
                 {
                     itemImage.enabled = false;
+                    rarityOverImage.enabled = false;
                     quantityText.text = string.Empty;
                     _hasItem = false;
                 }
@@ -55,6 +56,8 @@ namespace Services.Player
                         ItemName = itemName;
                         itemImage.sprite = itemUI.sprite;
                         itemImage.enabled = true;
+                        rarityOverImage.color = _itemsUIConfiguration.GetColorByRarity(itemUI.itemRarity);
+                        rarityOverImage.enabled = true;
                     }
 
                     _hasItem = true;
