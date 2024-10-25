@@ -30,7 +30,6 @@ namespace Services.Player
 
         private void InteractOnStarted(InputAction.CallbackContext callbackContext)
         {
-            Debug.Log("Interacted");
             if (!callbackContext.started) return;
             if (Physics.Raycast(_camera.transform.position,
                 _camera.transform.TransformDirection(Vector3.forward), out var hit, _interactDistance, _layerMask))
