@@ -47,7 +47,7 @@ public struct ChunkDataGenerator
             depth = ChunkConfig.depth,
             height = ChunkConfig.Height,
             heights = GenerateHighMap(coord),
-            temperature = GenerateTemperatureMap(coord),
+            temperatures = GenerateTemperatureMap(coord),
             humidity = GenerateHumidityMap(coord)
         };
         // Add the chunk to the list

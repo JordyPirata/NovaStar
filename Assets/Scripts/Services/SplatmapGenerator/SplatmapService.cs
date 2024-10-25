@@ -17,7 +17,7 @@ public class SplatMapService : ISplatMapService
     private int SplatMap2Id => Shader.PropertyToID("SplatMap2");
     private int BiomeMapId => Shader.PropertyToID("BiomeMap");
 
-    public Texture2D[] GenerateSplatMap(float2 chunkCoords, float[] tempNoise, float[] humiditynoise)
+    public RenderTexture[] GenerateSplatMap(float2 chunkCoords, float[] tempNoise, float[] humiditynoise)
     {
         int[] BiomeArray = new int[tempNoise.Length];
 
@@ -51,9 +51,18 @@ public class SplatMapService : ISplatMapService
         var biomeBuffer = new ComputeBuffer(BiomeArray.Length, sizeof(int));
         biomeBuffer.SetData(BiomeArray);
 
-        var splatMap1 = new Texture2D(257, 257, TextureFormat.RFloat, false);
-        var splatMap2 = new Texture2D(257, 257, TextureFormat.RFloat, false);
-        
+        var splatMap1 = new RenderTexture(257, 257, 0, RenderTextureFormat.ARGB32)
+        {
+            enableRandomWrite = true,
+        };
+        splatMap1.Create();
+
+        var splatMap2 = new RenderTexture(257, 257, 0, RenderTextureFormat.ARGB32)
+        {
+            enableRandomWrite = true,
+        };
+        splatMap2.Create();
+
         SplatMapShader.SetBuffer(Kernel, BiomeMapId, biomeBuffer);
 
         SplatMapShader.SetTexture(Kernel, SplatMap1Id, splatMap1);
@@ -63,7 +72,7 @@ public class SplatMapService : ISplatMapService
         
         biomeBuffer.Release();
 
-        return new Texture2D[] {splatMap1, splatMap2};
+        return new RenderTexture[] {splatMap1, splatMap2};
 
     }
 }

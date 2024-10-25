@@ -12,11 +12,6 @@ namespace Services.WorldGenerator
         public Chunk ChunkData { get; set; }
         public GameObject GameObject { get; set; }
         public Terrain Terrain { get; set; }
-        public TerrainData TerrainData 
-        {
-            get => Terrain.terrainData;
-            set => Terrain.terrainData = value;
-        }
         public float2 Coord { get; set; }
         private Bounds Bounds { get; set; }
         private Vector2 Position { get; set; }
@@ -37,6 +32,32 @@ namespace Services.WorldGenerator
             Bounds = new(Position, Vector2.one * ChunkConfig.width);
             _isAvailable = false;
             return this;
+        }
+        /// <summary>
+        /// Get the height of the terrain at the given local coordinates
+        /// </summary>
+        /// <returns>float height value</returns>
+        public float GetHeight(int x, int y)
+        {
+            return Terrain.terrainData.GetHeight(x, y);
+        }
+        /// <summary>
+        /// Get the temperature of the terrain at the given local coordinates
+        /// </summary>
+        /// <returns>float temperature value</returns>
+        public float GetTemperature(int x, int y)
+        {
+            var i = Util.TransferData.GetIndex(x, y, ChunkConfig.width);
+            return ChunkData.temperatures[i];
+        }
+        /// <summary>
+        /// Get the humidity of the terrain at the given local coordinates
+        /// </summary>
+        /// <returns>float humidity value</returns>
+        public float GetHumidity(int x, int y)
+        {
+            var i = Util.TransferData.GetIndex(x, y, ChunkConfig.width);
+            return ChunkData.humidity[i];
         }
         // Release the chunk
         public void Release()

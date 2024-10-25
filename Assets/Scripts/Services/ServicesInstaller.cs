@@ -56,6 +56,6 @@ public class ServiceInstaller : MonoBehaviour
         ServiceLocator.Register<ISplatMapService>(new SplatMapService());
         var biomeTexturesService = new BiomeTexturesService();
         biomeTexturesService.Configure(biomeTextures);
-        ServiceLocator.Register<IBiomeTexturesService>(new BiomeTexturesService());
+        ServiceLocator.Register<IBiomeTexturesService>(biomeTexturesService);
     }
 }
