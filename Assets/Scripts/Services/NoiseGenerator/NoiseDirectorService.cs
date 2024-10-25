@@ -7,9 +7,15 @@ namespace Services.NoiseGenerator
 public class NoiseDirectorService : INoiseDirector
 {
     private INoiseBuilder Builder;
+    private NoiseState State;
     public void SetBuilder(INoiseBuilder builder)
     {
         Builder = builder;
+        State = null;
+    }
+    public void SetExternalState(NoiseState state)
+    {
+        State = state;
     }
     /// <summary>
     /// Retuns noise based on the builder float[] or float[,]
@@ -20,55 +26,66 @@ public class NoiseDirectorService : INoiseDirector
         switch (Builder)
         {
             case ChunkNoiseBuilder:
+                // if SetExternalState is not set create a default state
+                State ??= new NoiseState();
 
-                NoiseState noiseState = new();
                 Builder.SetCoords(coords);
-                Builder.SetState(noiseState);
+                Builder.SetState(State);
                 Builder.SetKernel();
                 Builder.Build();
+
                 return Builder.GetNoise();
 
             case HumidityNoiseBuilder:
+                State ??= new NoiseState();
 
-                NoiseState humidityState = new();
                 Builder.SetCoords(coords);
                 Builder.SetSize(TextureMapGen.Width, TextureMapGen.Depth);
-                Builder.SetState(humidityState);
+                Builder.SetState(State);
                 Builder.SetKernel();
                 Builder.Build();
+
                 return Builder.GetNoise();
 
             case TempNoiseBuilder:
 
-                NoiseState tempState = new();
+                State ??= new NoiseState();
+
                 Builder.SetSize(TextureMapGen.Width, TextureMapGen.Depth);
-                Builder.SetCoords(coords - 1);
-                Builder.SetState(tempState);
+                Builder.SetCoords(coords);
+                Builder.SetState(State);
                 Builder.SetKernel();
                 Builder.Build();
+
                 return Builder.GetNoise();
             
             case TempChunkNoiseBuilder:
 
-                NoiseState tempChunkState = new();
+                State ??= new NoiseState();
+
                 Builder.SetCoords(coords);
-                Builder.SetState(tempChunkState);
+                Builder.SetState(State);
                 Builder.SetKernel();
                 Builder.Build();
+
                 return Builder.GetNoise();
 
             case HumidityChunkNoiseBuilder:
 
-                NoiseState humidityChunkState = new();
+                State ??= new NoiseState();
+                
                 Builder.SetCoords(coords);
-                Builder.SetState(humidityChunkState);
+                Builder.SetState(State);
                 Builder.SetKernel();
                 Builder.Build();
+
                 return Builder.GetNoise();
             
             default:
                 throw new Exception("Invalid Builder");
         }
     }
+
+    
 }
 }

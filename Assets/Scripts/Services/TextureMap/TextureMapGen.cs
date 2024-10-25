@@ -31,10 +31,32 @@ namespace Services
             };
             
             // Get reference of the state of the noise service
+            NoiseState temperature = new()
+            {
+                seed = tetureMapState.seed - 1,
+                noiseType = NoiseType.Perlin,
+                fractalType = FractalType.FBM,
+                frequency = 0.01f,
+                octaves = 2,
+                amplitude = TAmp,
+                distance = Tdist
+            };
             NoiseDirector.SetBuilder(new TempNoiseBuilder());
+            NoiseDirector.SetExternalState(temperature);
             var temperatureMap = NoiseDirector.GetNoise(new float2(0,0)) as float[,];
-
+            
+            NoiseState noiseState2 = new()
+            {
+                seed = tetureMapState.seed + 1,
+                noiseType = NoiseType.Perlin,
+                fractalType = FractalType.FBM,
+                frequency = 0.01f,
+                octaves = 2,
+                amplitude = HAmp,
+                distance = Hdist
+            };
             NoiseDirector.SetBuilder(new HumidityNoiseBuilder());
+            NoiseDirector.SetExternalState(noiseState2);
             var moistureMap = NoiseDirector.GetNoise(new float2(0,0)) as float[,];
 
             for (var x = 0; x < Width; x++)
