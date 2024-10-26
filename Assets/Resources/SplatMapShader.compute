@@ -4,22 +4,39 @@ RWStructuredBuffer<int> BiomeMap;
 RWTexture2D<float4> SplatMap1;
 RWTexture2D<float4> SplatMap2;
 
-[numthreads(257, 1, 1)]
+[numthreads(6, 6, 1)]
 
 void CSMain (uint3 id: SV_DispatchThreadID)
 {
     int biome = BiomeMap[id.x];
+    float4 color = float4(0,0,0,0);
     //                            R G B A
     if (biome == 0)
-        SplatMap1[id.xy] = float4(0,0,1,1);
-    else if (biome == 1)
-        SplatMap1[id.xy] = float4(0,1,0,1);
-    else if (biome == 2)
-        SplatMap1[id.xy] = float4(1,0,0,1);
-    else if (biome == 3)
-        SplatMap2[id.xy] = float4(0,0,1,1);
-    else if (biome == 4) 
-        SplatMap2[id.xy] = float4(0,1,0,1);
-    else if (biome == 5)
-        SplatMap2[id.xy] = float4(1,0,0,1);
+    {
+        color = float4(1,0,0,0);
+        SplatMap1[id.xy] = color;
+    }else if (biome == 1)
+    {
+        color = float4(0,1,0,0);
+        SplatMap1[id.xy] = color;
+    }else if (biome == 2)
+    {
+        color = float4(0,0,1,0);
+        SplatMap1[id.xy] = color;
+    }else if (biome == 3)
+    {
+        color = float4(1,0,0,0);
+        SplatMap2[id.xy] = color;
+    }else if (biome == 4)
+    {
+        color = float4(0,1,0,0);
+        SplatMap2[id.xy] = color;
+    }else if (biome == 5)
+    {
+        color = float4(0,0,1,0);
+        SplatMap2[id.xy] = color;
+    }else {
+        SplatMap1[id.xy] = float4(1,1,1,1);
+        SplatMap2[id.xy] = float4(1,1,1,1);
+    }
 }

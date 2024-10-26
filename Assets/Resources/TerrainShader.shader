@@ -2,14 +2,14 @@ Shader "Custom/TerrainShader"
 {
     Properties
     {
-        _SplatMap1 ("SplatMap1", 2D) = "white" {}
-        _SplatMap2 ("SplatMap2", 2D) = "white" {}
+        _SplatMap1 ("SplatMap1", 2D) = "red" {}
+        _SplatMap2 ("SplatMap2", 2D) = "red" {}
 
         _TundraAlbedo ("Albedo Tundra Map", 2D) = "grey" {}
         _TundraHeight ("Height Tundra Map", 2D) = "grey" {}
         _TundraNormal ("Normal Tundra Map", 2D) = "bump" {}
         _TundraNormalScale ("Normal Scale", Float) = 1.0
-        _TundraGlossiness ("Smoothness", Range(0,1)) = 0.2
+        _TundraGlossiness ("Smoothness", Range(0,1)) = 0.1
         _TundraMetallic ("Metallic", Range(0,1)) = 0.2
 
         _TaigaAlbedo ("Albedo Taiga Map", 2D) = "grey" {}
@@ -54,34 +54,43 @@ Shader "Custom/TerrainShader"
 
         CGPROGRAM
         // Physically based Standard lighting model, and enable shadows on all light types
-        #pragma surface surf Standard fullforwardshadows
+        #pragma surface surf Standard vertex:SplatmapsVert addshadow fullforwardshadows
 
         // Use shader model 3.0 target, to get nicer looking lighting
         #pragma target 3.0
 
-        fixed4 _Color;
+        #include "textureNoTile.cginc"
+
+        UNITY_DECLARE_TEX2D(_SplatMap1);
+        UNITY_DECLARE_TEX2D(_SplatMap2);
 
         sampler2D _TundraAlbedo, _TundraHeight, _TundraNormal;
+        float4 _TundraAlbedo_ST;
         half _TundraNormalScale, _TundraGlossiness, _TundraMetallic;
 
         sampler2D _TaigaAlbedo, _TaigaHeight, _TaigaNormal;
+        float4 _TaigaAlbedo_ST;
         half _TaigaNormalScale, _TaigaGlossiness, _TaigaMetallic;
 
         sampler2D _DesertAlbedo, _DesertHeight, _DesertNormal;
+        float4 _DesertAlbedo_ST;
         half _DesertNormalScale, _DesertGlossiness, _DesertMetallic;
 
         sampler2D _ForestAlbedo, _ForestHeight, _ForestNormal;
+        float4 _ForestAlbedo_ST;
         half _ForestNormalScale, _ForestGlossiness, _ForestMetallic;
 
         sampler2D _JungleAlbedo, _JungleHeight, _JungleNormal;
+        float4 _JungleAlbedo_ST;
         half _JungleNormalScale, _JungleGlossiness, _JungleMetallic;
 
         sampler2D _SavannaAlbedo, _SavannaHeight, _SavannaNormal;
+        float4 _SavannaAlbedo_ST;
         half _SavannaNormalScale, _SavannaGlossiness, _SavannaMetallic;
 
         struct Input
         {
-            float2 uv_TundraAlbedo;
+            float4 tc;
         };
 
         // Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
@@ -91,16 +100,40 @@ Shader "Custom/TerrainShader"
             // put more per-instance properties here
         UNITY_INSTANCING_BUFFER_END(Props)
 
+        void SplatmapsVert(inout appdata_full v, out Input data)
+        {
+            UNITY_INITIALIZE_OUTPUT(Input, data);
+            data.tc.xy = v.texcoord;
+        }
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
+            fixed4 splat_control = UNITY_SAMPLE_TEX2D(_SplatMap1, IN.tc.xy);
+
+            fixed2 uvSplat0 = TRANSFORM_TEX(IN.tc.xy, _TundraAlbedo);
+            fixed2 uvSplat1 = TRANSFORM_TEX(IN.tc.xy, _TaigaAlbedo);
+            fixed2 uvSplat2 = TRANSFORM_TEX(IN.tc.xy, _DesertAlbedo);
+            fixed2 uvSplat3 = TRANSFORM_TEX(IN.tc.xy, _ForestAlbedo);
+            fixed2 uvSplat4 = TRANSFORM_TEX(IN.tc.xy, _JungleAlbedo);
+            fixed2 uvSplat5 = TRANSFORM_TEX(IN.tc.xy, _SavannaAlbedo);
+
+            //fixed4 c = tex2D(_TundraAlbedo, uvSplat0);
+
+            NoTileUVs ntuvs0 = textureNoTileCalcUVs(uvSplat0);
+            NoTileUVs ntuvs1 = textureNoTileCalcUVs(uvSplat1);
+            NoTileUVs ntuvs2 = textureNoTileCalcUVs(uvSplat2);
+            NoTileUVs ntuvs3 = textureNoTileCalcUVs(uvSplat3);
+            NoTileUVs ntuvs4 = textureNoTileCalcUVs(uvSplat4);
+            NoTileUVs ntuvs5 = textureNoTileCalcUVs(uvSplat5);
+            
             // Albedo comes from a texture tinted by color
+            /*
             fixed4 c = tex2D(_TundraAlbedo, IN.uv_TundraAlbedo);
             o.Albedo = c.rgb;
             o.Alpha = c.a;
             o.Normal = UnpackNormal(tex2D(_TundraNormal, IN.uv_TundraAlbedo));
             // Metallic and smoothness come from slider variables
             o.Metallic = _TundraMetallic;
-            o.Smoothness = _TundraGlossiness;
+            o.Smoothness = _TundraGlossiness;*/
         }
         ENDCG
     }

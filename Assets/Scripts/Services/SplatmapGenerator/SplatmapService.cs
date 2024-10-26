@@ -51,15 +51,17 @@ public class SplatMapService : ISplatMapService
         var biomeBuffer = new ComputeBuffer(BiomeArray.Length, sizeof(int));
         biomeBuffer.SetData(BiomeArray);
 
-        var splatMap1 = new RenderTexture(257, 257, 0, RenderTextureFormat.ARGB32)
+        var splatMap1 = new RenderTexture(258, 258, 1)
         {
             enableRandomWrite = true,
+            filterMode = FilterMode.Point
         };
         splatMap1.Create();
 
-        var splatMap2 = new RenderTexture(257, 257, 0, RenderTextureFormat.ARGB32)
+        var splatMap2 = new RenderTexture(258, 258, 1)
         {
             enableRandomWrite = true,
+            filterMode = FilterMode.Point
         };
         splatMap2.Create();
 
@@ -68,7 +70,7 @@ public class SplatMapService : ISplatMapService
         SplatMapShader.SetTexture(Kernel, SplatMap1Id, splatMap1);
         SplatMapShader.SetTexture(Kernel, SplatMap2Id, splatMap2);
 
-        SplatMapShader.Dispatch(Kernel, 257, 1, 1);
+        SplatMapShader.Dispatch(Kernel, 258/6 ,258/6, 1);
         
         biomeBuffer.Release();
 
