@@ -116,24 +116,45 @@ Shader "Custom/TerrainShader"
             fixed2 uvSplat4 = TRANSFORM_TEX(IN.tc.xy, _JungleAlbedo);
             fixed2 uvSplat5 = TRANSFORM_TEX(IN.tc.xy, _SavannaAlbedo);
 
-            //fixed4 c = tex2D(_TundraAlbedo, uvSplat0);
-
             NoTileUVs ntuvs0 = textureNoTileCalcUVs(uvSplat0);
             NoTileUVs ntuvs1 = textureNoTileCalcUVs(uvSplat1);
             NoTileUVs ntuvs2 = textureNoTileCalcUVs(uvSplat2);
             NoTileUVs ntuvs3 = textureNoTileCalcUVs(uvSplat3);
             NoTileUVs ntuvs4 = textureNoTileCalcUVs(uvSplat4);
             NoTileUVs ntuvs5 = textureNoTileCalcUVs(uvSplat5);
+
+            fixed texture0Height = textureNoTile(_TundraHeight, ntuvs0);
+            fixed texture1Height = textureNoTile(_TaigaHeight, ntuvs1);
+            fixed texture2Height = textureNoTile(_DesertHeight, ntuvs2);
+            fixed texture3Height = textureNoTile(_ForestHeight, ntuvs3);
+            fixed texture4Height = textureNoTile(_JungleHeight, ntuvs4);
+            fixed texture5Height = textureNoTile(_SavannaHeight, ntuvs5);
+
+            fixed4 albedo0 = textureNoTile(_TundraAlbedo, ntuvs0);
+            fixed4 albedo1 = textureNoTile(_TaigaAlbedo, ntuvs1);
+            fixed4 albedo2 = textureNoTile(_DesertAlbedo, ntuvs2);
+            fixed4 albedo3 = textureNoTile(_ForestAlbedo, ntuvs3);
+            fixed4 albedo4 = textureNoTile(_JungleAlbedo, ntuvs4);
+            fixed4 albedo5 = textureNoTile(_SavannaAlbedo, ntuvs5);
+
+            fixed3 normal0 = textureNoTileNormal(_TundraNormal, ntuvs0, _TundraNormalScale);
+            fixed3 normal1 = textureNoTileNormal(_TaigaNormal, ntuvs1, _TaigaNormalScale);
+            fixed3 normal2 = textureNoTileNormal(_DesertNormal, ntuvs2, _DesertNormalScale);
+            fixed3 normal3 = textureNoTileNormal(_ForestNormal, ntuvs3, _ForestNormalScale);
+            fixed3 normal4 = textureNoTileNormal(_JungleNormal, ntuvs4, _JungleNormalScale);
+            fixed3 normal5 = textureNoTileNormal(_SavannaNormal, ntuvs5, _SavannaNormalScale);
+
+            
             
             // Albedo comes from a texture tinted by color
-            /*
-            fixed4 c = tex2D(_TundraAlbedo, IN.uv_TundraAlbedo);
-            o.Albedo = c.rgb;
-            o.Alpha = c.a;
-            o.Normal = UnpackNormal(tex2D(_TundraNormal, IN.uv_TundraAlbedo));
+            //fixed4 c = tex2D(_TundraAlbedo, ntuvs0);
+            //fixed4 c = tex2D(_TundraAlbedo, IN.uv_TundraAlbedo);
+            o.Albedo = albedo0.rgb;
+            o.Alpha = albedo0.a;
+            o.Normal = normal0;
             // Metallic and smoothness come from slider variables
             o.Metallic = _TundraMetallic;
-            o.Smoothness = _TundraGlossiness;*/
+            o.Smoothness = _TundraGlossiness;
         }
         ENDCG
     }
