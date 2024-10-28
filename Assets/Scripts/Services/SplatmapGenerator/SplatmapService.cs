@@ -3,6 +3,7 @@ using Services.Interfaces;
 using Unity.Mathematics;
 using UnityEngine;
 using Models.Biomes;
+using System.IO;
 
 namespace Services.Splatmap
 {
@@ -10,7 +11,7 @@ namespace Services.Splatmap
 public class SplatMapService : ISplatMapService 
 {
     private IBiomeDic BiomeDic => ServiceLocator.GetService<IBiomeDic>();
-    private ComputeShader SplatMapShader => Resources.Load<ComputeShader>("SplatMapShader");
+    private ComputeShader SplatMapShader => Resources.Load<ComputeShader>(Path.Combine("Shaders", "SplatMapShader"));
     // Shader Properties
     private int Kernel => SplatMapShader.FindKernel("CSMain");
     private int SplatMap1Id => Shader.PropertyToID("SplatMap1");

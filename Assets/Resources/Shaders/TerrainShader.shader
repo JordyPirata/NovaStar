@@ -108,6 +108,7 @@ Shader "Custom/TerrainShader"
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
             fixed4 splat_control = UNITY_SAMPLE_TEX2D(_SplatMap1, IN.tc.xy);
+            fixed4 splat_control2 = UNITY_SAMPLE_TEX2D(_SplatMap2, IN.tc.xy);
 
             fixed2 uvSplat0 = TRANSFORM_TEX(IN.tc.xy, _TundraAlbedo);
             fixed2 uvSplat1 = TRANSFORM_TEX(IN.tc.xy, _TaigaAlbedo);
