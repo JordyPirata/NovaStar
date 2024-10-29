@@ -63,11 +63,23 @@ public struct ChunkDataGenerator
     private  static float[] GenerateTemperatureMap(float2 coord)
     {
         NoiseDirector.SetBuilder(new TempChunkNoiseBuilder());
+        NoiseDirector.SetExternalState(
+            new NoiseState
+            {
+                seed = ServiceLocator.GetService<IWorldData>().GetSeed()-1,
+                frequency = 0.0001f,
+            });
         return NoiseDirector.GetNoise(coord) as float[];
     }
     private static float[] GenerateHumidityMap(float2 coord)
     {
         NoiseDirector.SetBuilder(new HumidityChunkNoiseBuilder());
+        NoiseDirector.SetExternalState(
+            new NoiseState
+            {
+                seed = ServiceLocator.GetService<IWorldData>().GetSeed()+1,
+                frequency = 0.0001f,
+            });
         return NoiseDirector.GetNoise(coord) as float[];
     }
     private static async void SaveChunk(Chunk Chunk)

@@ -37,6 +37,7 @@ public class NoiseDirectorService : INoiseDirector
                 return Builder.GetNoise();
 
             case HumidityNoiseBuilder:
+            
                 State ??= new NoiseState();
 
                 Builder.SetCoords(coords);
