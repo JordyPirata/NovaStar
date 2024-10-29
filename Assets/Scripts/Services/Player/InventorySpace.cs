@@ -165,7 +165,8 @@ namespace Services.Player
                 {
                     if (!inventorySpace.HasItem || inventorySpace == this ||
                         (isEquipableSpace && !inventorySpace._hasEquipableItem)) return;
-                    inventorySpace.Quantity = PickItem(inventorySpace);
+                    var restingItems = PickItem(inventorySpace);
+                    inventorySpace.Quantity = restingItems;
                 }
 
                 Debug.Log($"Dropped {eventData.pointerDrag.name} into {gameObject.name}");
