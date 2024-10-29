@@ -2,6 +2,7 @@ using Config;
 using Unity.Mathematics;
 using UnityEngine;
 using Services.Interfaces;
+using System.IO;
 
 namespace Services
 {
@@ -13,7 +14,7 @@ namespace Services
         protected int Width;
         protected int Depth;
         // Load the compute shader
-        protected readonly ComputeShader computeShader = Resources.Load<ComputeShader>("NoiseGenerator");
+        protected readonly ComputeShader computeShader = Resources.Load<ComputeShader>(Path.Combine("Shaders", "NoiseGenerator"));
         protected int kernel;
         protected readonly IWorldData worldData = ServiceLocator.GetService<IWorldData>();
         

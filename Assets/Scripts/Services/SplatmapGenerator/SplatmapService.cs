@@ -3,6 +3,7 @@ using Services.Interfaces;
 using Unity.Mathematics;
 using UnityEngine;
 using Models.Biomes;
+using System.IO;
 
 namespace Services.Splatmap
 {
@@ -10,7 +11,7 @@ namespace Services.Splatmap
 public class SplatMapService : ISplatMapService 
 {
     private IBiomeDic BiomeDic => ServiceLocator.GetService<IBiomeDic>();
-    private ComputeShader SplatMapShader => Resources.Load<ComputeShader>("SplatMapShader");
+    private ComputeShader SplatMapShader => Resources.Load<ComputeShader>(Path.Combine("Shaders", "SplatMapShader"));
     // Shader Properties
     private int Kernel => SplatMapShader.FindKernel("CSMain");
     private int SplatMap1Id => Shader.PropertyToID("SplatMap1");
@@ -51,15 +52,17 @@ public class SplatMapService : ISplatMapService
         var biomeBuffer = new ComputeBuffer(BiomeArray.Length, sizeof(int));
         biomeBuffer.SetData(BiomeArray);
 
-        var splatMap1 = new RenderTexture(257, 257, 0, RenderTextureFormat.ARGB32)
+        var splatMap1 = new RenderTexture(257, 257, 1)
         {
             enableRandomWrite = true,
+            filterMode = FilterMode.Point
         };
         splatMap1.Create();
 
-        var splatMap2 = new RenderTexture(257, 257, 0, RenderTextureFormat.ARGB32)
+        var splatMap2 = new RenderTexture(257, 257, 1)
         {
             enableRandomWrite = true,
+            filterMode = FilterMode.Point
         };
         splatMap2.Create();
 
@@ -68,7 +71,10 @@ public class SplatMapService : ISplatMapService
         SplatMapShader.SetTexture(Kernel, SplatMap1Id, splatMap1);
         SplatMapShader.SetTexture(Kernel, SplatMap2Id, splatMap2);
 
-        SplatMapShader.Dispatch(Kernel, 257, 1, 1);
+        int threadGroupsX = Mathf.CeilToInt(257 / 6.0f);
+        int threadGroupsY = Mathf.CeilToInt(257 / 6.0f);
+
+        SplatMapShader.Dispatch(Kernel, threadGroupsX ,threadGroupsY, 1);
         
         biomeBuffer.Release();
 
