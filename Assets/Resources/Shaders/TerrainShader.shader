@@ -9,42 +9,42 @@ Shader "Custom/TerrainShader"
         _TundraHeight ("Height Tundra Map", 2D) = "grey" {}
         _TundraNormal ("Normal Tundra Map", 2D) = "bump" {}
         _TundraNormalScale ("Normal Scale", Float) = 1.0
-        _TundraGlossiness ("Smoothness", Range(0,1)) = 0.1
-        _TundraMetallic ("Metallic", Range(0,1)) = 0.2
+        _TundraGlossiness ("Smoothness", Range(0,1)) = 0
+        _TundraMetallic ("Metallic", Range(0,1)) = 0
 
         _TaigaAlbedo ("Albedo Taiga Map", 2D) = "grey" {}
         _TaigaHeight ("Height Taiga Map", 2D) = "grey" {}
         _TaigaNormal ("Normal Taiga Map", 2D) = "bump" {}
         _TaigaNormalScale ("Normal Scale", Float) = 1.0
-        _TaigaGlossiness ("Smoothness", Range(0,1)) = 0.5
+        _TaigaGlossiness ("Smoothness", Range(0,1)) = 0
         _TaigaMetallic ("Metallic", Range(0,1)) = 0.0
 
         _DessertAlbedo ("Albedo Desert Map", 2D) = "grey" {}
         _DessertHeight ("Height Desert Map", 2D) = "grey" {}
         _DessertNormal ("Normal Desert Map", 2D) = "bump" {}
         _DessertNormalScale ("Normal Scale", Float) = 1.0
-        _DessertGlossiness ("Smoothness", Range(0,1)) = 0.5
+        _DessertGlossiness ("Smoothness", Range(0,1)) = 0
         _DessertMetallic ("Metallic", Range(0,1)) = 0.0
 
         _ForestAlbedo ("Albedo Forest Map", 2D) = "grey" {}
         _ForestHeight ("Height Forest Map", 2D) = "grey" {}
         _ForestNormal ("Normal Forest Map", 2D) = "bump" {}
         _ForestNormalScale ("Normal Scale", Float) = 1.0
-        _ForestGlossiness ("Smoothness", Range(0,1)) = 0.5
+        _ForestGlossiness ("Smoothness", Range(0,1)) = 0
         _ForestMetallic ("Metallic", Range(0,1)) = 0.0
 
         _JungleAlbedo ("Albedo Jungle Map", 2D) = "grey" {}
         _JungleHeight ("Height Jungle Map", 2D) = "grey" {}
         _JungleNormal ("Normal Jungle Map", 2D) = "bump" {}
         _JungleNormalScale ("Normal Scale", Float) = 1.0
-        _JungleGlossiness ("Smoothness", Range(0,1)) = 0.5
+        _JungleGlossiness ("Smoothness", Range(0,1)) = 0
         _JungleMetallic ("Metallic", Range(0,1)) = 0.0
         
         _SavannaAlbedo ("Albedo Savanna Map", 2D) = "grey" {}
         _SavannaHeight ("Height Savanna Map", 2D) = "grey" {}
         _SavannaNormal ("Normal Savanna Map", 2D) = "bump" {}
         _SavannaNormalScale ("Normal Scale", Float) = 1.0
-        _SavannaGlossiness ("Smoothness", Range(0,1)) = 0.5
+        _SavannaGlossiness ("Smoothness", Range(0,1)) = 0
         _SavannaMetallic ("Metallic", Range(0,1)) = 0.0
     }
     SubShader
