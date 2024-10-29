@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Services.Player;
 using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
 
@@ -45,6 +46,16 @@ namespace Gameplay.Items
         public string[] GetAllItemNames()
         {
             return items.ToList().Select(x => x.itemName).ToArray();
+        }
+
+        public int GetItemById(string itemId)
+        {
+            for (int i = 0; i < items.Length; i++)
+            {
+                if (items[i].itemName == itemId)
+                    return i;
+            }
+            throw new Exception($"El item con el nombre {itemId} no se encuentra en la configuracion");
         }
     }
 }

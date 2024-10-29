@@ -37,6 +37,24 @@ MonoBehaviour:
     itemRarity: 3
     isEquipable: 0
     equipableReference: {fileID: 0}
+  - itemName: CollectionTool
+    sprite: {fileID: 21300000, guid: 247cb504efaf4474bbaeb4346701b99c, type: 3}
+    maxAmount: 1
+    itemRarity: 3
+    isEquipable: 1
+    equipableReference: {fileID: 0}
+  - itemName: TeleportTablet
+    sprite: {fileID: 21300000, guid: a40e131b61d22ba42b2955962e636ca4, type: 3}
+    maxAmount: 1
+    itemRarity: 3
+    isEquipable: 1
+    equipableReference: {fileID: 0}
+  - itemName: SmartWatch
+    sprite: {fileID: 21300000, guid: a40e131b61d22ba42b2955962e636ca4, type: 3}
+    maxAmount: 1
+    itemRarity: 3
+    isEquipable: 1
+    equipableReference: {fileID: 0}
   rarityColors:
   - itemRarity: 0
     color: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}

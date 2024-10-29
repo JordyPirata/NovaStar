@@ -11,7 +11,9 @@ namespace Services.Player
     {
         [SerializeField] private TextMeshProUGUI quantityText;
         [SerializeField] private Image itemImage, rarityOverImage;
-        private bool _hasItem;
+        [SerializeField] private bool isEquipableSpace;
+        public Action<string> OnEquipItem, OnUnEquipItem;
+        private bool _hasItem, _hasEquipableItem;
         private string _itemName;
         private int _quantity;
         private Action<InventorySpace, Sprite, RectTransform> _beginDrag;
@@ -33,6 +35,10 @@ namespace Services.Player
                     rarityOverImage.enabled = false;
                     quantityText.text = string.Empty;
                     _hasItem = false;
+                    if (isEquipableSpace)
+                    {
+                        UnEquipItem(ItemName);
+                    }
                 }
             }
         }
@@ -51,6 +57,11 @@ namespace Services.Player
             {
                 if (itemUI.itemName == itemName)
                 {
+                    if (isEquipableSpace && !itemUI.isEquipable)
+                    {
+                        return amount;
+                    }
+
                     if (!_hasItem)
                     {
                         ItemName = itemName;
@@ -58,6 +69,11 @@ namespace Services.Player
                         itemImage.enabled = true;
                         rarityOverImage.color = _itemsUIConfiguration.GetColorByRarity(itemUI.itemRarity);
                         rarityOverImage.enabled = true;
+                        _hasEquipableItem = itemUI.isEquipable;
+                        if (isEquipableSpace)
+                        {
+                            EquipItem(itemUI.itemName);
+                        }
                     }
 
                     _hasItem = true;
@@ -78,6 +94,7 @@ namespace Services.Player
             throw new Exception($"El item con el nombre {itemName} no se encuentra en la configuracion");
         }
         
+
         public int PickItem(InventorySpace item)
         {
             var amount = item.Quantity;
@@ -92,6 +109,13 @@ namespace Services.Player
                         ItemName = item.ItemName;
                         itemImage.sprite = itemUI.sprite;
                         itemImage.enabled = true;
+                        rarityOverImage.color = _itemsUIConfiguration.GetColorByRarity(itemUI.itemRarity);
+                        rarityOverImage.enabled = true;
+                        _hasEquipableItem = itemUI.isEquipable;
+                        if (isEquipableSpace)
+                        {
+                            EquipItem(itemUI.itemName);
+                        }
                     }
 
                     _hasItem = true;
@@ -116,20 +140,20 @@ namespace Services.Player
         {
             if (!_hasItem) return;
             _beginDrag?.Invoke(this, itemImage.sprite, _rectTransform);
-            Debug.Log("beginDrag");
+            /*Debug.Log("beginDrag");*/
         }
 
         public void OnDrag(PointerEventData eventData)
         {
             if (!_hasItem) return;
             _drag?.Invoke(eventData);
-            Debug.Log("drag");
+            /*Debug.Log("drag");*/
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
             _endDrag?.Invoke();
-            Debug.Log("endDrag");
+            /*Debug.Log("endDrag");*/
         }
 
         public void OnDrop(PointerEventData eventData)
@@ -139,15 +163,18 @@ namespace Services.Player
             {
                 if (droppedObject.TryGetComponent<InventorySpace>(out var inventorySpace))
                 {
-                    if (!inventorySpace.HasItem || inventorySpace == this) return;
+                    if (!inventorySpace.HasItem || inventorySpace == this ||
+                        (isEquipableSpace && !inventorySpace._hasEquipableItem)) return;
                     inventorySpace.Quantity = PickItem(inventorySpace);
                 }
+
                 Debug.Log($"Dropped {eventData.pointerDrag.name} into {gameObject.name}");
             }
         }
 
 
-        public void Configure(ItemsUIConfiguration itemsUIConfiguration, Action<InventorySpace, Sprite, RectTransform> beginDrag, Action<PointerEventData> drag, Action endDrag)
+        public void Configure(ItemsUIConfiguration itemsUIConfiguration,
+            Action<InventorySpace, Sprite, RectTransform> beginDrag, Action<PointerEventData> drag, Action endDrag)
         {
             _beginDrag += beginDrag;
             _drag += drag;
@@ -173,6 +200,7 @@ namespace Services.Player
                     }
                 }
             }
+
             throw new Exception($"El item con el nombre {item.itemName} no se encuentra en la configuracion");
         }
 
@@ -187,19 +215,28 @@ namespace Services.Player
                         Quantity -= quantity;
                         return 0;
                     }
-                    else
-                    {
-                        var restingQuantity = quantity - Quantity;
-                        Quantity = 0;
-                        ItemName = string.Empty;
-                        itemImage.sprite = null;
-                        itemImage.enabled = false;
-                        _hasItem = false;
-                        return restingQuantity;
-                    }
+                    var restingQuantity = quantity - Quantity;
+                    Quantity = 0;
+                    ItemName = string.Empty;
+                    itemImage.sprite = null;
+                    itemImage.enabled = false;
+                    _hasItem = false;
+                    _hasEquipableItem = false;
+                    return restingQuantity;
                 }
             }
+
             throw new Exception($"El item con el nombre {itemName} no se encuentra en la configuracion");
+        }
+        
+        private void EquipItem(string itemUIItemName)
+        {
+            OnEquipItem?.Invoke(itemUIItemName);
+        }
+        
+        private void UnEquipItem(string itemUIItemName)
+        {
+            OnUnEquipItem?.Invoke(itemUIItemName);
         }
     }
 }
