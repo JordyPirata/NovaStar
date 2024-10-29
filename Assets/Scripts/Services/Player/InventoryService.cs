@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Gameplay.Items;
 using Gameplay.Items.Crafting;
 using InputSystem;
@@ -16,6 +17,7 @@ namespace Services.Player
         [SerializeField] private ItemsUIConfiguration itemsUIConfiguration;
         [SerializeField] private GameObject panelGameObject;
         [SerializeField] private MovingInventorySpace movingInventorySpace;
+        [SerializeField] public Equipable[] equipables;
         private Dictionary<string, int> _completeInventory;
         private InputActions _inputActions;
         private bool _open;
@@ -30,7 +32,11 @@ namespace Services.Player
             foreach (var inventorySpace in inventorySpaces)
             {
                 inventorySpace.Configure(itemsUIConfiguration, BeginDrag, Drag, EndDrag);
+                inventorySpace.OnEquipItem += EquipItem;
+                inventorySpace.OnUnEquipItem += UnEquipItem;
             }
+
+            TryPickItem("CollectionTool", 1);
         }
 
         private void OnInventoryMenu(InputAction.CallbackContext obj)
@@ -49,6 +55,7 @@ namespace Services.Player
                 if (!inventorySpace.HasItem || itemName == inventorySpace.ItemName)
                 {
                     quantity = inventorySpace.PickItem(itemName, quantity);
+                    if (quantity <= 0) break; 
                 }
             }
 
@@ -173,6 +180,26 @@ namespace Services.Player
         private void EndDrag()
         {
             movingInventorySpace.gameObject.SetActive(false);
+        }
+
+        private void EquipItem(string itemId)
+        {
+            int itemIntId = itemsUIConfiguration.GetItemById(itemId);
+            foreach (var equipable in equipables.Where(equipable=>equipable.CorrespondentItem == itemIntId))
+            {
+                equipable.gameObject.SetActive(true);
+                equipable.Equip();
+            }
+        }
+
+        private void UnEquipItem(string itemId)
+        {
+            int itemIntId = itemsUIConfiguration.GetItemById(itemId);
+            foreach (var equipable in equipables.Where(equipable=>equipable.CorrespondentItem == itemIntId))
+            {
+                equipable.gameObject.SetActive(false);
+                equipable.UnEquip();
+            }
         }
     }
 }
