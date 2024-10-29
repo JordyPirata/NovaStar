@@ -19,12 +19,12 @@ Shader "Custom/TerrainShader"
         _TaigaGlossiness ("Smoothness", Range(0,1)) = 0.5
         _TaigaMetallic ("Metallic", Range(0,1)) = 0.0
 
-        _DesertAlbedo ("Albedo Desert Map", 2D) = "grey" {}
-        _DesertHeight ("Height Desert Map", 2D) = "grey" {}
-        _DesertNormal ("Normal Desert Map", 2D) = "bump" {}
-        _DesertNormalScale ("Normal Scale", Float) = 1.0
-        _DesertGlossiness ("Smoothness", Range(0,1)) = 0.5
-        _DesertMetallic ("Metallic", Range(0,1)) = 0.0
+        _DessertAlbedo ("Albedo Desert Map", 2D) = "grey" {}
+        _DessertHeight ("Height Desert Map", 2D) = "grey" {}
+        _DessertNormal ("Normal Desert Map", 2D) = "bump" {}
+        _DessertNormalScale ("Normal Scale", Float) = 1.0
+        _DessertGlossiness ("Smoothness", Range(0,1)) = 0.5
+        _DessertMetallic ("Metallic", Range(0,1)) = 0.0
 
         _ForestAlbedo ("Albedo Forest Map", 2D) = "grey" {}
         _ForestHeight ("Height Forest Map", 2D) = "grey" {}
@@ -144,18 +144,55 @@ Shader "Custom/TerrainShader"
             fixed3 normal3 = textureNoTileNormal(_ForestNormal, ntuvs3, _ForestNormalScale);
             fixed3 normal4 = textureNoTileNormal(_JungleNormal, ntuvs4, _JungleNormalScale);
             fixed3 normal5 = textureNoTileNormal(_SavannaNormal, ntuvs5, _SavannaNormalScale);
-
             
-            
-            // Albedo comes from a texture tinted by color
-            //fixed4 c = tex2D(_TundraAlbedo, ntuvs0);
-            //fixed4 c = tex2D(_TundraAlbedo, IN.uv_TundraAlbedo);
-            o.Albedo = albedo0.rgb;
-            o.Alpha = albedo0.a;
-            o.Normal = normal0;
-            // Metallic and smoothness come from slider variables
-            o.Metallic = _TundraMetallic;
-            o.Smoothness = _TundraGlossiness;
+            if (splat_control.r == 1)
+            {
+                o.Albedo = albedo0.rgb;
+                o.Alpha = albedo0.a;
+                o.Normal = normal0;
+                o.Metallic = _TundraMetallic;
+                o.Smoothness = _TundraGlossiness;
+            }
+            else if (splat_control.g == 1)
+            {
+                o.Albedo = albedo1.rgb;
+                o.Alpha = albedo1.a;
+                o.Normal = normal1;
+                o.Metallic = _TaigaMetallic;
+                o.Smoothness = _TaigaGlossiness;
+            }
+            else if (splat_control.b == 1)
+            {
+                o.Albedo = albedo2.rgb;
+                o.Alpha = albedo2.a;
+                o.Normal = normal2;
+                o.Metallic = _DesertMetallic;
+                o.Smoothness = _DesertGlossiness;
+            }
+            else if (splat_control2.r == 1)
+            {
+                o.Albedo = albedo3.rgb;
+                o.Alpha = albedo3.a;
+                o.Normal = normal3;
+                o.Metallic = _ForestMetallic;
+                o.Smoothness = _ForestGlossiness;
+            }
+            else if (splat_control2.g == 1)
+            {
+                o.Albedo = albedo4.rgb;
+                o.Alpha = albedo4.a;
+                o.Normal = normal4;
+                o.Metallic = _JungleMetallic;
+                o.Smoothness = _JungleGlossiness;
+            }
+            else if (splat_control2.b == 1)
+            {
+                o.Albedo = albedo5.rgb;
+                o.Alpha = albedo5.a;
+                o.Normal = normal5;
+                o.Metallic = _SavannaMetallic;
+                o.Smoothness = _SavannaGlossiness;
+            }
         }
         ENDCG
     }
