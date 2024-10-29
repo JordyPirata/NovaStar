@@ -4,15 +4,11 @@ RWStructuredBuffer<int> BiomeMap;
 RWTexture2D<float4> SplatMap1;
 RWTexture2D<float4> SplatMap2;
 
-float4 Fade(float4 t) {
-    return t * t * t * (t * (t * 6 - 15) + 10);
-}
-
 [numthreads(6, 6, 1)]
 
 void CSMain (uint3 id: SV_DispatchThreadID)
 {
-    int biome = BiomeMap[id.x];
+    int biome = BiomeMap[(id.x * 257) + id.y];
     float4 color = float4(0,0,0,0);
     //                            R G B A
     if (biome == 0)
@@ -40,11 +36,9 @@ void CSMain (uint3 id: SV_DispatchThreadID)
         color = float4(0,0,1,0);
         SplatMap2[id.xy] = color;
     }else {
-        SplatMap1[id.xy] = float4(1,1,1,1);
-        SplatMap2[id.xy] = float4(1,1,1,1);
+        SplatMap1[id.xy] = float4(0,0,0,0);
+        SplatMap2[id.xy] = float4(0,0,0,0);
     }
-    SplatMap1[id.xy] =  Fade( SplatMap1[id.xy] );
-    SplatMap2[id.xy] =  Fade( SplatMap2[id.xy] );
 
 
 }
