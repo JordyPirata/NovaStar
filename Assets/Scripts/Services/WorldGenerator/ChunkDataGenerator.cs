@@ -66,8 +66,8 @@ public struct ChunkDataGenerator
         NoiseDirector.SetExternalState(
             new NoiseState
             {
-                seed = ServiceLocator.GetService<IWorldData>().GetSeed()-1,
-                frequency = 0.0001f,
+                seed = ServiceLocator.GetService<IWorldData>().GetSeed() - 1,
+                frequency = 0.01f,
             });
         return NoiseDirector.GetNoise(coord) as float[];
     }
@@ -77,8 +77,8 @@ public struct ChunkDataGenerator
         NoiseDirector.SetExternalState(
             new NoiseState
             {
-                seed = ServiceLocator.GetService<IWorldData>().GetSeed()+1,
-                frequency = 0.0001f,
+                seed = ServiceLocator.GetService<IWorldData>().GetSeed() + 1,
+                frequency = 0.01f,
             });
         return NoiseDirector.GetNoise(coord) as float[];
     }

@@ -19,12 +19,12 @@ Shader "Custom/TerrainShader"
         _TaigaGlossiness ("Smoothness", Range(0,1)) = 0
         _TaigaMetallic ("Metallic", Range(0,1)) = 0.0
 
-        _DessertAlbedo ("Albedo Desert Map", 2D) = "grey" {}
-        _DessertHeight ("Height Desert Map", 2D) = "grey" {}
-        _DessertNormal ("Normal Desert Map", 2D) = "bump" {}
-        _DessertNormalScale ("Normal Scale", Float) = 1.0
-        _DessertGlossiness ("Smoothness", Range(0,1)) = 0
-        _DessertMetallic ("Metallic", Range(0,1)) = 0.0
+        _DesertAlbedo ("Albedo Desert Map", 2D) = "grey" {}
+        _DesertHeight ("Height Desert Map", 2D) = "grey" {}
+        _DesertNormal ("Normal Desert Map", 2D) = "bump" {}
+        _DesertNormalScale ("Normal Scale", Float) = 1.0
+        _DesertGlossiness ("Smoothness", Range(0,1)) = 0
+        _DesertMetallic ("Metallic", Range(0,1)) = 0.0
 
         _ForestAlbedo ("Albedo Forest Map", 2D) = "grey" {}
         _ForestHeight ("Height Forest Map", 2D) = "grey" {}
@@ -39,7 +39,7 @@ Shader "Custom/TerrainShader"
         _JungleNormalScale ("Normal Scale", Float) = 1.0
         _JungleGlossiness ("Smoothness", Range(0,1)) = 0
         _JungleMetallic ("Metallic", Range(0,1)) = 0.0
-        
+
         _SavannaAlbedo ("Albedo Savanna Map", 2D) = "grey" {}
         _SavannaHeight ("Height Savanna Map", 2D) = "grey" {}
         _SavannaNormal ("Normal Savanna Map", 2D) = "bump" {}
@@ -59,10 +59,13 @@ Shader "Custom/TerrainShader"
         // Use shader model 3.0 target, to get nicer looking lighting
         #pragma target 3.0
 
+        #include "GaussianBlur.cginc"
         #include "textureNoTile.cginc"
 
-        UNITY_DECLARE_TEX2D(_SplatMap1);
-        UNITY_DECLARE_TEX2D(_SplatMap2);
+        sampler2D _SplatMap1;
+        float4 _SplatMap1_ST;
+        sampler2D _SplatMap2;
+        float4 _SplatMap2_ST;
 
         sampler2D _TundraAlbedo, _TundraHeight, _TundraNormal;
         float4 _TundraAlbedo_ST;
@@ -103,12 +106,15 @@ Shader "Custom/TerrainShader"
         void SplatmapsVert(inout appdata_full v, out Input data)
         {
             UNITY_INITIALIZE_OUTPUT(Input, data);
+            
             data.tc.xy = v.texcoord;
         }
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
-            fixed4 splat_control = UNITY_SAMPLE_TEX2D(_SplatMap1, IN.tc.xy);
-            fixed4 splat_control2 = UNITY_SAMPLE_TEX2D(_SplatMap2, IN.tc.xy);
+            float2 uv = IN.tc.xy;
+            float2 uv2 = IN.tc.xy;
+            fixed4 splat_control = GaussianBlur(_SplatMap1, uv, 15, 2570, 0.5, 0.5);
+            fixed4 splat_control2 = GaussianBlur(_SplatMap2, uv2, 15, 2570, 0.5, 0.5);
 
             fixed2 uvSplat0 = TRANSFORM_TEX(IN.tc.xy, _TundraAlbedo);
             fixed2 uvSplat1 = TRANSFORM_TEX(IN.tc.xy, _TaigaAlbedo);
@@ -145,54 +151,23 @@ Shader "Custom/TerrainShader"
             fixed3 normal4 = textureNoTileNormal(_JungleNormal, ntuvs4, _JungleNormalScale);
             fixed3 normal5 = textureNoTileNormal(_SavannaNormal, ntuvs5, _SavannaNormalScale);
             
-            if (splat_control.r == 1)
-            {
-                o.Albedo = albedo0.rgb;
-                o.Alpha = albedo0.a;
-                o.Normal = normal0;
-                o.Metallic = _TundraMetallic;
-                o.Smoothness = _TundraGlossiness;
-            }
-            else if (splat_control.g == 1)
-            {
-                o.Albedo = albedo1.rgb;
-                o.Alpha = albedo1.a;
-                o.Normal = normal1;
-                o.Metallic = _TaigaMetallic;
-                o.Smoothness = _TaigaGlossiness;
-            }
-            else if (splat_control.b == 1)
-            {
-                o.Albedo = albedo2.rgb;
-                o.Alpha = albedo2.a;
-                o.Normal = normal2;
-                o.Metallic = _DesertMetallic;
-                o.Smoothness = _DesertGlossiness;
-            }
-            else if (splat_control2.r == 1)
-            {
-                o.Albedo = albedo3.rgb;
-                o.Alpha = albedo3.a;
-                o.Normal = normal3;
-                o.Metallic = _ForestMetallic;
-                o.Smoothness = _ForestGlossiness;
-            }
-            else if (splat_control2.g == 1)
-            {
-                o.Albedo = albedo4.rgb;
-                o.Alpha = albedo4.a;
-                o.Normal = normal4;
-                o.Metallic = _JungleMetallic;
-                o.Smoothness = _JungleGlossiness;
-            }
-            else if (splat_control2.b == 1)
-            {
-                o.Albedo = albedo5.rgb;
-                o.Alpha = albedo5.a;
-                o.Normal = normal5;
-                o.Metallic = _SavannaMetallic;
-                o.Smoothness = _SavannaGlossiness;
-            }
+            float4 mixedAlbedo = albedo0 * splat_control.r 
+                               + albedo1 * splat_control.g 
+                               + albedo2 * splat_control.b 
+                               + albedo3 * splat_control2.r 
+                               + albedo4 * splat_control2.g 
+                               + albedo5 * splat_control2.b;
+            float mixedNormal = normal0 * splat_control.r 
+                               + normal1 * splat_control.g
+                               + normal2 * splat_control.b 
+                               + normal3 * splat_control2.r 
+                               + normal4 * splat_control2.g 
+                               + normal5 * splat_control2.b;
+            mixedNormal += 1e-5;
+            o.Albedo = mixedAlbedo;
+            o.Normal = mixedNormal + 0.5;
+            o.Smoothness = _TundraGlossiness;
+            o.Metallic = _TundraMetallic;
         }
         ENDCG
     }
