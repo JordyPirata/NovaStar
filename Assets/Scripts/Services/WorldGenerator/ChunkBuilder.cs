@@ -56,7 +56,7 @@ public class ChunkBuilder
     
     public void CalculateBiomes()
     {
-        const int tilling = 20;   
+        const int tilling = 30;   
         var splatMap = SplatMapService.GenerateSplatMap(_ChunkCoords, Chunk.temperatures, Chunk.humidity); 
         // Calculate biome and create splatmap for terrain
         List<BiomeTexture> biomeTexture = TexturesService.GetBiomeTextures().Textures;

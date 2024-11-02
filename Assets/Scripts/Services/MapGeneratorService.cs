@@ -66,6 +66,7 @@ public class MapGeneratorService : IMapGenerator
         }
         else
         {
+            if (isRunning == false) return;
             var chunkBuilder = new ChunkBuilder(viewedChunkCoord);
             await chunkBuilder.GenerateChunkData();
             chunkBuilder.SetGameObject();
