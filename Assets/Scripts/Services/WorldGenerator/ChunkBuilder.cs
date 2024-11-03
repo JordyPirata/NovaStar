@@ -43,11 +43,13 @@ public class ChunkBuilder
     }
     public async Task GenerateChunkData()
     {
+        if (_ChunkObject == null) return;
         Chunk = await ChunkDataGenerator.Generate(_ChunkCoords);
     }
 
     public void SetTerrain()
     {
+        if (_Terrain == null) return;
         TerrainCollider terrainCollider = ChunkGO.GetComponent<TerrainCollider>();
         _Terrain = TerrainSettings.ApplySettings(_Terrain, Chunk);
         terrainCollider.includeLayers = LayerMask.GetMask("Player");
@@ -56,6 +58,7 @@ public class ChunkBuilder
     
     public void CalculateBiomes()
     {
+        if (_Terrain == null) return;
         const int tilling = 30;   
         var splatMap = SplatMapService.GenerateSplatMap(_ChunkCoords, Chunk.temperatures, Chunk.humidity); 
         // Calculate biome and create splatmap for terrain

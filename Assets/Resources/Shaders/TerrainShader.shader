@@ -113,8 +113,8 @@ Shader "Custom/TerrainShader"
         {
             float2 uv = IN.tc.xy;
             float2 uv2 = IN.tc.xy;
-            fixed4 splat_control = GaussianBlur(_SplatMap1, uv, 15, 2570, 0.5, 0.5);
-            fixed4 splat_control2 = GaussianBlur(_SplatMap2, uv2, 15, 2570, 0.5, 0.5);
+            fixed4 splat_control = GaussianBlur(_SplatMap1, uv, 15, 2570, 1, 1);
+            fixed4 splat_control2 = GaussianBlur(_SplatMap2, uv2, 15, 2570, 1, 1);
 
             fixed2 uvSplat0 = TRANSFORM_TEX(IN.tc.xy, _TundraAlbedo);
             fixed2 uvSplat1 = TRANSFORM_TEX(IN.tc.xy, _TaigaAlbedo);
@@ -163,7 +163,8 @@ Shader "Custom/TerrainShader"
                                + normal3 * splat_control2.r 
                                + normal4 * splat_control2.g 
                                + normal5 * splat_control2.b;
-            mixedNormal += 1e-5;
+            mixedNormal += 1e-5; // avoid zero
+
             o.Albedo = mixedAlbedo;
             o.Normal = mixedNormal + 0.5;
             o.Smoothness = _TundraGlossiness;

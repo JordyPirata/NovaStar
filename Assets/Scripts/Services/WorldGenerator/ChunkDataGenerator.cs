@@ -35,7 +35,7 @@ public struct ChunkDataGenerator
             (message, chunk) = await GameRepository.Read<Chunk>(chunkPath);
 
             chunk.position = new float3(coord.x * ChunkConfig.width, 0, coord.y * ChunkConfig.depth);
-            // Debug.Log(message + " " + chunk.ChunkName);
+            Debug.Log(message + " " + chunk.ChunkName);
             return chunk;
         }
         // Create the chunk
@@ -60,7 +60,7 @@ public struct ChunkDataGenerator
         NoiseDirector.SetBuilder(new ChunkNoiseBuilder());
         return NoiseDirector.GetNoise(coord) as float[];
     }
-    private  static float[] GenerateTemperatureMap(float2 coord)
+    private static float[] GenerateTemperatureMap(float2 coord)
     {
         NoiseDirector.SetBuilder(new TempChunkNoiseBuilder());
         NoiseDirector.SetExternalState(
