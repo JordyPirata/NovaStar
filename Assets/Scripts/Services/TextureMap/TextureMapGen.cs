@@ -22,7 +22,7 @@ namespace Services
             
             float TAmp = math.distance(tempRange.x, tempRange.y), HAmp = math.length(humidityRange);
             float Tdist =TAmp*2 + math.distance(0, tempRange.x)* 2;
-            float Hdist = HAmp  + math.distance(0, humidityRange.x);
+            float Hdist = HAmp + math.distance(0, humidityRange.x);
 
             Texture2D texture2D = new(Width, Depth)
             {
@@ -37,7 +37,7 @@ namespace Services
                 noiseType = NoiseType.Perlin,
                 fractalType = FractalType.FBM,
                 frequency = 0.01f,
-                octaves = 2,
+                octaves = 1,
                 amplitude = TAmp,
                 distance = Tdist
             };
@@ -51,7 +51,7 @@ namespace Services
                 noiseType = NoiseType.Perlin,
                 fractalType = FractalType.FBM,
                 frequency = 0.01f,
-                octaves = 2,
+                octaves = 1,
                 amplitude = HAmp,
                 distance = Hdist
             };
