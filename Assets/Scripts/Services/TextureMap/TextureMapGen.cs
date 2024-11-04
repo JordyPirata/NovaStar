@@ -42,7 +42,7 @@ namespace Services
             
             // Get the amplitude and distance for the humidity noise
             (float HAmp, float Hdist) = NoiseRange.GetHumidityAmpDist(tetureMapState.humidityRange);
-            
+
             NoiseState noiseState2 = new()
             {
                 seed = tetureMapState.seed + 1,
@@ -66,15 +66,6 @@ namespace Services
                 }
             }
             return texture2D;
-        }
-        float2 ConvertRange(float2 value, float2 range)
-        {
-            value.x = Convert025(value.x, range);
-            value.y = Convert025(value.y, range);
-            return value;
-        }
-        float Convert025(float value, float2 range){
-            return (float)((value - range.x) / (range.y - range.x) * 0.25);
         }
     }
 }

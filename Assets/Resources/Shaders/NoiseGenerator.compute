@@ -1136,7 +1136,7 @@ void TempChunkNoise(uint3 id : SV_DispatchThreadID)
 
     // Gather noise data
     float noiseValue = fnlGetNoise2D(noise, coords[id.x].x, coords[id.x].y);
-    float cosValue = CosFunction(coords[id.x].x, 100);
+    float cosValue = CosFunction(coords[id.x].x, 1500);
     values[id.x] = (noiseValue + cosValue) * amplitude + distance;
 }
 

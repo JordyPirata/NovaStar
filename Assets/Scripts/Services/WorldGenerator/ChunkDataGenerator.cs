@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Config;
 using Models;
 using Services.Interfaces;
-using Unity.Burst;
+using Util;
 using Unity.Mathematics;
 using UnityEngine;
 using Services.NoiseGenerator;
@@ -22,6 +22,7 @@ public struct ChunkDataGenerator
     private static IRepository GameRepository => ServiceLocator.GetService<IRepository>();
     private static string WorldDirectory => ServiceLocator.GetService<IWorldData>().GetDirectory();
     private static INoiseDirector NoiseDirector => ServiceLocator.GetService<INoiseDirector>();
+    private static IWorldData WorldData => ServiceLocator.GetService<IWorldData>();
 
     public static async Task<Chunk> Generate(float2 coord)
     {
@@ -63,22 +64,30 @@ public struct ChunkDataGenerator
     private static float[] GenerateTemperatureMap(float2 coord)
     {
         NoiseDirector.SetBuilder(new TempChunkNoiseBuilder());
+        (float TAmp, float Tdist) = NoiseRange.GetTemperatureAmpDist(WorldData.GetTemperatureRange());
         NoiseDirector.SetExternalState(
             new NoiseState
             {
                 seed = ServiceLocator.GetService<IWorldData>().GetSeed() - 1,
-                frequency = 0.01f,
+                frequency = 0.0001f,
+                octaves = 1,
+                amplitude = TAmp,
+                distance = Tdist,
             });
         return NoiseDirector.GetNoise(coord) as float[];
     }
     private static float[] GenerateHumidityMap(float2 coord)
     {
         NoiseDirector.SetBuilder(new HumidityChunkNoiseBuilder());
+        (float HAmp, float Hdist) = NoiseRange.GetHumidityAmpDist(WorldData.GetHumidityRange());
         NoiseDirector.SetExternalState(
             new NoiseState
             {
                 seed = ServiceLocator.GetService<IWorldData>().GetSeed() + 1,
-                frequency = 0.01f,
+                frequency = 0.0001f,
+                octaves = 1,
+                amplitude = HAmp,
+                distance = Hdist,
             });
         return NoiseDirector.GetNoise(coord) as float[];
     }
