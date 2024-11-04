@@ -3,6 +3,7 @@ using UnityEngine;
 using Unity.Mathematics;
 using Services.NoiseGenerator;
 using System;
+using Util;
 
 namespace Services
 {
@@ -14,21 +15,15 @@ namespace Services
         private readonly IBiomeDic BiomeService = ServiceLocator.GetService<IBiomeDic>();
         public Texture2D GenerateTextureMap(TextureMapState tetureMapState)
         {
-            int2 baseTempRange = new(-10, 30);
-            int2 baseHumidityRange = new(0, 400);
-            // change state temperature and humidity range to 0 - 0.25
-            float2 tempRange = ConvertRange(tetureMapState.temperatureRange, baseTempRange);
-            float2 humidityRange = ConvertRange(tetureMapState.humidityRange, baseHumidityRange);
-            
-            float TAmp = math.distance(tempRange.x, tempRange.y), HAmp = math.length(humidityRange);
-            float Tdist =TAmp*2 + math.distance(0, tempRange.x)* 2;
-            float Hdist = HAmp + math.distance(0, humidityRange.x);
-
             Texture2D texture2D = new(Width, Depth)
             {
                 filterMode = FilterMode.Trilinear,
                 wrapMode = TextureWrapMode.Clamp
             };
+
+            // Get the amplitude and distance for the temperature noise
+
+            (float TAmp, float Tdist) = NoiseRange.GetTemperatureAmpDist(tetureMapState.temperatureRange);
             
             // Get reference of the state of the noise service
             NoiseState temperature = new()
@@ -44,6 +39,9 @@ namespace Services
             NoiseDirector.SetBuilder(new TempNoiseBuilder());
             NoiseDirector.SetExternalState(temperature);
             var temperatureMap = NoiseDirector.GetNoise(new float2(0,0)) as float[,];
+            
+            // Get the amplitude and distance for the humidity noise
+            (float HAmp, float Hdist) = NoiseRange.GetHumidityAmpDist(tetureMapState.humidityRange);
             
             NoiseState noiseState2 = new()
             {
