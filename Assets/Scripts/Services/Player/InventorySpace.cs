@@ -25,22 +25,6 @@ namespace Services.Player
         public int Quantity
         {
             get => _quantity;
-            private set
-            {
-                _quantity = value;
-                quantityText.text = value != 0 ? _quantity.ToString() : string.Empty;
-                if (value <= 0)
-                {
-                    itemImage.enabled = false;
-                    rarityOverImage.enabled = false;
-                    quantityText.text = string.Empty;
-                    _hasItem = false;
-                    if (isEquipableSpace)
-                    {
-                        UnEquipItem(ItemName);
-                    }
-                }
-            }
         }
 
         public bool HasItem => _hasItem;
@@ -51,6 +35,23 @@ namespace Services.Player
             private set => _itemName = value;
         }
 
+        public void SetQuantity(int value, bool movedBetweenEquipableSpaces = false)
+        {
+            _quantity = value;
+            quantityText.text = value != 0 ? _quantity.ToString() : string.Empty;
+            if (value <= 0)
+            {
+                itemImage.enabled = false;
+                rarityOverImage.enabled = false;
+                quantityText.text = string.Empty;
+                _hasItem = false;
+                if (!movedBetweenEquipableSpaces && isEquipableSpace)
+                {
+                    UnEquipItem(ItemName);
+                }
+            }
+        }
+        
         public int PickItem(string itemName, int amount)
         {
             foreach (var itemUI in _itemsUIConfiguration.items)
@@ -80,12 +81,12 @@ namespace Services.Player
                     if (itemUI.maxAmount < amount + Quantity)
                     {
                         amount = amount + Quantity - itemUI.maxAmount;
-                        Quantity = itemUI.maxAmount;
+                        SetQuantity(itemUI.maxAmount);
                         return amount;
                     }
                     else
                     {
-                        Quantity += amount;
+                        SetQuantity(amount);
                         return 0;
                     }
                 }
@@ -95,7 +96,7 @@ namespace Services.Player
         }
         
 
-        public int PickItem(InventorySpace item)
+        public int PickItem(InventorySpace item, bool isBetweenInventorySpaces = false)
         {
             var amount = item.Quantity;
             if (HasItem && item.ItemName != ItemName)
@@ -112,7 +113,7 @@ namespace Services.Player
                         rarityOverImage.color = _itemsUIConfiguration.GetColorByRarity(itemUI.itemRarity);
                         rarityOverImage.enabled = true;
                         _hasEquipableItem = itemUI.isEquipable;
-                        if (isEquipableSpace)
+                        if (isEquipableSpace && !isBetweenInventorySpaces)
                         {
                             EquipItem(itemUI.itemName);
                         }
@@ -122,12 +123,12 @@ namespace Services.Player
                     if (itemUI.maxAmount < amount + Quantity)
                     {
                         amount = amount + Quantity - itemUI.maxAmount;
-                        Quantity = itemUI.maxAmount;
+                        SetQuantity(itemUI.maxAmount);
                         return amount;
                     }
                     else
                     {
-                        Quantity += amount;
+                        SetQuantity(Quantity + amount);
                         return 0;
                     }
                 }
@@ -165,8 +166,15 @@ namespace Services.Player
                 {
                     if (!inventorySpace.HasItem || inventorySpace == this ||
                         (isEquipableSpace && !inventorySpace._hasEquipableItem)) return;
-                    var restingItems = PickItem(inventorySpace);
-                    inventorySpace.Quantity = restingItems;
+                    if (inventorySpace.isEquipableSpace && isEquipableSpace)
+                    {
+                        inventorySpace.SetQuantity(PickItem(inventorySpace, true), true);
+                    }
+                    else
+                    {
+                        
+                        inventorySpace.SetQuantity(PickItem(inventorySpace));
+                    }
                 }
 
                 Debug.Log($"Dropped {eventData.pointerDrag.name} into {gameObject.name}");
@@ -213,11 +221,11 @@ namespace Services.Player
                 {
                     if (quantity < Quantity)
                     {
-                        Quantity -= quantity;
+                        SetQuantity(Quantity - quantity);
                         return 0;
                     }
                     var restingQuantity = quantity - Quantity;
-                    Quantity = 0;
+                    SetQuantity(0);
                     ItemName = string.Empty;
                     itemImage.sprite = null;
                     itemImage.enabled = false;
@@ -233,11 +241,13 @@ namespace Services.Player
         private void EquipItem(string itemUIItemName)
         {
             OnEquipItem?.Invoke(itemUIItemName);
+            Debug.Log($"Se equipo el item {_itemName}");
         }
         
         private void UnEquipItem(string itemUIItemName)
         {
             OnUnEquipItem?.Invoke(itemUIItemName);
+            Debug.Log($"Se desequipo el item {_itemName}");
         }
     }
 }
