@@ -35,6 +35,7 @@ namespace Services.Player
         private void InteractOnStarted(InputAction.CallbackContext callbackContext)
         {
             if (!callbackContext.started) return;
+            ServiceLocator.GetService<ITeleportService>().Interacted();
             if (Physics.Raycast(_camera.transform.position,
                 _camera.transform.TransformDirection(Vector3.forward), out var hit, _interactDistance, _layerMask))
             {

@@ -2,6 +2,7 @@
 using UnityEngine;
 using Services.Interfaces;
 using System;
+using Unity.Mathematics;
 using UnityEngine.InputSystem;
 
 namespace Services.Player
@@ -92,7 +93,13 @@ namespace Services.Player
         {
             StartCoroutine(ExcecuteAfterMapLoaded());
         }
+
+        public void GoToPosition(float3 dataTeleportPosition)
+        {
+            _firstPersonCharacter.GoToPosition(dataTeleportPosition);
+        }
         
+
         public void PlayerDied()
         {
             _playerInfo.PlayerDied();

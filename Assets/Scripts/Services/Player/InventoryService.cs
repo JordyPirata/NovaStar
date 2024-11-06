@@ -37,6 +37,7 @@ namespace Services.Player
             }
 
             TryPickItem("CollectionTool", 1);
+            TryPickItem("TeleportTablet", 1);
         }
 
         private void OnInventoryMenu(InputAction.CallbackContext obj)

@@ -1,5 +1,6 @@
 using UnityEngine;
 using Services.Interfaces;
+using Unity.Mathematics;
 
 namespace Services
 {
@@ -21,6 +22,12 @@ namespace Services
         public Transform PlayerTransform 
         {
             get => ControllerScript.Controller.transform;
+        }
+
+        public void GoToPosition(float3 dataTeleportPosition)
+        {
+            ControllerScript.CanMove = false;
+            PlayerTransform.position = dataTeleportPosition;
         }
     }
 }
