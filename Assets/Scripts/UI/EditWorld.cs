@@ -38,9 +38,6 @@ public class EditWorld : MonoBehaviour
         state = new()
         {
             seed = WorldData.GetSeed(),
-            width = 200,
-            height = 200,
-            coords = new float2(0, 0),
             temperatureRange = WorldData.GetTemperatureRange(),
             humidityRange = WorldData.GetHumidityRange()
         };

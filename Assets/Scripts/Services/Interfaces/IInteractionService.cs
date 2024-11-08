@@ -6,5 +6,6 @@ namespace Services.Interfaces
     {
         void Configure(float interactionDistance, LayerMask interactionLayer);
         void SetCamera(Camera mainCamera);
+        void CanGetItems(bool canGetItems);
     }
 }

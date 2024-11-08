@@ -8,7 +8,10 @@ namespace Gameplay.Items.Crafting
     [Serializable]
     public class CraftingRecipe
     {
-        [ItemSelectorID] public int craftedItem;
+        [ItemSelectorID, SerializeField] private int craftedItem;
+        public int craftedQuantity;
         public List<CraftingIngredient> craftingIngredients;
+
+        public ItemData CraftedItem => ItemsUIConfiguration.Instance.items[craftedItem];
     }
 }

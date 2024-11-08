@@ -15,12 +15,12 @@ namespace Services.Player
             {
                 throw new Exception("RayCastsController: Player Transform not found, try calling Initialize() first");
             }
-            var height = Map[0,0].TerrainData.GetHeight((int)playerTransform.position.x, (int)playerTransform.position.z);
+            var height = Map[0,0].GetHeight((int)playerTransform.position.x, (int)playerTransform.position.z);
             Debug.Log(height);
             if (Physics.Raycast(playerTransform.position, Vector3.down, out var hit , 5500))
             {
                 Debug.Log(hit.point);
-                hit.point = new Vector3(hit.point.x, hit.point.y, hit.point.z);
+                hit.point = new Vector3(hit.point.x, hit.point.y + 1, hit.point.z);
                 playerTransform.position = hit.point;
             }
             else

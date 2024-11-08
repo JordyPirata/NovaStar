@@ -3,7 +3,7 @@
     public enum FractalType 
     {
         None, 
-        FBm, 
+        FBM, 
         Ridged, 
         PingPong, 
         DomainWarpProgressive, 

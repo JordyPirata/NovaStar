@@ -1,0 +1,1160 @@
+#pragma kernel ChunkNoise
+#pragma kernel HumidityNoise
+#pragma kernel TempChunkNoise
+#pragma kernel TempNoise
+
+// Switch between using floats or doubles for input position
+typedef float FNLfloat;
+//typedef double FNLfloat;
+
+// Noise Type
+#define FNL_NOISE_OPENSIMPLEX2 0
+#define FNL_NOISE_OPENSIMPLEX2S 1
+#define FNL_NOISE_CELLULAR 2
+#define FNL_NOISE_PERLIN 3
+#define FNL_NOISE_VALUE_CUBIC 4
+#define FNL_NOISE_VALUE 5
+typedef int fnl_noise_type;
+
+// Rotation types
+#define FNL_ROTATION_NONE 0
+#define FNL_ROTATION_IMPROVE_XY_PLANES 1
+#define FNL_ROTATION_IMPROVE_XZ_PLANES 2
+typedef int fnl_rotation_type_3d;
+
+// Fractal types
+#define FNL_FRACTAL_NONE 0
+#define FNL_FRACTAL_FBM 1
+#define FNL_FRACTAL_RIDGED 2
+#define FNL_FRACTAL_PINGPONG 3
+#define FNL_FRACTAL_DOMAIN_WARP_PROGRESSIVE 4
+#define FNL_FRACTAL_DOMAIN_WARP_INDEPENDENT 5
+typedef int fnl_fractal_type;
+
+#define FNL_CELLULAR_DISTANCE_EUCLIDEAN 0
+#define FNL_CELLULAR_DISTANCE_EUCLIDEANSQ 1
+#define FNL_CELLULAR_DISTANCE_MANHATTAN 2
+#define FNL_CELLULAR_DISTANCE_HYBRID 3
+typedef int fnl_cellular_distance_func;
+
+#define FNL_CELLULAR_RETURN_TYPE_CELLVALUE 0
+#define FNL_CELLULAR_RETURN_TYPE_DISTANCE 1
+#define FNL_CELLULAR_RETURN_TYPE_DISTANCE2 2
+#define FNL_CELLULAR_RETURN_TYPE_DISTANCE2ADD 3
+#define FNL_CELLULAR_RETURN_TYPE_DISTANCE2SUB 4
+#define FNL_CELLULAR_RETURN_TYPE_DISTANCE2MUL 5
+#define FNL_CELLULAR_RETURN_TYPE_DISTANCE2DIV 6
+typedef int fnl_cellular_return_type;
+
+#define FNL_DOMAIN_WARP_OPENSIMPLEX2 0
+#define FNL_DOMAIN_WARP_OPENSIMPLEX2_REDUCED 1
+#define FNL_DOMAIN_WARP_BASICGRID 2
+typedef int fnl_domain_warp_type;
+
+// Removes [0x80004005 - unknown error] 'internal error: no storage type for block output' 
+#if UNITY_VERSION
+    #define FNL_FLATTEN [flatten]
+    #define FNL_UNROLL [unroll(1)]
+#else
+    #define FNL_FLATTEN
+    #define FNL_UNROLL
+#endif
+
+/**
+ * Structure containing entire noise system state.
+ * @note Must only be created using fnlCreateState(optional: seed). To ensure defaults are set.
+ */
+struct fnl_state
+{
+    /**
+     * Seed used for all noise types.
+     * @remark Default: 1337
+     */
+    int seed;
+
+    /**
+     * The frequency for all noise types.
+     * @remark Default: 0.01
+     */
+    float frequency;
+
+    /**
+     * The noise algorithm to be used by GetNoise(...).
+     * @remark Default: FNL_NOISE_OPENSIMPLEX2
+     */
+    fnl_noise_type noise_type;
+
+    /**
+     * Sets noise rotation type for 3D.
+     * @remark Default: FNL_ROTATION_NONE
+     */
+    fnl_rotation_type_3d rotation_type_3d;
+
+    /**
+     * The method used for combining octaves for all fractal noise types.
+     * @remark Default: None
+     * @remark FNL_FRACTAL_DOMAIN_WARP_... only effects fnlDomainWarp...
+     */
+    fnl_fractal_type fractal_type;
+
+    /**
+     * The octave count for all fractal noise types.
+     * @remark Default: 3
+     */
+    int octaves;
+
+    /**
+     * The octave lacunarity for all fractal noise types.
+     * @remark Default: 2.0
+     */
+    float lacunarity;
+
+    /**
+     * The octave gain for all fractal noise types.
+     * @remark Default: 0.5
+     */
+    float gain;
+
+    /**
+     * The octave weighting for all none Domaain Warp fractal types.
+     * @remark Default: 0.0
+     * @remark 
+     */
+    float weighted_strength;
+
+    /**
+     * The strength of the fractal ping pong effect.
+     * @remark Default: 2.0
+     */
+    float ping_pong_strength;
+
+    /**
+     * The distance function used in cellular noise calculations.
+     * @remark Default: FNL_CELLULAR_DISTANCE_EUCLIDEANSQ
+     */
+    fnl_cellular_distance_func cellular_distance_func;
+
+    /**
+     * The cellular return type from cellular noise calculations.
+     * @remark Default: FNL_CELLULAR_RETURN_TYPE_DISTANCE
+     */
+    fnl_cellular_return_type cellular_return_type;
+
+    /**
+     * The maximum distance a cellular point can move from it's grid position.
+     * @remark Default: 1.0
+     * @note Setting this higher than 1 will cause artifacts.
+     */
+    float cellular_jitter_mod;
+
+    /**
+     * The warp algorithm when using fnlDomainWarp...
+     * @remark Default: OpenSimplex2
+     */
+    fnl_domain_warp_type domain_warp_type;
+
+    /**
+     * The maximum warp distance from original position when using fnlDomainWarp...
+     * @remark Default: 1.0
+     */
+    float domain_warp_amp;
+};
+
+/**
+ * Creates a noise state with default values.
+ * @param seed Optionally set the state seed.
+ */
+fnl_state fnlCreateState(int seed = 1337);
+
+/**
+ * 2D noise at given position using the state settings
+ * @returns Noise output bounded between -1 and 1.
+ */
+float fnlGetNoise2D(fnl_state state, FNLfloat x, FNLfloat y);
+
+/**
+ * 2D warps the input position using current domain warp settings.
+ * 
+ * Example usage with fnlGetNoise2D:
+ * ```
+ * fnlDomainWarp2D(state, x, y);
+ * noise = fnlGetNoise2D(state, x, y);
+ * ```
+ */
+void fnlDomainWarp2D(fnl_state state, inout FNLfloat x, inout FNLfloat y);
+
+// From here on, this is private implementation
+
+// Constant buffers
+
+StructuredBuffer<float> GRADIENTS_2D;
+StructuredBuffer<float> RAND_VECS_2D;
+
+// Utilities
+
+static inline float _fnlFastMin(float x, float y) { return x < y ? x : y; }
+
+static inline float _fnlFastMax(float x, float y) { return x > y ? x : y; }
+
+static inline float _fnlFastAbs(float f) { return f < 0 ? -f : f; }
+
+static inline float _fnlFastSqrt(float a) { return sqrt(a); }
+
+static inline int _fnlFastFloor(FNLfloat f) { return (f >= 0 ? (int)f : (int)f - 1); }
+
+static inline int _fnlFastRound(FNLfloat f) { return (f >= 0) ? (int)(f + 0.5f) : (int)(f - 0.5f); }
+
+static inline float _fnlLerp(float a, float b, float t) { return a + t * (b - a); }
+
+static inline float _fnlInterpHermite(float t) { return t * t * (3 - 2 * t); }
+
+static inline float _fnlInterpQuintic(float t) { return t * t * t * (t * (t * 6 - 15) + 10); }
+
+static inline float _fnlCubicLerp(float a, float b, float c, float d, float t)
+{
+    float p = (d - c) - (a - b);
+    return t * t * t * p + t * t * ((a - b) - p) + t * (c - a) + b;
+}
+
+static inline float _fnlPingPong(float t)
+{
+    t -= (int)(t * 0.5f) * 2;
+    return t < 1 ? t : 2 - t;
+}
+
+static float _fnlCalculateFractalBounding(fnl_state state)
+{
+    float gain = _fnlFastAbs(state.gain);
+    float amp = gain;
+    float ampFractal = 1.0f;
+    for (int i = 1; i < state.octaves; i++)
+    {
+        ampFractal += amp;
+        amp *= gain;
+    }
+    return 1.0f / ampFractal;
+}
+
+// Hashing
+
+static const int PRIME_X = 501125321;
+static const int PRIME_Y = 1136930381;
+static const int PRIME_Z = 1720413743;
+
+static inline int _fnlHash2D(int seed, int xPrimed, int yPrimed)
+{
+    int hash = seed ^ xPrimed ^ yPrimed;
+
+    hash *= 0x27d4eb2d;
+    return hash;
+}
+
+static inline float _fnlValCoord2D(int seed, int xPrimed, int yPrimed)
+{
+    int hash = _fnlHash2D(seed, xPrimed, yPrimed);
+    hash *= hash;
+    hash ^= hash << 19;
+    return hash * (1 / 2147483648.0f);
+}
+
+static inline float _fnlGradCoord2D(int seed, int xPrimed, int yPrimed, float xd, float yd)
+{
+    int hash = _fnlHash2D(seed, xPrimed, yPrimed);
+    hash ^= hash >> 15;
+    hash &= 127 << 1;
+    return xd * GRADIENTS_2D[hash] + yd * GRADIENTS_2D[hash | 1];
+}
+
+static inline void _fnlGradCoordOut2D(int seed, int xPrimed, int yPrimed, out float xo, out float yo)
+{
+    int hash = _fnlHash2D(seed, xPrimed, yPrimed) & (255 << 1);
+
+    xo = RAND_VECS_2D[hash];
+    yo = RAND_VECS_2D[hash | 1];
+}
+
+static inline void _fnlGradCoordDual2D(int seed, int xPrimed, int yPrimed, float xd, float yd, out float xo, out float yo)
+{
+    int hash = _fnlHash2D(seed, xPrimed, yPrimed);
+    int index1 = hash & (127 << 1);
+    int index2 = (hash >> 7) & (255 << 1);
+
+    float xg = GRADIENTS_2D[index1];
+    float yg = GRADIENTS_2D[index1 | 1];
+    float value = xd * xg + yd * yg;
+
+    float xgo = RAND_VECS_2D[index2];
+    float ygo = RAND_VECS_2D[index2 | 1];
+
+    xo = value * xgo;
+    yo = value * ygo;
+}
+// Generic Noise Gen
+
+static float _fnlSingleSimplex2D(int seed, FNLfloat x, FNLfloat y);
+static float _fnlSingleOpenSimplex2S2D(int seed, FNLfloat x, FNLfloat y);
+static float _fnlSingleCellular2D(fnl_state state, int seed, FNLfloat x, FNLfloat y);
+static float _fnlSinglePerlin2D(int seed, FNLfloat x, FNLfloat y);
+static float _fnlSingleValueCubic2D(int seed, FNLfloat x, FNLfloat y);
+static float _fnlSingleValue2D(int seed, FNLfloat x, FNLfloat y);
+
+static float _fnlGenNoiseSingle2D(fnl_state state, int seed, FNLfloat x, FNLfloat y)
+{
+    FNL_FLATTEN switch (state.noise_type)
+    {
+    case FNL_NOISE_OPENSIMPLEX2:
+        return _fnlSingleSimplex2D(seed, x, y);
+    case FNL_NOISE_OPENSIMPLEX2S:
+        return _fnlSingleOpenSimplex2S2D(seed, x, y);
+    case FNL_NOISE_CELLULAR:
+        return _fnlSingleCellular2D(state, seed, x, y);
+    case FNL_NOISE_PERLIN:
+        return _fnlSinglePerlin2D(seed, x, y);
+    case FNL_NOISE_VALUE_CUBIC:
+        return _fnlSingleValueCubic2D(seed, x, y);
+    case FNL_NOISE_VALUE:
+        return _fnlSingleValue2D(seed, x, y);
+    default:
+        return 0;
+    }
+}
+
+// Noise Coordinate Transforms (frequency, and possible skew or rotation)
+
+static void _fnlTransformNoiseCoordinate2D(fnl_state state, inout FNLfloat x, inout FNLfloat y)
+{
+    x *= state.frequency;
+    y *= state.frequency;
+
+    switch (state.noise_type)
+    {
+    case FNL_NOISE_OPENSIMPLEX2:
+    case FNL_NOISE_OPENSIMPLEX2S:
+    {
+        const FNLfloat SQRT3 = (FNLfloat)1.7320508075688772935274463415059;
+        const FNLfloat F2 = 0.5f * (SQRT3 - 1);
+        FNLfloat t = (x + y) * F2;
+        x += t;
+        y += t;
+    }
+    break;
+    default:
+        break;
+    }
+}
+
+// Domain Warp Coordinate Transforms
+
+static void _fnlTransformDomainWarpCoordinate2D(fnl_state state, inout FNLfloat x, inout FNLfloat y)
+{
+    switch (state.domain_warp_type)
+    {
+    case FNL_DOMAIN_WARP_OPENSIMPLEX2:
+    case FNL_DOMAIN_WARP_OPENSIMPLEX2_REDUCED:
+    {
+        const FNLfloat SQRT3 = (FNLfloat)1.7320508075688772935274463415059;
+        const FNLfloat F2 = 0.5f * (SQRT3 - 1);
+        FNLfloat t = (x + y) * F2;
+        x += t;
+        y += t;
+    }
+    break;
+    default:
+        break;
+    }
+}
+
+// Fractal FBm
+
+static float _fnlGenFractalFBM2D(fnl_state state, FNLfloat x, FNLfloat y)
+{
+    int seed = state.seed;
+    float sum = 0;
+    float amp = _fnlCalculateFractalBounding(state);
+
+    for (int i = 0; i < state.octaves; i++)
+    {
+        float noise = _fnlGenNoiseSingle2D(state, seed++, x, y);
+        sum += noise * amp;
+        amp *= _fnlLerp(1.0f, _fnlFastMin(noise + 1, 2) * 0.5f, state.weighted_strength);
+
+        x *= state.lacunarity;
+        y *= state.lacunarity;
+        amp *= state.gain;
+    }
+
+    return sum;
+}
+
+// Fractal Ridged
+
+static float _fnlGenFractalRidged2D(fnl_state state, FNLfloat x, FNLfloat y)
+{
+    int seed = state.seed;
+    float sum = 0;
+    float amp = _fnlCalculateFractalBounding(state);
+
+    for (int i = 0; i < state.octaves; i++)
+    {
+        float noise = _fnlFastAbs(_fnlGenNoiseSingle2D(state, seed++, x, y));
+        sum += (noise * -2 + 1) * amp;
+        amp *= _fnlLerp(1.0f, 1 - noise, state.weighted_strength);
+
+        x *= state.lacunarity;
+        y *= state.lacunarity;
+        amp *= state.gain;
+    }
+
+    return sum;
+}
+
+// Fractal PingPong
+
+static float _fnlGenFractalPingPong2D(fnl_state state, FNLfloat x, FNLfloat y)
+{
+    int seed = state.seed;
+    float sum = 0;
+    float amp = _fnlCalculateFractalBounding(state);
+
+    for (int i = 0; i < state.octaves; i++)
+    {
+        float noise = _fnlPingPong((_fnlGenNoiseSingle2D(state, seed++, x, y) + 1) * state.ping_pong_strength);
+        sum += (noise - 0.5f) * 2 * amp;
+        amp *= _fnlLerp(1.0f, noise, state.weighted_strength);
+
+        x *= state.lacunarity;
+        y *= state.lacunarity;
+        amp *= state.gain;
+    }
+
+    return sum;
+}
+
+// Simplex/OpenSimplex2 Noise
+
+static float _fnlSingleSimplex2D(int seed, FNLfloat x, FNLfloat y)
+{
+    // 2D OpenSimplex2 case uses the same algorithm as ordinary Simplex.
+
+    const float SQRT3 = 1.7320508075688772935274463415059f;
+    const float G2 = (3 - SQRT3) / 6;
+
+    /*
+     * --- Skew moved to TransformNoiseCoordinate method ---
+     * const FNLfloat F2 = 0.5f * (SQRT3 - 1);
+     * FNLfloat s = (x + y) * F2;
+     * x += s; y += s;
+     */
+
+    int i = _fnlFastFloor(x);
+    int j = _fnlFastFloor(y);
+    float xi = (float)(x - i);
+    float yi = (float)(y - j);
+
+    float t = (xi + yi) * G2;
+    float x0 = (float)(xi - t);
+    float y0 = (float)(yi - t);
+
+    i *= PRIME_X;
+    j *= PRIME_Y;
+
+    float n0, n1, n2;
+
+    float a = 0.5f - x0 * x0 - y0 * y0;
+    if (a <= 0)
+        n0 = 0;
+    else
+    {
+        n0 = (a * a) * (a * a) * _fnlGradCoord2D(seed, i, j, x0, y0);
+    }
+
+    float c = (float)(2 * (1 - 2 * G2) * (1 / G2 - 2)) * t + ((float)(-2 * (1 - 2 * G2) * (1 - 2 * G2)) + a);
+    if (c <= 0)
+        n2 = 0;
+    else
+    {
+        float x2 = x0 + (2 * (float)G2 - 1);
+        float y2 = y0 + (2 * (float)G2 - 1);
+        n2 = (c * c) * (c * c) * _fnlGradCoord2D(seed, i + PRIME_X, j + PRIME_Y, x2, y2);
+    }
+
+    if (y0 > x0)
+    {
+        float x1 = x0 + (float)G2;
+        float y1 = y0 + ((float)G2 - 1);
+        float b = 0.5f - x1 * x1 - y1 * y1;
+        if (b <= 0)
+            n1 = 0;
+        else
+        {
+            n1 = (b * b) * (b * b) * _fnlGradCoord2D(seed, i, j + PRIME_Y, x1, y1);
+        }
+    }
+    else
+    {
+        float x1 = x0 + ((float)G2 - 1);
+        float y1 = y0 + (float)G2;
+        float b = 0.5f - x1 * x1 - y1 * y1;
+        if (b <= 0)
+            n1 = 0;
+        else
+        {
+            n1 = (b * b) * (b * b) * _fnlGradCoord2D(seed, i + PRIME_X, j, x1, y1);
+        }
+    }
+
+    return (n0 + n1 + n2) * 99.83685446303647f;
+}
+
+// OpenSimplex2S Noise
+
+static float _fnlSingleOpenSimplex2S2D(int seed, FNLfloat x, FNLfloat y)
+{
+    // 2D OpenSimplex2S case is a modified 2D simplex noise.
+
+    const FNLfloat SQRT3 = (FNLfloat)1.7320508075688772935274463415059;
+    const FNLfloat G2 = (3 - SQRT3) / 6;
+
+    /*
+     * --- Skew moved to TransformNoiseCoordinate method ---
+     * const FNLfloat F2 = 0.5f * (SQRT3 - 1);
+     * FNLfloat s = (x + y) * F2;
+     * x += s; y += s;
+    */
+
+    int i = _fnlFastFloor(x);
+    int j = _fnlFastFloor(y);
+    float xi = (float)(x - i);
+    float yi = (float)(y - j);
+
+    i *= PRIME_X;
+    j *= PRIME_Y;
+    int i1 = i + PRIME_X;
+    int j1 = j + PRIME_Y;
+
+    float t = (xi + yi) * (float)G2;
+    float x0 = xi - t;
+    float y0 = yi - t;
+
+    int aMask = (int)((xi + yi + 1) * -0.5f);
+    int bMask = (int)((xi - (aMask + 2)) * 0.5f - yi);
+    int cMask = (int)((yi - (aMask + 2)) * 0.5f - xi);
+
+    float a0 = (2.0f / 3.0f) - x0 * x0 - y0 * y0;
+    float value = (a0 * a0) * (a0 * a0) * _fnlGradCoord2D(seed, i, j, x0, y0);
+
+    float a1 = (float)(2 * (1 - 2 * G2) * (1 / G2 - 2)) * t + ((float)(-2 * (1 - 2 * G2) * (1 - 2 * G2)) + a0);
+    float x1 = x0 - (float)(1 - 2 * G2);
+    float y1 = y0 - (float)(1 - 2 * G2);
+    value += (a1 * a1) * (a1 * a1) * _fnlGradCoord2D(seed, i1, j1, x1, y1);
+
+    int di2 = ~(aMask | cMask) | 1;
+    int ndj2 = (aMask & bMask) << 1;
+    float t2 = (di2 - ndj2) * (float)G2;
+    float x2 = x0 - di2 + t2;
+    float y2 = y0 + ndj2 + t2;
+    float a2 = (2.0f / 3.0f) - x2 * x2 - y2 * y2;
+    if (a2 > 0)
+    {
+        value += (a2 * a2) * (a2 * a2) * _fnlGradCoord2D(seed, i1 + (di2 & (-PRIME_X << 1)), j + (ndj2 & (PRIME_Y << 1)), x2, y2);
+    }
+
+    int ndi3 = (aMask & cMask) << 1;
+    int dj3 = ~(aMask | bMask) | 1;
+    float t3 = (dj3 - ndi3) * (float)G2;
+    float x3 = x0 + ndi3 + t3;
+    float y3 = y0 - dj3 + t3;
+    float a3 = (2.0f / 3.0f) - x3 * x3 - y3 * y3;
+    if (a3 > 0)
+    {
+        value += (a3 * a3) * (a3 * a3) * _fnlGradCoord2D(seed, i + (ndi3 & (PRIME_X << 1)), j1 + (dj3 & (-PRIME_Y << 1)), x3, y3);
+    }
+
+    return value * 18.24196194486065f;
+}
+
+// Cellular Noise
+
+static float _fnlSingleCellular2D(fnl_state state, int seed, FNLfloat x, FNLfloat y)
+{
+    int xr = _fnlFastRound(x);
+    int yr = _fnlFastRound(y);
+
+    float distance0 = 1e10f;
+    float distance1 = 1e10f;
+    int closestHash = 0;
+
+    float cellularJitter = 0.43701595f * state.cellular_jitter_mod;
+
+    int xPrimed = (xr - 1) * PRIME_X;
+    int yPrimedBase = (yr - 1) * PRIME_Y;
+
+    FNL_FLATTEN switch (state.cellular_distance_func)
+    {
+    default:
+    case FNL_CELLULAR_DISTANCE_EUCLIDEAN:
+    case FNL_CELLULAR_DISTANCE_EUCLIDEANSQ:
+    {
+        for (int xi = xr - 1; xi <= xr + 1; xi++)
+        {
+            int yPrimed = yPrimedBase;
+
+            for (int yi = yr - 1; yi <= yr + 1; yi++)
+            {
+                int hash = _fnlHash2D(seed, xPrimed, yPrimed);
+                int idx = hash & (255 << 1);
+
+                float vecX = (float)(xi - x) + RAND_VECS_2D[idx] * cellularJitter;
+                float vecY = (float)(yi - y) + RAND_VECS_2D[idx | 1] * cellularJitter;
+
+                float newDistance = vecX * vecX + vecY * vecY;
+
+                distance1 = _fnlFastMax(_fnlFastMin(distance1, newDistance), distance0);
+                if (newDistance < distance0)
+                {
+                    distance0 = newDistance;
+                    closestHash = hash;
+                }
+                yPrimed += PRIME_Y;
+            }
+            xPrimed += PRIME_X;
+        }
+        break;
+    }
+    case FNL_CELLULAR_DISTANCE_MANHATTAN:
+    {
+        for (int xi = xr - 1; xi <= xr + 1; xi++)
+        {
+            int yPrimed = yPrimedBase;
+
+            for (int yi = yr - 1; yi <= yr + 1; yi++)
+            {
+                int hash = _fnlHash2D(seed, xPrimed, yPrimed);
+                int idx = hash & (255 << 1);
+
+                float vecX = (float)(xi - x) + RAND_VECS_2D[idx] * cellularJitter;
+                float vecY = (float)(yi - y) + RAND_VECS_2D[idx | 1] * cellularJitter;
+
+                float newDistance = _fnlFastAbs(vecX) + _fnlFastAbs(vecY);
+
+                distance1 = _fnlFastMax(_fnlFastMin(distance1, newDistance), distance0);
+                if (newDistance < distance0)
+                {
+                    distance0 = newDistance;
+                    closestHash = hash;
+                }
+                yPrimed += PRIME_Y;
+            }
+            xPrimed += PRIME_X;
+        }
+        break;
+    }
+    case FNL_CELLULAR_DISTANCE_HYBRID:
+    {
+        for (int xi = xr - 1; xi <= xr + 1; xi++)
+        {
+            int yPrimed = yPrimedBase;
+            for (int yi = yr - 1; yi <= yr + 1; yi++)
+            {
+                int hash = _fnlHash2D(seed, xPrimed, yPrimed);
+                int idx = hash & (255 << 1);
+
+                float vecX = (float)(xi - x) + RAND_VECS_2D[idx] * cellularJitter;
+                float vecY = (float)(yi - y) + RAND_VECS_2D[idx | 1] * cellularJitter;
+
+                float newDistance = (_fnlFastAbs(vecX) + _fnlFastAbs(vecY)) + (vecX * vecX + vecY * vecY);
+
+                distance1 = _fnlFastMax(_fnlFastMin(distance1, newDistance), distance0);
+                if (newDistance < distance0)
+                {
+                    distance0 = newDistance;
+                    closestHash = hash;
+                }
+                yPrimed += PRIME_Y;
+            }
+            xPrimed += PRIME_X;
+        }
+        break;
+    }
+    }
+
+    FNL_FLATTEN if (state.cellular_distance_func == FNL_CELLULAR_DISTANCE_EUCLIDEAN && state.cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE)
+    {
+        distance0 = _fnlFastSqrt(distance0);
+        if (state.cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE2)
+            distance1 = _fnlFastSqrt(distance1);
+    }
+
+    switch (state.cellular_return_type)
+    {
+    case FNL_CELLULAR_RETURN_TYPE_CELLVALUE:
+        return closestHash * (1 / 2147483648.0f);
+    case FNL_CELLULAR_RETURN_TYPE_DISTANCE:
+        return distance0 - 1;
+    case FNL_CELLULAR_RETURN_TYPE_DISTANCE2:
+        return distance1 - 1;
+    case FNL_CELLULAR_RETURN_TYPE_DISTANCE2ADD:
+        return (distance1 + distance0) * 0.5f - 1;
+    case FNL_CELLULAR_RETURN_TYPE_DISTANCE2SUB:
+        return distance1 - distance0 - 1;
+    case FNL_CELLULAR_RETURN_TYPE_DISTANCE2MUL:
+        return distance1 * distance0 * 0.5f - 1;
+    case FNL_CELLULAR_RETURN_TYPE_DISTANCE2DIV:
+        return distance0 / distance1 - 1;
+    default:
+        return 0;
+    }
+}
+
+// Perlin Noise
+
+static float _fnlSinglePerlin2D(int seed, FNLfloat x, FNLfloat y)
+{
+    int x0 = _fnlFastFloor(x);
+    int y0 = _fnlFastFloor(y);
+
+    float xd0 = (float)(x - x0);
+    float yd0 = (float)(y - y0);
+    float xd1 = xd0 - 1;
+    float yd1 = yd0 - 1;
+
+    float xs = _fnlInterpQuintic(xd0);
+    float ys = _fnlInterpQuintic(yd0);
+
+    x0 *= PRIME_X;
+    y0 *= PRIME_Y;
+    int x1 = x0 + PRIME_X;
+    int y1 = y0 + PRIME_Y;
+
+    float xf0 = _fnlLerp(_fnlGradCoord2D(seed, x0, y0, xd0, yd0), _fnlGradCoord2D(seed, x1, y0, xd1, yd0), xs);
+    float xf1 = _fnlLerp(_fnlGradCoord2D(seed, x0, y1, xd0, yd1), _fnlGradCoord2D(seed, x1, y1, xd1, yd1), xs);
+
+    return _fnlLerp(xf0, xf1, ys) * 1.4247691104677813f;
+}
+
+// Value Cubic
+
+static float _fnlSingleValueCubic2D(int seed, FNLfloat x, FNLfloat y)
+{
+    int x1 = _fnlFastFloor(x);
+    int y1 = _fnlFastFloor(y);
+
+    float xs = x - (float)x1;
+    float ys = y - (float)y1;
+
+    x1 *= PRIME_X;
+    y1 *= PRIME_Y;
+
+    int x0 = x1 - PRIME_X;
+    int y0 = y1 - PRIME_Y;
+    int x2 = x1 + PRIME_X;
+    int y2 = y1 + PRIME_Y;
+    int x3 = x1 + PRIME_X * 2;
+    int y3 = y1 + PRIME_Y * 2;
+
+    return _fnlCubicLerp(
+        _fnlCubicLerp(_fnlValCoord2D(seed, x0, y0), _fnlValCoord2D(seed, x1, y0), _fnlValCoord2D(seed, x2, y0), _fnlValCoord2D(seed, x3, y0),
+                      xs),
+        _fnlCubicLerp(_fnlValCoord2D(seed, x0, y1), _fnlValCoord2D(seed, x1, y1), _fnlValCoord2D(seed, x2, y1), _fnlValCoord2D(seed, x3, y1),
+                      xs),
+        _fnlCubicLerp(_fnlValCoord2D(seed, x0, y2), _fnlValCoord2D(seed, x1, y2), _fnlValCoord2D(seed, x2, y2), _fnlValCoord2D(seed, x3, y2),
+                      xs),
+        _fnlCubicLerp(_fnlValCoord2D(seed, x0, y3), _fnlValCoord2D(seed, x1, y3), _fnlValCoord2D(seed, x2, y3), _fnlValCoord2D(seed, x3, y3),
+                      xs),
+        ys) * (1 / (1.5f * 1.5f));
+}
+
+// Value noise
+
+static float _fnlSingleValue2D(int seed, FNLfloat x, FNLfloat y)
+{
+    int x0 = _fnlFastFloor(x);
+    int y0 = _fnlFastFloor(y);
+
+    float xs = _fnlInterpHermite((float)(x - x0));
+    float ys = _fnlInterpHermite((float)(y - y0));
+
+    x0 *= PRIME_X;
+    y0 *= PRIME_Y;
+    int x1 = x0 + PRIME_X;
+    int y1 = y0 + PRIME_Y;
+
+    float xf0 = _fnlLerp(_fnlValCoord2D(seed, x0, y0), _fnlValCoord2D(seed, x1, y0), xs);
+    float xf1 = _fnlLerp(_fnlValCoord2D(seed, x0, y1), _fnlValCoord2D(seed, x1, y1), xs);
+
+    return _fnlLerp(xf0, xf1, ys);
+}
+
+// Domain Warp
+
+// Forward declare
+static void _fnlSingleDomainWarpBasicGrid2D(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, inout FNLfloat xp, inout FNLfloat yp);
+static void _fnlSingleDomainWarpSimplexGradient(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, inout FNLfloat xr, inout FNLfloat yr, bool outGradOnly);
+static void _fnlDoSingleDomainWarp2D(fnl_state state, int seed, float amp, float freq, FNLfloat x, FNLfloat y, inout FNLfloat xp, inout FNLfloat yp)
+{
+    FNL_FLATTEN switch (state.domain_warp_type)
+    {
+    case FNL_DOMAIN_WARP_OPENSIMPLEX2:
+        _fnlSingleDomainWarpSimplexGradient(seed, amp * 38.283687591552734375f, freq, x, y, xp, yp, false);
+        break;
+    case FNL_DOMAIN_WARP_OPENSIMPLEX2_REDUCED:
+        _fnlSingleDomainWarpSimplexGradient(seed, amp * 16.0f, freq, x, y, xp, yp, true);
+        break;
+    case FNL_DOMAIN_WARP_BASICGRID:
+        _fnlSingleDomainWarpBasicGrid2D(seed, amp, freq, x, y, xp, yp);
+        break;
+    }
+}
+
+// Domain Warp Single Wrapper
+
+static void _fnlDomainWarpSingle2D(fnl_state state, inout FNLfloat x, inout FNLfloat y)
+{
+    int seed = state.seed;
+    float amp = state.domain_warp_amp * _fnlCalculateFractalBounding(state);
+    float freq = state.frequency;
+
+    FNLfloat xs = x;
+    FNLfloat ys = y;
+    _fnlTransformDomainWarpCoordinate2D(state, xs, ys);
+
+    _fnlDoSingleDomainWarp2D(state, seed, amp, freq, xs, ys, x, y);
+}
+
+// Domain Warp Fractal Progressive
+
+static void _fnlDomainWarpFractalProgressive2D(fnl_state state, inout FNLfloat x, inout FNLfloat y)
+{
+    int seed = state.seed;
+    float amp = state.domain_warp_amp * _fnlCalculateFractalBounding(state);
+    float freq = state.frequency;
+
+    for (int i = 0; i < state.octaves; i++)
+    {
+        FNLfloat xs = x;
+        FNLfloat ys = y;
+        _fnlTransformDomainWarpCoordinate2D(state, xs, ys);
+
+        _fnlDoSingleDomainWarp2D(state, seed, amp, freq, xs, ys, x, y);
+
+        seed++;
+        amp *= state.gain;
+        freq *= state.lacunarity;
+    }
+}
+
+// Domain Warp Fractal Independent
+
+static void _fnlDomainWarpFractalIndependent2D(fnl_state state, inout FNLfloat x, inout FNLfloat y)
+{
+    FNLfloat xs = x;
+    FNLfloat ys = y;
+    _fnlTransformDomainWarpCoordinate2D(state, xs, ys);
+
+    int seed = state.seed;
+    float amp = state.domain_warp_amp * _fnlCalculateFractalBounding(state);
+    float freq = state.frequency;
+
+    for (int i = 0; i < state.octaves; i++)
+    {
+        _fnlDoSingleDomainWarp2D(state, seed, amp, freq, xs, ys, x, y);
+
+        seed++;
+        amp *= state.gain;
+        freq *= state.lacunarity;
+    }
+}
+
+// Domain Warp Basic Grid
+
+static void _fnlSingleDomainWarpBasicGrid2D(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, inout FNLfloat xp, inout FNLfloat yp)
+{
+    FNLfloat xf = x * frequency;
+    FNLfloat yf = y * frequency;
+
+    int x0 = _fnlFastFloor(xf);
+    int y0 = _fnlFastFloor(yf);
+
+    float xs = _fnlInterpHermite((float)(xf - x0));
+    float ys = _fnlInterpHermite((float)(yf - y0));
+
+    x0 *= PRIME_X;
+    y0 *= PRIME_Y;
+    int x1 = x0 + PRIME_X;
+    int y1 = y0 + PRIME_Y;
+
+    int idx0 = _fnlHash2D(seed, x0, y0) & (255 << 1);
+    int idx1 = _fnlHash2D(seed, x1, y0) & (255 << 1);
+
+    float lx0x = _fnlLerp(RAND_VECS_2D[idx0], RAND_VECS_2D[idx1], xs);
+    float ly0x = _fnlLerp(RAND_VECS_2D[idx0 | 1], RAND_VECS_2D[idx1 | 1], xs);
+
+    idx0 = _fnlHash2D(seed, x0, y1) & (255 << 1);
+    idx1 = _fnlHash2D(seed, x1, y1) & (255 << 1);
+
+    float lx1x = _fnlLerp(RAND_VECS_2D[idx0], RAND_VECS_2D[idx1], xs);
+    float ly1x = _fnlLerp(RAND_VECS_2D[idx0 | 1], RAND_VECS_2D[idx1 | 1], xs);
+
+    xp += _fnlLerp(lx0x, lx1x, ys) * warpAmp;
+    yp += _fnlLerp(ly0x, ly1x, ys) * warpAmp;
+}
+
+// Domain Warp Simplex/OpenSimplex2
+
+static void _fnlSingleDomainWarpSimplexGradient(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, inout FNLfloat xr, inout FNLfloat yr, bool outGradOnly)
+{
+    const float SQRT3 = 1.7320508075688772935274463415059f;
+    const float G2 = (3 - SQRT3) / 6;
+
+    x *= frequency;
+    y *= frequency;
+
+    /*
+     * --- Skew moved to TransformNoiseCoordinate method ---
+     * const FNLfloat F2 = 0.5f * (SQRT3 - 1);
+     * FNLfloat s = (x + y) * F2;
+     * x += s; y += s;
+     */
+
+    int i = _fnlFastFloor(x);
+    int j = _fnlFastFloor(y);
+    float xi = (float)(x - i);
+    float yi = (float)(y - j);
+
+    float t = (xi + yi) * G2;
+    float x0 = (float)(xi - t);
+    float y0 = (float)(yi - t);
+
+    i *= PRIME_X;
+    j *= PRIME_Y;
+
+    float vx, vy;
+    vx = vy = 0;
+
+    float a = 0.5f - x0 * x0 - y0 * y0;
+    if (a > 0)
+    {
+        float aaaa = (a * a) * (a * a);
+        float xo, yo;
+        if (outGradOnly)
+            _fnlGradCoordOut2D(seed, i, j, xo, yo);
+        else
+            _fnlGradCoordDual2D(seed, i, j, x0, y0, xo, yo);
+        vx += aaaa * xo;
+        vy += aaaa * yo;
+    }
+
+    float c = (float)(2 * (1 - 2 * G2) * (1 / G2 - 2)) * t + ((float)(-2 * (1 - 2 * G2) * (1 - 2 * G2)) + a);
+    if (c > 0)
+    {
+        float x2 = x0 + (2 * (float)G2 - 1);
+        float y2 = y0 + (2 * (float)G2 - 1);
+        float cccc = (c * c) * (c * c);
+        float xo, yo;
+        if (outGradOnly)
+            _fnlGradCoordOut2D(seed, i + PRIME_X, j + PRIME_Y, xo, yo);
+        else
+            _fnlGradCoordDual2D(seed, i + PRIME_X, j + PRIME_Y, x2, y2, xo, yo);
+        vx += cccc * xo;
+        vy += cccc * yo;
+    }
+
+    if (y0 > x0)
+    {
+        float x1 = x0 + (float)G2;
+        float y1 = y0 + ((float)G2 - 1);
+        float b = 0.5f - x1 * x1 - y1 * y1;
+        if (b > 0)
+        {
+            float bbbb = (b * b) * (b * b);
+            float xo, yo;
+            if (outGradOnly)
+                _fnlGradCoordOut2D(seed, i, j + PRIME_Y, xo, yo);
+            else
+                _fnlGradCoordDual2D(seed, i, j + PRIME_Y, x1, y1, xo, yo);
+            vx += bbbb * xo;
+            vy += bbbb * yo;
+        }
+    }
+    else
+    {
+        float x1 = x0 + ((float)G2 - 1);
+        float y1 = y0 + (float)G2;
+        float b = 0.5f - x1 * x1 - y1 * y1;
+        if (b > 0)
+        {
+            float bbbb = (b * b) * (b * b);
+            float xo, yo;
+            if (outGradOnly)
+                _fnlGradCoordOut2D(seed, i + PRIME_X, j, xo, yo);
+            else
+                _fnlGradCoordDual2D(seed, i + PRIME_X, j, x1, y1, xo, yo);
+            vx += bbbb * xo;
+            vy += bbbb * yo;
+        }
+    }
+
+    xr += vx * warpAmp;
+    yr += vy * warpAmp;
+}
+
+// ====================
+// Public API
+// ====================
+
+fnl_state fnlCreateState(int seed)
+{
+    fnl_state newState;
+    newState.seed = seed;
+    newState.frequency = 0.01f;
+    newState.noise_type = FNL_NOISE_OPENSIMPLEX2;
+    newState.rotation_type_3d = FNL_ROTATION_NONE;
+    newState.fractal_type = FNL_FRACTAL_NONE;
+    newState.octaves = 3;
+    newState.lacunarity = 2.0f;
+    newState.gain = 0.5f;
+    newState.weighted_strength = 0.0f;
+    newState.ping_pong_strength = 2.0f;
+    newState.cellular_distance_func = FNL_CELLULAR_DISTANCE_EUCLIDEANSQ;
+    newState.cellular_return_type = FNL_CELLULAR_RETURN_TYPE_DISTANCE;
+    newState.cellular_jitter_mod = 1.0f;
+    newState.domain_warp_amp = 30.0f;
+    newState.domain_warp_type = FNL_DOMAIN_WARP_OPENSIMPLEX2;
+    return newState;
+}
+
+float fnlGetNoise2D(fnl_state state, FNLfloat x, FNLfloat y)
+{
+    _fnlTransformNoiseCoordinate2D(state, x, y);
+
+    FNL_FLATTEN switch (state.fractal_type)
+    {
+    default:
+        return _fnlGenNoiseSingle2D(state, state.seed, x, y);
+    case FNL_FRACTAL_FBM:
+        return _fnlGenFractalFBM2D(state, x, y);
+    case FNL_FRACTAL_RIDGED:
+        return _fnlGenFractalRidged2D(state, x, y);
+    case FNL_FRACTAL_PINGPONG:
+        return _fnlGenFractalPingPong2D(state, x, y);
+    }
+}
+
+void fnlDomainWarp2D(fnl_state state, inout FNLfloat x, inout FNLfloat y)
+{
+    FNL_FLATTEN switch (state.fractal_type)
+    {
+    default:
+        _fnlDomainWarpSingle2D(state, x, y);
+        break;
+    case FNL_FRACTAL_DOMAIN_WARP_PROGRESSIVE:
+        _fnlDomainWarpFractalProgressive2D(state, x, y);
+        break;
+    case FNL_FRACTAL_DOMAIN_WARP_INDEPENDENT:
+        _fnlDomainWarpFractalIndependent2D(state, x, y);
+        break;
+    }
+}
+// IO Buffers
+StructuredBuffer<float2> coords;
+RWStructuredBuffer<float> values;
+// Noise parameters
+int seed;
+int noise_type;
+int fractal_type;
+float frequency;
+int octaves;
+float lacunarity;
+float gain;
+float amplitude;
+float distance;
+
+// Initialize noise state
+fnl_state GetFnlState(int seed)
+{
+    fnl_state noise = fnlCreateState(seed);
+    noise.noise_type = FNL_NOISE_OPENSIMPLEX2;
+    noise.fractal_type = FNL_FRACTAL_FBM;
+    noise.frequency = 0.001;
+    noise.octaves = 4;
+    return noise;
+}
+
+// Compute shader
+
+[numthreads(257,1,1)]
+  
+void ChunkNoise (uint3 id : SV_DispatchThreadID)
+{
+    // TODO: Perlin Implementation
+    fnl_state noise = GetFnlState(seed);
+    noise.noise_type = noise_type;
+    noise.fractal_type = fractal_type;
+    noise.frequency = frequency;
+    noise.octaves = octaves;
+    noise.lacunarity = lacunarity;
+    noise.gain = gain;
+
+    // Gather noise data
+    values[id.x] = fnlGetNoise2D(noise, coords[id.x].x, coords[id.x].y) * amplitude + distance;
+}
+
+[numthreads(20,1,1)]
+
+void HumidityNoise (uint3 id : SV_DispatchThreadID)
+{
+    fnl_state noise = fnlCreateState(seed);
+    noise.noise_type = noise_type;
+    noise.fractal_type = fractal_type;
+    noise.frequency = frequency;
+    noise.octaves = octaves;
+    noise.lacunarity = lacunarity;
+    noise.gain = gain;
+
+    // Gather noise data
+    values[id.x] = fnlGetNoise2D(noise, coords[id.x].x, coords[id.x].y) * amplitude + distance;
+
+}
+
+float CosFunction(float x, float size)
+{
+    return cos(x* 3.14159265f / size);
+}
+
+// 257 groups of 1 thread
+[numthreads(257,1,1)]
+
+void TempChunkNoise(uint3 id : SV_DispatchThreadID)
+{
+    fnl_state noise = fnlCreateState(seed);
+    noise.noise_type = noise_type;
+    noise.fractal_type = fractal_type;
+    noise.frequency = frequency;
+    noise.octaves = octaves;
+    noise.lacunarity = lacunarity;
+    noise.gain = gain;
+
+    // Gather noise data
+    float noiseValue = fnlGetNoise2D(noise, coords[id.x].x, coords[id.x].y);
+    float cosValue = CosFunction(coords[id.x].x, 1500);
+    values[id.x] = (noiseValue + cosValue) * amplitude + distance;
+}
+
+[numthreads(20,1,1)]
+
+void TempNoise (uint3 id : SV_DispatchThreadID)
+{
+    fnl_state noise = fnlCreateState(seed);
+    noise.noise_type = noise_type;
+    noise.fractal_type = fractal_type;
+    noise.frequency = frequency;
+    noise.octaves = octaves;
+    noise.lacunarity = lacunarity;
+    noise.gain = gain;
+
+    // Gather noise data
+    float noiseValue = fnlGetNoise2D(noise, coords[id.x].x, coords[id.x].y);
+    float cosValue = CosFunction(coords[id.x].x, 100);
+    values[id.x] = (noiseValue + cosValue) * amplitude + distance;
+}
+

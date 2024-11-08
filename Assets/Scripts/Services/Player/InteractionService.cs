@@ -1,10 +1,8 @@
-using System;
 using Gameplay.Items;
-using InputSystem;
 using Services.Interfaces;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
+
 
 namespace Services.Player
 {
@@ -14,6 +12,7 @@ namespace Services.Player
         private float _interactDistance;
         private LayerMask _layerMask;
         private Camera _camera;
+        private bool _canGetItems;
 
         public void Configure(float interactionDistance, LayerMask interactionLayer)
         {
@@ -28,12 +27,18 @@ namespace Services.Player
             _camera = mainCamera;
         }
 
+        public void CanGetItems(bool canGetItems)
+        {
+            _canGetItems = canGetItems;
+        }
+
         private void InteractOnStarted(InputAction.CallbackContext callbackContext)
         {
+            if (!callbackContext.started) return;
             if (Physics.Raycast(_camera.transform.position,
-                    _camera.transform.TransformDirection(Vector3.forward), out var hit, _interactDistance, _layerMask))
+                _camera.transform.TransformDirection(Vector3.forward), out var hit, _interactDistance, _layerMask))
             {
-                if (hit.collider.TryGetComponent(out InteractableObject interactableObject))
+                if (_canGetItems && hit.collider.TryGetComponent(out InteractableObject interactableObject))
                 {
                     interactableObject.Interact();
                 }
