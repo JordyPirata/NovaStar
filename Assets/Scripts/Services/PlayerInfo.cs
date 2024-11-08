@@ -5,6 +5,7 @@ using System.Collections;
 using Config;
 using Services.Interfaces;
 using UnityEngine.SceneManagement;
+using Services.WorldGenerator;
 
 namespace Services
 {
@@ -13,6 +14,7 @@ namespace Services
 /// </summary>
 public class PlayerInfo : MonoBehaviour, IPlayerInfo
 {
+    private IMap<ChunkObject> Map;
     private Transform player;
     private static float2 viewerCoordinate;
     private static float3 viewerPosition;
@@ -21,6 +23,7 @@ public class PlayerInfo : MonoBehaviour, IPlayerInfo
     public void Awake()
     {
         EventManager.OnSceneGameLoaded += FindPlayer;
+        Map = ServiceLocator.GetService<IMap<ChunkObject>>();
     }
     private void FindPlayer()
     {
@@ -41,16 +44,11 @@ public class PlayerInfo : MonoBehaviour, IPlayerInfo
         StopCoroutine(SetPlayerPosition());
     }
 
-    /*public PlayerMediator GetPlayerMediator()
-    {
-        return playerMediator;
-    }*/
-
     private IEnumerator SetPlayerPosition()
     {
         while (isRunning)
         {
-            yield return new WaitForFixedUpdate();
+            yield return new WaitForEndOfFrame();
             viewerPosition = player.position;
             viewerCoordinate = new float2(Mathf.RoundToInt(viewerPosition.x / ChunkConfig.width), Mathf.RoundToInt(viewerPosition.z / ChunkConfig.depth));
         }
@@ -70,6 +68,20 @@ public class PlayerInfo : MonoBehaviour, IPlayerInfo
             return new float2(0, 0); // Retorna una coordenada predeterminada o maneja la situación como prefieras
         }
         return viewerCoordinate;
+    }
+
+    public float MapTemperature()
+    {
+        return Map[viewerCoordinate].GetTemperature((int)viewerPosition.x, (int)viewerPosition.z);
+    }
+    public float MapHumidity()
+    {
+        return Map[viewerCoordinate].GetHumidity((int)viewerPosition.x, (int)viewerPosition.z);
+        // Map[coord.x ,coord.y].GetHumidity((int)player.position.x, (int)player.position.z);
+    }
+    public float MapHeight()
+    {
+        return Map[viewerCoordinate].GetHeight((int)viewerPosition.x, (int)viewerPosition.z);
     }
 
     public void PlayerDied()

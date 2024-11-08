@@ -1,3 +1,4 @@
+using System;
 using Config;
 using Models;
 using Services.Interfaces;
@@ -44,10 +45,13 @@ namespace Services.WorldGenerator
         /// <summary>
         /// Get the temperature of the terrain at the given local coordinates
         /// </summary>
-        /// <returns>float temperature value</returns>
+        /// <returns>float temperature value</returns>Time.
         public float GetTemperature(int x, int y)
         {
-            var i = Util.TransferData.GetIndex(x, y, ChunkConfig.width);
+            int X = (int)(Coord.x * ChunkConfig.width) - x;
+            int Y = (int)(Coord.y * ChunkConfig.width) - y;
+            Debug.Log($"x:{x} y:{y} X: {X} Y: {Y} position: {Coord}");
+            var i = Util.TransferData.GetIndex(X, Y, ChunkConfig.width);
             return ChunkData.temperatures[i];
         }
         /// <summary>
@@ -56,7 +60,10 @@ namespace Services.WorldGenerator
         /// <returns>float humidity value</returns>
         public float GetHumidity(int x, int y)
         {
-            var i = Util.TransferData.GetIndex(x, y, ChunkConfig.width);
+            // Get local coordinates
+            int X = (int)Coord.x - x;
+            int Y = (int)Coord.y - y;
+            var i = Util.TransferData.GetIndex(X, Y, ChunkConfig.width);
             return ChunkData.humidity[i];
         }
         // Release the chunk

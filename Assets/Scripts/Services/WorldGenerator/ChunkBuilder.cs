@@ -37,6 +37,7 @@ public class ChunkBuilder
     }
     public void SetGameObject()
     {
+        if (_ChunkObject == null) return;
         ChunkGO.transform.position = Chunk.position;
         ChunkGO.name = Chunk.ChunkName;
         ChunkGO.layer = LayerMask.NameToLayer("Terrain");
