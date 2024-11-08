@@ -83,7 +83,7 @@ namespace Services
         {
             foreach (var data in _teleportData.Where(data=> data.teleportName == teleportName))
             {
-                ServiceLocator.GetService<IPlayerMediator>().GoToPosition(data.teleportPosition);
+                ServiceLocator.GetService<IPlayerMediator>().TeleportToPosition(data.teleportPosition);
             }
         }
     }

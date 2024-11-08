@@ -94,9 +94,13 @@ namespace Services.Player
             StartCoroutine(ExcecuteAfterMapLoaded());
         }
 
-        public void GoToPosition(float3 dataTeleportPosition)
+        public void TeleportToPosition(float3 dataTeleportPosition)
         {
-            _firstPersonCharacter.GoToPosition(dataTeleportPosition);
+            ServiceLocator.GetService<IFadeController>().FadeIn(()=>
+            {
+                
+                _firstPersonCharacter.TeleportToPosition(dataTeleportPosition); 
+            });
         }
         
 
@@ -118,6 +122,7 @@ namespace Services.Player
             _iInputActions.InputActions.Player.Enable();
             
             ServiceLocator.GetService<IFadeController>().FadeOut();
+            ServiceLocator.GetService<ITimeService>().StartRunningTime();
         }
 
         public void Configure(PlayerMediatorData playerMediatorData)

@@ -8,6 +8,6 @@ namespace Services.Interfaces
     {
         public FirstPersonCharacter ControllerScript { get; }
         public Transform PlayerTransform { get; }
-        void GoToPosition(float3 dataTeleportPosition);
+        void TeleportToPosition(float3 dataTeleportPosition);
     }
 }

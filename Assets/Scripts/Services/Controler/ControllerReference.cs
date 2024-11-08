@@ -1,6 +1,8 @@
+using System.Collections;
 using UnityEngine;
 using Services.Interfaces;
 using Unity.Mathematics;
+using UnityEditor.Localization.Plugins.XLIFF.V20;
 
 namespace Services
 {
@@ -24,10 +26,10 @@ namespace Services
             get => ControllerScript.Controller.transform;
         }
 
-        public void GoToPosition(float3 dataTeleportPosition)
+        public void TeleportToPosition(float3 dataTeleportPosition)
         {
-            ControllerScript.CanMove = false;
-            PlayerTransform.position = dataTeleportPosition;
+            ControllerScript.TeleportToPosition(dataTeleportPosition);
         }
+
     }
 }

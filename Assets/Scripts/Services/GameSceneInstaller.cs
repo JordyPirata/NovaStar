@@ -9,8 +9,9 @@ namespace Services
     {
         [SerializeField] private GameSceneReferences gameSceneReferences;
         [SerializeField] private InventoryService inventoryService;
-        [SerializeField] private CraftingService craftingServie;
+        [SerializeField] private CraftingService craftingService;
         [SerializeField] private TeleportService teleportService;
+        [SerializeField] private TimeService timeService;
         private void Awake()
         {
             RegisterServices();
@@ -20,8 +21,9 @@ namespace Services
         {
             ServiceLocator.Register<IGameSceneReferences>(gameSceneReferences);
             ServiceLocator.Register<IInventoryService>(inventoryService);
-            ServiceLocator.Register<ICraftingService>(craftingServie);
+            ServiceLocator.Register<ICraftingService>(craftingService);
             ServiceLocator.Register<ITeleportService>(teleportService);
+            ServiceLocator.Register<ITimeService>(timeService);
         }
     }
 }
