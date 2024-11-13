@@ -4,6 +4,7 @@ using Services.Interfaces;
 
 namespace Services.Repository
 {
+    //TODO: Create a directory Manager to handle the dinamic creation of directories
     public class GameRepository : IRepository
     {
         // The CreateAsync method serializes the data and saves it to a file
@@ -28,9 +29,41 @@ namespace Services.Repository
         // The Delete method deletes a file
         public string Delete(string path)
         {
-            File.Delete(path);
-            return "File deleted successfully";
+            // Check if path is a file or directory with FileAttributes
+            FileAttributes attr = File.GetAttributes(path);
+            switch (attr)
+            {
+                case FileAttributes.Directory:
+                    Directory.Delete(path, true);
+                    return "Directory deleted successfully";
+                case FileAttributes.Archive:
+                    File.Delete(path);
+                    return "File deleted successfully";
+                default:
+                    return "Path not found";
+            }
         }
+        // The Exists method checks if a file or directory exists
+        public (bool, FileAttributes) Exists(string path)
+        {
+            // Check if path is a file or directory with FileAttributes
+            FileAttributes attr = File.GetAttributes(path);
+            switch (attr)
+            {
+                case FileAttributes.Directory:
+                    return (true, attr);
+                case FileAttributes.Archive:
+                    return (true, attr);
+                case FileAttributes.Device:
+                    return (false, attr);
+                case FileAttributes.Normal:
+                    return (false, attr);
+                default:
+                    return (false, attr);
+            }
+            
+        }
+        
         public bool ExistsFile (string path)
         {
             return File.Exists(path);
