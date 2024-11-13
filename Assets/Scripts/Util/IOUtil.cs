@@ -25,5 +25,31 @@ namespace Util
 
             return count;
         }
+        public static bool ExistsDirectory(string path)
+        {
+            return Directory.Exists(path);
+        }
+
+        public static void CreateDirectory(string path)
+        {
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+        }
+
+        public static string GetUniqueDirectoryName(string basePath, string baseName)
+        {
+            string uniqueName = baseName;
+            int counter = 1;
+
+            while (Directory.Exists(Path.Combine(basePath, uniqueName)))
+            {
+                uniqueName = $"{baseName}({counter})";
+                counter++;
+            }
+
+            return uniqueName;
+        }
     }
 }
