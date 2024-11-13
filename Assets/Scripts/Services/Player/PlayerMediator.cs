@@ -2,6 +2,7 @@
 using UnityEngine;
 using Services.Interfaces;
 using System;
+using Unity.Mathematics;
 using UnityEngine.InputSystem;
 
 namespace Services.Player
@@ -92,7 +93,17 @@ namespace Services.Player
         {
             StartCoroutine(ExcecuteAfterMapLoaded());
         }
+
+        public void TeleportToPosition(float3 dataTeleportPosition)
+        {
+            ServiceLocator.GetService<IFadeController>().FadeIn(()=>
+            {
+                
+                _firstPersonCharacter.TeleportToPosition(dataTeleportPosition); 
+            });
+        }
         
+
         public void PlayerDied()
         {
             _playerInfo.PlayerDied();
@@ -111,6 +122,7 @@ namespace Services.Player
             _iInputActions.InputActions.Player.Enable();
             
             ServiceLocator.GetService<IFadeController>().FadeOut();
+            ServiceLocator.GetService<ITimeService>().StartRunningTime();
         }
 
         public void Configure(PlayerMediatorData playerMediatorData)

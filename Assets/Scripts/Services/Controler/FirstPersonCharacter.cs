@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using InputSystem;
 using Services.Interfaces;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 
 namespace Services
@@ -176,6 +177,21 @@ namespace Services
         public Vector2 GetPlayerLook()
         {
             return inputActions.Player.Look.ReadValue<Vector2>();
+        }
+
+        public void TeleportToPosition(float3 dataTeleportPosition)
+        {
+            CanMove = false;
+            PlayerTransform.position = dataTeleportPosition;
+            StartCoroutine(WaitToTeleport());
+        }
+        
+        private IEnumerator WaitToTeleport()
+        {
+            yield return null;
+            yield return new WaitForFixedUpdate();
+            CanMove = true;
+            ServiceLocator.GetService<IFadeController>().FadeOut();
         }
     }
 }

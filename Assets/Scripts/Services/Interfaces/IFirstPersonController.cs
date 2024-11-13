@@ -1,3 +1,4 @@
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Services.Interfaces
@@ -7,5 +8,6 @@ namespace Services.Interfaces
     {
         public FirstPersonCharacter ControllerScript { get; }
         public Transform PlayerTransform { get; }
+        void TeleportToPosition(float3 dataTeleportPosition);
     }
 }
