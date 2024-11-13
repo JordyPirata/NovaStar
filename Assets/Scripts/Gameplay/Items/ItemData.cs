@@ -12,6 +12,5 @@ namespace Gameplay.Items
         public int maxAmount;
         public ItemRarity itemRarity = ItemRarity.Common;
         public bool isEquipable;
-        public Equipable equipableReference;
     }
 }

@@ -12,6 +12,8 @@ namespace Services
         [SerializeField] private CraftingService craftingService;
         [SerializeField] private TeleportService teleportService;
         [SerializeField] private TimeService timeService;
+        [SerializeField] private DropsService dropsService;
+        [SerializeField] private UIService uiService;
         private void Awake()
         {
             RegisterServices();
@@ -24,6 +26,7 @@ namespace Services
             ServiceLocator.Register<ICraftingService>(craftingService);
             ServiceLocator.Register<ITeleportService>(teleportService);
             ServiceLocator.Register<ITimeService>(timeService);
+            ServiceLocator.Register<IUIService>(uiService);
         }
     }
 }

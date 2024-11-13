@@ -15,20 +15,15 @@ namespace Services.Player
     {
         [SerializeField] private List<InventorySpace> inventorySpaces;
         [SerializeField] private ItemsUIConfiguration itemsUIConfiguration;
-        [SerializeField] private GameObject panelGameObject;
         [SerializeField] private MovingInventorySpace movingInventorySpace;
         [SerializeField] public Equipable[] equipables;
         private Dictionary<string, int> _completeInventory;
         private InputActions _inputActions;
-        private bool _open;
         private Action<Dictionary<string, int>> onInventoryUpdate;
 
         private void Awake()
         {
             _completeInventory = new Dictionary<string, int>();
-            _inputActions = ServiceLocator.GetService<IInputActions>().InputActions;
-            _inputActions.Player.InventoryMenu.performed += OnInventoryMenu;
-            panelGameObject.SetActive(false);
             foreach (var inventorySpace in inventorySpaces)
             {
                 inventorySpace.Configure(itemsUIConfiguration, BeginDrag, Drag, EndDrag);
@@ -38,14 +33,7 @@ namespace Services.Player
 
             TryPickItem("CollectionTool", 1);
             TryPickItem("TeleportTablet", 1);
-        }
-
-        private void OnInventoryMenu(InputAction.CallbackContext obj)
-        {
-            _open = !_open;
-            Cursor.visible = _open;
-            panelGameObject.SetActive(_open);
-            Cursor.lockState = _open ? CursorLockMode.None : CursorLockMode.Locked;
+            TryPickItem("Lantern", 1);
         }
 
         public int TryPickItem (string itemName, int quantity)

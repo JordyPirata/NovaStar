@@ -9,7 +9,6 @@ namespace Services
 {
     public class TeleportService : MonoBehaviour, ITeleportService
     {
-        [SerializeField] private GameObject teleportMenu;
         [SerializeField] private TMP_InputField tpNameInputField;
         [SerializeField] private TeleportUI teleportUITemplate;
         private int _teleportsEquipped;
@@ -23,7 +22,6 @@ namespace Services
             _teleportData = new List<TeleportData>();
             _telelportsUIParentTransform = teleportUITemplate.transform.parent;
             teleportUITemplate.gameObject.SetActive(false);
-            teleportMenu.SetActive(false);
         }
 
         public void Interacted()
@@ -32,10 +30,8 @@ namespace Services
             {
                 if (!_teleportMenuOpen)
                 {
-                    _teleportMenuOpen = !_teleportMenuOpen;
-                    teleportMenu.SetActive(_teleportMenuOpen);
-                    Cursor.visible = true;
-                    Cursor.lockState = CursorLockMode.None;
+                    if (ServiceLocator.GetService<IUIService>().OpenUIPanel(UIPanelType.Teleport))
+                        _teleportMenuOpen = !_teleportMenuOpen;
                 }
             }
         }
@@ -45,9 +41,7 @@ namespace Services
             if (_teleportMenuOpen)
             {
                 _teleportMenuOpen = !_teleportMenuOpen;
-                teleportMenu.SetActive(_teleportMenuOpen);
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.None;
+                ServiceLocator.GetService<IUIService>().OpenUIPanel(UIPanelType.Teleport);
             }
         }
         

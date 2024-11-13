@@ -45,8 +45,6 @@ namespace Services.Utility
                     onChangeDayLight?.Invoke(dayLight);   
                 }
             }
-
-            Debug.Log($"Son las {_horas}:{_minutes}:{_seconds}");
         }
 
         public string GetTime()
