@@ -9,6 +9,9 @@ namespace Services.Interfaces
         Transform PlayerTransform();
         float3 PlayerPosition();
         float2 PlayerCoordinate();
+        float MapHeight();
+        float MapTemperature();
+        float MapHumidity();
         void StartService();
         void StopService();
         void PlayerDied();

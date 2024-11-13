@@ -21,7 +21,7 @@ namespace Services.Player
         private IHUDService _hudService;
         private IInteractionService _interactionService;
 
-        private void Start()
+        public void Start()
         {
             _iInputActions = ServiceLocator.GetService<IInputActions>();
             _firstPersonCharacter = ServiceLocator.GetService<IFirstPersonController>();
@@ -85,7 +85,7 @@ namespace Services.Player
             _lifeService.OnStatChanged -= LifeAction;
             _staminaService.OnTiredChanged -= TiredAction;
         }
-        private void OnDestroy()
+        public void OnDestroy()
         {
             UnsubscribeToEvents();
         }

@@ -17,7 +17,6 @@ namespace Services.WorldGenerator
 /// </summary>
 public struct ChunkDataGenerator
 {
-
     static string message;
     private static IRepository GameRepository => ServiceLocator.GetService<IRepository>();
     private static string WorldDirectory => ServiceLocator.GetService<IWorldData>().GetDirectory();
@@ -68,7 +67,7 @@ public struct ChunkDataGenerator
         NoiseDirector.SetExternalState(
             new NoiseState
             {
-                seed = ServiceLocator.GetService<IWorldData>().GetSeed() - 1,
+                seed = WorldData.GetSeed() - 1,
                 frequency = 0.0001f,
                 octaves = 1,
                 amplitude = TAmp,
@@ -83,7 +82,7 @@ public struct ChunkDataGenerator
         NoiseDirector.SetExternalState(
             new NoiseState
             {
-                seed = ServiceLocator.GetService<IWorldData>().GetSeed() + 1,
+                seed = WorldData.GetSeed() + 1,
                 frequency = 0.0001f,
                 octaves = 1,
                 amplitude = HAmp,

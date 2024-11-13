@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 
 namespace Services
 {
-    [Serializable]
     public class HUDHolder : MonoBehaviour, IHUDService 
     {
         public void Initialize()
