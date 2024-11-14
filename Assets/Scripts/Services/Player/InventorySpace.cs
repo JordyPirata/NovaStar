@@ -182,13 +182,13 @@ namespace Services.Player
         }
 
 
-        public void Configure(ItemsUIConfiguration itemsUIConfiguration,
-            Action<InventorySpace, Sprite, RectTransform> beginDrag, Action<PointerEventData> drag, Action endDrag)
+        public void Configure(Action<InventorySpace, Sprite, RectTransform> beginDrag, Action<PointerEventData> drag,
+            Action endDrag)
         {
             _beginDrag += beginDrag;
             _drag += drag;
             _endDrag += endDrag;
-            _itemsUIConfiguration = itemsUIConfiguration;
+            _itemsUIConfiguration = ItemsUIConfiguration.Instance;
             _rectTransform = GetComponent<RectTransform>();
         }
 
