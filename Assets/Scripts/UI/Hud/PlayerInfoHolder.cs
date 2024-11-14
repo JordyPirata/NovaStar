@@ -1,7 +1,6 @@
 using Services.Interfaces;
 using TMPro;
 using UnityEngine;
-using Services.Interfaces;
 
 namespace UI
 {
