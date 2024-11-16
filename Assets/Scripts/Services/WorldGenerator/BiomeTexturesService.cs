@@ -1,10 +1,11 @@
 using System;
+using UnityEngine;
 using Services.Interfaces;
 namespace Services.WorldGenerator
 {
-    public class BiomeTexturesService : IBiomeTexturesService
+    public class BiomeTexturesService : MonoBehaviour, IBiomeTexturesService
     {
-        private BiomeTextures _BiomeTextures;
+        [SerializeField] private BiomeTextures _BiomeTextures;
 
         public BiomeTextures GetBiomeTextures()
         {

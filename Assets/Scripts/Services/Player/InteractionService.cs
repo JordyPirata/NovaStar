@@ -9,19 +9,16 @@ namespace Services.Player
     public class InteractionService : MonoBehaviour, IInteractionService
     {
         private IInputActions _inputActions;
-        private float _interactDistance;
-        private LayerMask _layerMask;
+        [SerializeField] private float _interactDistance;
+        [SerializeField] private LayerMask _layerMask;
         private Camera _camera;
         private bool _canGetItems;
 
-        public void Configure(float interactionDistance, LayerMask interactionLayer)
+        public void Awake()
         {
             _inputActions = ServiceLocator.GetService<IInputActions>();
             _inputActions.InputActions.Player.Interact.started += InteractOnStarted;
-            _interactDistance = interactionDistance;
-            _layerMask = interactionLayer;
         }
-
         public void SetCamera(Camera mainCamera)
         {
             _camera = mainCamera;

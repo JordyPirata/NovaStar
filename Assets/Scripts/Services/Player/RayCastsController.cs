@@ -9,7 +9,7 @@ namespace Services.Player
     public class RayCastsController:MonoBehaviour, IRayCastController
     {
         readonly IMap<ChunkObject> Map = ServiceLocator.GetService<IMap<ChunkObject>>();
-        public void LookForGround( Transform playerTransform)
+        public void LookForGround(Transform playerTransform)
         {
             if (playerTransform == null)
             {

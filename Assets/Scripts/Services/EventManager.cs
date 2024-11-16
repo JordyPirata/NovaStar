@@ -29,6 +29,7 @@ public class EventManager : MonoBehaviour, IEventManager
         {
             switch (scene.name)
             {
+            case IEventManager.Game1:
             case IEventManager.Game:
                 OnSceneGameLoaded?.Invoke();
                 ServiceLocator.GetService<IPlayerInfo>().StartService();
