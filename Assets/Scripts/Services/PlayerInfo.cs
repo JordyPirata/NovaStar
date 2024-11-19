@@ -11,28 +11,16 @@ namespace Services
 {
 /// <summary>
 /// MonoState Service that holds the actual Player data
+/// Dependencies: IMap<ChunkObject>
 /// </summary>
 public class PlayerInfo : MonoBehaviour, IPlayerInfo
 {
     private IMap<ChunkObject> Map;
-    private Transform player;
+    [SerializeField] private Transform player;
     private static float2 viewerCoordinate;
     private static float3 viewerPosition;
     private bool isRunning;
 
-    public void Awake()
-    {
-        EventManager.OnSceneGameLoaded += FindPlayer;
-        Map = ServiceLocator.GetService<IMap<ChunkObject>>();
-    }
-    private void FindPlayer()
-    {
-        var PlayerObj = GameObject.Find("Player");
-        if (PlayerObj != null) // Verifica si el objeto Player fue encontrado
-        {
-            player = PlayerObj.transform;
-        }
-    }
     public void StartService()
     {
         isRunning = true;

@@ -124,11 +124,5 @@ namespace Services.Player
             ServiceLocator.GetService<IFadeController>().FadeOut();
             ServiceLocator.GetService<ITimeService>().StartRunningTime();
         }
-
-        public void Configure(PlayerMediatorData playerMediatorData)
-        {
-            _interactionService = ServiceLocator.GetService<IInteractionService>();
-            _interactionService.Configure(playerMediatorData.interactionDistance, playerMediatorData.interactionLayer);
-        }
     }
 }
