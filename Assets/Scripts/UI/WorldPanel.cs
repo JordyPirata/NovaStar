@@ -72,7 +72,7 @@ namespace UI
                 WorldData.SetWorld(game);
                 WorldData.SetIsGenerated(true);
                 WorldData.SaveWorld();
-                ServiceLocator.GetService<IEventManager>().LoadScene(IEventManager.Game1); 
+                ServiceLocator.GetService<IEventManager>().LoadScene(IEventManager.Game); 
             });
         }
     }

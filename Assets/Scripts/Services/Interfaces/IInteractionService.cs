@@ -5,6 +5,5 @@ namespace Services.Interfaces
     public interface IInteractionService
     {
         void SetCamera(Camera mainCamera);
-        void CanGetItems(bool canGetItems);
     }
 }

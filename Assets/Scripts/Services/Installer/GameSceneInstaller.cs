@@ -1,10 +1,10 @@
-using System;
 using Services.Interfaces;
 using Services.Player;
-using UnityEngine;
 using Services.Splatmap;
 using Services.WorldGenerator;
-namespace Services
+using UnityEngine;
+
+namespace Services.Installer
 {
 [RequireComponent(typeof(PlayerMediatorData))]
 public class GameSceneInstaller : MonoBehaviour

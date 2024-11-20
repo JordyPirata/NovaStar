@@ -13,45 +13,140 @@ MonoBehaviour:
   m_Name: ItemsUIConfiguration
   m_EditorClassIdentifier: 
   items:
-  - itemName: Piedra
-    sprite: {fileID: 21300000, guid: b45a6b397eb4ae246a2f6d0ddc6ea5fa, type: 3}
-    maxAmount: 64
+  - itemName: BotellaDeAgua
+    sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
+    maxAmount: 1
     itemRarity: 0
     isEquipable: 0
-  - itemName: Antorcha
-    sprite: {fileID: 21300000, guid: d4856a986af1a6442bc0ae7c0348f2f7, type: 3}
+  - itemName: Sombrero
+    sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
+    maxAmount: 1
+    itemRarity: 0
+    isEquipable: 0
+  - itemName: Ropa de abrigo
+    sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
+    maxAmount: 1
+    itemRarity: 0
+    isEquipable: 0
+  - itemName: Fogata
+    sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
+    maxAmount: 1
+    itemRarity: 0
+    isEquipable: 0
+  - itemName: Comida y provisiones
+    sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
+    maxAmount: 1
+    itemRarity: 0
+    isEquipable: 0
+  - itemName: Frutas y verduras
+    sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
+    maxAmount: 1
+    itemRarity: 0
+    isEquipable: 0
+  - itemName: Combustible
+    sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
     maxAmount: 64
     itemRarity: 1
     isEquipable: 0
-  - itemName: Carbon
-    sprite: {fileID: 21300000, guid: 6ef0d7c5de16ca14fb868b4cbd8f05c5, type: 3}
+  - itemName: Metal
+    sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
     maxAmount: 64
-    itemRarity: 2
+    itemRarity: 1
     isEquipable: 0
-  - itemName: Palos
-    sprite: {fileID: 21300000, guid: a40e131b61d22ba42b2955962e636ca4, type: 3}
+  - itemName: Cristal de Litio
+    sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
     maxAmount: 64
-    itemRarity: 3
+    itemRarity: 1
     isEquipable: 0
-  - itemName: CollectionTool
+  - itemName: Cristal
+    sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
+    maxAmount: 64
+    itemRarity: 1
+    isEquipable: 0
+  - itemName: Bateria
+    sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
+    maxAmount: 64
+    itemRarity: 1
+    isEquipable: 0
+  - itemName: Tarjeta logica
+    sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
+    maxAmount: 64
+    itemRarity: 1
+    isEquipable: 0
+  - itemName: Polimero
+    sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
+    maxAmount: 64
+    itemRarity: 1
+    isEquipable: 0
+  - itemName: Tela de Nilon
+    sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
+    maxAmount: 64
+    itemRarity: 1
+    isEquipable: 0
+  - itemName: Plantas
+    sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
+    maxAmount: 64
+    itemRarity: 1
+    isEquipable: 0
+  - itemName: Hierbas
+    sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
+    maxAmount: 64
+    itemRarity: 1
+    isEquipable: 0
+  - itemName: Hierbas
+    sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
+    maxAmount: 64
+    itemRarity: 1
+    isEquipable: 0
+  - itemName: Herramienta de recoleccion
     sprite: {fileID: 21300000, guid: 247cb504efaf4474bbaeb4346701b99c, type: 3}
     maxAmount: 1
     itemRarity: 3
     isEquipable: 1
-  - itemName: TeleportTablet
+  - itemName: Tableta de teletransporte
     sprite: {fileID: 21300000, guid: a40e131b61d22ba42b2955962e636ca4, type: 3}
     maxAmount: 1
-    itemRarity: 3
+    itemRarity: 2
     isEquipable: 1
-  - itemName: SmartWatch
+  - itemName: Reloj Inteligente
     sprite: {fileID: 21300000, guid: a40e131b61d22ba42b2955962e636ca4, type: 3}
     maxAmount: 1
-    itemRarity: 3
+    itemRarity: 2
     isEquipable: 1
-  - itemName: Lantern
+  - itemName: Casco de escaneo
     sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
     maxAmount: 1
     itemRarity: 3
+    isEquipable: 1
+  - itemName: Planeador
+    sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
+    maxAmount: 1
+    itemRarity: 2
+    isEquipable: 1
+  - itemName: Mochila cohete
+    sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
+    maxAmount: 1
+    itemRarity: 2
+    isEquipable: 1
+  - itemName: Planeador cohete
+    sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
+    maxAmount: 1
+    itemRarity: 3
+    isEquipable: 1
+  - itemName: Linterna
+    sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
+    maxAmount: 1
+    itemRarity: 2
+    isEquipable: 1
+  - itemName: Estimulante
+    sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
+    maxAmount: 1
+    itemRarity: 2
+    isEquipable: 1
+  - itemName: Hoverboard
+    sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
+    maxAmount: 1
+    itemRarity: 2
     isEquipable: 1
   rarityColors:
   - itemRarity: 0

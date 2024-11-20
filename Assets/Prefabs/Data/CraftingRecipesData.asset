@@ -13,10 +13,72 @@ MonoBehaviour:
   m_Name: CraftingRecipesData
   m_EditorClassIdentifier: 
   craftingRecipes:
-  - craftedItem: 1
-    craftedQuantity: 4
+  - craftedItem: 18
+    craftedQuantity: 1
     craftingIngredients:
-    - item: 2
+    - item: 8
       quantity: 1
-    - item: 3
+    - item: 11
+      quantity: 1
+  - craftedItem: 19
+    craftedQuantity: 1
+    craftingIngredients:
+    - item: 9
+      quantity: 1
+    - item: 11
+      quantity: 1
+  - craftedItem: 24
+    craftedQuantity: 1
+    craftingIngredients:
+    - item: 9
+      quantity: 1
+    - item: 10
+      quantity: 1
+    - item: 7
+      quantity: 1
+  - craftedItem: 21
+    craftedQuantity: 1
+    craftingIngredients:
+    - item: 7
+      quantity: 1
+    - item: 13
+      quantity: 1
+  - craftedItem: 21
+    craftedQuantity: 1
+    craftingIngredients:
+    - item: 12
+      quantity: 1
+    - item: 13
+      quantity: 1
+    - item: 6
+      quantity: 1
+  - craftedItem: 22
+    craftedQuantity: 1
+    craftingIngredients:
+    - item: 12
+      quantity: 1
+    - item: 13
+      quantity: 1
+    - item: 6
+      quantity: 1
+  - craftedItem: 25
+    craftedQuantity: 1
+    craftingIngredients:
+    - item: 14
+      quantity: 1
+    - item: 15
+      quantity: 1
+  - craftedItem: 20
+    craftedQuantity: 1
+    craftingIngredients:
+    - item: 18
+      quantity: 1
+    - item: 19
+      quantity: 1
+  - craftedItem: 23
+    craftedQuantity: 1
+    craftingIngredients:
+    - item: 21
+      quantity: 1
+    - item: 22
       quantity: 1
