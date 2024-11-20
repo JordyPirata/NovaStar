@@ -47,6 +47,11 @@ namespace Services.Player
                 }
             }
         }
+
+        public void CloseDrop()
+        {
+            ServiceLocator.GetService<IUIService>().OpenUIPanel(UIPanelType.Drops);
+        }
         
         public int TryPickItem (string itemName, int quantity)
         {

@@ -11,7 +11,7 @@ namespace Services.Player
         [SerializeField] private Drop dropPrefab;
         [SerializeField] private DropsConfiguration dropsConfiguration;
         [SerializeField] private DropUIWindow dropUIWindow;
-        private int _dropSpaces;
+        private int _dropSpaces = 10;
 
         private void Awake()
         {
@@ -20,8 +20,8 @@ namespace Services.Player
 
         private IEnumerator StartSpawning()
         {
-            yield return new WaitForSeconds(secondsToSpawn);
             SpawnDrop();
+            yield return new WaitForSeconds(secondsToSpawn);
             StartCoroutine(StartSpawning());
         }
 

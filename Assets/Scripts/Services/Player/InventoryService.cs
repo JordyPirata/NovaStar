@@ -20,6 +20,7 @@ namespace Services.Player
         private Dictionary<string, int> _completeInventory;
         private InputActions _inputActions;
         private Action<Dictionary<string, int>> onInventoryUpdate;
+        private bool _hasTool;
 
         private void Awake()
         {
@@ -31,13 +32,19 @@ namespace Services.Player
                 inventorySpace.OnUnEquipItem += UnEquipItem;
             }
 
-            TryPickItem("CollectionTool", 1);
-            TryPickItem("TeleportTablet", 1);
-            TryPickItem("Lantern", 1);
+            TryPickItem("Herramienta de recoleccion", 1);
+            TryPickItem("Tableta de teletransporte", 1);
+            TryPickItem("Linterna", 1);
+        }
+        
+        public void CanGetItems(bool canGetItems)
+        {
+            _hasTool = canGetItems;
         }
 
-        public int TryPickItem (string itemName, int quantity)
+        public int TryPickItem (string itemName, int quantity, bool needsTool = false)
         {
+            if (needsTool && !_hasTool) return quantity;
             var startingQuantity = quantity;
             foreach (var inventorySpace in inventorySpaces)
             {

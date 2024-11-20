@@ -8,13 +8,13 @@ namespace Services.Player
         public override void Equip()
         {
             base.Equip();
-            ServiceLocator.GetService<IInteractionService>().CanGetItems(true);
+            ServiceLocator.GetService<IInventoryService>().CanGetItems(true);
         }
 
         public override void UnEquip()
         {
             base.UnEquip();
-            ServiceLocator.GetService<IInteractionService>().CanGetItems(false);
+            ServiceLocator.GetService<IInventoryService>().CanGetItems(false);
         }
     }
 }

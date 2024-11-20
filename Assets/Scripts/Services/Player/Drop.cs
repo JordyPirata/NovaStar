@@ -9,8 +9,7 @@ namespace Services.Player
 {
     public class Drop : InteractableObject
     {
-        [SerializeField] private List<int> droppedItemsIndex;
-        [SerializeField] private MovingInventorySpace movingInventorySpace;
+        private List<int> droppedItemsIndex;
         private DropUIWindow _dropUIWindow;
 
         public override void Interact()

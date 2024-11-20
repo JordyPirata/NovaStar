@@ -6,7 +6,7 @@ using UnityEngine.Serialization;
 
 namespace Services.Player
 {
-    [CreateAssetMenu(menuName = "Create DropsConfiguration", fileName = "DropsConfiguration")]
+    [CreateAssetMenu(menuName = "NovaStar/DropsConfiguration", fileName = "DropsConfiguration")]
     public class DropsConfiguration : ScriptableObject
     {
         public List<DropsByRarity> dropsByRarities;
