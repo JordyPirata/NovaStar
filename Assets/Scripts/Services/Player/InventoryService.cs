@@ -26,7 +26,7 @@ namespace Services.Player
             _completeInventory = new Dictionary<string, int>();
             foreach (var inventorySpace in inventorySpaces)
             {
-                inventorySpace.Configure(itemsUIConfiguration, BeginDrag, Drag, EndDrag);
+                inventorySpace.Configure(BeginDrag, Drag, EndDrag);
                 inventorySpace.OnEquipItem += EquipItem;
                 inventorySpace.OnUnEquipItem += UnEquipItem;
             }
