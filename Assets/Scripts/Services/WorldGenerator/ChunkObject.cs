@@ -30,7 +30,7 @@ namespace Services.WorldGenerator
             if (!_isAvailable) return null;
             Coord = coord;
             Position = coord * ChunkConfig.width;
-            Bounds = new(Position, Vector2.one * ChunkConfig.width);
+            Bounds = new(Position, Vector2.one * ChunkConfig.width); // original is less than 2
             _isAvailable = false;
             return this;
         }

@@ -6,6 +6,7 @@ using UnityEditor.Localization.Plugins.XLIFF.V20;
 
 namespace Services
 {
+    [System.Obsolete]
     public class ControllerReference : IFirstPersonController
     {
         public ControllerReference()
