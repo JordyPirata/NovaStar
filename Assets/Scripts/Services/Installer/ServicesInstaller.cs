@@ -25,6 +25,7 @@ public class ServiceInstaller : MonoBehaviour
     {     
         ServiceLocator.Register<IInputActions>(new PlayerInputService());
         ServiceLocator.Register<ISettingsService>(gameObject.AddComponent<SettingsService>());
+        ServiceLocator.Register<ICoroutineManager>(gameObject.AddComponent<CoroutineManager>());
         // ServiceLocator.Register<IMapGenerator>(gameObject.AddComponent<MapGeneratorC>());
         ServiceLocator.Register<IRepository>(new GameRepository());
         ServiceLocator.Register<IEventManager>(gameObject.AddComponent<EventManager>());
