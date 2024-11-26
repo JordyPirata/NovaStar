@@ -11,10 +11,10 @@ namespace Services.Player
     {
         [SerializeField] private TextMeshProUGUI quantityText;
         [SerializeField] private Image itemImage, rarityOverImage;
-        [SerializeField] private bool isEquipableSpace;
+        [SerializeField] public bool isEquipableSpace;
         public Action<string> OnEquipItem, OnUnEquipItem;
         private bool _hasItem, _hasEquipableItem;
-        private string _itemName;
+        [SerializeField] private string _itemName;
         private int _quantity;
         private Action<InventorySpace, Sprite, RectTransform> _beginDrag;
         private Action<PointerEventData> _drag;
@@ -45,6 +45,7 @@ namespace Services.Player
                 rarityOverImage.enabled = false;
                 quantityText.text = string.Empty;
                 _hasItem = false;
+                ItemName = String.Empty;
                 if (!movedBetweenEquipableSpaces && isEquipableSpace)
                 {
                     UnEquipItem(ItemName);
