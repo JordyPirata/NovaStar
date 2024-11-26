@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Gameplay.Items;
+using Player.Gameplay;
+using Player.Gameplay.UserInterface;
 using Services.Interfaces;
 using UnityEngine;
 using UnityEngine.EventSystems;

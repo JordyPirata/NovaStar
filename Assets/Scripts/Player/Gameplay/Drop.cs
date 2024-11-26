@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Gameplay.Items;
-using UnityEngine;
-using UnityEngine.EventSystems;
+using Services.Player;
 
-namespace Services.Player
+namespace Player.Gameplay
 {
     public class Drop : InteractableObject
     {

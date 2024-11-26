@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Gameplay.Items;
+using Services.Player;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace Services.Player
+namespace Player.Gameplay
 {
     [CreateAssetMenu(menuName = "NovaStar/DropsConfiguration", fileName = "DropsConfiguration")]
     public class DropsConfiguration : ScriptableObject

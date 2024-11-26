@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Gameplay.Items;
 using Gameplay.Items.Crafting;
 using Services.Interfaces;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Services
+namespace Player.Gameplay.UserInterface
 {
     public class CraftingRecipeUI : MonoBehaviour
     {

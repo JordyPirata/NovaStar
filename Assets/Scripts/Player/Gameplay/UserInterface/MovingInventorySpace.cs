@@ -1,11 +1,9 @@
-﻿using System;
-using Gameplay.Items;
+﻿using Services.Player;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Services.Player
+namespace Player.Gameplay.UserInterface
 {
     public class MovingInventorySpace : MonoBehaviour
     {

@@ -1,9 +1,8 @@
 using Gameplay.Items;
-using Player.Gameplay;
-using UnityEngine;
 using Services.Interfaces;
+using UnityEngine;
 
-namespace Services.Player
+namespace Player.Gameplay.Items
 {
     public class Item : InteractableObject
     {
