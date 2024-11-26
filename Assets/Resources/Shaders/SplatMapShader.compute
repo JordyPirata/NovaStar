@@ -1,6 +1,6 @@
 #pragma kernel CSMain
 
-float ChunkSize = 129;
+int ChunkSize;
 RWStructuredBuffer<int> BiomeMap;
 RWTexture2D<float4> SplatMap1;
 RWTexture2D<float4> SplatMap2;
@@ -9,7 +9,7 @@ RWTexture2D<float4> SplatMap2;
 
 void CSMain (uint3 id: SV_DispatchThreadID)
 {
-    int biome = BiomeMap[(id.x * chunkSize) + id.y];
+    int biome = BiomeMap[(id.x * ChunkSize) + id.y];
     float4 color = float4(0,0,0,0);
     //                            R G B A
     switch (biome)

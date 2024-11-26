@@ -67,7 +67,7 @@ public class SplatMapService : ISplatMapService
             filterMode = FilterMode.Point
         };
         splatMap2.Create();
-        SplatMapShader.SetFloat(ChunkSizeId, ChunkConfig.width);
+        SplatMapShader.SetInt(ChunkSizeId, ChunkConfig.width);
         SplatMapShader.SetBuffer(Kernel, BiomeMapId, biomeBuffer);
 
         SplatMapShader.SetTexture(Kernel, SplatMap1Id, splatMap1);
