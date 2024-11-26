@@ -83,7 +83,7 @@ namespace Services
             computeShader.SetFloat(Distance, State.distance);
 
             // Dispatch the shader
-            computeShader.Dispatch(kernel, 257, 1, 1);
+            computeShader.Dispatch(kernel, 129, 1, 1);
             
             // Get the data from the buffer
             valuesBuffer.GetData(heights);

@@ -15,7 +15,7 @@ public class TempChunkNoiseBuilder : NoiseBuilder, INoiseBuilder
 
     public void SetKernel()
     {
-        kernel = computeShader.FindKernel(Kernel.HumidityNoise.ToString());
+        kernel = computeShader.FindKernel(Kernel.ChunkNoise.ToString());
     }
 }
 }
