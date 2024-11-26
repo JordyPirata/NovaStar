@@ -30,7 +30,7 @@ public class ChunkBuilder
         get => _ChunkObject.Terrain;
         set => _ChunkObject.Terrain = value;
     }    
-    public ChunkBuilder(float2 chunkCoords)
+    public ChunkBuilder(float2 chunkCoords) 
     {
         _ChunkCoords = chunkCoords;
         _ChunkObject = ChunkPool.Instance.GetChunk(_ChunkCoords);
