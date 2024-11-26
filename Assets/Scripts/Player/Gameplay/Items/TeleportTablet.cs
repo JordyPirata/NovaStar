@@ -1,4 +1,7 @@
-﻿namespace Services.Player
+﻿using Services.Interfaces;
+using Services.Player;
+
+namespace Player.Gameplay.Items
 {
     public class TeleportTablet : Equipable
     {

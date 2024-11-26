@@ -1,7 +1,6 @@
-﻿using Player.Gameplay;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Services.Player
+namespace Player.Gameplay.Items
 {
     public abstract class Equipable : MonoBehaviour
     {

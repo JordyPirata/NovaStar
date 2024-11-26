@@ -4,6 +4,8 @@ using System.Linq;
 using Gameplay.Items;
 using Gameplay.Items.Crafting;
 using InputSystem;
+using Player.Gameplay.Items;
+using Player.Gameplay.UserInterface;
 using Services.Interfaces;
 using UnityEngine;
 using UnityEngine.EventSystems;

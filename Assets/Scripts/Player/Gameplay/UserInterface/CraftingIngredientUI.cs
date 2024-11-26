@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Services
+namespace Player.Gameplay.UserInterface
 {
     public class CraftingIngredientUI : MonoBehaviour
     {

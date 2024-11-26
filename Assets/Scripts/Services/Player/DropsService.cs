@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using Gameplay.Items;
+using Player.Gameplay;
+using Services.Interfaces;
 using UnityEngine;
 using Random = UnityEngine.Random;
 

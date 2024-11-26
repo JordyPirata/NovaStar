@@ -1,7 +1,6 @@
-﻿using System;
-using Services.Interfaces;
+﻿using Services.Interfaces;
 
-namespace Services.Player
+namespace Player.Gameplay.Items
 {
     public class CollectionTool : Equipable
     {

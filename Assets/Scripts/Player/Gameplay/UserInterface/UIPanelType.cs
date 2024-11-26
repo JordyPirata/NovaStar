@@ -1,4 +1,4 @@
-﻿namespace Services
+﻿namespace Player.Gameplay.UserInterface
 {
     public enum UIPanelType
     {

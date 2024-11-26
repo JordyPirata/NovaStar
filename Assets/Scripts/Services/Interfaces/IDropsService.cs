@@ -1,4 +1,4 @@
-﻿namespace Services.Player
+﻿namespace Services.Interfaces
 {
     public interface IDropsService
     {

@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using Services.Player;
+using UnityEngine;
 
-namespace Services.Player
+namespace Player.Gameplay.Items
 {
     public class Lantern : Equipable
     {
