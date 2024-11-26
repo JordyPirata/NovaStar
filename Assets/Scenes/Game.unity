@@ -641,6 +641,12 @@ PrefabInstance:
       propertyPath: mainLight
       value: 
       objectReference: {fileID: 1619380708}
+    - target: {fileID: 1714937320373956020, guid: 6ac82c29a4ab281419d8796b23147ec3,
+        type: 3}
+      propertyPath: playerMediatorData
+      value: 
+      objectReference: {fileID: 11400000, guid: 86883ede0d1eba24f9f69df4d41ea2ac,
+        type: 2}
     - target: {fileID: 2407970781217027929, guid: 6ac82c29a4ab281419d8796b23147ec3,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -1495,7 +1501,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e8341f4563df734189df5e9e2d0ad58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolSize: 70
+  poolSize: 200
   ChunkPrefab: {fileID: 7826691407829502194, guid: a8f096d692fef3d4488ff517f561a03b,
     type: 3}
 --- !u!114 &440870767
