@@ -1082,7 +1082,7 @@ fnl_state GetFnlState(int seed)
 
 // Compute shader
 
-[numthreads(257,1,1)]
+[numthreads(129,1,1)]
   
 void ChunkNoise (uint3 id : SV_DispatchThreadID)
 {
@@ -1098,7 +1098,20 @@ void ChunkNoise (uint3 id : SV_DispatchThreadID)
     // Gather noise data
     values[id.x] = fnlGetNoise2D(noise, coords[id.x].x, coords[id.x].y) * amplitude + distance;
 }
+[numthreads(129,1,1)]
+void HumidityChunkNoise(uint3 id : SV_DispatchThreadID)
+{
+    fnl_state noise = fnlCreateState(seed);
+    noise.noise_type = noise_type;
+    noise.fractal_type = fractal_type;
+    noise.frequency = frequency;
+    noise.octaves = octaves;
+    noise.lacunarity = lacunarity;
+    noise.gain = gain;
 
+    // Gather noise data
+    values[id.x] = fnlGetNoise2D(noise, coords[id.x].x, coords[id.x].y) * amplitude + distance;
+}
 [numthreads(20,1,1)]
 
 void HumidityNoise (uint3 id : SV_DispatchThreadID)
@@ -1122,7 +1135,7 @@ float CosFunction(float x, float size)
 }
 
 // 257 groups of 1 thread
-[numthreads(257,1,1)]
+[numthreads(129,1,1)]
 
 void TempChunkNoise(uint3 id : SV_DispatchThreadID)
 {

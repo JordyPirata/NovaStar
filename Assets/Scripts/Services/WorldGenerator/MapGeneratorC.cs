@@ -17,24 +17,28 @@ namespace Services
 
 public class MapGeneratorC : MonoBehaviour, IMapGenerator
 {
-    private IMap<ChunkObject> Map;
-    void Awake()
-    {
-        Map = ServiceLocator.GetService<IMap<ChunkObject>>();
-    }
+    private bool isRunning;
+    bool firstLoop;
     private static IPlayerInfo PlayerInfo => ServiceLocator.GetService<IPlayerInfo>();
-    private bool run = false;
-    public void StartService()
+    private static IMap<ChunkObject> Map => ServiceLocator.GetService<IMap<ChunkObject>>();
+    public async void StartService()
     {
-        run = true;
+        firstLoop = true;
+        isRunning = true;
+        await GenerateMap();
     }
     public void StopService()
     {
-        run = false;
+        isRunning = false;
+        foreach (var chunk in Map.AllChunks())
+        {
+            chunk.Release();
+        }
+        
     }
     private static readonly int chunkVisibleInViewDst = Mathf.RoundToInt(ChunkConfig.maxViewDst / ChunkConfig.width);
 
-    private void UpdateVisibleChunks(float2 viewerCoordinate)
+    private void MapLoop(float2 viewerCoordinate)
     {
         for (var yOffset = -chunkVisibleInViewDst; yOffset <= chunkVisibleInViewDst; yOffset++)
         {
@@ -46,9 +50,15 @@ public class MapGeneratorC : MonoBehaviour, IMapGenerator
 
             }
         }
+        if (firstLoop) 
+        {
+            Debug.Log("Map Loaded");
+            EventManager.OnMapLoaded.Invoke();
+            firstLoop = false;
+        }
+        
     }
-
-    private async void GenerateChunk (float2 viewedChunkCoord)
+    private async void GenerateChunk(float2 viewedChunkCoord)
     {
         if (Map.ContainsKey(viewedChunkCoord))
         {
@@ -57,17 +67,27 @@ public class MapGeneratorC : MonoBehaviour, IMapGenerator
         }
         else
         {
+            if (isRunning == false) return;
             var chunkBuilder = new ChunkBuilder(viewedChunkCoord);
             await chunkBuilder.GenerateChunkData();
+            chunkBuilder.SetGameObject();
             chunkBuilder.SetTerrain();
+            chunkBuilder.CalculateBiomes();
+            
             Map.Add(viewedChunkCoord, chunkBuilder.GetChunkObject());
         }
     }
-    private void Update()
+
+    private async Task GenerateMap()
     {
-        if (run)
+        while (isRunning)
         {
-            UpdateVisibleChunks(PlayerInfo.PlayerCoordinate());
+            // delay the update of the chunks by system time
+            await Task.Delay(3000);
+            // get the player coordinate
+            MapLoop(PlayerInfo.PlayerCoordinate());
+            // delay the update of the chunks by system time
+            
         }
     }
 }
