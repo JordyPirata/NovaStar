@@ -174,8 +174,8 @@ MonoBehaviour:
   m_fontSizeMin: 2
   m_fontSizeMax: 50
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 4
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -323,7 +323,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 65, y: 65}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7772502032123606028
 CanvasRenderer:
@@ -378,3 +378,4 @@ MonoBehaviour:
   quantityText: {fileID: 2293959394947369046}
   itemImage: {fileID: 3095237126675914128}
   rarityOverImage: {fileID: 3658510836016391680}
+  isEquipableSpace: 0

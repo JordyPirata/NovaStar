@@ -11,6 +11,7 @@ namespace Services.Player
     {
         [SerializeField] private List<InventorySpace> inventorySpaces;
         [SerializeField] private MovingInventorySpace movingInventorySpace;
+        private bool _isOpen;
 
         private void Awake()
         {
@@ -39,8 +40,10 @@ namespace Services.Player
 
         public void OpenDrop(List<int> droppedItemsIndex)
         {
+            if (_isOpen) return;
             if (ServiceLocator.GetService<IUIService>().OpenUIPanel(UIPanelType.Drops))
             {
+                _isOpen = true;
                 foreach (var itemIndex in droppedItemsIndex)
                 {
                     TryPickItem(ItemsUIConfiguration.Instance.items[itemIndex].itemName, 1);
@@ -51,6 +54,7 @@ namespace Services.Player
         public void CloseDrop()
         {
             ServiceLocator.GetService<IUIService>().OpenUIPanel(UIPanelType.Drops);
+            _isOpen = false;
         }
         
         public int TryPickItem (string itemName, int quantity)
@@ -76,7 +80,8 @@ namespace Services.Player
         {
             foreach (var inventorySpace in inventorySpaces)
             {
-                ServiceLocator.GetService<IInventoryService>().TryPickItem(inventorySpace.ItemName, inventorySpace.Quantity);
+                if (inventorySpace.HasItem) 
+                    ServiceLocator.GetService<IInventoryService>().TryPickItem(inventorySpace.ItemName, inventorySpace.Quantity);
             }
         }
     }
