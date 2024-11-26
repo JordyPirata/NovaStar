@@ -2451,7 +2451,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e8341f4563df734189df5e9e2d0ad58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolSize: 70
+  poolSize: 200
   ChunkPrefab: {fileID: 7826691407829502194, guid: a8f096d692fef3d4488ff517f561a03b,
     type: 3}
 --- !u!114 &440870767
