@@ -10,7 +10,7 @@ using Unity.VisualScripting;
 namespace Services
 {
     [RequireComponent(typeof(CharacterController))]
-    public class FirstPersonCharacter : MonoBehaviour
+    public class FirstPersonCharacter : MonoBehaviour, IFirstPersonController
     {
         private InputActions inputActions;
         public CharacterController Controller { get; set; }
@@ -46,7 +46,7 @@ namespace Services
         [Tooltip("What layers the character uses as ground")]
         public LayerMask GroundLayers;
 
-        public bool CanMove;
+        public bool CanMove { get; set; }
 
         private void Awake()
         {

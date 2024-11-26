@@ -562,7 +562,6 @@ MonoBehaviour:
   GroundLayers:
     serializedVersion: 2
     m_Bits: 8
-  CanMove: 0
 --- !u!1001 &273688427
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -836,6 +835,11 @@ PrefabInstance:
       propertyPath: mainLight
       value: 
       objectReference: {fileID: 1619380708}
+    - target: {fileID: 1714937320373956020, guid: 6ac82c29a4ab281419d8796b23147ec3,
+        type: 3}
+      propertyPath: firstPersonCharacter
+      value: 
+      objectReference: {fileID: 183609782}
     - target: {fileID: 1722037542122363197, guid: 6ac82c29a4ab281419d8796b23147ec3,
         type: 3}
       propertyPath: m_AnchorMax.y
