@@ -1,19 +1,18 @@
 using Services.Interfaces;
-using Services.Repository;
-using UnityEngine;
-using Services;
-using UI;
-using Services.WorldGenerator;
-using Services.Player;
 using Services.NoiseGenerator;
+using Services.Repository;
+using Services.WorldGenerator;
+using UI;
+using UnityEngine;
 
-
-[RequireComponent(typeof(FadeController))]
-[RequireComponent(typeof(BiomeTexturesService))]
-
-public class ServiceInstaller : MonoBehaviour
+namespace Services.Installer
 {
-    [SerializeField] private FadeController fadeController;
+    [RequireComponent(typeof(FadeController))]
+    [RequireComponent(typeof(BiomeTexturesService))]
+
+    public class ServiceInstaller : MonoBehaviour
+    {
+        [SerializeField] private FadeController fadeController;
     
     [SerializeField] private BiomeTextures biomeTextures;
     public void Awake()
@@ -37,5 +36,6 @@ public class ServiceInstaller : MonoBehaviour
         ServiceLocator.Register<IFadeController>(fadeController);
         ServiceLocator.Register<INoiseDirector>(new NoiseDirectorService());
         
+        }
     }
 }

@@ -24,11 +24,6 @@ namespace Services.Player
             _camera = mainCamera;
         }
 
-        public void CanGetItems(bool canGetItems)
-        {
-            _canGetItems = canGetItems;
-        }
-
         private void InteractOnStarted(InputAction.CallbackContext callbackContext)
         {
             if (!callbackContext.started) return;
@@ -36,7 +31,7 @@ namespace Services.Player
             if (Physics.Raycast(_camera.transform.position,
                 _camera.transform.TransformDirection(Vector3.forward), out var hit, _interactDistance, _layerMask))
             {
-                if (_canGetItems && hit.collider.TryGetComponent(out InteractableObject interactableObject))
+                if (hit.collider.TryGetComponent(out InteractableObject interactableObject))
                 {
                     interactableObject.Interact();
                 }

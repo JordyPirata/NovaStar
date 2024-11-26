@@ -7,8 +7,9 @@ namespace Services.Interfaces
 {
     public interface IInventoryService
     {
-        int TryPickItem(string item, int quantity);
+        int TryPickItem(string item, int quantity, bool needsTool = false);
         ref Action<Dictionary<string, int>> GetOnInventoryUpdated();
         void TryCraftItem(CraftingRecipe recipe);
+        public void CanGetItems(bool canGetItems);
     }
 }

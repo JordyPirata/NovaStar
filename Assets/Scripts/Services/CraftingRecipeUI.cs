@@ -14,7 +14,7 @@ namespace Services
         [SerializeField] private List<CraftingIngredientUI> craftingIngredientsUI;
         [SerializeField] private CraftingIngredientUI craftingResult;
         [SerializeField] private TextMeshProUGUI craftedItemName;
-        [SerializeField] private Image uncrafteableImage;
+        [SerializeField] private Image uncrafteableImage, uncrafteableImage2;
         [SerializeField] private Button button;
         private Dictionary<string, int> _neededItemsDictionary;
 
@@ -57,16 +57,19 @@ namespace Services
                 if (!ownedItemsDictionary.ContainsKey(neededItemKey))
                 {
                     uncrafteableImage.gameObject.SetActive(true);
+                    uncrafteableImage.gameObject.SetActive(true);
                     button.enabled = false;
                     return;
                 }
                 if (ownedItemsDictionary[neededItem.Key] < _neededItemsDictionary[neededItemKey])
                 {
                     uncrafteableImage.gameObject.SetActive(true);
+                    uncrafteableImage.gameObject.SetActive(true);
                     button.enabled = false;
                     return;
                 }
             }
+            uncrafteableImage.gameObject.SetActive(false);
             uncrafteableImage.gameObject.SetActive(false);
             button.enabled = true;
         }
