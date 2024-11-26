@@ -15,7 +15,7 @@ namespace Services.Player
         {
             foreach (var drops in dropsByRarities.Where(drops => drops.rarity == itemRarity))
             {
-                return Random.Range(0, drops.drops.Count);
+                return drops.drops[Random.Range(0, drops.drops.Count)];
             }
 
             Debug.LogError($"something Went Wrong Trying To Get Any item of the rarity {itemRarity}");

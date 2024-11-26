@@ -11,16 +11,27 @@ namespace Services.Player
     {
         private List<int> droppedItemsIndex;
         private DropUIWindow _dropUIWindow;
+        private List<string> _droppedItems;
 
         public override void Interact()
         {
-            _dropUIWindow.OpenDrop(droppedItemsIndex);
+            if (_droppedItems != null)
+            {
+                _dropUIWindow.OpenDrop(_droppedItems, this);
+                return;
+            }
+            _dropUIWindow.OpenDrop(droppedItemsIndex, this);
         }
 
         public void Configure(int[] dropItemsData, DropUIWindow dropUIWindow)
         {
             droppedItemsIndex = dropItemsData.ToList();
             _dropUIWindow = dropUIWindow;
+        }
+
+        public void SetRestingItems(List<string> restingItems)
+        {
+            _droppedItems = restingItems;
         }
     }
 }

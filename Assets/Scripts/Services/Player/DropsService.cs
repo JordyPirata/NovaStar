@@ -21,7 +21,7 @@ namespace Services.Player
         private IEnumerator StartSpawning()
         {
             SpawnDrop();
-            yield return new WaitForSeconds(secondsToSpawn);
+            yield return new WaitForSeconds(10);
             StartCoroutine(StartSpawning());
         }
 
@@ -37,10 +37,10 @@ namespace Services.Player
                 var itemRarity = ItemRarity.Common;
                 switch (itemRarityPercentage)
                 {
-                    case <= 1: break;
-                    case <= 5: itemRarity = ItemRarity.Rare; break;
-                    case <= 31: itemRarity = ItemRarity.VeryRare; break;
-                    case <= 100: itemRarity = ItemRarity.Epic; break;
+                    case <= 1: itemRarity = ItemRarity.Epic; break;
+                    case <= 5: itemRarity = ItemRarity.VeryRare; break;
+                    case <= 31: itemRarity = ItemRarity.Rare; break;
+                    case <= 100: break;
                     default: Debug.LogError($"got an error trying get a random {itemRarityPercentage}"); break;
                 }
 

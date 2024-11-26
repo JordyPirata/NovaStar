@@ -57,5 +57,6 @@ namespace Gameplay.Items
             }
             throw new Exception($"El item con el nombre {itemId} no se encuentra en la configuracion");
         }
+
     }
 }
