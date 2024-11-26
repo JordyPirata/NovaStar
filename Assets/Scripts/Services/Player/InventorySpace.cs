@@ -45,11 +45,11 @@ namespace Services.Player
                 rarityOverImage.enabled = false;
                 quantityText.text = string.Empty;
                 _hasItem = false;
-                ItemName = String.Empty;
                 if (!movedBetweenEquipableSpaces && isEquipableSpace)
                 {
                     UnEquipItem(ItemName);
                 }
+                ItemName = String.Empty;
             }
         }
         
@@ -87,7 +87,7 @@ namespace Services.Player
                     }
                     else
                     {
-                        SetQuantity(amount);
+                        SetQuantity(amount + Quantity);
                         return 0;
                     }
                 }
