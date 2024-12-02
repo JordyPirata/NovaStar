@@ -118,7 +118,7 @@ namespace Services.Player
             yield return new WaitForSeconds(4);
             _raycastController.LookForGround(_firstPersonCharacter.PlayerTransform);
             yield return new WaitForSeconds(0.1f);
-            _firstPersonCharacter.ControllerScript.CanMove = true;
+            _firstPersonCharacter.CanMove = true;
             _iInputActions.InputActions.Player.Enable();
             
             ServiceLocator.GetService<IFadeController>().FadeOut();

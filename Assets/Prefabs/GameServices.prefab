@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 122000590231450029}
   - component: {fileID: 8050637390777121426}
   - component: {fileID: 4569345581497471872}
+  - component: {fileID: 688317005753205589}
   m_Layer: 0
   m_Name: GameServices
   m_TagString: Untagged
@@ -47,6 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fadeController: {fileID: 4569345581497471872}
+  biomeTextures: {fileID: 11400000, guid: 48bd6cb036c664a419f417a7d7a74201, type: 2}
 --- !u!114 &4569345581497471872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61,6 +63,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 683286059536392146}
   fadeDuration: 0.5
+--- !u!114 &688317005753205589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1810645996181022462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: daf1162391c07b04e9c0e19003a77ffa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _BiomeTextures: {fileID: 0}
 --- !u!1 &3675063790298869574
 GameObject:
   m_ObjectHideFlags: 0

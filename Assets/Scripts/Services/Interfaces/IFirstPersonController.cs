@@ -6,7 +6,7 @@ namespace Services.Interfaces
     // TODO: Test this class
     public interface IFirstPersonController
     {
-        public FirstPersonCharacter ControllerScript { get; }
+        public bool CanMove { get; set; }
         public Transform PlayerTransform { get; }
         void TeleportToPosition(float3 dataTeleportPosition);
     }

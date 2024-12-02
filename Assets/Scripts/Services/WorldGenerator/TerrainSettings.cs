@@ -10,7 +10,7 @@ namespace Services.WorldGenerator
     {
         public const bool allowAutoConnect = true;
         public const int groupingID = 0;
-        public const int pixelError = 5;
+        public const int pixelError = 0;
         public const int heightmapMaximumLOD = 0;
         public const int basemapDistance = 100;
         private static Material DefaultTerrainMaterial { get{return GetDefaultTerrainMaterial();}}

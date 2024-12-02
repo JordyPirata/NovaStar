@@ -8887,6 +8887,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 688317005753205589, guid: f5a8d62b98c04ed41a0cb209012b7423,
+        type: 3}
+      propertyPath: _BiomeTextures
+      value: 
+      objectReference: {fileID: 11400000, guid: 48bd6cb036c664a419f417a7d7a74201,
+        type: 2}
     - target: {fileID: 1810645996181022462, guid: f5a8d62b98c04ed41a0cb209012b7423,
         type: 3}
       propertyPath: m_Name

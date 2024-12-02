@@ -20,6 +20,7 @@ public class GameSceneInstaller : MonoBehaviour
     [SerializeField] private PlayerInfo playerInfo;
     [SerializeField] private InteractionService interactionService;
     [SerializeField] private BiomeTexturesService biomeTexturesService;
+    [SerializeField] private FirstPersonCharacter firstPersonCharacter;
     private void Awake()
     {
         RegisterServices();
@@ -42,7 +43,7 @@ public class GameSceneInstaller : MonoBehaviour
         ServiceLocator.Register<IInteractionService>(interactionService);
         ServiceLocator.Register<IPlayerMediator>(gameObject.AddComponent<PlayerMediator>());
         ServiceLocator.Register<IHUDService>(gameObject.AddComponent<HUDHolder>());
-        ServiceLocator.Register<IFirstPersonController>(new ControllerReference());
+        ServiceLocator.Register<IFirstPersonController>(firstPersonCharacter);
         ServiceLocator.Register<IGameSceneReferences>(gameSceneReferences);
         ServiceLocator.Register<IInventoryService>(inventoryService);
         ServiceLocator.Register<ICraftingService>(craftingService);
