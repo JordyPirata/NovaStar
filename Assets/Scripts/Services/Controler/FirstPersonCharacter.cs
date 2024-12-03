@@ -20,6 +20,8 @@ namespace Services
             get => Controller.transform;
         }
 
+        public bool CanPlane { get; set; }
+
         [SerializeField] private Camera cam;
         [SerializeField] private float movementSpeed = 2.0f;
         [SerializeField] private float lookSensitivity = 1.0f;
@@ -28,7 +30,7 @@ namespace Services
 
         // Movement Vars
         private Vector3 velocity;
-        public float gravity = -15.0f;
+        public float gravity = -15.0f, maxPlanningVelocity = -2f;
         private float initHeight;
 
         [SerializeField] private float crouchHeight;
@@ -109,6 +111,10 @@ namespace Services
         private void ApplyGravity()
         {
             velocity.y += gravity * Time.deltaTime;
+            if (ServiceLocator.GetService<IJetPackService>().Propelling)
+                velocity.y = ServiceLocator.GetService<IJetPackService>().PropellingForce;
+            if (CanPlane && velocity.y < maxPlanningVelocity)
+                velocity.y = maxPlanningVelocity;
             Controller.Move(velocity * Time.deltaTime);
         }
 
@@ -121,6 +127,9 @@ namespace Services
         private void DoMovement()
         {
             float targetSpeed = Sprinting ? movementSpeed * 2 : movementSpeed;
+            targetSpeed = ServiceLocator.GetService<IHoverboardService>().HoverboardEquipped
+                ? ServiceLocator.GetService<IHoverboardService>().HoverBoardSpeedMultiplier * targetSpeed
+                : targetSpeed;
             Grounded = Controller.isGrounded;
             if (Grounded && velocity.y < 0)
             {

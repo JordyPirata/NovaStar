@@ -1,20 +1,19 @@
 ﻿using Services.Interfaces;
-using Services.Player;
 
 namespace Player.Gameplay.Items
 {
-    public class TeleportTablet : Equipable
+    public class Jetpack : Equipable
     {
         public override void Equip()
         {
             base.Equip();
-            ServiceLocator.GetService<ITeleportService>().EquipTeleport(true, false);
+            ServiceLocator.GetService<IEquipablesService>().EquipJetpack(false, true);
         }
 
         public override void UnEquip()
         {
             base.UnEquip();
-            ServiceLocator.GetService<ITeleportService>().EquipTeleport(false, false);
+            ServiceLocator.GetService<IEquipablesService>().EquipJetpack(false, false);
         }
     }
 }
