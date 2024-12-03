@@ -92,6 +92,7 @@ namespace Services.Player
         public void MapLoaded()
         {
             StartCoroutine(ExcecuteAfterMapLoaded());
+            _temperatureService.MapLoaded();
         }
 
         public void TeleportToPosition(float3 dataTeleportPosition)
