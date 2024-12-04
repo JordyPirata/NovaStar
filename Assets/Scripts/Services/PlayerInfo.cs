@@ -19,7 +19,7 @@ public class PlayerInfo : MonoBehaviour, IPlayerInfo
     [SerializeField] private Transform player;
     private static float2 viewerCoordinate;
     private static float3 viewerPosition;
-    private bool isRunning;
+    private bool isRunning; 
 
     public void StartService()
     {
@@ -75,6 +75,11 @@ public class PlayerInfo : MonoBehaviour, IPlayerInfo
     public void PlayerDied()
     {
         throw new System.NotImplementedException();
+    }
+
+    public void MapLoaded()
+    {
+        Map = ServiceLocator.GetService<IMap<ChunkObject>>();
     }
 
     public Transform PlayerTransform()

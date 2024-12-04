@@ -57,6 +57,16 @@ namespace Gameplay.Items
             }
             throw new Exception($"El item con el nombre {itemId} no se encuentra en la configuracion");
         }
+        
+        public ItemData GetItemDataById(string itemId)
+        {
+            for (int i = 0; i < items.Length; i++)
+            {
+                if (items[i].itemName == itemId)
+                    return items[i];
+            }
+            throw new Exception($"El item con el nombre {itemId} no se encuentra en la configuracion");
+        }
 
     }
 }

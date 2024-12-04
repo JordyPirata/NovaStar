@@ -17,5 +17,6 @@ namespace Services.Interfaces
         void PlayerDied();
 
         /* PlayerMediator GetPlayerMediator();*/
+        void MapLoaded();
     }
 }

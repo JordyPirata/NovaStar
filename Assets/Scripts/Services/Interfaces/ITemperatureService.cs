@@ -8,5 +8,7 @@ namespace Services.Interfaces
         void IncreaseStat(int amount);
         void DecreaseStat(int amount);
         void MapLoaded();
+        void DrinkSomeWater();
+        void EquipHat();
     }
 }

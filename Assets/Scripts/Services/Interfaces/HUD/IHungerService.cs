@@ -10,5 +10,6 @@ namespace Services.Interfaces
         void StopService();
         void IncreaseStat(int amount);
         void DecreaseStat(int amount);
+        bool EatSomeFood();
     }
 }

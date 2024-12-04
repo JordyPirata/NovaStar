@@ -22,6 +22,8 @@ namespace Services
 
         public bool CanPlane { get; set; }
 
+        public bool Running => Sprinting && !ServiceLocator.GetService<IPlayerMediator>().IsTired;
+
         [SerializeField] private Camera cam;
         [SerializeField] private float movementSpeed = 2.0f;
         [SerializeField] private float lookSensitivity = 1.0f;
@@ -126,7 +128,7 @@ namespace Services
 
         private void DoMovement()
         {
-            float targetSpeed = Sprinting ? movementSpeed * 2 : movementSpeed;
+            float targetSpeed = Running ? movementSpeed * 2 : movementSpeed;
             targetSpeed = ServiceLocator.GetService<IHoverboardService>().HoverboardEquipped
                 ? ServiceLocator.GetService<IHoverboardService>().HoverBoardSpeedMultiplier * targetSpeed
                 : targetSpeed;

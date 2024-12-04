@@ -4,6 +4,7 @@ using Services.Interfaces;
 using System;
 using Unity.Mathematics;
 using UnityEngine.InputSystem;
+using Util;
 
 namespace Services.Player
 {
@@ -20,6 +21,8 @@ namespace Services.Player
         private ITemperatureService _temperatureService;
         private IHUDService _hudService;
         private IInteractionService _interactionService;
+
+        public bool IsTired => _staminaService.IsTired;
 
         public void Start()
         {
@@ -92,18 +95,42 @@ namespace Services.Player
         public void MapLoaded()
         {
             StartCoroutine(ExcecuteAfterMapLoaded());
-            _temperatureService.MapLoaded();
         }
 
         public void TeleportToPosition(float3 dataTeleportPosition)
         {
             ServiceLocator.GetService<IFadeController>().FadeIn(()=>
             {
-                
                 _firstPersonCharacter.TeleportToPosition(dataTeleportPosition); 
             });
         }
-        
+
+        public bool UseConsumable(ConsumableType consumableType)
+        {
+            switch (consumableType)
+            {
+                case ConsumableType.Hat:
+                    _temperatureService.EquipHat();
+                    return true;
+                case ConsumableType.WaterBottle:
+                    var drunk = _hydrationService.DrinkSomeWater();
+                    if (drunk) _temperatureService.DrinkSomeWater();
+                    return drunk;
+                case ConsumableType.CampFire:
+                    break;
+                    
+                case ConsumableType.Food:
+                    return _hungerService.EatSomeFood();
+                case ConsumableType.Stimulant:
+                    _staminaService.Stimulate();
+                    return true;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(consumableType), consumableType, null);
+            } 
+            throw new NotImplementedException();
+        }
+
 
         public void PlayerDied()
         {
@@ -121,6 +148,8 @@ namespace Services.Player
             yield return new WaitForSeconds(0.1f);
             _firstPersonCharacter.CanMove = true;
             _iInputActions.InputActions.Player.Enable();
+            _playerInfo.MapLoaded();
+            _temperatureService.MapLoaded();
             
             ServiceLocator.GetService<IFadeController>().FadeOut();
             ServiceLocator.GetService<ITimeService>().StartRunningTime();
