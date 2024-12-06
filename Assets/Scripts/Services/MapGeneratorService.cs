@@ -59,22 +59,31 @@ public class MapGeneratorService : IMapGenerator
     }
     private async void GenerateChunk(float2 viewedChunkCoord)
     {
-        if (Map.ContainsKey(viewedChunkCoord))
+        try 
         {
-            // update the status of the chunk
-            Map[viewedChunkCoord].UpdateStatus();
+            if (Map.ContainsKey(viewedChunkCoord))
+            {
+
+                // if the chunk is already in the map, update the status of the chunk
+                Map[viewedChunkCoord].UpdateStatus();
+            }
+            else
+            {
+                if (isRunning == false) return;
+                var chunkBuilder = new ChunkBuilder(viewedChunkCoord);
+                await chunkBuilder.GenerateChunkData();
+                chunkBuilder.SetGameObject();
+                chunkBuilder.SetTerrain();
+                chunkBuilder.CalculateBiomes();
+                
+                Map.Add(viewedChunkCoord, chunkBuilder.GetChunkObject());
+            }
         }
-        else
+        catch
         {
-            if (isRunning == false) return;
-            var chunkBuilder = new ChunkBuilder(viewedChunkCoord);
-            await chunkBuilder.GenerateChunkData();
-            chunkBuilder.SetGameObject();
-            chunkBuilder.SetTerrain();
-            chunkBuilder.CalculateBiomes();
-            
-            Map.Add(viewedChunkCoord, chunkBuilder.GetChunkObject());
+            Debug.Log("Chunk exit from map");
         }
+        
     }
 
     private async Task GenerateMap()
