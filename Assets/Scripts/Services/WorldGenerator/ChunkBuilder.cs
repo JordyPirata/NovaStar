@@ -4,7 +4,6 @@ using Models;
 using Unity.Mathematics;
 using UnityEngine;
 using Services.Interfaces;
-using Services.NoiseGenerator;
 using System.Collections.Generic;
 
 namespace Services.WorldGenerator
@@ -37,83 +36,106 @@ public class ChunkBuilder
     }
     public void SetGameObject()
     {
-        if (_ChunkObject == null) return;
-        ChunkGO.transform.position = Chunk.position;
-        ChunkGO.name = Chunk.ChunkName;
-        ChunkGO.layer = LayerMask.NameToLayer("Terrain");
+        try
+        {
+            ChunkGO.transform.position = Chunk.position;
+            ChunkGO.name = Chunk.ChunkName;
+            ChunkGO.layer = LayerMask.NameToLayer("Terrain");
+        }
+        catch(Exception e)
+        {
+            Debug.Log(e);
+        }
     }
     public async Task GenerateChunkData()
     {
-        if (_ChunkObject == null) return;
-        Chunk = await ChunkDataGenerator.Generate(_ChunkCoords);
+        try
+        {
+            Chunk = await ChunkDataGenerator.Generate(_ChunkCoords);
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+        }
+        
     }
 
     public void SetTerrain()
     {
-        if (_Terrain == null) return;
-        TerrainCollider terrainCollider = ChunkGO.GetComponent<TerrainCollider>();
-        _Terrain = TerrainSettings.ApplySettings(_Terrain, Chunk);
-        terrainCollider.includeLayers = LayerMask.GetMask("Player");
-        terrainCollider.terrainData = _Terrain.terrainData;
+        try
+        {
+            TerrainCollider terrainCollider = ChunkGO.GetComponent<TerrainCollider>();
+            _Terrain = TerrainSettings.ApplySettings(_Terrain, Chunk);
+            terrainCollider.includeLayers = LayerMask.GetMask("Player");
+            terrainCollider.terrainData = _Terrain.terrainData;
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+        }    
     }
     
     public void CalculateBiomes()
     {
-        if (_Terrain == null) return;
-        const int tilling = 30;   
-        var splatMap = SplatMapService.GenerateSplatMap(_ChunkCoords, Chunk.temperatures, Chunk.humidity); 
-        // Calculate biome and create splatmap for terrain
-        List<BiomeTexture> biomeTexture = TexturesService.GetBiomeTextures().Textures;
-        var terrainMaterial = new Material(Shader.Find("Custom/TerrainShader"));
+        try
+        {
+            const int tilling = 30;   
+            var splatMap = SplatMapService.GenerateSplatMap(_ChunkCoords, Chunk.temperatures, Chunk.humidity); 
+            // Calculate biome and create splatmap for terrain
+            List<BiomeTexture> biomeTexture = TexturesService.GetBiomeTextures().Textures;
+            var terrainMaterial = new Material(Shader.Find("Custom/TerrainShader"));
+    
+            terrainMaterial.SetTexture("_SplatMap1", splatMap[0]);
+            terrainMaterial.SetTexture("_SplatMap2", splatMap[1]);
+    
+            terrainMaterial.SetTexture("_TundraAlbedo", biomeTexture[0].Albedo);
+            terrainMaterial.SetTexture("_TundraHeight", biomeTexture[0].Height);
+            terrainMaterial.SetTexture("_TundraNormal", biomeTexture[0].Normal);
+            terrainMaterial.SetTextureScale("_TundraAlbedo", new float2(tilling, tilling));
+            terrainMaterial.SetTextureScale("_TundraHeight", new float2(tilling, tilling));
+            terrainMaterial.SetTextureScale("_TundraNormal", new float2(tilling, tilling));
+            
+            terrainMaterial.SetTexture("_TaigaAlbedo", biomeTexture[1].Albedo);
+            terrainMaterial.SetTexture("_TaigaHeight", biomeTexture[1].Height);
+            terrainMaterial.SetTexture("_TaigaNormal", biomeTexture[1].Normal);
+            terrainMaterial.SetTextureScale("_TaigaAlbedo", new float2(tilling, tilling));
+            terrainMaterial.SetTextureScale("_TaigaHeight", new float2(tilling, tilling));
+            terrainMaterial.SetTextureScale("_TaigaNormal", new float2(tilling, tilling));
+    
+            terrainMaterial.SetTexture("_DesertAlbedo", biomeTexture[2].Albedo);
+            terrainMaterial.SetTexture("_DesertHeight", biomeTexture[2].Height);
+            terrainMaterial.SetTexture("_DesertNormal", biomeTexture[2].Normal);
+            terrainMaterial.SetTextureScale("_DesertAlbedo", new float2(tilling, tilling));
+            terrainMaterial.SetTextureScale("_DesertHeight", new float2(tilling, tilling));
+            terrainMaterial.SetTextureScale("_DesertNormal", new float2(tilling, tilling));
+    
+            terrainMaterial.SetTexture("_ForestAlbedo", biomeTexture[3].Albedo);
+            terrainMaterial.SetTexture("_ForestHeight", biomeTexture[3].Height);
+            terrainMaterial.SetTexture("_ForestNormal", biomeTexture[3].Normal);
+            terrainMaterial.SetTextureScale("_ForestAlbedo", new float2(tilling, tilling));
+            terrainMaterial.SetTextureScale("_ForestHeight", new float2(tilling, tilling));
+            terrainMaterial.SetTextureScale("_ForestNormal", new float2(tilling, tilling));
+    
+            terrainMaterial.SetTexture("_JungleAlbedo", biomeTexture[4].Albedo);
+            terrainMaterial.SetTexture("_JungleHeight", biomeTexture[4].Height);
+            terrainMaterial.SetTexture("_JungleNormal", biomeTexture[4].Normal);
+            terrainMaterial.SetTextureScale("_JungleAlbedo", new float2(tilling, tilling));
+            terrainMaterial.SetTextureScale("_JungleHeight", new float2(tilling, tilling));
+            terrainMaterial.SetTextureScale("_JungleNormal", new float2(tilling, tilling));
+    
+            terrainMaterial.SetTexture("_SavannaAlbedo", biomeTexture[5].Albedo);
+            terrainMaterial.SetTexture("_SavannaHeight", biomeTexture[5].Height);
+            terrainMaterial.SetTexture("_SavannaNormal", biomeTexture[5].Normal);
+            terrainMaterial.SetTextureScale("_SavannaAlbedo", new float2(tilling, tilling));
+            terrainMaterial.SetTextureScale("_SavannaHeight", new float2(tilling, tilling));
+            terrainMaterial.SetTextureScale("_SavannaNormal", new float2(tilling, tilling));
 
-        terrainMaterial.SetTexture("_SplatMap1", splatMap[0]);
-        terrainMaterial.SetTexture("_SplatMap2", splatMap[1]);
-
-        terrainMaterial.SetTexture("_TundraAlbedo", biomeTexture[0].Albedo);
-        terrainMaterial.SetTexture("_TundraHeight", biomeTexture[0].Height);
-        terrainMaterial.SetTexture("_TundraNormal", biomeTexture[0].Normal);
-        terrainMaterial.SetTextureScale("_TundraAlbedo", new float2(tilling, tilling));
-        terrainMaterial.SetTextureScale("_TundraHeight", new float2(tilling, tilling));
-        terrainMaterial.SetTextureScale("_TundraNormal", new float2(tilling, tilling));
-        
-        terrainMaterial.SetTexture("_TaigaAlbedo", biomeTexture[1].Albedo);
-        terrainMaterial.SetTexture("_TaigaHeight", biomeTexture[1].Height);
-        terrainMaterial.SetTexture("_TaigaNormal", biomeTexture[1].Normal);
-        terrainMaterial.SetTextureScale("_TaigaAlbedo", new float2(tilling, tilling));
-        terrainMaterial.SetTextureScale("_TaigaHeight", new float2(tilling, tilling));
-        terrainMaterial.SetTextureScale("_TaigaNormal", new float2(tilling, tilling));
-
-        terrainMaterial.SetTexture("_DesertAlbedo", biomeTexture[2].Albedo);
-        terrainMaterial.SetTexture("_DesertHeight", biomeTexture[2].Height);
-        terrainMaterial.SetTexture("_DesertNormal", biomeTexture[2].Normal);
-        terrainMaterial.SetTextureScale("_DesertAlbedo", new float2(tilling, tilling));
-        terrainMaterial.SetTextureScale("_DesertHeight", new float2(tilling, tilling));
-        terrainMaterial.SetTextureScale("_DesertNormal", new float2(tilling, tilling));
-
-        terrainMaterial.SetTexture("_ForestAlbedo", biomeTexture[3].Albedo);
-        terrainMaterial.SetTexture("_ForestHeight", biomeTexture[3].Height);
-        terrainMaterial.SetTexture("_ForestNormal", biomeTexture[3].Normal);
-        terrainMaterial.SetTextureScale("_ForestAlbedo", new float2(tilling, tilling));
-        terrainMaterial.SetTextureScale("_ForestHeight", new float2(tilling, tilling));
-        terrainMaterial.SetTextureScale("_ForestNormal", new float2(tilling, tilling));
-
-        terrainMaterial.SetTexture("_JungleAlbedo", biomeTexture[4].Albedo);
-        terrainMaterial.SetTexture("_JungleHeight", biomeTexture[4].Height);
-        terrainMaterial.SetTexture("_JungleNormal", biomeTexture[4].Normal);
-        terrainMaterial.SetTextureScale("_JungleAlbedo", new float2(tilling, tilling));
-        terrainMaterial.SetTextureScale("_JungleHeight", new float2(tilling, tilling));
-        terrainMaterial.SetTextureScale("_JungleNormal", new float2(tilling, tilling));
-
-        terrainMaterial.SetTexture("_SavannaAlbedo", biomeTexture[5].Albedo);
-        terrainMaterial.SetTexture("_SavannaHeight", biomeTexture[5].Height);
-        terrainMaterial.SetTexture("_SavannaNormal", biomeTexture[5].Normal);
-        terrainMaterial.SetTextureScale("_SavannaAlbedo", new float2(tilling, tilling));
-        terrainMaterial.SetTextureScale("_SavannaHeight", new float2(tilling, tilling));
-        terrainMaterial.SetTextureScale("_SavannaNormal", new float2(tilling, tilling));
-
-        _Terrain.materialTemplate = terrainMaterial;
-        // Set terrain data 
-
+            _Terrain.materialTemplate = terrainMaterial;
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+        }
     }
     public ChunkObject GetChunkObject()
     {
