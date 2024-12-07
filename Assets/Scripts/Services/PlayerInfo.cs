@@ -13,7 +13,7 @@ namespace Services
 /// MonoState Service that holds the actual Player data
 /// Dependencies: IMap<ChunkObject>
 /// </summary>
-public class PlayerInfo : MonoBehaviour, IPlayerInfo
+public class PlayerInfo : MonoBehaviour, IPlayerInfo , IService
 {
     private IMap<ChunkObject> Map;
     [SerializeField] private Transform player;

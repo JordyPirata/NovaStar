@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using Console = UnityEngine.Debug;
+using System.Collections.Generic;
 
 namespace Services
 {
@@ -32,6 +33,24 @@ public class EventManager : MonoBehaviour, IEventManager
             case IEventManager.Game1:
             case IEventManager.Game:
                 OnSceneGameLoaded?.Invoke();
+                List<Type> serviceTypes = new()
+                {
+                    typeof(IPlayerInfo),
+                    typeof(IMapGenerator),
+                    typeof(IWeldMap),
+                    typeof(ILifeService),
+                    typeof(IHungerService),
+                    typeof(IStaminaService),
+                    typeof(IThirstService),
+                    typeof(IHUDService)
+                };
+
+                foreach (Type serviceType in serviceTypes)
+                {
+                    IService service = ServiceLocator.GetService(serviceType) as IService;
+                    service?.StartService();
+                }
+                /*
                 ServiceLocator.GetService<IPlayerInfo>().StartService();
                 ServiceLocator.GetService<IMapGenerator>().StartService();
                 ServiceLocator.GetService<IWeldMap>().StartService();
@@ -39,7 +58,7 @@ public class EventManager : MonoBehaviour, IEventManager
                 ServiceLocator.GetService<IHungerService>().StartService();
                 ServiceLocator.GetService<IStaminaService>().StartService();
                 ServiceLocator.GetService<IThirstService>().StartService();
-                ServiceLocator.GetService<IHUDService>().Initialize();
+                ServiceLocator.GetService<IHUDService>().Initialize();*/
                 Console.Log("Game Scene Loaded");
                 break;    
             case IEventManager.MainMenu:
@@ -56,13 +75,22 @@ public class EventManager : MonoBehaviour, IEventManager
             switch (scene.name)
             {
             case IEventManager.Game:
-                ServiceLocator.GetService<IMapGenerator>().StopService();
-                ServiceLocator.GetService<IWeldMap>().StopService();
-                ServiceLocator.GetService<IPlayerInfo>().StopService();
-                ServiceLocator.GetService<ILifeService>().StopService();
-                ServiceLocator.GetService<IHungerService>().StopService();
-                ServiceLocator.GetService<IStaminaService>().StopService();
-                ServiceLocator.GetService<IThirstService>().StopService();
+                List<Type> serviceTypes = new()
+                {
+                    typeof(IPlayerInfo),
+                    typeof(IMapGenerator),
+                    typeof(IWeldMap),
+                    typeof(ILifeService),
+                    typeof(IHungerService),
+                    typeof(IStaminaService),
+                    typeof(IThirstService)
+                };
+
+                foreach (Type serviceType in serviceTypes)
+                {
+                    IService service = ServiceLocator.GetService(serviceType) as IService;
+                    service?.StopService();
+                }
                 Console.Log("Game Scene Unloaded");
                 break;    
             case IEventManager.MainMenu:

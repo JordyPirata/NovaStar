@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Services.Player
 {
-public class StaminaService : MonoBehaviour, IStaminaService
+public class StaminaService : MonoBehaviour, IStaminaService, IService
 {
     private object lockObject = new();
     public bool Increase { get; set; }

@@ -9,8 +9,6 @@ namespace Services.Interfaces
         Action OnStatChanged { get; set; }
         Action<bool> OnTiredChanged { get; set; }
         int Stamina { get; }
-        void StartService();
-        void StopService();
         void IncreaseStat(int amount);
         void DecreaseStat(int amount);
     }

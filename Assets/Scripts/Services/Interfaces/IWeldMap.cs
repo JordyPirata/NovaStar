@@ -5,7 +5,6 @@ namespace Services.Interfaces
     /// </summary>
     public interface IWeldMap
     {
-        void StartService();
-        void StopService(); 
+
     }
 }

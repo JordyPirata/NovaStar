@@ -14,7 +14,7 @@ namespace Services
 /// This class is responsible for showing the chunks that are visible to the player
 /// </summary>
 
-public class MapGeneratorService : IMapGenerator
+public class MapGeneratorService : IMapGenerator, IService
 {
     private bool isRunning;
     bool firstLoop;

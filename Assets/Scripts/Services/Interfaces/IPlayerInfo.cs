@@ -12,8 +12,6 @@ namespace Services.Interfaces
         float MapHeight();
         float MapTemperature();
         float MapHumidity();
-        void StartService();
-        void StopService();
         void PlayerDied();
 
         /* PlayerMediator GetPlayerMediator();*/

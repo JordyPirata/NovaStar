@@ -23,6 +23,15 @@ public class ServiceLocator
 
         throw new InvalidOperationException($"Service of type {typeof(T)} is not registered.");
     }
+    public static object GetService(Type type)
+    {
+        if (services.TryGetValue(type, out object service))
+        {
+            return service;
+        }
+
+        throw new InvalidOperationException($"Service of type {type} is not registered.");
+    }
     public static void Unregister<T>()
     {
         services.Remove(typeof(T));
