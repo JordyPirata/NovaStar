@@ -75,6 +75,7 @@ public class EventManager : MonoBehaviour, IEventManager
             switch (scene.name)
             {
             case IEventManager.Game:
+                
                 List<Type> serviceTypes = new()
                 {
                     typeof(IPlayerInfo),
@@ -85,12 +86,12 @@ public class EventManager : MonoBehaviour, IEventManager
                     typeof(IStaminaService),
                     typeof(IThirstService)
                 };
-
+                /*    
                 foreach (Type serviceType in serviceTypes)
                 {
                     IService service = ServiceLocator.GetService(serviceType) as IService;
                     service?.StopService();
-                }
+                }*/
                 Console.Log("Game Scene Unloaded");
                 break;    
             case IEventManager.MainMenu:

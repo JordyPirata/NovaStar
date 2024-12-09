@@ -24,7 +24,7 @@ public class WeldMapService : MonoBehaviour, IWeldMap , IService
     }
     public void StopService()
     {
-        StopCoroutine(WeldChunks());
+        StopAllCoroutines();
     }
 
     private IEnumerator WeldChunks()
@@ -83,7 +83,7 @@ public class WeldMapService : MonoBehaviour, IWeldMap , IService
     }
     private void OnDestroy()
     {
-        StopCoroutine(WeldChunks());
+        StopService();
     }
 }
 }

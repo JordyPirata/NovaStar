@@ -81,5 +81,9 @@ public class PlayerInfo : MonoBehaviour, IPlayerInfo , IService
     {
         return player;
     }
+    private void OnDestroy()
+    {
+        StopService();
+    }
 }
 }

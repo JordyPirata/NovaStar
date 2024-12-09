@@ -7,16 +7,36 @@ namespace Services.Repository
     //TODO: Create a directory Manager to handle the dinamic creation of directories
     public class GameRepository : IRepository
     {
-        // The CreateAsync method serializes the data and saves it to a file
-        public async Task<string> Create<T>(T data, string path)
+        // The Create method serializes the data and saves it to a file
+        public string Create<T>(T data, string path)
         {
-            await Serializer.BSerialize(data, path);
+            Serializer.BSerialize(data, path);
             return "Data saved successfully on: " + path;
         }
-        // The ReadAsync method deserializes the data from a file
-        public async Task<(string, T)> Read<T>(string path)
+        
+        // The CreateAsync method serializes the data and saves it to a file
+        public async Task<string> CreateAsync<T>(T data, string path)
         {
-            T data = await Serializer.BDeserialize<T>(path);
+            await Serializer.BAsyncSerialize(data, path);
+            return "Data saved successfully on: " + path;
+        }
+        // The Read method deserializes the data from a file
+        public (string, T) Read<T>(string path)
+        {
+            T data = Serializer.BDeserialize<T>(path);
+            if (data == null)
+            {
+                return ("Data not found", default);
+            }
+            else
+            {
+                return ("Data read successfully", data);
+            }
+        }
+        // The ReadAsync method deserializes the data from a file
+        public async Task<(string, T)> ReadAsync<T>(string path)
+        {
+            T data = await Serializer.BAsyncDeserialize<T>(path);
             if (data == null)
             {
                 return ("Data not found", default);

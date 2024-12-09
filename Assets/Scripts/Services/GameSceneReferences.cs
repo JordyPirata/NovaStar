@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Services
 {
+    [Obsolete]
     public class GameSceneReferences : MonoBehaviour, IGameSceneReferences
     {
         [SerializeField] private Camera mainCamera;
