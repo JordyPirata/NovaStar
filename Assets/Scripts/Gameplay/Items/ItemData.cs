@@ -1,6 +1,9 @@
 ﻿using System;
+using Services.Interfaces;
 using Services.Player;
 using UnityEngine;
+using UnityEngine.Events;
+using Util;
 
 namespace Gameplay.Items
 {
@@ -11,6 +14,12 @@ namespace Gameplay.Items
         public Sprite sprite;
         public int maxAmount;
         public ItemRarity itemRarity = ItemRarity.Common;
-        public bool isEquipable;
+        public bool isEquipable, isConsumable;
+        public ConsumableType consumableType;
+
+        public bool Consume()
+        {
+            return ServiceLocator.GetService<IPlayerMediator>().UseConsumable(consumableType);
+        }
     }
 }

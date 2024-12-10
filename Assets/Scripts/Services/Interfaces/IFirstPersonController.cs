@@ -10,5 +10,6 @@ namespace Services.Interfaces
         public Transform PlayerTransform { get; }
         bool CanPlane { get; set; }
         void TeleportToPosition(float3 dataTeleportPosition);
+        void Stimulate();
     }
 }

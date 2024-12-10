@@ -5,7 +5,14 @@ using System;
 using UnityEngine.Events;
 public class HydrationService : StatService, IThirstService
 {
+    private const int bottleWaterHydrationRegen = 20;
     public int Hydration { get => Stat; set => Stat = value; }
+    public bool DrinkSomeWater()
+    {
+        if (Hydration >= 100) return false;
+        IncreaseStat(bottleWaterHydrationRegen);
+        return true;
+    }
 
     protected override IEnumerator NaturalRecovery()
     {

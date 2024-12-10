@@ -18,136 +18,190 @@ MonoBehaviour:
     maxAmount: 64
     itemRarity: 0
     isEquipable: 0
+    isConsumable: 0
+    consumableType: 0
   - itemName: Sombrero
     sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
     maxAmount: 1
     itemRarity: 0
     isEquipable: 0
+    isConsumable: 0
+    consumableType: 0
   - itemName: Ropa de abrigo
     sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
     maxAmount: 1
     itemRarity: 0
     isEquipable: 0
+    isConsumable: 0
+    consumableType: 0
   - itemName: Fogata
     sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
     maxAmount: 1
     itemRarity: 0
     isEquipable: 0
+    isConsumable: 0
+    consumableType: 0
   - itemName: Comida y provisiones
     sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
     maxAmount: 64
     itemRarity: 0
     isEquipable: 0
+    isConsumable: 0
+    consumableType: 0
   - itemName: Frutas y verduras
     sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
     maxAmount: 64
     itemRarity: 0
     isEquipable: 0
+    isConsumable: 0
+    consumableType: 0
   - itemName: Combustible
     sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
     maxAmount: 64
     itemRarity: 1
     isEquipable: 0
+    isConsumable: 0
+    consumableType: 0
   - itemName: Metal
     sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
     maxAmount: 64
     itemRarity: 1
     isEquipable: 0
+    isConsumable: 0
+    consumableType: 0
   - itemName: Cristal de Litio
     sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
     maxAmount: 64
     itemRarity: 1
     isEquipable: 0
+    isConsumable: 0
+    consumableType: 0
   - itemName: Cristal
     sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
     maxAmount: 64
     itemRarity: 1
     isEquipable: 0
+    isConsumable: 0
+    consumableType: 0
   - itemName: Bateria
     sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
     maxAmount: 64
     itemRarity: 1
     isEquipable: 0
+    isConsumable: 0
+    consumableType: 0
   - itemName: Tarjeta logica
     sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
     maxAmount: 64
     itemRarity: 1
     isEquipable: 0
+    isConsumable: 0
+    consumableType: 0
   - itemName: Polimero
     sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
     maxAmount: 64
     itemRarity: 1
     isEquipable: 0
+    isConsumable: 0
+    consumableType: 0
   - itemName: Tela de Nilon
     sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
     maxAmount: 64
     itemRarity: 1
     isEquipable: 0
+    isConsumable: 0
+    consumableType: 0
   - itemName: Plantas
     sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
     maxAmount: 64
     itemRarity: 1
     isEquipable: 0
+    isConsumable: 0
+    consumableType: 0
   - itemName: Hierbas
     sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
     maxAmount: 64
     itemRarity: 1
     isEquipable: 0
+    isConsumable: 0
+    consumableType: 0
   - itemName: Hierbas
     sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
     maxAmount: 64
     itemRarity: 1
     isEquipable: 0
+    isConsumable: 0
+    consumableType: 0
   - itemName: Herramienta de recoleccion
     sprite: {fileID: 21300000, guid: 247cb504efaf4474bbaeb4346701b99c, type: 3}
     maxAmount: 1
     itemRarity: 3
     isEquipable: 1
+    isConsumable: 0
+    consumableType: 0
   - itemName: Tableta de teletransporte
     sprite: {fileID: 21300000, guid: a40e131b61d22ba42b2955962e636ca4, type: 3}
     maxAmount: 1
     itemRarity: 2
     isEquipable: 1
+    isConsumable: 0
+    consumableType: 0
   - itemName: Reloj Inteligente
     sprite: {fileID: 21300000, guid: a40e131b61d22ba42b2955962e636ca4, type: 3}
     maxAmount: 1
     itemRarity: 2
     isEquipable: 1
+    isConsumable: 0
+    consumableType: 0
   - itemName: Casco de escaneo
     sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
     maxAmount: 1
     itemRarity: 3
     isEquipable: 1
+    isConsumable: 0
+    consumableType: 0
   - itemName: Planeador
     sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
     maxAmount: 1
     itemRarity: 2
     isEquipable: 1
+    isConsumable: 0
+    consumableType: 0
   - itemName: Mochila cohete
     sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
     maxAmount: 1
     itemRarity: 2
     isEquipable: 1
+    isConsumable: 0
+    consumableType: 0
   - itemName: Planeador cohete
     sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
     maxAmount: 1
     itemRarity: 3
     isEquipable: 1
+    isConsumable: 0
+    consumableType: 0
   - itemName: Linterna
     sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
     maxAmount: 1
     itemRarity: 2
     isEquipable: 1
+    isConsumable: 0
+    consumableType: 0
   - itemName: Estimulante
     sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
     maxAmount: 1
     itemRarity: 2
-    isEquipable: 1
+    isEquipable: 0
+    isConsumable: 1
+    consumableType: 4
   - itemName: Hoverboard
     sprite: {fileID: 21300000, guid: 2f3cd6b896e7d9d4f82a99662da14c7d, type: 3}
     maxAmount: 1
     itemRarity: 2
     isEquipable: 1
+    isConsumable: 0
+    consumableType: 0
   rarityColors:
   - itemRarity: 0
     color: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}

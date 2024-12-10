@@ -4,6 +4,7 @@ using Services.Interfaces;
 using System;
 using Unity.Mathematics;
 using UnityEngine.InputSystem;
+using Util;
 
 namespace Services.Player
 {
@@ -21,6 +22,22 @@ namespace Services.Player
         private IHUDService _hudService;
         private IInteractionService _interactionService;
 
+        public bool IsTired => _staminaService.IsTired;
+        public void Dehydrate(int i)
+        {
+            _hydrationService.DecreaseStat(1);
+        }
+
+        public void LimitStamina(int i)
+        {
+            _staminaService.SetMaxStamina(i);
+        }
+
+        public void LoseLife(int i)
+        {
+            _lifeService.DecreaseStat(i);
+        }
+
         public void Start()
         {
             _iInputActions = ServiceLocator.GetService<IInputActions>();
@@ -31,7 +48,7 @@ namespace Services.Player
             _staminaService = ServiceLocator.GetService<IStaminaService>();    
             _hydrationService = ServiceLocator.GetService<IThirstService>();
             _hungerService = ServiceLocator.GetService<IHungerService>();
-            _temperatureService = ServiceLocator.GetService<ITemperatureService>();
+            _temperatureService = ServiceLocator.GetService<ITemperatureService>().Configure(this);
             _hudService = ServiceLocator.GetService<IHUDService>();
             SubscribeToEvents();
         }
@@ -98,11 +115,36 @@ namespace Services.Player
         {
             ServiceLocator.GetService<IFadeController>().FadeIn(()=>
             {
-                
                 _firstPersonCharacter.TeleportToPosition(dataTeleportPosition); 
             });
         }
-        
+
+        public bool UseConsumable(ConsumableType consumableType)
+        {
+            switch (consumableType)
+            {
+                case ConsumableType.Hat:
+                    _temperatureService.EquipHat();
+                    return true;
+                case ConsumableType.WaterBottle:
+                    var drunk = _hydrationService.DrinkSomeWater();
+                    if (drunk) _temperatureService.DrinkSomeWater();
+                    return drunk;
+                case ConsumableType.CampFire:
+                    return false;
+                case ConsumableType.Food:
+                    return _hungerService.EatSomeFood();
+                case ConsumableType.Stimulant:
+                    _staminaService.Stimulate();
+                    _firstPersonCharacter.Stimulate();
+                    _lifeService.Stimulate();
+                    return true;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(consumableType), consumableType, null);
+            }
+        }
+
 
         public void PlayerDied()
         {
@@ -120,6 +162,8 @@ namespace Services.Player
             yield return new WaitForSeconds(0.1f);
             _firstPersonCharacter.CanMove = true;
             _iInputActions.InputActions.Player.Enable();
+            _playerInfo.MapLoaded();
+            _temperatureService.MapLoaded();
             
             ServiceLocator.GetService<IFadeController>().FadeOut();
             ServiceLocator.GetService<ITimeService>().StartRunningTime();

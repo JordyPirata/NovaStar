@@ -15,9 +15,10 @@ namespace Services.Player
         public Action OnStatChanged { get; set; }
         public Action<bool> OnTiredChanged { get; set; }
         private Coroutine invokeOnTiredChangedCoroutine;
-        private bool _isTired;
+        private bool _isTired, _isStimulated;
+        private int _maxStamina = 100;
 
-        private bool IsTired
+        public bool IsTired
         {
             get => _isTired;
             set
@@ -60,6 +61,7 @@ namespace Services.Player
             if (Stamina - amount <= 0)
             {
                 Stamina = 0;
+                IsTired = true;
                 return;
             }
 
@@ -67,12 +69,31 @@ namespace Services.Player
             if (Stamina == 0) IsTired = true;
         }
 
+        public void Stimulate()
+        {
+            StopCoroutine(StimulateCoroutine());
+            StartCoroutine(StimulateCoroutine());
+        }
+
+        public void SetMaxStamina(int cant)
+        {
+            _maxStamina = cant;
+        }
+
+        private IEnumerator StimulateCoroutine()
+        {
+            IncreaseStat(100);
+            _isStimulated = true;
+            yield return new WaitForSeconds(60);
+            _isStimulated = false;
+        }
+        
         public void IncreaseStat(int amount)
         {
             OnStatChanged.Invoke();
-            if (Stamina + amount >= 100)
+            if (Stamina + amount >= _maxStamina)
             {
-                Stamina = 100;
+                Stamina = _maxStamina;
                 return;
             }
 
@@ -88,13 +109,13 @@ namespace Services.Player
         {
             while (true)
             {
-                if (Increase)
+                if (Increase || _isStimulated)
                 {
                     yield return new WaitForSeconds(.20f);
                     IncreaseStat(2);
                 }
 
-                if (!Increase)
+                if (!Increase && !_isStimulated)
                 {
                     yield return new WaitForSeconds(.1f);
                     DecreaseStat(2);

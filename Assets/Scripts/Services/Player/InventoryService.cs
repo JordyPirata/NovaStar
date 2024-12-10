@@ -41,6 +41,7 @@ namespace Services.Player
             TryPickItem("Planeador cohete", 1);
             TryPickItem("Mochila cohete", 1);
             TryPickItem("Hoverboard", 1); 
+            TryPickItem("Estimulante", 10); 
         }
         
         public void CanGetItems(bool canGetItems)
