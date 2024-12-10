@@ -9,13 +9,24 @@ namespace Services.Repository
     {
         // Serialize the data to a binary file
         private static readonly BinaryFormatter binaryFormatter = new();
-        public static async Task BSerialize<T>(T data, string path)
+        public static void BSerialize<T> (T data, string path)
+        {
+            using Stream stream = File.Open(path, FileMode.Create);
+            binaryFormatter.Serialize(stream, data);
+        }
+        // Deserialize the data from a binary file
+        public static T BDeserialize<T>(string path)
+        {
+            using Stream stream = File.Open(path, FileMode.Open);
+            return (T)binaryFormatter.Deserialize(stream);
+        }
+        public static async Task BAsyncSerialize<T>(T data, string path)
         {
             using Stream stream = File.Open(path, FileMode.Create);
             await Task.Run(() => binaryFormatter.Serialize(stream, data));
         }
         // Deserialize the data from a binary file
-        public static async Task<T> BDeserialize<T>(string path)
+        public static async Task<T> BAsyncDeserialize<T>(string path)
         {
             using Stream stream = File.Open(path, FileMode.Open);
             return await Task.Run( () =>(T)binaryFormatter.Deserialize(stream));

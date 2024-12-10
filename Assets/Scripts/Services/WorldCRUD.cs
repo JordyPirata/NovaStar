@@ -48,7 +48,7 @@ namespace Services
             string GameName = IOUtil.GetNameDirectory(directoryPath);
             string GamePath = Path.Combine(directoryPath, string.Concat(GameName, ".bin"));
             // Load the game
-            (message, game) = await GameRepository.Read<World>(GamePath);
+            (message, game) = await GameRepository.ReadAsync<World>(GamePath);
             Console.Log(message);
             return game;
         }
@@ -59,7 +59,7 @@ namespace Services
             {
                 throw new System.Exception("Game not found");
             }
-            message = await GameRepository.Create(game, game.WorldPath);
+            message = await GameRepository.CreateAsync(game, game.WorldPath);
             Console.Log(message);
         }
         public async Task UpdateWorld(World game, string newGameName)
@@ -82,7 +82,7 @@ namespace Services
             game.Name = newGameName;
             game = UpdateDir(newGameName, game);
             // Update the game
-            message = await GameRepository.Create(game, game.WorldPath);
+            message = await GameRepository.CreateAsync(game, game.WorldPath);
             Console.Log(message);
         }
         private World UpdateDir(string GameName, World game)
@@ -95,7 +95,7 @@ namespace Services
         {
             Directory.CreateDirectory(world.Directory);
             
-            message = await GameRepository.Create(world, world.WorldPath);
+            message = await GameRepository.CreateAsync(world, world.WorldPath);
             Console.Log(message);
         }
         

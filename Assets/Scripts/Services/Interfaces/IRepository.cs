@@ -4,8 +4,10 @@ namespace Services.Interfaces
 {
     public interface IRepository
     {
-        Task<string> Create<T>(T data, string path);
-        Task<(string, T)> Read<T>(string path);
+        string Create<T>(T data, string path);
+        Task<string> CreateAsync<T>(T data, string path);
+        (string, T) Read<T>(string path);
+        Task<(string, T)> ReadAsync<T>(string path);
         string Delete(string path);
         bool ExistsFile(string path);
         bool ExistsDirectory(string path);

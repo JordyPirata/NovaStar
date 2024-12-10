@@ -33,7 +33,7 @@ public class SettingsService : MonoBehaviour, ISettingsService
         }
         else
         {
-            (message, settings) = await GameRepository.Read<Settings>(settingsFile);
+            (message, settings) = await GameRepository.ReadAsync<Settings>(settingsFile);
             Console.Log(message);
         }
         SetLanguage(settings.language);
@@ -47,7 +47,7 @@ public class SettingsService : MonoBehaviour, ISettingsService
 
     public async void SaveSettings()
     {
-        message = await GameRepository.Create(settings, settingsFile);
+        message = await GameRepository.CreateAsync(settings, settingsFile);
         Console.Log(message);
     }
 

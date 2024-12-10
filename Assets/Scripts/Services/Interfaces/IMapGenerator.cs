@@ -5,7 +5,5 @@ namespace Services.Interfaces
     /// </summary>
     public interface IMapGenerator
     {
-        void StartService();
-        void StopService();
     }
 }

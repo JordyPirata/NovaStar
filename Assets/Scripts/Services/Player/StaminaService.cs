@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Services.Player
 {
-    public class StaminaService : MonoBehaviour, IStaminaService
+    public class StaminaService : MonoBehaviour, IStaminaService, IService
     {
         private object lockObject = new();
         public bool Increase { get; set; }
@@ -44,6 +44,16 @@ namespace Services.Player
             Increase = true;
         }
 
+        public void StopService()
+        {
+            StopCoroutine(ContinuousChange());
+        }
+
+        private void CheckIsTired()
+        {
+            if (Stamina < 20) IsTired = true;
+            else IsTired = false;
+        }
         public void StopService()
         {
             StopCoroutine(ContinuousChange());
@@ -100,7 +110,74 @@ namespace Services.Player
             Stamina += amount;
             CheckIsTired();
         }
+        public void DecreaseStat(int amount)
+        {
+            OnStatChanged.Invoke();
+            if (Stamina - amount <= 0)
+            {
+                Stamina = 0;
+                IsTired = true;
+                return;
+            }
 
+            Stamina -= amount;
+            if (Stamina == 0) IsTired = true;
+        }
+
+        public void Stimulate()
+        {
+            StopCoroutine(StimulateCoroutine());
+            StartCoroutine(StimulateCoroutine());
+        }
+
+        public void SetMaxStamina(int cant)
+        {
+            _maxStamina = cant;
+        }
+
+        private IEnumerator StimulateCoroutine()
+        {
+            IncreaseStat(100);
+            _isStimulated = true;
+            yield return new WaitForSeconds(60);
+            _isStimulated = false;
+        }
+        
+        public void IncreaseStat(int amount)
+        {
+            OnStatChanged.Invoke();
+            if (Stamina + amount >= _maxStamina)
+            {
+                Stamina = _maxStamina;
+                return;
+            }
+
+            Stamina += amount;
+            CheckIsTired();
+        }
+
+        /// <summary>
+        /// Increase or decrease stamina over time
+        /// </summary>
+        /// <param name="increase"> If true, stamina will increase over time, otherwise it will decrease</param> 
+        protected IEnumerator ContinuousChange()
+        {
+            while (true)
+            {
+                if (Increase || _isStimulated)
+                {
+                    yield return new WaitForSeconds(.20f);
+                    IncreaseStat(2);
+                }
+
+                if (!Increase && !_isStimulated)
+                {
+                    yield return new WaitForSeconds(.1f);
+                    DecreaseStat(2);
+                }
+            }
+        }
+    }
         /// <summary>
         /// Increase or decrease stamina over time
         /// </summary>
