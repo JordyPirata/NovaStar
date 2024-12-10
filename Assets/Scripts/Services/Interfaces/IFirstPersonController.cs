@@ -8,6 +8,8 @@ namespace Services.Interfaces
     {
         public bool CanMove { get; set; }
         public Transform PlayerTransform { get; }
+        bool CanPlane { get; set; }
         void TeleportToPosition(float3 dataTeleportPosition);
+        void Stimulate();
     }
 }

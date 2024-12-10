@@ -1,5 +1,6 @@
 using System;
 using Gameplay.Items;
+using Services.Interfaces;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -7,11 +8,12 @@ using UnityEngine.UI;
 
 namespace Player.Gameplay.UserInterface
 {
-    public class InventorySpace : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
+    public class InventorySpace : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerClickHandler
     {
         [SerializeField] private TextMeshProUGUI quantityText;
         [SerializeField] private Image itemImage, rarityOverImage;
         [SerializeField] public bool isEquipableSpace;
+        [SerializeField] public float doubleClickThreshold = 0.3f;
         public Action<string> OnEquipItem, OnUnEquipItem;
         private bool _hasItem, _hasEquipableItem;
         [SerializeField] private string _itemName;
@@ -21,6 +23,7 @@ namespace Player.Gameplay.UserInterface
         private Action _endDrag;
         private ItemsUIConfiguration _itemsUIConfiguration;
         private RectTransform _rectTransform;
+        private float _lastClickTime = 0f;
 
         public int Quantity
         {
@@ -182,6 +185,24 @@ namespace Player.Gameplay.UserInterface
             }
         }
 
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            float timeSinceLastClick = Time.time - _lastClickTime;
+
+            if (timeSinceLastClick <= doubleClickThreshold)
+            {
+                OnDoubleClick();
+            }
+
+            _lastClickTime = Time.time;
+        }
+
+        private void OnDoubleClick()
+        {
+            if (!_hasItem || !_itemsUIConfiguration.GetItemDataById(_itemName).isConsumable) return;
+            if (_itemsUIConfiguration.GetItemDataById(_itemName).Consume())
+                ServiceLocator.GetService<IInventoryService>().TryDiscardItems(_itemName, 1);
+        }
 
         public void Configure(Action<InventorySpace, Sprite, RectTransform> beginDrag, Action<PointerEventData> drag,
             Action endDrag)

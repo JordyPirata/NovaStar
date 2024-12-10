@@ -8,5 +8,6 @@ namespace Services.Interfaces
         int Hydration { get; set; }
         void IncreaseStat(int amount);
         void DecreaseStat(int amount);
+        bool DrinkSomeWater();
     }   
 }

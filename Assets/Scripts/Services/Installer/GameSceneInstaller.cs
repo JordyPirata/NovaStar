@@ -1,3 +1,4 @@
+using Player.Gameplay.Items;
 using Services.Interfaces;
 using Services.Player;
 using Services.Splatmap;
@@ -21,6 +22,8 @@ public class GameSceneInstaller : MonoBehaviour
     [SerializeField] private InteractionService interactionService;
     [SerializeField] private BiomeTexturesService biomeTexturesService;
     [SerializeField] private FirstPersonCharacter firstPersonCharacter;
+    [SerializeField] private JetPackService jetPackService;
+    [SerializeField] private HoverBoardService hoverBoardService;
     private void Awake()
     {
         RegisterServices();
@@ -50,6 +53,9 @@ public class GameSceneInstaller : MonoBehaviour
         ServiceLocator.Register<ITeleportService>(teleportService);
         ServiceLocator.Register<ITimeService>(timeService);
         ServiceLocator.Register<IUIService>(uiService);
+        ServiceLocator.Register<IEquipablesService>(new EquipablesService());
+        ServiceLocator.Register<IJetPackService>(jetPackService);
+        ServiceLocator.Register<IHoverboardService>(hoverBoardService);
     }
 }
 }

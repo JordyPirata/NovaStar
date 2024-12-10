@@ -8,5 +8,6 @@ namespace Services.Interfaces
         int Life { get; set; }
         void IncreaseStat(int amount);
         void DecreaseStat(int amount);
+        void Stimulate();
     }
 }

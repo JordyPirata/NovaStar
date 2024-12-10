@@ -12,16 +12,16 @@ namespace Services
     {
         [SerializeField] private TMP_InputField tpNameInputField;
         [SerializeField] private TeleportUI teleportUITemplate;
-        private int _teleportsEquipped;
+        private int _10TeleportsEquipped, _15TeleportsEquipped;
         private bool _teleportMenuOpen;
-        private bool CanOpenTeleportMenu => _teleportsEquipped > 0;
+        private bool CanOpenTeleportMenu => _10TeleportsEquipped > 0 || _15TeleportsEquipped > 0;
         private List<TeleportData> _teleportData;
-        private Transform _telelportsUIParentTransform;
+        private Transform _teleportsUIParentTransform;
 
         private void Awake()
         {
             _teleportData = new List<TeleportData>();
-            _telelportsUIParentTransform = teleportUITemplate.transform.parent;
+            _teleportsUIParentTransform = teleportUITemplate.transform.parent;
             teleportUITemplate.gameObject.SetActive(false);
         }
 
@@ -46,19 +46,30 @@ namespace Services
             }
         }
         
-        public void EquipTeleport(bool canOpen)
+        public void EquipTeleport(bool canOpen, bool is15Teleports)
         {
-            if (canOpen)
-                _teleportsEquipped++;
+            if (is15Teleports)
+            {
+                if (canOpen)
+                    _15TeleportsEquipped++;
+                else
+                    _15TeleportsEquipped--;
+            }
             else
-                _teleportsEquipped--;
+            {
+                if (canOpen)
+                    _10TeleportsEquipped++;
+                else
+                    _10TeleportsEquipped--;
+            }
 
-            
-            if (_teleportsEquipped < 0) Debug.LogError($"For some reason you have {_teleportsEquipped} teleports equipped now");
+            if (_10TeleportsEquipped < 0) Debug.LogError($"For some reason you have {_10TeleportsEquipped} teleports equipped now");
         }
 
         public void SetTeleportInPlayerPosition()
         {
+            var maxTeleports = _15TeleportsEquipped > 0 ? 15 : 10;
+            if (maxTeleports > _teleportData.Count) return;
             if (_teleportData.Any(data => data.teleportName == tpNameInputField.text))
                 return;
             
@@ -68,7 +79,7 @@ namespace Services
                 teleportName = tpNameInputField.text
             };
             _teleportData.Add(teleportData);
-            var teleportUIInstance = Instantiate(teleportUITemplate, _telelportsUIParentTransform);
+            var teleportUIInstance = Instantiate(teleportUITemplate, _teleportsUIParentTransform);
             teleportUIInstance.TeleportName = teleportData.teleportName;
             teleportUIInstance.OnClick += TeleportToPosition;
             teleportUIInstance.gameObject.SetActive(true);

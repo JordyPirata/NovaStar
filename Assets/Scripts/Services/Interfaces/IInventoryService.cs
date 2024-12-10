@@ -11,5 +11,6 @@ namespace Services.Interfaces
         ref Action<Dictionary<string, int>> GetOnInventoryUpdated();
         void TryCraftItem(CraftingRecipe recipe);
         public void CanGetItems(bool canGetItems);
+        int TryDiscardItems(string itemName, int quantity);
     }
 }

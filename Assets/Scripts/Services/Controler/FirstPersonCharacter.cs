@@ -20,16 +20,22 @@ namespace Services
             get => Controller.transform;
         }
 
+        public bool CanPlane { get; set; }
+        
+        
+        public bool Running => Sprinting && !ServiceLocator.GetService<IPlayerMediator>().IsTired;
+
         [SerializeField] private Camera cam;
-        [SerializeField] private float movementSpeed = 2.0f;
+        [SerializeField] private float movementSpeed = 2.0f, stimulatedSpeed = 3.0f;
         [SerializeField] private float lookSensitivity = 1.0f;
 
         private float xRotation = 0f;
 
         // Movement Vars
         private Vector3 velocity;
-        public float gravity = -15.0f;
+        public float gravity = -15.0f, maxPlanningVelocity = -2f;
         private float initHeight;
+        private float _restingStimulatedTime;
 
         [SerializeField] private float crouchHeight;
 
@@ -47,6 +53,7 @@ namespace Services
         public LayerMask GroundLayers;
 
         public bool CanMove { get; set; }
+        public bool Stimulated { get; set; }
 
         private void Awake()
         {
@@ -109,6 +116,10 @@ namespace Services
         private void ApplyGravity()
         {
             velocity.y += gravity * Time.deltaTime;
+            if (ServiceLocator.GetService<IJetPackService>().Propelling)
+                velocity.y = ServiceLocator.GetService<IJetPackService>().PropellingForce;
+            if (CanPlane && velocity.y < maxPlanningVelocity)
+                velocity.y = maxPlanningVelocity;
             Controller.Move(velocity * Time.deltaTime);
         }
 
@@ -120,7 +131,11 @@ namespace Services
 
         private void DoMovement()
         {
-            float targetSpeed = Sprinting ? movementSpeed * 2 : movementSpeed;
+            var targetSpeed = Stimulated ? stimulatedSpeed : movementSpeed;
+            targetSpeed = Running ? targetSpeed * 2 : targetSpeed;
+            targetSpeed = ServiceLocator.GetService<IHoverboardService>().HoverboardEquipped
+                ? ServiceLocator.GetService<IHoverboardService>().HoverBoardSpeedMultiplier * targetSpeed
+                : targetSpeed;
             Grounded = Controller.isGrounded;
             if (Grounded && velocity.y < 0)
             {
@@ -130,6 +145,11 @@ namespace Services
             Vector2 movement = GetPlayerMovement();
             Vector3 move = transform.right * movement.x + transform.forward * movement.y;
             Controller.Move(targetSpeed * Time.deltaTime * move);
+            if (Stimulated)
+            {
+                _restingStimulatedTime -= Time.fixedTime;
+                if (_restingStimulatedTime <= 0) Stimulated = false;
+            }
         }
 
         private void GroundedCheck()
@@ -167,6 +187,12 @@ namespace Services
                     Controller.height = initHeight;
                 }
             }
+        }
+
+        public void Stimulate()
+        {
+            Stimulated = true;
+            _restingStimulatedTime = 60f;
         }
 
         public Vector2 GetPlayerMovement()
