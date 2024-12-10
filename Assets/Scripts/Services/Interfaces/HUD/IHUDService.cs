@@ -4,17 +4,16 @@ namespace Services.Interfaces
 {
 interface IHUDService
 {
-    public void Initialize();
     public float HealthValue { get; set; }
     public float StaminaValue { get; set; }
     public float HungerValue { get; set; }
     public float ThirstValue { get; set; }
     public float FreezeScreenValue { get; set; }
-    public HealthBar healthBar { get; set; }
-    public StaminaBar staminaBar { get; set; }
-    public HungerBar hungerBar { get; set; }
-    public ThirstBar thirstBar { get; set; }
-    public MiniMap miniMap { get; set; }
-    public FreezeScreen freezeScreen { get; set;}
+    public HealthBar HealthBar { get; set; }
+    public StaminaBar StaminaBar { get; set; }
+    public HungerBar HungerBar { get; set; }
+    public ThirstBar ThirstBar { get; set; }
+    public MiniMap MiniMap { get; set; }
+    public FreezeScreen FreezeScreen { get; set;}
     }
 }
