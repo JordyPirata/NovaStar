@@ -16,6 +16,7 @@ namespace Services.Player
         public Action<bool> OnTiredChanged { get; set; }
         private Coroutine invokeOnTiredChangedCoroutine;
         private bool _isTired, _isStimulated;
+        private int _maxStamina = 100;
 
         public bool IsTired
         {
@@ -74,6 +75,11 @@ namespace Services.Player
             StartCoroutine(StimulateCoroutine());
         }
 
+        public void SetMaxStamina(int cant)
+        {
+            _maxStamina = cant;
+        }
+
         private IEnumerator StimulateCoroutine()
         {
             IncreaseStat(100);
@@ -85,9 +91,9 @@ namespace Services.Player
         public void IncreaseStat(int amount)
         {
             OnStatChanged.Invoke();
-            if (Stamina + amount >= 100)
+            if (Stamina + amount >= _maxStamina)
             {
-                Stamina = 100;
+                Stamina = _maxStamina;
                 return;
             }
 

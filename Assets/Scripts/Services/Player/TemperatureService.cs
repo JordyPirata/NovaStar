@@ -7,15 +7,22 @@ namespace Services.Player
 {
     public class TemperatureService : StatService, ITemperatureService
     {
-        [SerializeField] private float secondsToCheckAgain = 5;
+        [SerializeField] private float secondsToCheckAgain = 1;
         private bool _hasDrinkEffect, _hasHat;
-        private int _temperatureModification;
+        private int _temperatureModification, _lastTemperature, _currentSecondsLapsed;
+        private IPlayerMediator _playerMediator;
+
+        private Action _onTemperatureChanged;
 
         public int Temperature
         {
             get => Stat;
             set => Stat = value;
         }
+
+        private bool Heated => !_hasHat && Temperature == 38;
+        private bool OverHeated => Temperature > 38;
+        private bool Frozen => Temperature <= 35;
 
         public void MapLoaded()
         {
@@ -38,9 +45,41 @@ namespace Services.Player
             _hasHat = true;
         }
 
+        public ITemperatureService Configure(IPlayerMediator playerMediator)
+        {
+            return this;
+            _playerMediator = playerMediator;
+        }
+
         private IEnumerator StartCheckingTemperature()
         {
             yield return new WaitForSeconds(secondsToCheckAgain);
+            _currentSecondsLapsed++;
+            if (_currentSecondsLapsed % 5 == 0)
+            {
+                CheckTemperature();
+                if (Heated || OverHeated) _playerMediator.Dehydrate(1);
+            }
+
+            if (_currentSecondsLapsed % 10 == 0)
+            {
+                if (OverHeated) _playerMediator.LoseLife(1);
+                if (Frozen) _playerMediator.LoseLife(5);
+            }
+            
+            if (_currentSecondsLapsed % 30 == 0)
+            {
+                if (Heated) _playerMediator.LoseLife(1);
+            }
+            
+            
+            
+            
+            StartCoroutine(StartCheckingTemperature());
+        }
+
+        public void CheckTemperature()
+        {
             var mapTemperature = 15f;
             try
             {
@@ -51,8 +90,54 @@ namespace Services.Player
                 Console.WriteLine(e); 
             }
             Temperature = (int)((mapTemperature + 10) * 7 / 50) + 34 + _temperatureModification;
+            if (Temperature != _lastTemperature)
+            {
+                ChangeTemperatureLevel();
+                _lastTemperature = Temperature;
+            }
             Debug.Log($"MapTemperature:{mapTemperature}. CorporalTemperature: {Temperature}");
-            StartCoroutine(StartCheckingTemperature());
+        }
+
+        private void ChangeTemperatureLevel()
+        {
+            _onTemperatureChanged?.Invoke();
+            switch (Temperature)
+            {
+                case 35:
+                    _playerMediator.LimitStamina(19);
+                    _onTemperatureChanged = () =>
+                    {
+                        _playerMediator.LimitStamina(100);
+                    };
+                    break;
+                case 36:
+                    _playerMediator.LimitStamina(19);
+                    _onTemperatureChanged = () =>
+                    {
+                        _playerMediator.LimitStamina(100);
+                    };
+                    break;
+                case 37:
+                    
+                    break;
+                case 38:
+                    _playerMediator.LimitStamina(60);
+                    _onTemperatureChanged = () =>
+                    {
+                        _playerMediator.LimitStamina(100);
+                    };
+                    break;
+                case 39:
+                    _playerMediator.LimitStamina(60);
+                    _onTemperatureChanged = () =>
+                    {
+                        _playerMediator.LimitStamina(100);
+                    };
+                    break;
+                default:
+                    Debug.Log($"Temperature {Temperature} is out of range");
+                    break;
+            }
         }
 
         private IEnumerator DrinkSomeWaterCoroutine()

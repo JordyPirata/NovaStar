@@ -11,5 +11,8 @@ namespace Services.Interfaces
         void TeleportToPosition(float3 dataTeleportPosition);
         bool UseConsumable(ConsumableType consumableType);
         bool IsTired { get;}
+        void Dehydrate(int i);
+        void LimitStamina(int i);
+        void LoseLife(int i);
     }
 }

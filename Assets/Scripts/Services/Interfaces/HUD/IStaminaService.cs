@@ -15,5 +15,6 @@ namespace Services.Interfaces
         void IncreaseStat(int amount);
         void DecreaseStat(int amount);
         void Stimulate();
+        void SetMaxStamina(int cant);
     }
 }

@@ -1,6 +1,8 @@
+using Services.Player;
+
 namespace Services.Interfaces
 {
-    interface ITemperatureService
+    public interface ITemperatureService
     {
         int Temperature { get; set; }
         void StartService();
@@ -10,5 +12,6 @@ namespace Services.Interfaces
         void MapLoaded();
         void DrinkSomeWater();
         void EquipHat();
+        ITemperatureService Configure(IPlayerMediator playerMediator);
     }
 }

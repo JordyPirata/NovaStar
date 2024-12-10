@@ -553,6 +553,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 278524695}
   movementSpeed: 10
+  stimulatedSpeed: 3
   lookSensitivity: 2
   gravity: -15
   maxPlanningVelocity: -2
@@ -6410,6 +6411,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3422355909545523304, guid: 4ae9a231231e56f4b95d35130a93b7bf,
+        type: 3}
+      propertyPath: m_Type
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3422355909545523304, guid: 4ae9a231231e56f4b95d35130a93b7bf,
+        type: 3}
+      propertyPath: m_Range
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 4044237310278424688, guid: 4ae9a231231e56f4b95d35130a93b7bf,
         type: 3}
