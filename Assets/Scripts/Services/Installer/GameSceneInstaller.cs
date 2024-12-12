@@ -10,6 +10,7 @@ namespace Services.Installer
 [RequireComponent(typeof(PlayerMediatorData))]
 public class GameSceneInstaller : MonoBehaviour
 {
+    [SerializeField] private HUDHolder hudHolder;
     [SerializeField] private PlayerMediatorData playerMediatorData;
     [SerializeField] private GameSceneReferences gameSceneReferences;
     [SerializeField] private InventoryService inventoryService;
@@ -46,7 +47,7 @@ public class GameSceneInstaller : MonoBehaviour
         ServiceLocator.Register<ITemperatureService>(gameObject.AddComponent<TemperatureService>());
         ServiceLocator.Register<IInteractionService>(interactionService);
         ServiceLocator.Register<IPlayerMediator>(gameObject.AddComponent<PlayerMediator>());
-        ServiceLocator.Register<IHUDService>(gameObject.AddComponent<HUDHolder>());
+        ServiceLocator.Register<IHUDService>(hudHolder);
         ServiceLocator.Register<IFirstPersonController>(firstPersonCharacter);
         ServiceLocator.Register<IGameSceneReferences>(gameSceneReferences);
         ServiceLocator.Register<IInventoryService>(inventoryService);

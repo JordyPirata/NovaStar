@@ -1,8 +1,9 @@
 using UnityEngine;
 using System.Collections;
 using System;
+using Services.Interfaces;
 
-public class StatService : MonoBehaviour
+public class StatService : MonoBehaviour , IService
 {
     public Action OnStatChanged { get; set; } = new Action(() => { });
     

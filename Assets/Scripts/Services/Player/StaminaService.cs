@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Services.Player
 {
-    public class StaminaService : MonoBehaviour, IStaminaService
+    public class StaminaService : MonoBehaviour, IStaminaService, IService
     {
         private object lockObject = new();
         public bool Increase { get; set; }
@@ -100,7 +100,6 @@ namespace Services.Player
             Stamina += amount;
             CheckIsTired();
         }
-
         /// <summary>
         /// Increase or decrease stamina over time
         /// </summary>

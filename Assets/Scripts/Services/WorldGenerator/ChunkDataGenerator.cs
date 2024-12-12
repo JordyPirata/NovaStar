@@ -32,7 +32,7 @@ public struct ChunkDataGenerator
         if (GameRepository.ExistsFile(chunkPath))
         {
             // Load the chunk
-            (message, chunk) = await GameRepository.Read<Chunk>(chunkPath);
+            (message, chunk) = await GameRepository.ReadAsync<Chunk>(chunkPath);
 
             chunk.position = new float3(coord.x * ChunkConfig.width, 0, coord.y * ChunkConfig.depth);
             Debug.Log(message + " " + chunk.ChunkName);
@@ -92,7 +92,7 @@ public struct ChunkDataGenerator
     }
     private static async void SaveChunk(Chunk Chunk)
     {
-        message = await GameRepository.Create(Chunk,
+        message = await GameRepository.CreateAsync(Chunk,
             Path.Combine(WorldDirectory, string.Concat(Chunk.ChunkName, ".bin")));
         Debug.Log(message + " " + Chunk.ChunkName);
     }

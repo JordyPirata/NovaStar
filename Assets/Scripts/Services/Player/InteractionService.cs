@@ -28,6 +28,18 @@ namespace Services.Player
         {
             if (!callbackContext.started) return;
             ServiceLocator.GetService<ITeleportService>().Interacted();
+            try
+            {
+                Interact();
+            }
+            catch (System.Exception e)
+            {
+                Debug.Log(e);
+            }
+            
+        }
+        private void Interact()
+        {
             if (Physics.Raycast(_camera.transform.position,
                 _camera.transform.TransformDirection(Vector3.forward), out var hit, _interactDistance, _layerMask))
             {

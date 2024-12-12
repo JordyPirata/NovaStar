@@ -4,7 +4,6 @@ using Models;
 using Unity.Mathematics;
 using UnityEngine;
 using Services.Interfaces;
-using Services.NoiseGenerator;
 using System.Collections.Generic;
 
 namespace Services.WorldGenerator
@@ -37,29 +36,27 @@ public class ChunkBuilder
     }
     public void SetGameObject()
     {
-        if (_ChunkObject == null) return;
         ChunkGO.transform.position = Chunk.position;
         ChunkGO.name = Chunk.ChunkName;
         ChunkGO.layer = LayerMask.NameToLayer("Terrain");
+
     }
     public async Task GenerateChunkData()
-    {
-        if (_ChunkObject == null) return;
-        Chunk = await ChunkDataGenerator.Generate(_ChunkCoords);
+    {       
+        Chunk = await ChunkDataGenerator.Generate(_ChunkCoords);       
     }
 
     public void SetTerrain()
     {
-        if (_Terrain == null) return;
+
         TerrainCollider terrainCollider = ChunkGO.GetComponent<TerrainCollider>();
         _Terrain = TerrainSettings.ApplySettings(_Terrain, Chunk);
         terrainCollider.includeLayers = LayerMask.GetMask("Player");
-        terrainCollider.terrainData = _Terrain.terrainData;
+        terrainCollider.terrainData = _Terrain.terrainData;   
     }
     
     public void CalculateBiomes()
-    {
-        if (_Terrain == null) return;
+    {        
         const int tilling = 30;   
         var splatMap = SplatMapService.GenerateSplatMap(_ChunkCoords, Chunk.temperatures, Chunk.humidity); 
         // Calculate biome and create splatmap for terrain
@@ -112,8 +109,6 @@ public class ChunkBuilder
         terrainMaterial.SetTextureScale("_SavannaNormal", new float2(tilling, tilling));
 
         _Terrain.materialTemplate = terrainMaterial;
-        // Set terrain data 
-
     }
     public ChunkObject GetChunkObject()
     {

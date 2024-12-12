@@ -11,7 +11,7 @@ namespace Services
 /// This class is responsible for welding the chunks together
 /// </summary>
 
-public class WeldMapService : MonoBehaviour, IWeldMap
+public class WeldMapService : MonoBehaviour, IWeldMap , IService
 {
     private static IMap<ChunkObject> Map;
     public void Awake()
@@ -24,7 +24,7 @@ public class WeldMapService : MonoBehaviour, IWeldMap
     }
     public void StopService()
     {
-        StopCoroutine(WeldChunks());
+        StopAllCoroutines();
     }
 
     private IEnumerator WeldChunks()
@@ -80,6 +80,10 @@ public class WeldMapService : MonoBehaviour, IWeldMap
             SetNeighbors(chunkObject.Coord);
         }
         Debug.Log("SetNeighbors");
+    }
+    private void OnDestroy()
+    {
+        StopService();
     }
 }
 }

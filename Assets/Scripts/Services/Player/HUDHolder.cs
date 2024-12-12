@@ -7,90 +7,96 @@ using UnityEngine.SceneManagement;
 
 namespace Services
 {
-    public class HUDHolder : MonoBehaviour, IHUDService 
+    public class HUDHolder : MonoBehaviour, IHUDService
     {
-        public void Initialize()
-        {
-            try
-            {
-                // Initialize the HUD
-                healthBar = FindObjectOfType<HealthBar>();
-                staminaBar = FindObjectOfType<StaminaBar>();
-                hungerBar = FindObjectOfType<HungerBar>();
-                thirstBar = FindObjectOfType<ThirstBar>();
-                miniMap = FindObjectOfType<MiniMap>();
-                freezeScreen = FindObjectOfType<FreezeScreen>();
-
-                // Check if any of the components are null
-                if (healthBar == null || staminaBar == null || hungerBar == null || thirstBar == null || miniMap == null || freezeScreen == null)
-                {
-                    throw new NullReferenceException("One or more HUD components are missing.");
-                }
-            }
-            catch (NullReferenceException ex)
-            {
-                Debug.LogError($"Initialization failed: {ex.Message}");
-                // Handle the exception (e.g., disable the HUD, show an error message, etc.)
-            }
-        }
+        [SerializeField] private HealthBar _healthBar;
+        [SerializeField] private StaminaBar _staminaBar;
+        [SerializeField] private HungerBar _hungerBar;
+        [SerializeField] private ThirstBar _thirstBar;
+        [SerializeField] private MiniMap _miniMap;
+        [SerializeField] private FreezeScreen _freezeScreen;
 
         // Restrict the value to be between 0 and 1
         public float HealthValue
         {
-            get => healthBar != null ? healthBar.Value : 0f;
+            get => HealthBar != null ? HealthBar.Value : 0f;
             set
             {
-                if (healthBar != null)
+                if (HealthBar != null)
                 {
-                    healthBar.Value = Mathf.Clamp01(value);
+                    HealthBar.Value = Mathf.Clamp01(value);
                 }
             }
         }        
         public float StaminaValue
         {
-            get => staminaBar != null ? staminaBar.Value : 0f;
+            get => StaminaBar != null ? StaminaBar.Value : 0f;
             set
             {
-                if (staminaBar != null)
+                if (StaminaBar != null)
                 {
-                    staminaBar.Value = Mathf.Clamp01(value);
+                    StaminaBar.Value = Mathf.Clamp01(value);
                 }
             }
         }
         public float HungerValue
         {
-            get => hungerBar != null ? hungerBar.Value : 0f;
+            get => HungerBar != null ? HungerBar.Value : 0f;
             set
             {
-                if (hungerBar != null)
+                if (HungerBar != null)
                 {
-                    hungerBar.Value = Mathf.Clamp01(value);
+                    HungerBar.Value = Mathf.Clamp01(value);
                 }
             }
         }
         public float ThirstValue
         {
-            get => thirstBar != null ? thirstBar.Value : 0f;
+            get => ThirstBar != null ? ThirstBar.Value : 0f;
             set
             {
-                if (thirstBar != null)
+                if (ThirstBar != null)
                 {
-                    thirstBar.Value = Mathf.Clamp01(value);
+                    ThirstBar.Value = Mathf.Clamp01(value);
                 }
             }
         }
         public float FreezeScreenValue
         {
-            get => freezeScreen.Value;
-            set => freezeScreen.Value =  Mathf.Clamp01(value);
+            get => FreezeScreen.Value;
+            set => FreezeScreen.Value =  Mathf.Clamp01(value);
         }
 
-        public HealthBar healthBar { get; set; }
-        public StaminaBar staminaBar { get; set; }  
-        public HungerBar hungerBar  { get; set; }
-        public ThirstBar thirstBar { get; set; }
-        public MiniMap miniMap { get; set; }
-        public FreezeScreen freezeScreen { get; set; }
+        public HealthBar HealthBar 
+        { 
+            get => _healthBar; 
+            set => _healthBar = value;
+        }
+        public StaminaBar StaminaBar
+        {
+            get => _staminaBar;
+            set => _staminaBar = value;
+        }
+        public HungerBar HungerBar
+        {
+            get => _hungerBar;
+            set => _hungerBar = value;
+        }
+        public ThirstBar ThirstBar 
+        {
+            get => _thirstBar;
+            set => _thirstBar = value;
+        }
+        public MiniMap MiniMap 
+        {
+            get => _miniMap;
+            set => _miniMap = value;
+        }
+        public FreezeScreen FreezeScreen 
+        {
+            get => _freezeScreen;
+            set => _freezeScreen = value;
+        }
 
     }
 }
