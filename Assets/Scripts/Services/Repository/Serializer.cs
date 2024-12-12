@@ -20,14 +20,12 @@ namespace Services.Repository
             using Stream stream = File.Open(path, FileMode.Open);
             return await Task.Run( () =>(T)binaryFormatter.Deserialize(stream));
         }
-        [System.Obsolete]
-        public static async Task SerializeAsync<T>(T data, string path)
+        public static async Task JsonSerialize<T>(T data, string path)
         {
             string json = JsonConvert.SerializeObject(data);
             await File.WriteAllTextAsync(path, json);
         } 
-        [System.Obsolete]
-        public static async Task<T> DeserializeAsync<T>(string path)
+        public static async Task<T> JsonDeserialize<T>(string path)
         {
             string json = await File.ReadAllTextAsync(path);
             return JsonConvert.DeserializeObject<T>(json);

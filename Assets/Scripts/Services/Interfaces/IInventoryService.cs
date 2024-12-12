@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Gameplay.Items.Crafting;
+using Models;
 using Services.Player;
 
 namespace Services.Interfaces
@@ -12,5 +13,7 @@ namespace Services.Interfaces
         void TryCraftItem(CraftingRecipe recipe);
         public void CanGetItems(bool canGetItems);
         int TryDiscardItems(string itemName, int quantity);
+        InventoryModel GetModelState();
+        void LoadInventory(InventoryModel inventoryModel);
     }
 }

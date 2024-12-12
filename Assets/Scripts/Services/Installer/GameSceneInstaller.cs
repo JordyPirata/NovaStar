@@ -24,6 +24,7 @@ public class GameSceneInstaller : MonoBehaviour
     [SerializeField] private FirstPersonCharacter firstPersonCharacter;
     [SerializeField] private JetPackService jetPackService;
     [SerializeField] private HoverBoardService hoverBoardService;
+    [SerializeField] private SaveGameSceneService saveGameSceneService;
     private void Awake()
     {
         RegisterServices();
@@ -56,6 +57,7 @@ public class GameSceneInstaller : MonoBehaviour
         ServiceLocator.Register<IEquipablesService>(new EquipablesService());
         ServiceLocator.Register<IJetPackService>(jetPackService);
         ServiceLocator.Register<IHoverboardService>(hoverBoardService);
+        ServiceLocator.Register<ISaveGameSceneService>(saveGameSceneService);
     }
 }
 }

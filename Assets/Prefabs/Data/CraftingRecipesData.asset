@@ -17,57 +17,55 @@ MonoBehaviour:
     craftedQuantity: 1
     craftingIngredients:
     - item: 8
-      quantity: 1
+      quantity: 10
     - item: 11
-      quantity: 1
+      quantity: 2
   - craftedItem: 19
     craftedQuantity: 1
     craftingIngredients:
     - item: 9
-      quantity: 1
+      quantity: 2
     - item: 11
       quantity: 1
   - craftedItem: 24
     craftedQuantity: 1
     craftingIngredients:
     - item: 9
-      quantity: 1
+      quantity: 2
     - item: 10
-      quantity: 1
+      quantity: 2
     - item: 7
       quantity: 1
   - craftedItem: 21
     craftedQuantity: 1
     craftingIngredients:
     - item: 7
-      quantity: 1
+      quantity: 10
     - item: 13
-      quantity: 1
+      quantity: 3
   - craftedItem: 21
     craftedQuantity: 1
     craftingIngredients:
-    - item: 12
-      quantity: 1
+    - item: 7
+      quantity: 10
     - item: 13
-      quantity: 1
-    - item: 6
-      quantity: 1
+      quantity: 3
   - craftedItem: 22
     craftedQuantity: 1
     craftingIngredients:
     - item: 12
-      quantity: 1
+      quantity: 10
     - item: 13
-      quantity: 1
+      quantity: 4
     - item: 6
-      quantity: 1
+      quantity: 2
   - craftedItem: 25
     craftedQuantity: 1
     craftingIngredients:
     - item: 14
-      quantity: 1
+      quantity: 5
     - item: 15
-      quantity: 1
+      quantity: 2
   - craftedItem: 20
     craftedQuantity: 1
     craftingIngredients:

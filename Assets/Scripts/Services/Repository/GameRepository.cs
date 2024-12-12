@@ -13,10 +13,29 @@ namespace Services.Repository
             await Serializer.BSerialize(data, path);
             return "Data saved successfully on: " + path;
         }
+        
+        public async Task<string> CreateJson<T>(T data, string path)
+        {
+            await Serializer.JsonSerialize(data, path);
+            return "Data saved successfully on: " + path;
+        }
         // The ReadAsync method deserializes the data from a file
         public async Task<(string, T)> Read<T>(string path)
         {
             T data = await Serializer.BDeserialize<T>(path);
+            if (data == null)
+            {
+                return ("Data not found", default);
+            }
+            else
+            {
+                return ("Data read successfully", data);
+            }
+        }
+        
+        public async Task<(string, T)> ReadJson<T>(string path)
+        {
+            T data = await Serializer.JsonDeserialize<T>(path);
             if (data == null)
             {
                 return ("Data not found", default);

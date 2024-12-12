@@ -8,10 +8,9 @@ namespace Services.Player
     public class TemperatureService : StatService, ITemperatureService
     {
         [SerializeField] private float secondsToCheckAgain = 1;
-        private bool _hasDrinkEffect, _hasHat;
+        private bool _hasDrinkEffect, _hasHat, _hasCoat;
         private int _temperatureModification, _lastTemperature, _currentSecondsLapsed;
         private IPlayerMediator _playerMediator;
-
         private Action _onTemperatureChanged;
 
         public int Temperature
@@ -47,8 +46,17 @@ namespace Services.Player
 
         public ITemperatureService Configure(IPlayerMediator playerMediator)
         {
-            return this;
             _playerMediator = playerMediator;
+            return this;
+        }
+
+        public void EquipCoat(bool equip)
+        {
+            if (_hasCoat != equip)
+            {
+                _temperatureModification = equip ? _temperatureModification + 1 : _temperatureModification - 1;
+                _hasCoat = equip;
+            }
         }
 
         private IEnumerator StartCheckingTemperature()
@@ -103,17 +111,21 @@ namespace Services.Player
             _onTemperatureChanged?.Invoke();
             switch (Temperature)
             {
-                case 35:
+                case <= 35:
                     _playerMediator.LimitStamina(19);
+                    _playerMediator.StopLifeRegen(false);
                     _onTemperatureChanged = () =>
                     {
+                        _playerMediator.StopLifeRegen(true);
                         _playerMediator.LimitStamina(100);
                     };
                     break;
                 case 36:
                     _playerMediator.LimitStamina(19);
+                    _playerMediator.StopLifeRegen(false);
                     _onTemperatureChanged = () =>
                     {
+                        _playerMediator.StopLifeRegen(true);
                         _playerMediator.LimitStamina(100);
                     };
                     break;
@@ -122,20 +134,21 @@ namespace Services.Player
                     break;
                 case 38:
                     _playerMediator.LimitStamina(60);
+                    _playerMediator.StopLifeRegen(false);
                     _onTemperatureChanged = () =>
                     {
+                        _playerMediator.StopLifeRegen(true);
                         _playerMediator.LimitStamina(100);
                     };
                     break;
-                case 39:
+                case >= 39:
                     _playerMediator.LimitStamina(60);
+                    _playerMediator.StopLifeRegen(false);
                     _onTemperatureChanged = () =>
                     {
+                        _playerMediator.StopLifeRegen(true);
                         _playerMediator.LimitStamina(100);
                     };
-                    break;
-                default:
-                    Debug.Log($"Temperature {Temperature} is out of range");
                     break;
             }
         }

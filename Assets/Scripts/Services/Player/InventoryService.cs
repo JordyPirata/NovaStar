@@ -4,6 +4,7 @@ using System.Linq;
 using Gameplay.Items;
 using Gameplay.Items.Crafting;
 using InputSystem;
+using Models;
 using Player.Gameplay.Items;
 using Player.Gameplay.UserInterface;
 using Services.Interfaces;
@@ -33,23 +34,14 @@ namespace Services.Player
                 inventorySpace.OnEquipItem += EquipItem;
                 inventorySpace.OnUnEquipItem += UnEquipItem;
             }
-
-            TryPickItem("Herramienta de recoleccion", 1);
-            TryPickItem("Tableta de teletransporte", 1);
-            TryPickItem("Linterna", 1);
-            TryPickItem("Planeador", 1);
-            TryPickItem("Planeador cohete", 1);
-            TryPickItem("Mochila cohete", 1);
-            TryPickItem("Hoverboard", 1); 
-            TryPickItem("Estimulante", 10); 
         }
-        
+
         public void CanGetItems(bool canGetItems)
         {
             _hasTool = canGetItems;
         }
 
-        public int TryPickItem (string itemName, int quantity, bool needsTool = false)
+        public int TryPickItem(string itemName, int quantity, bool needsTool = false)
         {
             if (needsTool && !_hasTool) return quantity;
             var startingQuantity = quantity;
@@ -58,7 +50,7 @@ namespace Services.Player
                 if (!inventorySpace.HasItem || itemName == inventorySpace.ItemName)
                 {
                     quantity = inventorySpace.PickItem(itemName, quantity);
-                    if (quantity <= 0) break; 
+                    if (quantity <= 0) break;
                 }
             }
 
@@ -66,6 +58,7 @@ namespace Services.Player
             {
                 return quantity;
             }
+
             if (_completeInventory.ContainsKey(itemName))
             {
                 _completeInventory[itemName] += startingQuantity - quantity;
@@ -76,11 +69,12 @@ namespace Services.Player
                 _completeInventory.Add(itemName, startingQuantity - quantity);
                 Debug.Log($"Now you have {_completeInventory[itemName]} units of {itemName}");
             }
+
             onInventoryUpdate?.Invoke(_completeInventory);
             return quantity;
         }
-        
-        private bool CanSaveItem (ItemData item, int quantity)
+
+        private bool CanSaveItem(ItemData item, int quantity)
         {
             var startingQuantity = quantity;
             foreach (var inventorySpace in inventorySpaces)
@@ -95,6 +89,7 @@ namespace Services.Player
             {
                 return false;
             }
+
             onInventoryUpdate?.Invoke(_completeInventory);
             if (quantity == 0)
             {
@@ -105,6 +100,7 @@ namespace Services.Player
             {
                 return false;
             }
+
             throw new Exception("Trying save item got negative remainder");
         }
 
@@ -130,7 +126,6 @@ namespace Services.Player
                     if (restingDiscardedItems != 0)
                         Debug.LogError(
                             $"at discarding item {recipeCraftingIngredient.Item.itemName} got {restingDiscardedItems} resting items");
-                    
                 }
             }
         }
@@ -150,6 +145,7 @@ namespace Services.Player
             {
                 return quantity;
             }
+
             if (_completeInventory.ContainsKey(itemName))
             {
                 _completeInventory[itemName] -= startingQuantity - quantity;
@@ -166,6 +162,29 @@ namespace Services.Player
                 _completeInventory.Remove(itemName);
             onInventoryUpdate?.Invoke(_completeInventory);
             return quantity;
+        }
+
+        public InventoryModel GetModelState()
+        {
+            return new InventoryModel()
+            {
+                completeInventory = _completeInventory,
+                fullInventory = inventorySpaces.Select(inventorySpace => inventorySpace.GetModel()).ToList()
+            };
+        }
+
+        public void LoadInventory(InventoryModel inventoryModel)
+        {
+            _completeInventory = inventoryModel.completeInventory;
+            if (inventorySpaces.Count != inventoryModel.fullInventory.Count)
+                Debug.LogError(
+                    $"inventorySpacesCount ({inventorySpaces.Count}doesnt match with model loaded spaces ({inventoryModel.fullInventory.Count}))");
+            for (int i = 0; i < inventorySpaces.Count; i++)
+            {
+                if (inventoryModel.fullInventory[i].hasItem)
+                    inventorySpaces[i].PickItem(inventoryModel.fullInventory[i].itemName,
+                        inventoryModel.fullInventory[i].quantity);
+            }
         }
 
         private void BeginDrag(InventorySpace inventorySpaceDragging, Sprite itemSprite, RectTransform rectTransform)
@@ -188,7 +207,7 @@ namespace Services.Player
         private void EquipItem(string itemId)
         {
             int itemIntId = itemsUIConfiguration.GetItemById(itemId);
-            foreach (var equipable in equipables.Where(equipable=>equipable.CorrespondentItem == itemIntId))
+            foreach (var equipable in equipables.Where(equipable => equipable.CorrespondentItem == itemIntId))
             {
                 equipable.gameObject.SetActive(true);
                 equipable.Equip();
@@ -198,7 +217,7 @@ namespace Services.Player
         private void UnEquipItem(string itemId)
         {
             int itemIntId = itemsUIConfiguration.GetItemById(itemId);
-            foreach (var equipable in equipables.Where(equipable=>equipable.CorrespondentItem == itemIntId))
+            foreach (var equipable in equipables.Where(equipable => equipable.CorrespondentItem == itemIntId))
             {
                 equipable.gameObject.SetActive(false);
                 equipable.UnEquip();
