@@ -17,27 +17,25 @@ namespace Services.Installer
         {
             
             _inventoryFile = Path.Combine(ServiceLocator.GetService<IWorldData>().GetDirectory(), "inventory.json");
-            Debug.Log(Application.persistentDataPath);
         }
 
         private void Start()
         {
-            LoadSettings();
+            LoadInventory();
         }
 
         public async void SaveState()
         {
-            var message = await GameRepository.Create(
+            var message = await GameRepository.CreateAsync(
                 ServiceLocator.GetService<IInventoryService>().GetModelState(),
                 _inventoryFile);
             Debug.Log(message);
         }
         
-        public async void LoadSettings()
+        public async void LoadInventory()
         {
             if (!GameRepository.ExistsFile(_inventoryFile)) return;
-            var (message, inventoryModel) = await GameRepository.Read<InventoryModel>(_inventoryFile);
-            Debug.Log(message);
+            var (message, inventoryModel) = await GameRepository.ReadAsync<InventoryModel>(_inventoryFile);
             ServiceLocator.GetService<IInventoryService>().LoadInventory(inventoryModel);
         }
     }
