@@ -16,5 +16,8 @@ namespace Services.Interfaces
         void LoseLife(int i);
         void EquipCoat(bool b);
         void StopLifeRegen(bool b);
+        int GetLife();
+        int GetThirsty();
+        int GetHunger();
     }
 }
