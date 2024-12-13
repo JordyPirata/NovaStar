@@ -11,5 +11,6 @@ namespace Services.Interfaces
         void DrinkSomeWater();
         void EquipHat();
         ITemperatureService Configure(IPlayerMediator playerMediator);
+        void EquipCoat(bool equip);
     }
 }

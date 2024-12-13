@@ -1,5 +1,6 @@
 using System;
 using Gameplay.Items;
+using Models;
 using Services.Interfaces;
 using TMPro;
 using UnityEngine;
@@ -270,6 +271,16 @@ namespace Player.Gameplay.UserInterface
         {
             OnUnEquipItem?.Invoke(itemUIItemName);
             Debug.Log($"Se desequipo el item {_itemName}");
+        }
+
+        public InventorySpaceModel GetModel()
+        {
+            return new InventorySpaceModel()
+            {
+                hasItem = _hasItem,
+                itemName = _itemName,
+                quantity = Quantity
+            };
         }
     }
 }

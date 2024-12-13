@@ -38,6 +38,25 @@ namespace Services.Player
             _lifeService.DecreaseStat(i);
         }
 
+        public void EquipCoat(bool b)
+        {
+            _temperatureService.EquipCoat(b);
+        }
+
+        public void StopLifeRegen(bool b)
+        {
+            var service = _lifeService as IService;
+
+            if (b)
+            {
+                service?.StartService();    
+            }
+            else
+            {
+                service?.StopService();
+            }
+        }
+
         public void Start()
         {
             _iInputActions = ServiceLocator.GetService<IInputActions>();
