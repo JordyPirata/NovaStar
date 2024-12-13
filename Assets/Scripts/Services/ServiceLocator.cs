@@ -32,7 +32,7 @@ public class ServiceLocator
 
         throw new InvalidOperationException($"Service of type {type} is not registered.");
     }
-    public static void Unregister<T>()
+    public static void UnRegister<T>()
     {
         services.Remove(typeof(T));
     }

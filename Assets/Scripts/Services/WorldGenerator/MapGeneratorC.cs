@@ -15,7 +15,7 @@ namespace Services
 /// This class is responsible for showing the chunks that are visible to the player
 /// </summary>
 
-public class MapGeneratorC : MonoBehaviour, IMapGenerator
+public class MapGeneratorC : MonoBehaviour, IMapGenerator, IService
 {
     private bool isRunning;
     bool firstLoop;
@@ -30,10 +30,8 @@ public class MapGeneratorC : MonoBehaviour, IMapGenerator
     public void StopService()
     {
         isRunning = false;
-        foreach (var chunk in Map.AllChunks())
-        {
-            chunk.Release();
-        }
+        var map = Map as IDisposable;
+        map.Dispose();
         
     }
     private static readonly int chunkVisibleInViewDst = Mathf.RoundToInt(ChunkConfig.maxViewDst / ChunkConfig.width);
@@ -58,7 +56,7 @@ public class MapGeneratorC : MonoBehaviour, IMapGenerator
         }
         
     }
-    private async void GenerateChunk(float2 viewedChunkCoord)
+    private void GenerateChunk(float2 viewedChunkCoord)
     {
         try 
         {
@@ -72,7 +70,7 @@ public class MapGeneratorC : MonoBehaviour, IMapGenerator
             {
                 if (isRunning == false) return;
                 var chunkBuilder = new ChunkBuilder(viewedChunkCoord);
-                await chunkBuilder.GenerateChunkData();
+                chunkBuilder.GenerateChunkData();
                 chunkBuilder.SetGameObject();
                 chunkBuilder.SetTerrain();
                 chunkBuilder.CalculateBiomes();

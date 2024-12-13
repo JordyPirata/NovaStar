@@ -22,6 +22,7 @@ namespace Services.Installer
     }
     public void InstallServices()
     {     
+        ServiceLocator.Register<IMap<ChunkObject>>(new Map<ChunkObject>());
         ServiceLocator.Register<IInputActions>(new PlayerInputService());
         ServiceLocator.Register<ISettingsService>(gameObject.AddComponent<SettingsService>());
         ServiceLocator.Register<ICoroutineManager>(gameObject.AddComponent<CoroutineManager>());
