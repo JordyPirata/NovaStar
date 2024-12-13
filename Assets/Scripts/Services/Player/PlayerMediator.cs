@@ -57,6 +57,21 @@ namespace Services.Player
             }
         }
 
+        public int GetLife()
+        {
+            return _lifeService.Life;
+        }
+
+        public int GetThirsty()
+        {
+            return _hydrationService.Hydration;
+        }
+
+        public int GetHunger()
+        {
+            return _hungerService.Hunger;
+        }
+
         public void Start()
         {
             _iInputActions = ServiceLocator.GetService<IInputActions>();
