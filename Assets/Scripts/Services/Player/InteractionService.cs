@@ -11,7 +11,7 @@ namespace Services.Player
         private IInputActions _inputActions;
         [SerializeField] private float _interactDistance;
         [SerializeField] private LayerMask _layerMask;
-        private Camera _camera;
+        [SerializeField] private Camera _camera;
         private bool _canGetItems;
 
         public void Awake()
@@ -25,10 +25,6 @@ namespace Services.Player
         public void OnDisable()
         {
             _inputActions.InputActions.Player.Interact.started -= InteractOnStarted;
-        }
-        public void SetCamera(Camera mainCamera)
-        {
-            _camera = mainCamera;
         }
 
         private void InteractOnStarted(InputAction.CallbackContext callbackContext)

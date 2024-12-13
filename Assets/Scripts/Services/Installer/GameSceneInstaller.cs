@@ -12,7 +12,6 @@ public class GameSceneInstaller : MonoBehaviour
 {
     [SerializeField] private HUDHolder hudHolder;
     [SerializeField] private PlayerMediatorData playerMediatorData;
-    [SerializeField] private GameSceneReferences gameSceneReferences;
     [SerializeField] private InventoryService inventoryService;
     [SerializeField] private CraftingService craftingService;
     [SerializeField] private TeleportService teleportService;
@@ -53,7 +52,6 @@ public class GameSceneInstaller : MonoBehaviour
         ServiceLocator.Register<IPlayerMediator>(gameObject.AddComponent<PlayerMediator>());
         ServiceLocator.Register<IHUDService>(hudHolder);
         ServiceLocator.Register<IFirstPersonController>(firstPersonCharacter);
-        ServiceLocator.Register<IGameSceneReferences>(gameSceneReferences);
         ServiceLocator.Register<IInventoryService>(inventoryService);
         ServiceLocator.Register<ICraftingService>(craftingService);
         ServiceLocator.Register<ITeleportService>(teleportService);
