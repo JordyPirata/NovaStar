@@ -839,6 +839,11 @@ PrefabInstance:
       objectReference: {fileID: 1619380708}
     - target: {fileID: 1714937320373956020, guid: 6ac82c29a4ab281419d8796b23147ec3,
         type: 3}
+      propertyPath: hudHolder
+      value: 
+      objectReference: {fileID: 273688432}
+    - target: {fileID: 1714937320373956020, guid: 6ac82c29a4ab281419d8796b23147ec3,
+        type: 3}
       propertyPath: jetPackService
       value: 
       objectReference: {fileID: 273688429}
@@ -2768,6 +2773,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 273688431}
+    - targetCorrespondingSourceObject: {fileID: 2734435518145231164, guid: 6ac82c29a4ab281419d8796b23147ec3,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 273688432}
   m_SourcePrefab: {fileID: 100100000, guid: 6ac82c29a4ab281419d8796b23147ec3, type: 3}
 --- !u!1 &273688428 stripped
 GameObject:
@@ -2816,6 +2825,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fe8c96109de459cabd5b0b5c3e5e8b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &273688432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 273688428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da99456a4d62172479ca8f640d48ff77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _healthBar: {fileID: 1415462482}
+  _staminaBar: {fileID: 1467247266}
+  _hungerBar: {fileID: 449390168}
+  _thirstBar: {fileID: 1475233706}
+  _miniMap: {fileID: 1201302809}
+  _freezeScreen: {fileID: 1631557537}
 --- !u!1 &278524692
 GameObject:
   m_ObjectHideFlags: 0
@@ -4373,7 +4400,7 @@ GameObject:
   - component: {fileID: 967979173}
   - component: {fileID: 967979174}
   m_Layer: 5
-  m_Name: MiniMap
+  m_Name: MiniMapImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4729,7 +4756,7 @@ GameObject:
   - component: {fileID: 1201302806}
   - component: {fileID: 1201302809}
   m_Layer: 0
-  m_Name: MiniMapCamera
+  m_Name: MiniMap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

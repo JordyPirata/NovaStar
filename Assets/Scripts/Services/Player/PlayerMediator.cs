@@ -45,13 +45,15 @@ namespace Services.Player
 
         public void StopLifeRegen(bool b)
         {
+            var service = _lifeService as IService;
+
             if (b)
             {
-                _lifeService.StartService();
+                service?.StartService();    
             }
             else
             {
-                _lifeService.StopService();
+                service?.StopService();
             }
         }
 
