@@ -23,7 +23,7 @@ public struct ChunkDataGenerator
     private static INoiseDirector NoiseDirector => ServiceLocator.GetService<INoiseDirector>();
     private static IWorldData WorldData => ServiceLocator.GetService<IWorldData>();
 
-    public static async Task<Chunk> Generate(float2 coord)
+    public static Chunk Generate(float2 coord)
     {
         string chunkName = $"Chunk({coord.x},{coord.y})";
         string chunkPath = Path.Combine(WorldDirectory, string.Concat(chunkName, ".bin"));
@@ -32,7 +32,7 @@ public struct ChunkDataGenerator
         if (GameRepository.ExistsFile(chunkPath))
         {
             // Load the chunk
-            (message, chunk) = await GameRepository.ReadAsync<Chunk>(chunkPath);
+            (message, chunk) = GameRepository.Read<Chunk>(chunkPath);
 
             chunk.position = new float3(coord.x * ChunkConfig.width, 0, coord.y * ChunkConfig.depth);
             Debug.Log(message + " " + chunk.ChunkName);

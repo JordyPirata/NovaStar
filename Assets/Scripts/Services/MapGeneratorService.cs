@@ -7,6 +7,9 @@ using Services.Player;
 using Services.WorldGenerator;
 using UI;
 using UnityEditor.SearchService;
+using Unity.VisualScripting;
+using System;
+using System.Collections.Concurrent;
 
 namespace Services
 {
@@ -14,7 +17,7 @@ namespace Services
 /// This class is responsible for showing the chunks that are visible to the player
 /// </summary>
 
-public class MapGeneratorService : IMapGenerator, IService
+public class MapGeneratorService : MonoBehaviour, IMapGenerator, IService
 {
     private bool isRunning;
     bool firstLoop;
@@ -26,14 +29,15 @@ public class MapGeneratorService : IMapGenerator, IService
         isRunning = true;
         await GenerateMap();
     }
+    private void OnDestroy()
+    {
+        StopService();
+    }
     public void StopService()
     {
         isRunning = false;
-        foreach (var chunk in Map.AllChunks())
-        {
-            chunk.Release();
-        }
-        
+        var map = Map as IDisposable;
+        map.Dispose();
     }
     private static readonly int chunkVisibleInViewDst = Mathf.RoundToInt(ChunkConfig.maxViewDst / ChunkConfig.width);
 
@@ -57,31 +61,25 @@ public class MapGeneratorService : IMapGenerator, IService
         }
         
     }
-    private async void GenerateChunk(float2 viewedChunkCoord)
+    private void GenerateChunk(float2 viewedChunkCoord)
     {
-        try 
+        
+        if (Map.ContainsKey(viewedChunkCoord))
         {
-            if (Map.ContainsKey(viewedChunkCoord))
-            {
 
-                // if the chunk is already in the map, update the status of the chunk
-                Map[viewedChunkCoord].UpdateStatus();
-            }
-            else
-            {
-                if (isRunning == false) return;
-                var chunkBuilder = new ChunkBuilder(viewedChunkCoord);
-                await chunkBuilder.GenerateChunkData();
-                chunkBuilder.SetGameObject();
-                chunkBuilder.SetTerrain();
-                chunkBuilder.CalculateBiomes();
-                
-                Map.Add(viewedChunkCoord, chunkBuilder.GetChunkObject());
-            }
+            // if the chunk is already in the map, update the status of the chunk
+            Map[viewedChunkCoord].UpdateStatus();
         }
-        catch
+        else
         {
-            Debug.Log("Chunk exit from map");
+            if (isRunning == false) return;
+            var chunkBuilder = new ChunkBuilder(viewedChunkCoord);
+            chunkBuilder.GenerateChunkData();
+            chunkBuilder.SetGameObject();
+            chunkBuilder.SetTerrain();
+            chunkBuilder.CalculateBiomes();
+            
+            Map.Add(viewedChunkCoord, chunkBuilder.GetChunkObject());
         }
         
     }
@@ -90,11 +88,18 @@ public class MapGeneratorService : IMapGenerator, IService
     {
         while (isRunning)
         {
-            // delay the update of the chunks by system time
-            await Task.Delay(3000);
-            // get the player coordinate
-            MapLoop(PlayerInfo.PlayerCoordinate());
-            // delay the update of the chunks by system time
+            try
+            {
+                // delay the update of the chunks by system time
+                await Task.Delay(3000);
+                // get the player coordinate
+                MapLoop(PlayerInfo.PlayerCoordinate());
+                // delay the update of the chunks by system time
+            }
+            catch
+            {
+                Debug.Log("Chunk exit from map");
+            }
             
         }
     }

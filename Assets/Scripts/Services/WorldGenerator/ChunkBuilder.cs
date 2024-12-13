@@ -41,9 +41,9 @@ public class ChunkBuilder
         ChunkGO.layer = LayerMask.NameToLayer("Terrain");
 
     }
-    public async Task GenerateChunkData()
+    public void GenerateChunkData()
     {       
-        Chunk = await ChunkDataGenerator.Generate(_ChunkCoords);       
+        Chunk = ChunkDataGenerator.Generate(_ChunkCoords);       
     }
 
     public void SetTerrain()

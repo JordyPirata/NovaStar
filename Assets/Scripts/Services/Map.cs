@@ -2,10 +2,11 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using Services.Interfaces;
 using Services.WorldGenerator;
+using System;
 
 namespace Services
 {
-    public class Map<ChunkObject> : IMap<ChunkObject> 
+    public class Map<ChunkObject> : IMap<ChunkObject>, IDisposable
     {
 
         private static readonly object _lock = new();
@@ -50,5 +51,9 @@ namespace Services
             grid.Remove(coord);
         }
 
+        public void Dispose()
+        {
+            grid.Clear();
+        }
     }
 }

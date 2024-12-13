@@ -17,7 +17,14 @@ namespace Services.Player
         public void Awake()
         {
             _inputActions = ServiceLocator.GetService<IInputActions>();
+        }
+        public void OnEnable()
+        {
             _inputActions.InputActions.Player.Interact.started += InteractOnStarted;
+        }
+        public void OnDisable()
+        {
+            _inputActions.InputActions.Player.Interact.started -= InteractOnStarted;
         }
         public void SetCamera(Camera mainCamera)
         {

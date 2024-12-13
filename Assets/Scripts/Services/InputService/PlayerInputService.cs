@@ -1,5 +1,6 @@
 using InputSystem;
-namespace Services.Interfaces
+using Services.Interfaces;
+namespace Services
 {
 public class PlayerInputService : IInputActions
 {
@@ -10,4 +11,5 @@ public class PlayerInputService : IInputActions
     public InputActions InputActions { get; set; }
 
 }    
+
 }

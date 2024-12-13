@@ -29,13 +29,17 @@ public class GameSceneInstaller : MonoBehaviour
     {
         RegisterServices();
     }
+    private void OnDestroy()
+    {
+        UnRegisterServices();
+    }
 
     private void RegisterServices()
     {
+        
         ServiceLocator.Register<ISplatMapService>(new SplatMapService());
-        ServiceLocator.Register<IMapGenerator>(new MapGeneratorService());
+        ServiceLocator.Register<IMapGenerator>(gameObject.AddComponent<MapGeneratorService>());
         ServiceLocator.Register<IBiomeTexturesService>(biomeTexturesService);
-        ServiceLocator.Register<IMap<ChunkObject>>(new Map<ChunkObject>());
         ServiceLocator.Register<IPlayerInfo>(playerInfo);
         ServiceLocator.Register<IWeldMap>(gameObject.AddComponent<WeldMapService>()); 
         ServiceLocator.Register<IRayCastController>(gameObject.AddComponent<RayCastsController>());
@@ -57,6 +61,33 @@ public class GameSceneInstaller : MonoBehaviour
         ServiceLocator.Register<IEquipablesService>(new EquipablesService());
         ServiceLocator.Register<IJetPackService>(jetPackService);
         ServiceLocator.Register<IHoverboardService>(hoverBoardService);
+    }
+    private void UnRegisterServices()
+    {
+        ServiceLocator.UnRegister<ISplatMapService>();
+        ServiceLocator.UnRegister<IMapGenerator>();
+        ServiceLocator.UnRegister<IBiomeTexturesService>();
+        ServiceLocator.UnRegister<IPlayerInfo>();
+        ServiceLocator.UnRegister<IWeldMap>();
+        ServiceLocator.UnRegister<IRayCastController>();
+        ServiceLocator.UnRegister<ILifeService>();
+        ServiceLocator.UnRegister<IStaminaService>();
+        ServiceLocator.UnRegister<IThirstService>();
+        ServiceLocator.UnRegister<IHungerService>();
+        ServiceLocator.UnRegister<ITemperatureService>();
+        ServiceLocator.UnRegister<IInteractionService>();
+        ServiceLocator.UnRegister<IPlayerMediator>();
+        ServiceLocator.UnRegister<IHUDService>();
+        ServiceLocator.UnRegister<IFirstPersonController>();
+        ServiceLocator.UnRegister<IGameSceneReferences>();
+        ServiceLocator.UnRegister<IInventoryService>();
+        ServiceLocator.UnRegister<ICraftingService>();
+        ServiceLocator.UnRegister<ITeleportService>();
+        ServiceLocator.UnRegister<ITimeService>();
+        ServiceLocator.UnRegister<IUIService>();
+        ServiceLocator.UnRegister<IEquipablesService>();
+        ServiceLocator.UnRegister<IJetPackService>();
+        ServiceLocator.UnRegister<IHoverboardService>();
     }
 }
 }
