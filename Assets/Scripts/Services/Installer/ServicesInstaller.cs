@@ -12,7 +12,7 @@ namespace Services.Installer
 
     public class ServiceInstaller : MonoBehaviour
     {
-        [SerializeField] private FadeController fadeController;
+    [SerializeField] private FadeController fadeController;
     
     [SerializeField] private BiomeTextures biomeTextures;
     public void Awake()
@@ -25,7 +25,7 @@ namespace Services.Installer
         ServiceLocator.Register<IMap<ChunkObject>>(new Map<ChunkObject>());
         ServiceLocator.Register<IInputActions>(new PlayerInputService());
         ServiceLocator.Register<ISettingsService>(gameObject.AddComponent<SettingsService>());
-        ServiceLocator.Register<ICoroutineManager>(gameObject.AddComponent<CoroutineManager>());
+        ServiceLocator.Register<ICoroutineManager>(gameObject.AddComponent<CoroutineManagerObject>());
         // ServiceLocator.Register<IMapGenerator>(gameObject.AddComponent<MapGeneratorC>());
         ServiceLocator.Register<IRepository>(new GameRepository());
         ServiceLocator.Register<IEventManager>(gameObject.AddComponent<EventManager>());

@@ -19,15 +19,15 @@ namespace Services
 
 public class MapGeneratorService : MonoBehaviour, IMapGenerator, IService
 {
+    private Action Generate;
     private bool isRunning;
     bool firstLoop;
     private static IPlayerInfo PlayerInfo => ServiceLocator.GetService<IPlayerInfo>();
     private static IMap<ChunkObject> Map => ServiceLocator.GetService<IMap<ChunkObject>>();
-    public async void StartService()
+    public void StartService()
     {
         firstLoop = true;
         isRunning = true;
-        await GenerateMap();
     }
     private void OnDestroy()
     {
