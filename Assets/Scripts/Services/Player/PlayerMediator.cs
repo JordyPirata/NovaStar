@@ -2,6 +2,7 @@
 using UnityEngine;
 using Services.Interfaces;
 using System;
+using Models;
 using Unity.Mathematics;
 using UnityEngine.InputSystem;
 using Util;
@@ -70,6 +71,14 @@ namespace Services.Player
         public int GetHunger()
         {
             return _hungerService.Hunger;
+        }
+
+        public void LoadPlayerStats(PlayerStatsModel playerStatsModel)
+        {
+            _hungerService.Hunger = playerStatsModel.playerHunger;
+            _hydrationService.Hydration = playerStatsModel.playerThirsty;
+            _lifeService.Life = playerStatsModel.playerLife;
+            _firstPersonCharacter.TeleportToPosition(playerStatsModel.playerPosition);
         }
 
         public void Start()

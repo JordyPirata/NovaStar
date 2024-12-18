@@ -1,3 +1,4 @@
+using Models;
 using Services.Player;
 using Unity.Mathematics;
 using UnityEngine;
@@ -19,5 +20,6 @@ namespace Services.Interfaces
         int GetLife();
         int GetThirsty();
         int GetHunger();
+        void LoadPlayerStats(PlayerStatsModel playerStatsModel);
     }
 }

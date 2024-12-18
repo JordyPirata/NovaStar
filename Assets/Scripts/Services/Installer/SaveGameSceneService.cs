@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Models;
 using Services.Interfaces;
+using Services.Player;
 using UnityEngine;
 
 namespace Services.Installer
@@ -49,8 +50,7 @@ namespace Services.Installer
             if (!GameRepository.ExistsFile(_playerStatsFile)) return;
             var (playerStatsMessage, playerStatsModel) =
                 await GameRepository.ReadAsync<PlayerStatsModel>(_playerStatsFile);
-            
-            
+            ServiceLocator.GetService<IPlayerMediator>().LoadPlayerStats(playerStatsModel);
         }
     }
 }
