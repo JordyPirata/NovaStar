@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Models;
 using Player.Gameplay.UserInterface;
 using Services.Interfaces;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using Vector3 = System.Numerics.Vector3;
 
@@ -66,10 +68,40 @@ namespace Services
             if (_10TeleportsEquipped < 0) Debug.LogError($"For some reason you have {_10TeleportsEquipped} teleports equipped now");
         }
 
+        public TeleportsModel GetTeleportsModel()
+        {
+            return new TeleportsModel()
+            {
+                teleports = _teleportData
+            };
+        }
+
+        public void LoadTeleports(TeleportsModel teleportsModel)
+        {
+            foreach (var teleportData in teleportsModel.teleports)
+            {
+                LoadTeleport(teleportData);       
+            }
+        }
+
+        private void LoadTeleport(TeleportData teleportModel)
+        {
+            var maxTeleports = _15TeleportsEquipped > 0 ? 15 : 10;
+            if (maxTeleports <= _teleportData.Count) return;
+            if (_teleportData.Any(data => data.teleportName == tpNameInputField.text))
+                return;
+            
+            _teleportData.Add(teleportModel);
+            var teleportUIInstance = Instantiate(teleportUITemplate, _teleportsUIParentTransform);
+            teleportUIInstance.TeleportName = teleportModel.teleportName;
+            teleportUIInstance.OnClick += TeleportToPosition;
+            teleportUIInstance.gameObject.SetActive(true);
+        }
+
         public void SetTeleportInPlayerPosition()
         {
             var maxTeleports = _15TeleportsEquipped > 0 ? 15 : 10;
-            if (maxTeleports > _teleportData.Count) return;
+            if (maxTeleports <= _teleportData.Count) return;
             if (_teleportData.Any(data => data.teleportName == tpNameInputField.text))
                 return;
             
