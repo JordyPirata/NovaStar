@@ -4,6 +4,7 @@ using Unity.Mathematics;
 
 namespace Services
 {
+    [Serializable]
     public class TeleportData
     {
         public string teleportName;

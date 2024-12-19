@@ -58,27 +58,23 @@ namespace Services.Player
             }
         }
 
-        public int GetLife()
-        {
-            return _lifeService.Life;
-        }
-
-        public int GetThirsty()
-        {
-            return _hydrationService.Hydration;
-        }
-
-        public int GetHunger()
-        {
-            return _hungerService.Hunger;
-        }
-
         public void LoadPlayerStats(PlayerStatsModel playerStatsModel)
         {
             _hungerService.Hunger = playerStatsModel.playerHunger;
             _hydrationService.Hydration = playerStatsModel.playerThirsty;
             _lifeService.Life = playerStatsModel.playerLife;
-            _firstPersonCharacter.TeleportToPosition(playerStatsModel.playerPosition);
+            _firstPersonCharacter.PlayerTransform.position = playerStatsModel.playerPosition;
+        }
+
+        public PlayerStatsModel GetPlayerStatsModel()
+        {
+            return new PlayerStatsModel()
+            {
+                playerHunger = _hungerService.Hunger,
+                playerThirsty = _hydrationService.Hydration,
+                playerLife = _lifeService.Life,
+                playerPosition = ServiceLocator.GetService<IPlayerInfo>().PlayerPosition()
+            };
         }
 
         public void Start()

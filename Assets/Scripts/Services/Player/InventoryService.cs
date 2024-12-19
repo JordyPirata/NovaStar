@@ -34,6 +34,8 @@ namespace Services.Player
                 inventorySpace.OnEquipItem += EquipItem;
                 inventorySpace.OnUnEquipItem += UnEquipItem;
             }
+
+            TryPickItem("Tableta de teletransporte", 1);
         }
 
         public void CanGetItems(bool canGetItems)
