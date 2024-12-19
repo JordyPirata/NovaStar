@@ -1,13 +1,11 @@
 using System;
+using System.Collections.Generic;
 using Services.Interfaces;
-using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using Console = UnityEngine.Debug;
-using System.Collections.Generic;
 
-namespace Services
+namespace Services.Installer
 {
 /// <summary>
 /// Load and unload scenes
@@ -42,12 +40,12 @@ public class EventManager : MonoBehaviour, IEventManager
                     typeof(IHungerService),
                     typeof(IStaminaService),
                     typeof(IThirstService),
-                    typeof(IHUDService)
                 };
 
                 foreach (Type serviceType in serviceTypes)
                 {
                     IService service = ServiceLocator.GetService(serviceType) as IService;
+                    Debug.Log(service.ToString());
                     service?.StartService();
                 }
                 /*
