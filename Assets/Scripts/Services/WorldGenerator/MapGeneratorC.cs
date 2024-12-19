@@ -7,6 +7,7 @@ using Services.Player;
 using Services.WorldGenerator;
 using Models;
 using System;
+using Services.Installer;
 
 
 namespace Services

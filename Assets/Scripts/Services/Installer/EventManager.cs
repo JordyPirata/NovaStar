@@ -1,13 +1,11 @@
 using System;
+using System.Collections.Generic;
 using Services.Interfaces;
-using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using Console = UnityEngine.Debug;
-using System.Collections.Generic;
 
-namespace Services
+namespace Services.Installer
 {
 /// <summary>
 /// Load and unload scenes

@@ -118,8 +118,9 @@ namespace Services
             velocity.y += gravity * Time.deltaTime;
             if (ServiceLocator.GetService<IJetPackService>().Propelling)
                 velocity.y = ServiceLocator.GetService<IJetPackService>().PropellingForce;
-            if (CanPlane && velocity.y < maxPlanningVelocity)
-                velocity.y = maxPlanningVelocity;
+            var planning = CanPlane && velocity.y < maxPlanningVelocity;
+            if (planning) velocity.y = maxPlanningVelocity;
+            ServiceLocator.GetService<IPlayerAnimator>().PlayerGliding(planning);
             Controller.Move(velocity * Time.deltaTime);
         }
 
@@ -144,6 +145,7 @@ namespace Services
 
             Vector2 movement = GetPlayerMovement();
             Vector3 move = transform.right * movement.x + transform.forward * movement.y;
+            ServiceLocator.GetService<IPlayerAnimator>().PlayerWalking(move);
             Controller.Move(targetSpeed * Time.deltaTime * move);
             if (Stimulated)
             {
@@ -166,6 +168,7 @@ namespace Services
             if (context.performed && Grounded)
             {
                 velocity.y = Mathf.Sqrt(2.0f * -2.0f * gravity);
+                ServiceLocator.GetService<IPlayerAnimator>().PlayerJump();
             }
         }
 

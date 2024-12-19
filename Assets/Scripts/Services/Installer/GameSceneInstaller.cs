@@ -11,7 +11,6 @@ namespace Services.Installer
 public class GameSceneInstaller : MonoBehaviour
 {
     [SerializeField] private HUDHolder hudHolder;
-    [SerializeField] private PlayerMediatorData playerMediatorData;
     [SerializeField] private InventoryService inventoryService;
     [SerializeField] private CraftingService craftingService;
     [SerializeField] private TeleportService teleportService;
@@ -25,6 +24,7 @@ public class GameSceneInstaller : MonoBehaviour
     [SerializeField] private JetPackService jetPackService;
     [SerializeField] private HoverBoardService hoverBoardService;
     [SerializeField] private SaveGameSceneService saveGameSceneService;
+    [SerializeField] private PlayerAnimator playerAnimator;
     private void Awake()
     {
         RegisterServices();
@@ -61,6 +61,7 @@ public class GameSceneInstaller : MonoBehaviour
         ServiceLocator.Register<IJetPackService>(jetPackService);
         ServiceLocator.Register<IHoverboardService>(hoverBoardService);
         ServiceLocator.Register<ISaveGameSceneService>(saveGameSceneService);
+        ServiceLocator.Register<IPlayerAnimator>(playerAnimator);
     }
     private void UnRegisterServices()
     {
@@ -88,6 +89,7 @@ public class GameSceneInstaller : MonoBehaviour
         ServiceLocator.UnRegister<IEquipablesService>();
         ServiceLocator.UnRegister<IJetPackService>();
         ServiceLocator.UnRegister<IHoverboardService>();
+        ServiceLocator.UnRegister<IPlayerAnimator>();
     }
 }
 }
