@@ -38,7 +38,7 @@ public class GameSceneInstaller : MonoBehaviour
     {
         
         ServiceLocator.Register<ISplatMapService>(new SplatMapService());
-        ServiceLocator.Register<IMapGenerator>(gameObject.AddComponent<MapGeneratorService>());
+        ServiceLocator.Register<IMapGenerator>(gameObject.AddComponent<MapGeneratorC>());
         ServiceLocator.Register<IBiomeTexturesService>(biomeTexturesService);
         ServiceLocator.Register<IPlayerInfo>(playerInfo);
         ServiceLocator.Register<IWeldMap>(gameObject.AddComponent<WeldMapService>()); 

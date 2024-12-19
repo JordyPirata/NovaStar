@@ -40,12 +40,12 @@ public class EventManager : MonoBehaviour, IEventManager
                     typeof(IHungerService),
                     typeof(IStaminaService),
                     typeof(IThirstService),
-                    typeof(IHUDService)
                 };
 
                 foreach (Type serviceType in serviceTypes)
                 {
                     IService service = ServiceLocator.GetService(serviceType) as IService;
+                    Debug.Log(service.ToString());
                     service?.StartService();
                 }
                 /*
