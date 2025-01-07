@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using InputSystem;
@@ -25,7 +26,7 @@ namespace Services
         
         public bool Running => Sprinting && !ServiceLocator.GetService<IPlayerMediator>().IsTired;
 
-        [SerializeField] private Camera cam;
+        [SerializeField] private CinemachineVirtualCamera virtualCamera;
         [SerializeField] private float movementSpeed = 2.0f, stimulatedSpeed = 3.0f;
         [SerializeField] private float lookSensitivity = 1.0f;
 
@@ -108,7 +109,7 @@ namespace Services
             xRotation -= lookY;
             xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-            cam.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+            virtualCamera.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
 
             transform.Rotate(Vector3.up * lookX);
         }

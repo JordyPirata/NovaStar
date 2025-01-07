@@ -23,6 +23,7 @@ namespace Services.Player
         private ITemperatureService _temperatureService;
         private IHUDService _hudService;
         private IInteractionService _interactionService;
+        private IPlayerCameraService _playerCameraService;
 
         public bool IsTired => _staminaService.IsTired;
         public void Dehydrate(int i)

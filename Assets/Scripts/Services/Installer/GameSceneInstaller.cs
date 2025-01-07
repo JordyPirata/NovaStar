@@ -25,6 +25,7 @@ public class GameSceneInstaller : MonoBehaviour
     [SerializeField] private HoverBoardService hoverBoardService;
     [SerializeField] private SaveGameSceneService saveGameSceneService;
     [SerializeField] private PlayerAnimator playerAnimator;
+    [SerializeField] private PlayerCameraService playerCameraService;
     private void Awake()
     {
         RegisterServices();
@@ -62,6 +63,7 @@ public class GameSceneInstaller : MonoBehaviour
         ServiceLocator.Register<IHoverboardService>(hoverBoardService);
         ServiceLocator.Register<ISaveGameSceneService>(saveGameSceneService);
         ServiceLocator.Register<IPlayerAnimator>(playerAnimator);
+        ServiceLocator.Register<IPlayerCameraService>(playerCameraService);
     }
     private void UnRegisterServices()
     {
@@ -90,6 +92,7 @@ public class GameSceneInstaller : MonoBehaviour
         ServiceLocator.UnRegister<IJetPackService>();
         ServiceLocator.UnRegister<IHoverboardService>();
         ServiceLocator.UnRegister<IPlayerAnimator>();
+        ServiceLocator.UnRegister<IPlayerCameraService>();
     }
 }
 }
