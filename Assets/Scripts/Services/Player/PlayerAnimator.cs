@@ -19,9 +19,9 @@ namespace Services.Player
             playerAnimator.SetTrigger("Respawn");
         }
 
-        public void PlayerWalking(Vector3 velocity)
+        public void PlayerWalking(float velocity)
         {
-            playerAnimator.SetFloat("Walking", velocity.magnitude);
+            playerAnimator.SetFloat("Walking", velocity);
         }
 
         public void PlayerJump()

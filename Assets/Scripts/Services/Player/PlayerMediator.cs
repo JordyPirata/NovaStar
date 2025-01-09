@@ -79,6 +79,11 @@ namespace Services.Player
             };
         }
 
+        public void ChangeController(bool thirdPerson)
+        {
+            _firstPersonCharacter.ChangeControllerType(thirdPerson);
+        }
+
         public void Start()
         {
             _iInputActions = ServiceLocator.GetService<IInputActions>();

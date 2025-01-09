@@ -109,6 +109,15 @@ namespace InputSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChangeCamera"",
+                    ""type"": ""Button"",
+                    ""id"": ""60e0996b-70cc-4df5-843e-c6ac889de6d2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -351,6 +360,17 @@ namespace InputSystem
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""InventoryMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c75b221c-b96b-4746-a881-e3e0febbb244"",
+                    ""path"": ""<Keyboard>/v"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeCamera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -886,6 +906,7 @@ namespace InputSystem
             m_Player_Run = m_Player.FindAction("Run", throwIfNotFound: true);
             m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
             m_Player_InventoryMenu = m_Player.FindAction("InventoryMenu", throwIfNotFound: true);
+            m_Player_ChangeCamera = m_Player.FindAction("ChangeCamera", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -968,6 +989,7 @@ namespace InputSystem
         private readonly InputAction m_Player_Run;
         private readonly InputAction m_Player_Interact;
         private readonly InputAction m_Player_InventoryMenu;
+        private readonly InputAction m_Player_ChangeCamera;
         public struct PlayerActions
         {
             private @InputActions m_Wrapper;
@@ -981,6 +1003,7 @@ namespace InputSystem
             public InputAction @Run => m_Wrapper.m_Player_Run;
             public InputAction @Interact => m_Wrapper.m_Player_Interact;
             public InputAction @InventoryMenu => m_Wrapper.m_Player_InventoryMenu;
+            public InputAction @ChangeCamera => m_Wrapper.m_Player_ChangeCamera;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1017,6 +1040,9 @@ namespace InputSystem
                 @InventoryMenu.started += instance.OnInventoryMenu;
                 @InventoryMenu.performed += instance.OnInventoryMenu;
                 @InventoryMenu.canceled += instance.OnInventoryMenu;
+                @ChangeCamera.started += instance.OnChangeCamera;
+                @ChangeCamera.performed += instance.OnChangeCamera;
+                @ChangeCamera.canceled += instance.OnChangeCamera;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -1048,6 +1074,9 @@ namespace InputSystem
                 @InventoryMenu.started -= instance.OnInventoryMenu;
                 @InventoryMenu.performed -= instance.OnInventoryMenu;
                 @InventoryMenu.canceled -= instance.OnInventoryMenu;
+                @ChangeCamera.started -= instance.OnChangeCamera;
+                @ChangeCamera.performed -= instance.OnChangeCamera;
+                @ChangeCamera.canceled -= instance.OnChangeCamera;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -1194,6 +1223,7 @@ namespace InputSystem
             void OnRun(InputAction.CallbackContext context);
             void OnInteract(InputAction.CallbackContext context);
             void OnInventoryMenu(InputAction.CallbackContext context);
+            void OnChangeCamera(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {

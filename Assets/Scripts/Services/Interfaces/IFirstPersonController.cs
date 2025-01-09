@@ -11,5 +11,6 @@ namespace Services.Interfaces
         bool CanPlane { get; set; }
         void TeleportToPosition(float3 dataTeleportPosition);
         void Stimulate();
+        void ChangeControllerType(bool thirdPerson);
     }
 }
