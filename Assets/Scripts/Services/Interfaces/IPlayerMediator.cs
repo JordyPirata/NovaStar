@@ -19,5 +19,6 @@ namespace Services.Interfaces
         void StopLifeRegen(bool b);
         void LoadPlayerStats(PlayerStatsModel playerStatsModel);
         PlayerStatsModel GetPlayerStatsModel();
+        void ChangeController(bool thirdPersonCamera);
     }
 }

@@ -23,6 +23,7 @@ namespace Services.Player
         private ITemperatureService _temperatureService;
         private IHUDService _hudService;
         private IInteractionService _interactionService;
+        private IPlayerCameraService _playerCameraService;
 
         public bool IsTired => _staminaService.IsTired;
         public void Dehydrate(int i)
@@ -76,6 +77,11 @@ namespace Services.Player
                 playerLife = _lifeService.Life,
                 playerPosition = ServiceLocator.GetService<IPlayerInfo>().PlayerPosition()
             };
+        }
+
+        public void ChangeController(bool thirdPerson)
+        {
+            _firstPersonCharacter.ChangeControllerType(thirdPerson);
         }
 
         public void Start()

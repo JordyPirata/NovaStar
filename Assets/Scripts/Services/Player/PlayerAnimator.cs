@@ -1,4 +1,5 @@
 ﻿using System;
+using Services.Installer;
 using Services.Interfaces;
 using UnityEngine;
 
@@ -8,10 +9,19 @@ namespace Services.Player
     {
         [SerializeField] private Animator playerAnimator;
 
-
-        public void PlayerWalking(Vector3 velocity)
+        private void OnEnable()
         {
-            playerAnimator.SetFloat("Walking", velocity.magnitude);
+            EventManager.OnMapLoaded += OnMapLoaded;
+        }
+
+        private void OnMapLoaded()
+        {
+            playerAnimator.SetTrigger("Respawn");
+        }
+
+        public void PlayerWalking(float velocity)
+        {
+            playerAnimator.SetFloat("Walking", velocity);
         }
 
         public void PlayerJump()
@@ -22,6 +32,11 @@ namespace Services.Player
         public void PlayerGliding(bool gliding)
         {
             playerAnimator.SetBool("Gliding", gliding);
+        }
+        
+        private void OnDisable()
+        {
+            EventManager.OnMapLoaded -= OnMapLoaded;
         }
     }
 }

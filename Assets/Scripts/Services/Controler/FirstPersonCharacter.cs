@@ -1,11 +1,10 @@
 using System.Collections;
-using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using InputSystem;
 using Services.Interfaces;
 using Unity.Mathematics;
-using Unity.VisualScripting;
 
 namespace Services
 {
@@ -25,7 +24,9 @@ namespace Services
         
         public bool Running => Sprinting && !ServiceLocator.GetService<IPlayerMediator>().IsTired;
 
-        [SerializeField] private Camera cam;
+        [SerializeField] private CinemachineVirtualCamera firstPersonCamera;
+        [SerializeField] private GameObject thirdPersonCamera;
+        [SerializeField] private Transform playerModelTransform;
         [SerializeField] private float movementSpeed = 2.0f, stimulatedSpeed = 3.0f;
         [SerializeField] private float lookSensitivity = 1.0f;
 
@@ -51,6 +52,23 @@ namespace Services
 
         [Tooltip("What layers the character uses as ground")]
         public LayerMask GroundLayers;
+        
+        [Header("Cinemachine")]
+        [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
+        public GameObject CinemachineCameraTarget;
+
+        [Tooltip("How far in degrees can you move the camera up")]
+        public float TopClamp = 70.0f;
+
+        [Tooltip("How far in degrees can you move the camera down")]
+        public float BottomClamp = -30.0f;
+
+        [Tooltip("Additional degress to override the camera. Useful for fine tuning camera position when locked")]
+        public float CameraAngleOverride = 0.0f;
+
+        [Tooltip("For locking the camera position on all axis")]
+        public bool LockCameraPosition = false;
+        
 
         public bool CanMove { get; set; }
         public bool Stimulated { get; set; }
@@ -63,6 +81,7 @@ namespace Services
 
         private void Start()
         {
+            _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
             Controller = GetComponent<CharacterController>();
             initHeight = Controller.height;
             Cursor.lockState = CursorLockMode.Locked;
@@ -94,11 +113,104 @@ namespace Services
 
             ApplyGravity();
             GroundedCheck();
-            DoMovement();
-            DoLooking();
-
+            
+            CameraRotation();
+            if (_thirdPerson)
+            {
+                Move();
+            }
+            else
+            {
+                DoMovement();
+                DoLooking();
+            }
         }
 
+
+        #region ThirdPerson
+
+        
+        private float _cinemachineTargetYaw;
+        private float _cinemachineTargetPitch;
+        private float _targetRotation = 0f;
+        private const float _threshold = 0.01f;
+        [Range(0.0f, 0.3f)]
+        public float RotationSmoothTime = 0.12f;
+        [Tooltip("Acceleration and deceleration")]
+        public float SpeedChangeRate = 10.0f;
+
+        public float deltaTimeMultiplier = .1f;
+
+        private float _speed;
+        private float _rotationVelocity;
+        private bool _thirdPerson;
+
+
+        private void CameraRotation()
+        {
+            // if there is an input and camera position is not fixed
+            if (GetPlayerLook().sqrMagnitude >= _threshold && !LockCameraPosition)
+            {
+                //Don't multiply mouse input by Time.deltaTime;
+
+                _cinemachineTargetYaw += GetPlayerLook().x * deltaTimeMultiplier;
+                _cinemachineTargetPitch -= GetPlayerLook().y * deltaTimeMultiplier;
+            }
+
+            // clamp our rotations so our values are limited 360 degrees
+            _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
+            _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
+
+            // Cinemachine will follow this target
+            CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
+                _cinemachineTargetYaw, 0.0f);
+        }
+
+        private void Move()
+        {
+            // set target speed based on move speed, sprint speed and if sprint is pressed
+            var targetSpeed = Stimulated ? stimulatedSpeed : movementSpeed;
+            targetSpeed = Running ? targetSpeed * 2 : targetSpeed;
+            targetSpeed = ServiceLocator.GetService<IHoverboardService>().HoverboardEquipped
+                ? ServiceLocator.GetService<IHoverboardService>().HoverBoardSpeedMultiplier * targetSpeed
+                : targetSpeed;
+            
+            if (GetPlayerMovement() == Vector2.zero) targetSpeed = 0.0f;
+            if (GetPlayerMovement() != Vector2.zero)
+            {
+                Vector3 inputDirection = new Vector3(GetPlayerMovement().x, 0.0f, GetPlayerMovement().y).normalized;
+
+                // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
+                // if there is a move input rotate player when the player is moving
+                if (GetPlayerMovement() != Vector2.zero)
+                {
+                    _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
+                                      thirdPersonCamera.transform.eulerAngles.y;
+                    float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
+                        RotationSmoothTime);
+
+                    // rotate to face input direction relative to camera position
+                    transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                }
+
+
+                Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
+
+                // move the player
+                Controller.Move(targetDirection.normalized * (targetSpeed * Time.deltaTime));
+            }
+            ServiceLocator.GetService<IPlayerAnimator>().PlayerWalking(targetSpeed / 10);
+        }
+
+        private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
+        {
+            if (lfAngle < -360f) lfAngle += 360f;
+            if (lfAngle > 360f) lfAngle -= 360f;
+            return Mathf.Clamp(lfAngle, lfMin, lfMax);
+        }
+        #endregion
+        
+        
         private void DoLooking()
         {
             Vector2 looking = GetPlayerLook();
@@ -108,7 +220,7 @@ namespace Services
             xRotation -= lookY;
             xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-            cam.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+            firstPersonCamera.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
 
             transform.Rotate(Vector3.up * lookX);
         }
@@ -129,6 +241,7 @@ namespace Services
             if (context.started) Sprinting = true;
             else if (context.canceled) Sprinting = false;
         }
+        
 
         private void DoMovement()
         {
@@ -145,8 +258,10 @@ namespace Services
 
             Vector2 movement = GetPlayerMovement();
             Vector3 move = transform.right * movement.x + transform.forward * movement.y;
-            ServiceLocator.GetService<IPlayerAnimator>().PlayerWalking(move);
+            /*playerModelTransform.LookAt(playerModelTransform.position + move);*/
+            ServiceLocator.GetService<IPlayerAnimator>().PlayerWalking(targetSpeed);
             Controller.Move(targetSpeed * Time.deltaTime * move);
+            
             if (Stimulated)
             {
                 _restingStimulatedTime -= Time.fixedTime;
@@ -196,6 +311,11 @@ namespace Services
         {
             Stimulated = true;
             _restingStimulatedTime = 60f;
+        }
+
+        public void ChangeControllerType(bool thirdPerson)
+        {
+            _thirdPerson = thirdPerson;
         }
 
         public Vector2 GetPlayerMovement()
