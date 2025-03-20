@@ -1356,11 +1356,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -0.0009719414
       objectReference: {fileID: 0}
-    - target: {fileID: 4256179289620736216, guid: 6ac82c29a4ab281419d8796b23147ec3,
-        type: 3}
-      propertyPath: mainCamera
-      value: 
-      objectReference: {fileID: 278524695}
     - target: {fileID: 4297709027556374537, guid: 6ac82c29a4ab281419d8796b23147ec3,
         type: 3}
       propertyPath: equipables.Array.size
