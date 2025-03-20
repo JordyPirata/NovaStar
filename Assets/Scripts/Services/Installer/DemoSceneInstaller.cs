@@ -9,7 +9,7 @@ namespace Services.Installer
 {
 public class DemoSceneInstaller : MonoBehaviour
 {
-
+    [SerializeField] private FirstPersonCharacter firstPersonCharacter;
     private void Awake()
     {
         RegisterServices();
@@ -18,14 +18,13 @@ public class DemoSceneInstaller : MonoBehaviour
     {
         UnRegisterServices();
     }
-
     private void RegisterServices()
     {
-
+        ServiceLocator.Register<IFirstPersonController>(firstPersonCharacter);
     }
     private void UnRegisterServices()
     {
-
+        ServiceLocator.UnRegister<IFirstPersonController>();
     }
 }
 }
