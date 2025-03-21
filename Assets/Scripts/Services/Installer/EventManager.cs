@@ -28,7 +28,24 @@ public class EventManager : MonoBehaviour, IEventManager
         {
             switch (scene.name)
             {
-            case IEventManager.Game1:
+            case IEventManager.DemoScene:
+                Console.Log("Demo Scene Loaded");
+                List<Type> service_Types = new()
+                {
+                    typeof(IPlayerInfo),
+                    typeof(ILifeService),
+                    typeof(IHungerService),
+                    typeof(IStaminaService),
+                    typeof(IThirstService),
+                };
+                foreach (Type serviceType in service_Types)
+                {
+                    IService service = ServiceLocator.GetService(serviceType) as IService;
+                    Debug.Log(service.ToString());
+                    service?.StartService();
+                }
+                
+                break;
             case IEventManager.Game:
                 OnSceneGameLoaded?.Invoke();
                 List<Type> serviceTypes = new()
