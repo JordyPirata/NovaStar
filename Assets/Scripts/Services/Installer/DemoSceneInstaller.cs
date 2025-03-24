@@ -12,8 +12,6 @@ public class DemoSceneInstaller : MonoBehaviour
     [SerializeField] private HUDHolder hudHolder;
     [SerializeField] private InventoryService inventoryService;
     [SerializeField] private CraftingService craftingService;
-    [SerializeField] private TeleportService teleportService;
-    [SerializeField] private DropsService dropsService;
     [SerializeField] private UIService uiService;
     [SerializeField] private PlayerInfo playerInfo;
     [SerializeField] private InteractionService interactionService;
@@ -43,7 +41,6 @@ public class DemoSceneInstaller : MonoBehaviour
         ServiceLocator.Register<IFirstPersonController>(firstPersonCharacter);
         ServiceLocator.Register<IInventoryService>(inventoryService);
         ServiceLocator.Register<ICraftingService>(craftingService);
-        ServiceLocator.Register<ITeleportService>(teleportService);
         ServiceLocator.Register<IUIService>(uiService);
         ServiceLocator.Register<IEquipablesService>(new EquipablesService());
         ServiceLocator.Register<IJetPackService>(jetPackService);
@@ -52,11 +49,7 @@ public class DemoSceneInstaller : MonoBehaviour
     }
     private void UnRegisterServices()
     {
-        ServiceLocator.UnRegister<ISplatMapService>();
-        ServiceLocator.UnRegister<IMapGenerator>();
-        ServiceLocator.UnRegister<IBiomeTexturesService>();
         ServiceLocator.UnRegister<IPlayerInfo>();
-        ServiceLocator.UnRegister<IWeldMap>();
         ServiceLocator.UnRegister<IRayCastController>();
         ServiceLocator.UnRegister<ILifeService>();
         ServiceLocator.UnRegister<IStaminaService>();
@@ -70,13 +63,10 @@ public class DemoSceneInstaller : MonoBehaviour
         ServiceLocator.UnRegister<IGameSceneReferences>();
         ServiceLocator.UnRegister<IInventoryService>();
         ServiceLocator.UnRegister<ICraftingService>();
-        ServiceLocator.UnRegister<ITeleportService>();
-        ServiceLocator.UnRegister<ITimeService>();
         ServiceLocator.UnRegister<IUIService>();
         ServiceLocator.UnRegister<IEquipablesService>();
         ServiceLocator.UnRegister<IJetPackService>();
         ServiceLocator.UnRegister<IHoverboardService>();
-        ServiceLocator.UnRegister<IPlayerAnimator>();
     }
 }
 }

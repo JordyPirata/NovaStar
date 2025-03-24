@@ -58,6 +58,7 @@ namespace Services
         private void Awake()
         {
             inputActions = ServiceLocator.GetService<IInputActions>().InputActions;
+            inputActions.Enable();
             lookSensitivity = 0.5f * 10;
         }
 
@@ -90,7 +91,7 @@ namespace Services
 
         void FixedUpdate()
         {
-            if (!CanMove) return;
+            // if (!CanMove) return;
 
             ApplyGravity();
             GroundedCheck();
@@ -120,7 +121,7 @@ namespace Services
                 velocity.y = ServiceLocator.GetService<IJetPackService>().PropellingForce;
             var planning = CanPlane && velocity.y < maxPlanningVelocity;
             if (planning) velocity.y = maxPlanningVelocity;
-            ServiceLocator.GetService<IPlayerAnimator>().PlayerGliding(planning);
+            // ServiceLocator.GetService<IPlayerAnimator>().PlayerGliding(planning);
             Controller.Move(velocity * Time.deltaTime);
         }
 
@@ -145,7 +146,7 @@ namespace Services
 
             Vector2 movement = GetPlayerMovement();
             Vector3 move = transform.right * movement.x + transform.forward * movement.y;
-            ServiceLocator.GetService<IPlayerAnimator>().PlayerWalking(move);
+            // ServiceLocator.GetService<IPlayerAnimator>().PlayerWalking(move);
             Controller.Move(targetSpeed * Time.deltaTime * move);
             if (Stimulated)
             {
@@ -168,7 +169,7 @@ namespace Services
             if (context.performed && Grounded)
             {
                 velocity.y = Mathf.Sqrt(2.0f * -2.0f * gravity);
-                ServiceLocator.GetService<IPlayerAnimator>().PlayerJump();
+                // ServiceLocator.GetService<IPlayerAnimator>().PlayerJump();
             }
         }
 
