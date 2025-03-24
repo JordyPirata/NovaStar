@@ -116,8 +116,8 @@ namespace Services.Player
 
                 if (!Increase && !_isStimulated)
                 {
-                    yield return new WaitForSeconds(.1f);
-                    DecreaseStat(2);
+                    yield return new WaitForSeconds(.2f);
+                    DecreaseStat(1);
                 }
             }
         }

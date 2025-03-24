@@ -10,7 +10,6 @@ using Player.Gameplay.UserInterface;
 using Services.Interfaces;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 
 namespace Services.Player
 {
@@ -113,7 +112,7 @@ namespace Services.Player
 
         public void TryCraftItem(CraftingRecipe recipe)
         {
-            if (CanSaveItem(recipe.CraftedItem, recipe.craftedQuantity)) ;
+            if (CanSaveItem(recipe.CraftedItem, recipe.craftedQuantity))
             {
                 var restingItems = TryPickItem(recipe.CraftedItem.itemName, recipe.craftedQuantity);
                 if (restingItems != 0)

@@ -35,7 +35,6 @@ namespace Services.Installer
         ServiceLocator.Register<IBiomeDic>(new BiomesDic());
         ServiceLocator.Register<ITextureMapGen>(new TextureMapGen());
         ServiceLocator.Register<IFadeController>(fadeController);
-        ServiceLocator.Register<INoiseDirector>(new NoiseDirectorService());
         
         }
     }

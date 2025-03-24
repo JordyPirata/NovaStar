@@ -94,7 +94,7 @@ namespace Services.Player
             _staminaService = ServiceLocator.GetService<IStaminaService>();    
             _hydrationService = ServiceLocator.GetService<IThirstService>();
             _hungerService = ServiceLocator.GetService<IHungerService>();
-            _temperatureService = ServiceLocator.GetService<ITemperatureService>().Configure(this);
+            // _temperatureService = ServiceLocator.GetService<ITemperatureService>().Configure(this);
             _hudService = ServiceLocator.GetService<IHUDService>();
             SubscribeToEvents();
         }
@@ -170,11 +170,11 @@ namespace Services.Player
             switch (consumableType)
             {
                 case ConsumableType.Hat:
-                    _temperatureService.EquipHat();
+                    // _temperatureService.EquipHat();
                     return true;
                 case ConsumableType.WaterBottle:
                     var drunk = _hydrationService.DrinkSomeWater();
-                    if (drunk) _temperatureService.DrinkSomeWater();
+                    // if (drunk) _temperatureService.DrinkSomeWater();
                     return drunk;
                 case ConsumableType.CampFire:
                     return false;
@@ -209,7 +209,7 @@ namespace Services.Player
             _firstPersonCharacter.CanMove = true;
             _iInputActions.InputActions.Player.Enable();
             _playerInfo.MapLoaded();
-            _temperatureService.MapLoaded();
+            //_temperatureService.MapLoaded();
             
             ServiceLocator.GetService<IFadeController>().FadeOut();
             ServiceLocator.GetService<ITimeService>().StartRunningTime();

@@ -10,7 +10,7 @@ public class MiniMap : MonoBehaviour
 {
     [SerializeField] GameObject minimapPanel;
     private IPlayerInfo playerInfo;
-    public void Awake()
+    public void Start()
     {
         playerInfo = ServiceLocator.GetService<IPlayerInfo>();
     }
